@@ -253,6 +253,81 @@ details.hw-flip .hw-body p {
   line-height: 1.7;
 }
 
+/* ===== 选择题作业样式 ===== */
+.hw-quiz {
+  margin: 12px 0 20px 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: quiz-counter;
+}
+.hw-quiz > li {
+  counter-increment: quiz-counter;
+  margin-bottom: 16px;
+  padding: 14px 18px 14px 50px;
+  background: rgba(124, 58, 237, .03);
+  border-left: 4px solid var(--purple);
+  border-radius: 8px;
+  position: relative;
+}
+.hw-quiz > li::before {
+  content: counter(quiz-counter) ".";
+  position: absolute;
+  left: 14px;
+  top: 14px;
+  font-weight: 800;
+  color: var(--purple-deep);
+  font-size: 16px;
+}
+.hw-q {
+  font-size: 15px;
+  line-height: 1.7;
+  margin: 0 0 8px 0;
+  color: var(--text);
+  font-weight: 600;
+}
+.hw-options {
+  margin: 6px 0 8px 0;
+  padding-left: 24px;
+  font-size: 14px;
+  line-height: 1.8;
+}
+.hw-options li {
+  margin: 2px 0;
+  color: var(--text);
+}
+.hw-ans {
+  margin-top: 8px;
+}
+.hw-ans summary {
+  cursor: pointer;
+  display: inline-block;
+  padding: 4px 12px;
+  background: linear-gradient(135deg, rgba(22, 163, 74, .12), rgba(124, 58, 237, .08));
+  border: 1px solid rgba(22, 163, 74, .3);
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #047857;
+  user-select: none;
+  transition: all .15s ease;
+}
+.hw-ans summary:hover {
+  background: linear-gradient(135deg, rgba(22, 163, 74, .2), rgba(124, 58, 237, .15));
+}
+.hw-ans[open] summary {
+  background: linear-gradient(135deg, rgba(22, 163, 74, .25), rgba(124, 58, 237, .15));
+}
+.hw-ans-body {
+  margin-top: 8px;
+  padding: 10px 14px;
+  background: rgba(22, 163, 74, .06);
+  border-left: 3px solid #16a34a;
+  border-radius: 6px;
+  font-size: 13.5px;
+  line-height: 1.75;
+  color: var(--text);
+}
+
 /* ===== 闪卡筛选标签 ===== */
 .fc-tabs {
   display: flex;
@@ -586,9 +661,338 @@ code.inline {
     <p class="section-sub">做完截图发给老师，下节课讲评</p>
 
     <details class="hw-flip" open>
-      <summary>L1 · 数字系统完整版</summary>
+      <summary>L1 · 数字系统完整版（30 题选择题 · 6 大考点）</summary>
       <div class="hw-body">
-        <p style="color:var(--muted); font-size:14px;">截止日期：2026-09-30 23:59 · OJ 平台已分配给学生</p>
+        <p style="color:var(--muted); font-size:14px;">截止日期：2026-09-30 23:59 · 全部为 ACSL 风格选择题 · 做题前请先看完 L1 PPT</p>
+
+        <p style="font-size:14px; line-height:1.7;">
+          <b>覆盖范围</b>：L1 全部 5 个核心考点 + L2 递归入门，共 6 章节 × 5 题 = <b>30 道选择题</b>。<br>
+          <b>难度</b>：★ 基础（找感觉）+ ★★ 中等（计算题）+ ★★★ ACSL 真题风格（综合应用）。<br>
+          <b>做法</b>：每题先自己答题，再点 <b>"展开答案"</b> 对答案看解析。错题反复练直到全对。
+        </p>
+
+        <hr style="border:none; border-top:1px dashed var(--line); margin:14px 0;">
+
+        <!-- ========== 章节 1 · 二进制互转 ========== -->
+        <h4 style="color:var(--purple-deep);">📘 章节 1 · 二进制互转（5 题）</h4>
+        <ol class="hw-quiz">
+          <li>
+            <p class="hw-q">Convert the binary number <code>1011₂</code> to base 10.</p>
+            <ol type="A" class="hw-options">
+              <li>9</li><li>10</li><li>11</li><li>12</li>
+            </ol>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>正确答案：C</b><br>按权展开：1×2³ + 0×2² + 1×2¹ + 1×2⁰ = 8 + 0 + 2 + 1 = <b>11</b></div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q">Convert the decimal number <code>25₁₀</code> to binary.</p>
+            <ol type="A" class="hw-options">
+              <li>11001₂</li><li>10101₂</li><li>10011₂</li><li>11101₂</li>
+            </ol>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>正确答案：A</b><br>25 ÷ 2 = 12 r 1 → 12 ÷ 2 = 6 r 0 → 6 ÷ 2 = 3 r 0 → 3 ÷ 2 = 1 r 1 → 1 ÷ 2 = 0 r 1，余数<b>倒读</b> = <b>11001₂</b></div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q">What is the largest decimal number that can be represented using 8 bits?</p>
+            <ol type="A" class="hw-options">
+              <li>128</li><li>255</li><li>256</li><li>512</li>
+            </ol>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>正确答案：B</b><br>8 位无符号最大值 = 2⁸ - 1 = 256 - 1 = <b>255</b></div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q">How many binary digits are needed to represent the decimal number 1000?</p>
+            <ol type="A" class="hw-options">
+              <li>8</li><li>9</li><li>10</li><li>11</li>
+            </ol>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>正确答案：C</b><br>2⁹ = 512（不够），2¹⁰ = 1024（够）→ 需要 <b>10 位</b>（1000 = 1111101000₂）</div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q">Convert the binary number <code>10110101₂</code> to base 10, then to hexadecimal.</p>
+            <ol type="A" class="hw-options">
+              <li>181₁₀, B5₁₆</li><li>173₁₀, AD₁₆</li><li>191₁₀, BF₁₆</li><li>185₁₀, B9₁₆</li>
+            </ol>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>正确答案：A</b><br>按权展开 = 128+0+32+16+0+4+0+1 = <b>181</b>。分组：1011 0101 = <b>B5₁₆</b></div>
+            </details>
+          </li>
+        </ol>
+
+        <!-- ========== 章节 2 · 其他进制 ========== -->
+        <h4 style="color:var(--purple-deep);">📘 章节 2 · 其他进制（5 题）</h4>
+        <ol class="hw-quiz">
+          <li>
+            <p class="hw-q">Convert the octal number <code>17₈</code> to base 10.</p>
+            <ol type="A" class="hw-options">
+              <li>14</li><li>15</li><li>16</li><li>17</li>
+            </ol>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>正确答案：B</b><br>1×8 + 7 = <b>15</b></div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q">Convert the hexadecimal number <code>2F₁₆</code> to base 10.</p>
+            <ol type="A" class="hw-options">
+              <li>45</li><li>46</li><li>47</li><li>48</li>
+            </ol>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>正确答案：C</b><br>2×16 + 15(F) = <b>47</b></div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q">Convert the decimal number <code>100₁₀</code> to octal.</p>
+            <ol type="A" class="hw-options">
+              <li>144₈</li><li>142₈</li><li>141₈</li><li>145₈</li>
+            </ol>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>正确答案：A</b><br>100 ÷ 8 = 12 r 4 → 12 ÷ 8 = 1 r 4 → 1 ÷ 8 = 0 r 1，余数倒读 = <b>144₈</b></div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q">Convert the hexadecimal number <code>CAFE₁₆</code> to base 10.</p>
+            <ol type="A" class="hw-options">
+              <li>51966</li><li>51868</li><li>52014</li><li>51796</li>
+            </ol>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>正确答案：A</b><br>12×4096 + 10×256 + 15×16 + 14 = 49152 + 2560 + 240 + 14 = <b>51966</b></div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q">Which sequence correctly orders from smallest to largest? <br>A) 56₁₀ &nbsp; B) 110100₁₀ &nbsp; C) 1011100₂ &nbsp; D) 70₈ &nbsp; E) 3A₁₆</p>
+            <ol type="A" class="hw-options">
+              <li>A &lt; B &lt; C &lt; D &lt; E</li>
+              <li>B &lt; A = D &lt; E &lt; C</li>
+              <li>D &lt; A &lt; E &lt; C &lt; B</li>
+              <li>A &lt; D &lt; E &lt; B &lt; C</li>
+            </ol>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>正确答案：B</b><br>统一十进制：A=56, B=52, C=92, D=56, E=58。排序：B(52) &lt; A=D(56) &lt; E(58) &lt; C(92)</div>
+            </details>
+          </li>
+        </ol>
+
+        <!-- ========== 章节 3 · 二进制运算 ========== -->
+        <h4 style="color:var(--purple-deep);">📘 章节 3 · 二进制运算（5 题）</h4>
+        <ol class="hw-quiz">
+          <li>
+            <p class="hw-q">Compute <code>1011₂ + 110₂</code> in binary.</p>
+            <ol type="A" class="hw-options">
+              <li>10001₂</li><li>11101₂</li><li>11011₂</li><li>10101₂</li>
+            </ol>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>正确答案：A</b><br>竖式相加（11 + 6 = 17 = 10001₂）：<br>1011 + 0110 = 10001</div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q">Compute <code>101₂ × 10₂</code> in binary.</p>
+            <ol type="A" class="hw-options">
+              <li>1010₂</li><li>1100₂</li><li>1110₂</li><li>10010₂</li>
+            </ol>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>正确答案：A</b><br>5 × 2 = 10 = <b>1010₂</b>（二进制左移 1 位 = 乘 2）</div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q">What is the result of <code>11111111₂ + 1₂</code> (unsigned 8-bit)?</p>
+            <ol type="A" class="hw-options">
+              <li>11111111₂</li><li>100000000₂</li><li>0 with carry 1 (overflow)</li><li>-1 in two's complement</li>
+            </ol>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>正确答案：C</b><br>8 位无符号最大 255，加 1 会<b>溢出</b> → 结果 = <b>0</b>，进位 1 被丢弃</div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q">What is <code>10110101₂ AND 01101011₂</code> (bitwise)?</p>
+            <ol type="A" class="hw-options">
+              <li>00100001₂</li><li>11011110₂</li><li>11111111₂</li><li>00000000₂</li>
+            </ol>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>正确答案：A</b><br>按位 AND：1&amp;0=0, 0&amp;1=0, 1&amp;1=1, 1&amp;0=0 ... → <b>00100001₂</b></div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q">Compute <code>255₁₀ + 1₁₀</code> in 8-bit two's complement. What is the result?</p>
+            <ol type="A" class="hw-options">
+              <li>256</li><li>0</li><li>-256</li><li>-1</li>
+            </ol>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>正确答案：B</b><br>8 位补码范围 -128 ~ +127，255 超出范围。按 ACSL 习惯：溢出时进位被丢弃 → 结果 = <b>0</b></div>
+            </details>
+          </li>
+        </ol>
+
+        <!-- ========== 章节 4 · 补码 ========== -->
+        <h4 style="color:var(--purple-deep);">📘 章节 4 · 补码 Two's Complement（5 题）</h4>
+        <ol class="hw-quiz">
+          <li>
+            <p class="hw-q">What is the two's complement representation of <code>-5</code> in 8 bits?</p>
+            <ol type="A" class="hw-options">
+              <li>11111011₂</li><li>11111010₂</li><li>10000101₂</li><li>00000101₂</li>
+            </ol>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>正确答案：A</b><br>+5 = 00000101 → 取反 11111010 → 加 1 = <b>11111011₂</b></div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q">What decimal number does the 8-bit two's complement <code>11111111₂</code> represent?</p>
+            <ol type="A" class="hw-options">
+              <li>255</li><li>128</li><li>-1</li><li>-127</li>
+            </ol>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>正确答案：C</b><br>取反 00000000 → 加 1 = 00000001 = 1，所以原数 = <b>-1</b></div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q">What is the range of signed integers representable in 8-bit two's complement?</p>
+            <ol type="A" class="hw-options">
+              <li>-127 to +127</li><li>-128 to +127</li><li>-128 to +128</li><li>-256 to +255</li>
+            </ol>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>正确答案：B</b><br>公式 -2ⁿ⁻¹ ~ 2ⁿ⁻¹-1，n=8 → <b>-128 ~ +127</b></div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q">Convert <code>-100₁₀</code> to 8-bit two's complement.</p>
+            <ol type="A" class="hw-options">
+              <li>10011100₂</li><li>01100100₂</li><li>10011101₂</li><li>01100011₂</li>
+            </ol>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>正确答案：A</b><br>+100 = 01100100 → 取反 10011011 → 加 1 = <b>10011100₂</b></div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q">In 16-bit two's complement, what is <code>32767 + 1</code>?</p>
+            <ol type="A" class="hw-options">
+              <li>32768</li><li>0 with overflow flag set</li><li>-32768</li><li>-1</li>
+            </ol>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>正确答案：C</b><br>32767 = 0111...111，加 1 = 1000...000 = <b>-32768</b>（补码环绕，ACSL 经典考点）</div>
+            </details>
+          </li>
+        </ol>
+
+        <!-- ========== 章节 5 · 二进制小数 ========== -->
+        <h4 style="color:var(--purple-deep);">📘 章节 5 · 二进制小数 Binary Fractions（5 题）</h4>
+        <ol class="hw-quiz">
+          <li>
+            <p class="hw-q">Convert <code>0.1₂</code> (binary fraction) to decimal.</p>
+            <ol type="A" class="hw-options">
+              <li>0.1</li><li>0.25</li><li>0.5</li><li>0.75</li>
+            </ol>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>正确答案：C</b><br>0.1₂ = 1 × 2⁻¹ = <b>0.5</b></div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q">Convert <code>0.11₂</code> to decimal.</p>
+            <ol type="A" class="hw-options">
+              <li>0.25</li><li>0.5</li><li>0.75</li><li>1.0</li>
+            </ol>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>正确答案：C</b><br>0×2⁻¹ + 1×2⁻² = 0.5 + 0.25 = <b>0.75</b></div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q">Convert <code>0.625₁₀</code> to binary fraction.</p>
+            <ol type="A" class="hw-options">
+              <li>0.101₂</li><li>0.110₂</li><li>0.011₂</li><li>0.100₂</li>
+            </ol>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>正确答案：A</b><br>0.625 × 2 = 1.25 → 1；0.25 × 2 = 0.5 → 0；0.5 × 2 = 1.0 → 1，停 = <b>0.101₂</b></div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q">How many binary digits after the point are needed to exactly represent <code>0.1₁₀</code>?</p>
+            <ol type="A" class="hw-options">
+              <li>Finite (can be done in 10 bits)</li><li>Infinite (cannot be exactly represented)</li><li>4 bits</li><li>8 bits</li>
+            </ol>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>正确答案：B</b><br>0.1₁₀ 在二进制中是<b>无限循环小数</b>，类似 1/3 在十进制。计算机用浮点数只能近似。</div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q">What is <code>1.01₂ + 1.1₂</code>?</p>
+            <ol type="A" class="hw-options">
+              <li>10.11₂</li><li>11.11₂</li><li>10.01₂</li><li>11.01₂</li>
+            </ol>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>正确答案：A</b><br>1.01 + 1.10（补零对齐）= 10.11（1.25 + 1.5 = 2.75 = 10.11₂）</div>
+            </details>
+          </li>
+        </ol>
+
+        <!-- ========== 章节 6 · 递归函数入门 ========== -->
+        <h4 style="color:var(--purple-deep);">📘 章节 6 · 递归函数入门 Recursive Functions（5 题）</h4>
+        <p style="font-size:13px; color:var(--muted); margin:6px 0 10px;">⭐ 衔接 L2 递归函数 PPT，先看完 L2 slide 1-10 再做</p>
+        <ol class="hw-quiz">
+          <li>
+            <p class="hw-q">Given <code>f(0) = 1</code> and <code>f(n) = n × f(n-1)</code>, what is <code>f(4)</code>?</p>
+            <ol type="A" class="hw-options">
+              <li>12</li><li>24</li><li>48</li><li>64</li>
+            </ol>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>正确答案：B</b><br>f(4) = 4×3×2×1 = <b>24</b>（即 4!）</div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q">Given <code>g(0) = 0, g(1) = 1, g(n) = g(n-1) + g(n-2)</code>, what is <code>g(5)</code>?</p>
+            <ol type="A" class="hw-options">
+              <li>3</li><li>5</li><li>8</li><li>13</li>
+            </ol>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>正确答案：B</b><br>g(2)=1, g(3)=2, g(4)=3, g(5)=<b>5</b>（Fibonacci 数列）</div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q">How many times is <code>f</code> called (including the initial call) when evaluating <code>f(3)</code> if <code>f(0)=1</code> and <code>f(n)=2*f(n-1)</code>?</p>
+            <ol type="A" class="hw-options">
+              <li>3</li><li>4</li><li>5</li><li>8</li>
+            </ol>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>正确答案：B</b><br>f(3) → f(2) → f(1) → f(0)，共 <b>4 次</b>调用</div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q">Given <code>h(n) = 2 * h(n-1) + 1</code> and <code>h(1) = 1</code>, what is <code>h(5)</code>?</p>
+            <ol type="A" class="hw-options">
+              <li>15</li><li>31</li><li>16</li><li>32</li>
+            </ol>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>正确答案：B</b><br>h(1)=1, h(2)=3, h(3)=7, h(4)=15, h(5)=<b>31</b>（公式 2ⁿ-1）</div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q">Given <code>f(x, y) = f(x-y, y-1) + 2</code> with <code>f(x, 0) = x</code>, what is <code>f(8, 3)</code>?</p>
+            <ol type="A" class="hw-options">
+              <li>10</li><li>12</li><li>8</li><li>16</li>
+            </ol>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>正确答案：C</b><br>展开调用树：f(8,3) → f(5,2)+2 → f(3,1)+2 → f(2,0)+2 → <b>2+2=4</b><br>回填：f(3,1)=4, f(5,2)=6, f(8,3)=<b>8</b></div>
+            </details>
+          </li>
+        </ol>
+
+        <hr style="border:none; border-top:1px dashed var(--line); margin:18px 0 8px;">
+        <p style="font-size:13px; color:var(--muted);">
+          📊 <b>做完对答案</b>：6 章节每章节全对 → 该章节满分 · 错题超过 2 道 → 重做该章节。<br>
+          🎯 <b>目标</b>：30 题全对 + 每题 30 秒内完成 → L1 内容过关，可进入 L2 深度学习。
+        </p>
+
+        <h4 style="margin-top:18px;">📚 ACSL Wiki 样题（选做 · 加分项）</h4>
+        <p>在 <a href="https://categories.acsl.org/wiki/index.php?title=Computer_Number_Systems" target="_blank">ACSL Wiki · Computer Number Systems</a> 做 <b>5 道</b>样题</p>
+        <p style="font-size:13px; color:var(--muted);">重点：进制互转 + 补码表示（竞赛真题）</p>
+      </div>
+    </details>
+
+    <details class="hw-flip">
+      <summary>🖥️ L1 编程练手 · OJ 作业（10 道 · 不算正式作业）</summary>
+      <div class="hw-body">
+        <p style="color:var(--muted); font-size:14px;">这些是 L1 课堂同步练手的编程题，<b>不是 L1 正式作业</b>。30 道选择题才是 L1 作业。做不做看你时间，但做完对编程手感帮助大。</p>
 
         <h4>🖥️ OJ 编程作业</h4>
         <p>Cubicbird OJ · <b>作业 ID：6a9a58cfd43bfd05b0c9c68f</b></p>
@@ -607,10 +1011,6 @@ code.inline {
           <li><code class="inline">1027</code> 累计相加 · 累加器模式</li>
         </ul>
         <p style="margin-top:8px;"><b>要求</b>：课堂禁 AI · 课后可用 AI 检查但不能 AI 生成</p>
-
-        <h4>📚 ACSL Wiki 样题</h4>
-        <p>在 <a href="https://categories.acsl.org/wiki/index.php?title=Computer_Number_Systems" target="_blank">ACSL Wiki · Computer Number Systems</a> 做 <b>5 道</b>样题</p>
-        <p style="font-size:13px; color:var(--muted);">重点：进制互转 + 补码表示</p>
       </div>
     </details>
 
