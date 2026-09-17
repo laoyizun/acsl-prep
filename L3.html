@@ -1,0 +1,1108 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>L3 · ACSL 程序追踪 · ACSL 备赛</title>
+<style>
+:root {
+  --bg: #faf7f2;
+  --panel: #ffffff;
+  --panel-soft: #fdf9f3;
+  --text: #1a1626;
+  --muted: #5a536b;
+  --line: #e2d9c8;
+  --purple: #7c3aed;
+  --purple-deep: #2d1b4e;
+  --amber: #d97706;
+  --amber-deep: #b45309;
+  --red: #dc2626;
+  --green: #16a34a;
+  --green-deep: #047857;
+  --blue: #2563eb;
+  --blue-deep: #1d4ed8;
+  --teal: #0f9f9a;
+  --ink: #2d1b4e;
+  --shadow: 0 18px 46px rgba(124, 58, 237, .10);
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: "HarmonyOS Sans", "Source Han Sans SC", "Alibaba PuHuiTi", "PingFang SC", Inter, Arial, sans-serif;
+  color: var(--text);
+  background:
+    linear-gradient(135deg, rgba(124, 58, 237, .06), transparent 36%),
+    linear-gradient(225deg, rgba(217, 119, 6, .06), transparent 34%),
+    var(--bg);
+  min-height: 100vh;
+  font-size: 17px;
+  line-height: 1.7;
+  padding-bottom: 80px;
+}
+.en-tag {
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--blue-deep);
+  background: rgba(37, 99, 235, .12);
+  padding: 1px 8px;
+  border-radius: 999px;
+  margin-left: 6px;
+  vertical-align: middle;
+  font-family: "Source Code Pro", Consolas, monospace;
+}
+code.inline, .inline {
+  background: rgba(124, 58, 237, .1);
+  color: var(--purple-deep);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: "Source Code Pro", Consolas, monospace;
+  font-size: .92em;
+  font-weight: 700;
+}
+pre {
+  background: var(--ink);
+  color: #e9e3f5;
+  padding: 16px 20px;
+  border-radius: 10px;
+  overflow-x: auto;
+  font-family: "Source Code Pro", Consolas, monospace;
+  font-size: 15px;
+  line-height: 1.7;
+  margin: 12px 0;
+}
+pre code {
+  color: #e9e3f5;
+  background: transparent;
+  padding: 0;
+  font-weight: 400;
+}
+.highlight { color: var(--purple-deep); }
+section.slide {
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 48px 32px 24px;
+  min-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+section.slide.wide { max-width: 1100px; }
+section.slide.compact { min-height: 60vh; padding-top: 32px; }
+section.slide.wide.compact { max-width: 1100px; }
+.kicker {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--purple);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+h1 {
+  font-size: clamp(36px, 5vw, 64px);
+  font-weight: 900;
+  margin: 0 0 18px;
+  line-height: 1.15;
+  color: var(--purple-deep);
+}
+h2 {
+  font-size: clamp(28px, 3.6vw, 44px);
+  font-weight: 900;
+  margin: 0 0 14px;
+  line-height: 1.25;
+  color: var(--purple-deep);
+}
+h3 {
+  font-size: 20px;
+  font-weight: 800;
+  margin: 18px 0 8px;
+  color: var(--purple-deep);
+}
+.subtitle {
+  font-size: 18px;
+  color: var(--muted);
+  margin: 8px 0 0;
+  line-height: 1.6;
+}
+.head { margin-bottom: 24px; }
+.card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 18px 22px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, .04);
+  margin: 12px 0;
+}
+.practice {
+  background: linear-gradient(135deg, rgba(124, 58, 237, .05), rgba(217, 119, 6, .05));
+  border: 1px solid rgba(124, 58, 237, .3);
+  border-radius: 12px;
+  padding: 18px 22px;
+  margin: 14px 0;
+}
+.practice .label {
+  display: inline-block;
+  background: var(--purple);
+  color: white;
+  padding: 3px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.grid2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 14px;
+}
+@media (max-width: 700px) { .grid2 { grid-template-columns: 1fr; } }
+.summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 16px 24px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  margin: 12px 0;
+  font-size: 16px;
+  font-weight: 700;
+}
+.summary .total { color: var(--purple); }
+.summary .nav { display: flex; gap: 8px; align-items: center; }
+.summary button {
+  padding: 8px 16px;
+  background: var(--purple);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  font-size: 14px;
+}
+.summary button.secondary { background: var(--panel); color: var(--purple); border: 1px solid var(--purple); }
+.summary .home-link { color: var(--purple); text-decoration: none; font-weight: 800; }
+.summary .counter { font-family: "Source Code Pro", Consolas, monospace; color: var(--muted); font-weight: 700; min-width: 90px; text-align: center; }
+.summary .progress-bar { width: 120px; height: 6px; background: rgba(124, 58, 237, .15); border-radius: 3px; overflow: hidden; }
+.summary .progress-bar span { display: block; height: 100%; background: var(--purple); transition: width .3s; }
+section.title-slide {
+  text-align: center;
+  background: linear-gradient(135deg, rgba(124, 58, 237, .14), rgba(217, 119, 6, .12));
+  border-radius: 16px;
+  padding: 60px 32px;
+}
+section.title-slide h1 {
+  font-size: clamp(44px, 6vw, 72px);
+  background: linear-gradient(135deg, var(--purple), var(--amber));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.track-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 14px 0;
+  font-family: "Source Code Pro", Consolas, monospace;
+  font-size: 14px;
+}
+.track-table th, .track-table td {
+  border: 1px solid var(--line);
+  padding: 8px 12px;
+  text-align: center;
+}
+.track-table th {
+  background: rgba(124, 58, 237, .1);
+  color: var(--purple-deep);
+  font-weight: 800;
+}
+.track-table tbody tr:nth-child(even) { background: var(--panel-soft); }
+.step-num {
+  display: inline-block;
+  background: var(--amber);
+  color: white;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 24px;
+  font-weight: 800;
+  margin-right: 6px;
+  font-size: 13px;
+}
+.tip {
+  background: rgba(22, 163, 74, .08);
+  border-left: 4px solid var(--green);
+  padding: 12px 18px;
+  border-radius: 8px;
+  margin: 12px 0;
+  font-size: 15px;
+}
+.warn {
+  background: rgba(220, 38, 38, .06);
+  border-left: 4px solid var(--red);
+  padding: 12px 18px;
+  border-radius: 8px;
+  margin: 12px 0;
+  font-size: 15px;
+}
+.dual-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media (max-width: 700px) { .dual-col { grid-template-columns: 1fr; } }
+.nav-fixed {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(255, 255, 255, .95);
+  backdrop-filter: blur(8px);
+  border-top: 1px solid var(--line);
+  padding: 10px 20px;
+  z-index: 100;
+}
+.nav-fixed .summary { max-width: 1100px; margin: 0 auto; box-shadow: none; }
+.home-link.secondary {
+  display: inline-block;
+  background: var(--panel);
+  color: var(--purple);
+  padding: 8px 16px;
+  border: 1px solid var(--purple);
+  border-radius: 8px;
+  font-weight: 800;
+  text-decoration: none;
+  font-size: 14px;
+}
+.section-icon {
+  display: inline-block;
+  background: var(--purple);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 800;
+  margin-right: 8px;
+}
+</style>
+</head>
+<body>
+
+<!-- 01 · 标题页 -->
+<section class="slide title-slide">
+  <div class="kicker">L3 · Program Reading & Tracing</div>
+  <h1>L3 · 程序是怎么追踪的<br><span class="muted" style="font-size:.6em; font-weight:700;">What Does This Program Do?</span></h1>
+  <p class="subtitle">从「会写代码」到「会读代码 + 手算追踪」</p>
+  <p class="subtitle" style="margin-top:18px;">
+    <span class="en-tag">ACSL Junior Division · Contest 1 / 2 / 3</span>
+  </p>
+  <p style="margin-top:32px; font-size:16px; color:var(--muted);">
+    📌 本课目的：你已经会写代码，本课专攻 <b>读代码 + 手算追踪</b><br>
+    🎯 核心训练：30 秒读完 15 行代码 · 立即给答案<br>
+    ⏱ 适用比赛：第一轮（12.13） + 第二轮（2.13） + 第三轮（3.13）
+  </p>
+</section>
+
+<!-- 02 · 学生不适应的地方（核心问题） -->
+<section class="slide wide">
+  <div class="head">
+    <div class="kicker">为什么需要这节课 · The Problem</div>
+    <h2>学生卡在哪里？<span class="highlight">不是不会，是没练过</span></h2>
+    <p class="subtitle">你已经会写 OJ 编程题了，但 ACSL 考的是「读别人代码 + 手算追踪」</p>
+  </div>
+
+  <div class="grid2">
+    <div class="card" style="background:rgba(22,163,74,.06); border-color:rgba(22,163,74,.3);">
+      <h3 style="color:var(--green-deep);">✅ 你已经会的（OJ 训练过）</h3>
+      <ul style="line-height:1.8; padding-left:20px;">
+        <li>写 if / else（OJ 1061）</li>
+        <li>写 for / while（OJ 913）</li>
+        <li>写数组操作（OJ 608、543）</li>
+        <li>写字符串操作（OJ 543）</li>
+        <li>写循环累加（OJ 1027）</li>
+      </ul>
+      <p style="font-size:14px; color:var(--muted); margin-top:8px;">→ 逻辑层面完全没问题</p>
+    </div>
+
+    <div class="card" style="background:rgba(220,38,38,.04); border-color:rgba(220,38,38,.3);">
+      <h3 style="color:var(--red);">❌ 你没练过的（ACSL 特有）</h3>
+      <ul style="line-height:1.8; padding-left:20px;">
+        <li>ACSL 伪代码语法（不是 input() / print()）</li>
+        <li>30 秒读完 15 行 + 立即给答案</li>
+        <li>手算变量追踪表（不靠代码运行）</li>
+        <li>嵌套循环 + 双指针同时追踪</li>
+        <li>step -1 倒序循环 + 字符串拼接</li>
+        <li>业务逻辑陌生（工资计算、字符串反转等真实场景）</li>
+      </ul>
+      <p style="font-size:14px; color:var(--muted); margin-top:8px;">→ 这些是 ACSL 考试特有的能力</p>
+    </div>
+  </div>
+
+  <div class="tip">
+    <b>本课核心目标</b>：从「我写代码能跑对」→「我读代码能算对」<br>
+    <span class="en-tag">From "code that runs" to "code you can trace by hand in 30 seconds"</span>
+  </div>
+</section>
+
+<!-- 03 · ACSL 伪代码语法速览 -->
+<section class="slide wide">
+  <div class="head">
+    <div class="kicker">第 1 章 · ACSL 伪代码基础</div>
+    <h2>ACSL 伪代码语法速览 <span class="highlight">对照 Python</span></h2>
+    <p class="subtitle">2 分钟速成，看完就能读懂 ACSL 题面</p>
+  </div>
+
+  <h3>1️⃣ 输入输出 · <span class="en-tag">I/O</span></h3>
+  <div class="grid2">
+    <div class="card">
+      <div style="font-weight:800; color:var(--purple);">ACSL 伪代码</div>
+      <pre><code>INPUT h, r
+b = 0
+OUTPUT b</code></pre>
+    </div>
+    <div class="card">
+      <div style="font-weight:800; color:var(--green-deep);">Python 对照</div>
+      <pre style="background:rgba(22,163,74,.1); color:#1a1626;"><code>h, r = map(int, input().split())
+b = 0
+print(b)</code></pre>
+    </div>
+  </div>
+
+  <h3>2️⃣ 分支判断 · <span class="en-tag">Branching</span></h3>
+  <div class="grid2">
+    <div class="card">
+      <div style="font-weight:800; color:var(--purple);">ACSL 伪代码</div>
+      <pre><code>IF h > 48 THEN
+  b = b + (h - 48) * 2 * r
+  h = 48
+ELSE
+  b = b + h * r
+END IF</code></pre>
+    </div>
+    <div class="card">
+      <div style="font-weight:800; color:var(--green-deep);">Python 对照</div>
+      <pre style="background:rgba(22,163,74,.1); color:#1a1626;"><code>if h > 48:
+    b = b + (h - 48) * 2 * r
+    h = 48
+else:
+    b = b + h * r</code></pre>
+    </div>
+  </div>
+</section>
+
+<!-- 04 · 循环语法 -->
+<section class="slide wide">
+  <div class="head">
+    <div class="kicker">第 1 章 · 续</div>
+    <h2>循环语法 · <span class="en-tag">Loops</span></h2>
+    <p class="subtitle">WHILE / FOR ... NEXT —— 比 Python 严格</p>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <h3>不定循环 · <span class="en-tag">WHILE</span></h3>
+      <pre><code>WHILE A(k) > 0
+  C(n) = A(j)
+  n = n + 1
+  j = j + 1
+END WHILE</code></pre>
+      <p style="font-size:14px; color:var(--muted); margin-top:6px;">
+        → 条件为真时反复执行 · 用 <code class="inline">END WHILE</code> 收尾
+      </p>
+    </div>
+
+    <div class="card">
+      <h3>定次循环 · <span class="en-tag">FOR ... NEXT</span></h3>
+      <pre><code>FOR j = 0 TO len(a) - 1
+  IF a[j] == t[j] THEN
+    num = num + 1
+  END IF
+NEXT j</code></pre>
+      <p style="font-size:14px; color:var(--muted); margin-top:6px;">
+        → <b>含头含尾</b>（0 到 len(a)-1 共 len(a) 次）<br>
+        → <b>用 NEXT j 收尾</b>，表示 j 循环结束
+      </p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 style="color:var(--amber-deep);">3️⃣ 倒序循环 · <span class="en-tag">STEP -1</span>（学生最大难点）</h3>
+    <pre><code>FOR j = len(a) - 1 TO 0 STEP -1
+  t = t + a[j]
+NEXT j</code></pre>
+    <div class="dual-col" style="margin-top:12px;">
+      <div>
+        <p><b>含义</b>：从 <code class="inline">len(a)-1</code> 开始，每次减 1，到 0 结束</p>
+        <p style="font-size:14px;">例：a = "BANANAS"（长度 7），j 取 6, 5, 4, 3, 2, 1, 0</p>
+      </div>
+      <div>
+        <div class="warn" style="margin:0;">
+          <b>陷阱</b>：Python 用 <code class="inline">range(len(a)-1, -1, -1)</code>，但 ACSL 直接写 <code class="inline">TO 0 STEP -1</code>，更直观
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 05 · 数组和字符串 -->
+<section class="slide wide">
+  <div class="head">
+    <div class="kicker">第 1 章 · 续</div>
+    <h2>数组和字符串 · <span class="en-tag">Arrays & Strings</span></h2>
+    <p class="subtitle">ACSL 的索引语法容易踩坑</p>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <h3>数组 · <span class="en-tag">Arrays</span></h3>
+      <pre><code>A(0) = 12
+A(1) = 41
+A(2) = 52
+print(A(0))  → 12</code></pre>
+      <p style="font-size:14px; margin-top:6px;">
+        ⚠️ ACSL 用 <code class="inline">A(0)</code>（圆括号）<br>
+        而 Python 用 <code class="inline">A[0]</code>（方括号）<br>
+        含义相同，<b>别看花眼</b>
+      </p>
+    </div>
+
+    <div class="card">
+      <h3>字符串切片 · <span class="en-tag">Substring</span>（ACSL 特有）</h3>
+      <pre><code>S = "ACSL WDTPD"
+S[:3]   = "ACS"     ← 前 3 个字符
+S[4:]   = "DTPD"    ← 后 4 个字符
+S[2:6]  = "SL WD"   ← 位置 2 到 6
+S[0]    = "A"       ← 单个字符</code></pre>
+      <p style="font-size:14px; margin-top:6px;">
+        ⚠️ 字符串索引从 <b>0 开始</b>（不是 1）<br>
+        ⚠️ <code class="inline">S[2:6]</code> 含头不含尾（取位置 2, 3, 4, 5）
+      </p>
+    </div>
+  </div>
+
+  <div class="tip">
+    💡 <b>字符串拼接</b>：用 <code class="inline">+</code> 符号（如 <code class="inline">t = t + a[j]</code>）
+  </div>
+</section>
+
+<!-- 06 · 关键差异 -->
+<section class="slide wide">
+  <div class="head">
+    <div class="kicker">第 1 章 · 速查表</div>
+    <h2>ACSL 伪代码 vs Python · <span class="highlight">关键差异</span></h2>
+    <p class="subtitle">考试时这些差异会让你卡壳 —— 现在一次记住</p>
+  </div>
+
+  <table class="track-table" style="margin-top:14px;">
+    <thead>
+      <tr><th>概念</th><th>ACSL 写法</th><th>Python 写法</th><th>坑在哪</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>输入</td><td><code class="inline">INPUT h, r</code></td><td><code class="inline">input().split()</code></td><td>ACSL 没有 input() 包装</td></tr>
+      <tr><td>输出</td><td><code class="inline">OUTPUT b</code></td><td><code class="inline">print(b)</code></td><td>直接看 OUTPUT 后面的变量</td></tr>
+      <tr><td>赋值</td><td><code class="inline">b = 0</code></td><td><code class="inline">b = 0</code></td><td>完全一样</td></tr>
+      <tr><td>数组索引</td><td><code class="inline">A(0)</code></td><td><code class="inline">A[0]</code></td><td>圆括号 vs 方括号</td></tr>
+      <tr><td>字符串</td><td><code class="inline">"BANANAS"</code></td><td><code class="inline">"BANANAS"</code></td><td>完全一样</td></tr>
+      <tr><td>循环变量</td><td><code class="inline">FOR j = 0 TO 9</code></td><td><code class="inline">for j in range(10)</code></td><td>ACSL 含头含尾（10 次）</td></tr>
+      <tr><td>倒序</td><td><code class="inline">STEP -1</code></td><td><code class="inline">range(9,-1,-1)</code></td><td>ACSL 直接写 STEP -1 更直观</td></tr>
+      <tr><td>分支收尾</td><td><code class="inline">END IF</code></td><td>靠缩进</td><td>必须有 END IF 标识</td></tr>
+      <tr><td>循环收尾</td><td><code class="inline">NEXT j</code> 或 <code class="inline">END WHILE</code></td><td>靠缩进</td><td>必须有 NEXT/END 标识</td></tr>
+      <tr><td>整数除法</td><td><code class="inline">3/2 = 1.5</code></td><td><code class="inline">3/2 = 1.5</code></td><td>ACSL 用 / 就是浮点除</td></tr>
+      <tr><td>取模</td><td><code class="inline">a MOD b</code> 或 <code class="inline">a % b</code></td><td><code class="inline">a % b</code></td><td>都接受 %</td></tr>
+      <tr><td>逻辑运算</td><td><code class="inline">&amp;&amp;</code> <code class="inline">||</code> <code class="inline">!</code></td><td><code class="inline">and</code> <code class="inline">or</code> <code class="inline">not</code></td><td>符号不同含义相同</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- 07 · 第 2 章 · 分支追踪 -->
+<section class="slide title-slide">
+  <div class="kicker">Chapter 2 · Branching Tracing</div>
+  <h1>第 2 章<br>分支追踪</h1>
+  <p class="subtitle" style="margin-top:18px;">ACSL 第一轮高频考点 · 30 分钟攻克</p>
+  <p class="subtitle">
+    <span class="en-tag">Contest 1 · What Does This Program Do? - Branching</span>
+  </p>
+</section>
+
+<!-- 08 · 分支追踪方法论 -->
+<section class="slide wide">
+  <div class="head">
+    <div class="kicker">第 2 章 · 方法论</div>
+    <h2>分支追踪 · <span class="highlight">3 步法</span></h2>
+    <p class="subtitle">3 步搞定任何分支追踪题</p>
+  </div>
+
+  <div class="grid2">
+    <div class="card" style="background:rgba(124,58,237,.05);">
+      <h3 style="color:var(--purple);">第 1 步 · 通读代码找变量</h3>
+      <p>先标出所有被赋值的变量（看到 <code class="inline">x = ...</code> 就圈出来）</p>
+      <p style="font-size:14px; color:var(--muted);">→ 一般 2-5 个变量</p>
+    </div>
+    <div class="card" style="background:rgba(217,119,6,.05);">
+      <h3 style="color:var(--amber-deep);">第 2 步 · 画追踪表</h3>
+      <p>每行 = 一个变量的当前值，每列 = 一个分支节点</p>
+      <p style="font-size:14px; color:var(--muted);">→ 不要在脑子里算！写在纸上！</p>
+    </div>
+    <div class="card" style="background:rgba(22,163,74,.05);">
+      <h3 style="color:var(--green-deep);">第 3 步 · 逐 if 顺序执行</h3>
+      <p>ACSL 的 if 是<b>连续 if 串联</b>（不是 if-else 互斥）</p>
+      <p style="font-size:14px; color:var(--muted);">→ 每个 if 都要判断，条件满足才执行</p>
+    </div>
+    <div class="card" style="background:rgba(37,99,235,.05);">
+      <h3 style="color:var(--blue-deep);">⚠️ 关键陷阱</h3>
+      <p style="font-size:15px;">一个变量可能<b>被多次修改</b>（如 h 从 50 → 48 → 40）</p>
+      <p style="font-size:14px; color:var(--muted);">→ 每行只记"当前值"，不记"原值"</p>
+    </div>
+  </div>
+</section>
+
+<!-- 09 · 实战题 1（ACSL Wiki 原题） -->
+<section class="slide wide">
+  <div class="head">
+    <div class="kicker">第 2 章 · 例题</div>
+    <h2>例题 · 工资计算 <span class="en-tag">ACSL Wiki Sample 1</span></h2>
+    <p class="subtitle">ACSL Wiki 真题 · 第一次接触"业务逻辑追踪"</p>
+  </div>
+
+  <pre><code>INPUT h, r
+b = 0
+IF h > 48 THEN
+  b = b + (h - 48) * 2 * r
+  h = 48
+END IF
+IF h > 40 THEN
+  b = b + (h - 40) * (3/2) * r
+  h = 40
+END IF
+b = b + h * r
+OUTPUT b</code></pre>
+
+  <p><b>问</b>：输入 <code class="inline">h = 50, r = 10</code>，输出 b 是多少？</p>
+
+  <div class="practice">
+    <div class="label">🤔 先自己想 30 秒再往下看</div>
+    <p>提示：这是一个计算员工周薪的程序</p>
+    <ul style="font-size:14px; line-height:1.8; padding-left:20px;">
+      <li>≤ 40 小时：按 <code class="inline">r</code> 元/小时 算</li>
+      <li>40-48 小时：1.5 倍工资（加班费）</li>
+      <li>> 48 小时：2 倍工资（双倍加班费）</li>
+    </ul>
+  </div>
+</section>
+
+<!-- 10 · 例题详解 -->
+<section class="slide wide">
+  <div class="head">
+    <div class="kicker">第 2 章 · 详解</div>
+    <h2>追踪表 · <span class="highlight">b 从 0 到 560</span></h2>
+    <p class="subtitle">每行 = 执行完一个 IF 或最后一行后的状态</p>
+  </div>
+
+  <p><b>初始值</b>：<code class="inline">h = 50, r = 10, b = 0</code></p>
+
+  <table class="track-table">
+    <thead>
+      <tr><th>行号</th><th>执行语句</th><th>b</th><th>h</th><th>说明</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>3</td>
+        <td><code>b = 0</code></td>
+        <td><b>0</b></td>
+        <td>50</td>
+        <td>初始</td>
+      </tr>
+      <tr>
+        <td>5</td>
+        <td><code>b = b + (50-48) * 2 * 10</code></td>
+        <td><b>40</b></td>
+        <td>50</td>
+        <td>2 倍加班 2h</td>
+      </tr>
+      <tr>
+        <td>6</td>
+        <td><code>h = 48</code></td>
+        <td>40</td>
+        <td><b>48</b></td>
+        <td>h 被修改了</td>
+      </tr>
+      <tr>
+        <td>10</td>
+        <td><code>b = b + (48-40) * 1.5 * 10</code></td>
+        <td><b>160</b></td>
+        <td>48</td>
+        <td>1.5 倍加班 8h</td>
+      </tr>
+      <tr>
+        <td>11</td>
+        <td><code>h = 40</code></td>
+        <td>160</td>
+        <td><b>40</b></td>
+        <td>h 被修改了</td>
+      </tr>
+      <tr>
+        <td>14</td>
+        <td><code>b = b + 40 * 10</code></td>
+        <td><b>560</b></td>
+        <td>40</td>
+        <td>基础 40h</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="tip">
+    <b>答案</b>：b = <b>560</b><br>
+    <b>心算验证</b>：2h × 2 × 10 + 8h × 1.5 × 10 + 40h × 10 = 40 + 120 + 400 = <b>560</b> ✓
+  </div>
+</section>
+
+<!-- 11 · 例题 2 · 业务逻辑更复杂 -->
+<section class="slide wide">
+  <div class="head">
+    <div class="kicker">第 2 章 · 例题 2</div>
+    <h2>字符串追踪 · <span class="en-tag">ACSL Wiki Sample 2</span></h2>
+    <p class="subtitle">ACSL Wiki 第二轮真题 · 第一次接触"倒序 + 字符串拼接"</p>
+  </div>
+
+  <pre><code>a = "BANANAS"
+num = 0; t = ""
+FOR j = len(a) - 1 TO 0 STEP -1
+  t = t + a[j]
+NEXT j
+FOR j = 0 TO len(a) - 1
+  IF a[j] == t[j] THEN
+    num = num + 1
+  END IF
+NEXT j</code></pre>
+
+  <p><b>问</b>：执行后 num 的值是多少？</p>
+
+  <div class="practice">
+    <div class="label">🤔 试试自己追踪</div>
+    <p>提示：第一个循环把 a 反转存到 t，第二个循环数 a 和 t 相同位置的字符数</p>
+  </div>
+</section>
+
+<!-- 12 · 例题 2 详解 -->
+<section class="slide wide">
+  <div class="head">
+    <div class="kicker">第 2 章 · 详解</div>
+    <h2>追踪表 · <span class="highlight">num 从 0 到 5</span></h2>
+  </div>
+
+  <p><b>初始值</b>：<code class="inline">a = "BANANAS", num = 0, t = ""</code></p>
+  <p><b>a 的索引</b>：<code class="inline">a[0]="B", a[1]="A", a[2]="N", a[3]="A", a[4]="N", a[5]="A", a[6]="S"</code></p>
+
+  <h3>循环 1 · 把 a 反转存到 t</h3>
+  <table class="track-table">
+    <thead>
+      <tr><th>j</th><th>a[j]</th><th>t (更新后)</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>6</td><td>S</td><td>"S"</td></tr>
+      <tr><td>5</td><td>A</td><td>"SA"</td></tr>
+      <tr><td>4</td><td>N</td><td>"SAN"</td></tr>
+      <tr><td>3</td><td>A</td><td>"SANA"</td></tr>
+      <tr><td>2</td><td>N</td><td>"SANAN"</td></tr>
+      <tr><td>1</td><td>A</td><td>"SANANA"</td></tr>
+      <tr><td>0</td><td>B</td><td>"SANANAB"</td></tr>
+    </tbody>
+  </table>
+
+  <h3>循环 2 · 数相同位置的字符</h3>
+  <table class="track-table">
+    <thead>
+      <tr><th>j</th><th>a[j]</th><th>t[j]</th><th>相等？</th><th>num</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>0</td><td>B</td><td>S</td><td>❌</td><td>0</td></tr>
+      <tr><td>1</td><td>A</td><td>A</td><td>✅</td><td>1</td></tr>
+      <tr><td>2</td><td>N</td><td>N</td><td>✅</td><td>2</td></tr>
+      <tr><td>3</td><td>A</td><td>A</td><td>✅</td><td>3</td></tr>
+      <tr><td>4</td><td>N</td><td>N</td><td>✅</td><td>4</td></tr>
+      <tr><td>5</td><td>A</td><td>A</td><td>✅</td><td>5</td></tr>
+      <tr><td>6</td><td>S</td><td>B</td><td>❌</td><td>5</td></tr>
+    </tbody>
+  </table>
+
+  <div class="tip">
+    <b>答案</b>：num = <b>5</b><br>
+    💡 <b>含义</b>：B 和 S 是不动的「轴」，其他位置全是 palindrome（对称的）
+  </div>
+</section>
+
+<!-- 13 · 第 3 章 · 循环追踪 -->
+<section class="slide title-slide">
+  <div class="kicker">Chapter 3 · Loop Tracing</div>
+  <h1>第 3 章<br>循环追踪</h1>
+  <p class="subtitle" style="margin-top:18px;">ACSL 第二轮核心考点</p>
+  <p class="subtitle">
+    <span class="en-tag">Contest 2 · What Does This Program Do? - Looping</span>
+  </p>
+</section>
+
+<!-- 14 · 循环追踪方法 -->
+<section class="slide wide">
+  <div class="head">
+    <div class="kicker">第 3 章 · 方法论</div>
+    <h2>循环追踪 · <span class="highlight">追踪表模板</span></h2>
+    <p class="subtitle">不管循环多复杂，一张表搞定</p>
+  </div>
+
+  <h3>追踪表 5 列模板</h3>
+  <table class="track-table">
+    <thead>
+      <tr><th>行号</th><th>循环变量 j</th><th>关键变量 1</th><th>关键变量 2</th><th>本次循环做了什么</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>初始</td><td>—</td><td>初值</td><td>初值</td><td>—</td></tr>
+      <tr><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td></tr>
+    </tbody>
+  </table>
+
+  <div class="warn">
+    <b>三大陷阱</b>：
+    <ol style="padding-left:20px; line-height:1.8;">
+      <li><b>STEP -1 倒序</b> —— 学生最容易搞错方向（变成 0,1,2,3...）</li>
+      <li><b>循环体内修改循环变量</b> —— 如 <code class="inline">j = j + 1</code> 在循环体内，会让循环次数变多</li>
+      <li><b>多个变量同时改变</b> —— 不只追踪 j，还要追踪被赋值的所有变量</li>
+    </ol>
+  </div>
+
+  <div class="tip">
+    💡 <b>速度训练法</b>：第一遍慢点建立模板，第二遍计时做 —— 目标 30 秒读完 + 30 秒内出答案
+  </div>
+</section>
+
+<!-- 15 · 倒序循环 -->
+<section class="slide wide">
+  <div class="head">
+    <div class="kicker">第 3 章 · 重难点</div>
+    <h2>倒序循环 · <span class="highlight">STEP -1</span></h2>
+    <p class="subtitle">学生最大失分点之一</p>
+  </div>
+
+  <pre><code>FOR j = 5 TO 1 STEP -1
+  PRINT j
+NEXT j</code></pre>
+
+  <p><b>输出</b>：</p>
+  <table class="track-table">
+    <thead>
+      <tr><th>j</th><th>输出</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>5</td><td>5</td></tr>
+      <tr><td>4</td><td>4</td></tr>
+      <tr><td>3</td><td>3</td></tr>
+      <tr><td>2</td><td>2</td></tr>
+      <tr><td>1</td><td>1</td></tr>
+    </tbody>
+  </table>
+
+  <div class="warn">
+    ⚠️ <b>STEP -1 不是「0 到 5」</b>，而是「5 到 1」！<br>
+    起点在 = 前面，终点在 = 后面，STEP -1 表示每次减 1
+  </div>
+
+  <div class="card">
+    <h3>陷阱 · 边界值</h3>
+    <pre><code>FOR j = 0 TO 0 STEP -1
+  PRINT j
+NEXT j</code></pre>
+    <p><b>输出</b>：0（只跑一次）—— 因为 0 到 0 已经相等，但 STEP -1 还要再判断一次条件</p>
+    <p style="font-size:14px; color:var(--muted);">→ ACSL 边界值题常考，<b>先画表再写答案</b></p>
+  </div>
+</section>
+
+<!-- 16 · 第 4 章 · 数组追踪 -->
+<section class="slide title-slide">
+  <div class="kicker">Chapter 4 · Array Tracing</div>
+  <h1>第 4 章<br>数组追踪</h1>
+  <p class="subtitle" style="margin-top:18px;">ACSL 第三轮核心考点</p>
+  <p class="subtitle">
+    <span class="en-tag">Contest 3 · What Does This Program Do? - Arrays</span>
+  </p>
+</section>
+
+<!-- 17 · 数组追踪方法 -->
+<section class="slide wide">
+  <div class="head">
+    <div class="kicker">第 4 章 · 方法论</div>
+    <h2>数组追踪 · <span class="highlight">3 种常见模式</span></h2>
+  </div>
+
+  <h3>模式 1 · 单数组累加</h3>
+  <pre><code>A(0) = 10; A(1) = 20; A(2) = 30
+sum = 0
+FOR j = 0 TO 2
+  sum = sum + A(j)
+NEXT j</code></pre>
+  <p>追踪表：</p>
+  <table class="track-table">
+    <thead><tr><th>j</th><th>A(j)</th><th>sum</th></tr></thead>
+    <tbody>
+      <tr><td>初始</td><td>—</td><td>0</td></tr>
+      <tr><td>0</td><td>10</td><td>10</td></tr>
+      <tr><td>1</td><td>20</td><td>30</td></tr>
+      <tr><td>2</td><td>30</td><td>60</td></tr>
+    </tbody>
+  </table>
+
+  <h3>模式 2 · 哨兵值退出</h3>
+  <pre><code>A(0) = 5; A(1) = 8; A(2) = -1
+sum = 0; j = 0
+WHILE A(j) > 0
+  sum = sum + A(j)
+  j = j + 1
+END WHILE</code></pre>
+  <p>→ 当 <code class="inline">A(j) = -1</code> 时退出循环（<b>哨兵值</b>）</p>
+  <p>→ 输出 sum = 13</p>
+
+  <div class="tip">
+    💡 <b>哨兵值</b>是数组末尾的特殊值（如 -1, 0, 空字符串），用来标记循环结束 —— <b>OJ 学生完全没见过这个模式</b>
+  </div>
+</section>
+
+<!-- 18 · 嵌套循环追踪 -->
+<section class="slide wide">
+  <div class="head">
+    <div class="kicker">第 4 章 · 重难点</div>
+    <h2>嵌套循环追踪 · <span class="highlight">ACSL Wiki Sample 3</span></h2>
+    <p class="subtitle">ACSL 第三轮真题 · 学生最大难关</p>
+  </div>
+
+  <pre><code>A(0)=12; A(1)=41; A(2)=52
+A(3)=57; A(4)=77; A(5)=-100
+B(0)=17; B(1)=34; B(2)=81
+j=0; k=0; n=0
+WHILE A(k) > 0
+  WHILE B(k) <= A(j)
+    C(n) = B(k)
+    n = n + 1
+    k = k + 1
+  END WHILE
+  C(n) = A(j)
+  n = n + 1
+  j = j + 1
+END WHILE
+C(n) = B(k)</code></pre>
+
+  <div class="warn">
+    ⚠️ <b>本程序本质</b>：把两个有序数组合并成一个有序数组（归并算法 merge）<br>
+    学生 OJ 上完全没练过这种"哨兵 + 双指针 + 嵌套 while"组合
+  </div>
+
+  <p><b>问</b>：执行后 C(4) 的值是多少？</p>
+</section>
+
+<!-- 19 · 嵌套循环详解 -->
+<section class="slide wide">
+  <div class="head">
+    <div class="kicker">第 4 章 · 详解</div>
+    <h2>追踪表 · <span class="highlight">6 列变量</span></h2>
+    <p class="subtitle">每次进入 / 退出内循环都记一行</p>
+  </div>
+
+  <table class="track-table">
+    <thead>
+      <tr><th>阶段</th><th>j</th><th>k</th><th>n</th><th>A(j)</th><th>B(k)</th><th>C(n)</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>初始</td><td>0</td><td>0</td><td>0</td><td>12</td><td>17</td><td>—</td></tr>
+      <tr><td>内循环退出（B(0)=17 &gt; A(0)=12）</td><td>0</td><td>0</td><td>0</td><td>12</td><td>17</td><td>C(0)=12</td></tr>
+      <tr><td>j++ → 进入外循环</td><td>1</td><td>0</td><td>1</td><td>41</td><td>17</td><td>—</td></tr>
+      <tr><td>内循环 1：B(0)=17 ≤ A(1)=41</td><td>1</td><td>0</td><td>1</td><td>41</td><td>17</td><td>C(1)=17</td></tr>
+      <tr><td>内循环 2：B(1)=34 ≤ 41</td><td>1</td><td>1</td><td>2</td><td>41</td><td>34</td><td>C(2)=34</td></tr>
+      <tr><td>内循环 3：B(2)=81 &gt; 41 退出</td><td>1</td><td>2</td><td>3</td><td>41</td><td>81</td><td>C(3)=41</td></tr>
+      <tr><td>j++ → A(2)=52</td><td>2</td><td>2</td><td>4</td><td>52</td><td>81</td><td>C(4)=52 ✓</td></tr>
+      <tr><td>B(2)=81 &gt; 52 退出内循环</td><td>2</td><td>2</td><td>5</td><td>52</td><td>81</td><td>—</td></tr>
+      <tr><td>j++ → A(3)=57</td><td>3</td><td>2</td><td>5</td><td>57</td><td>81</td><td>C(5)=57</td></tr>
+      <tr><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td></tr>
+    </tbody>
+  </table>
+
+  <div class="tip">
+    <b>答案</b>：C(4) = <b>52</b><br>
+    💡 注意：n 先 +1 再赋值，所以"赋值 C(n) = ... 后 n 自动 +1"指向下一个空位
+  </div>
+</section>
+
+<!-- 20 · 实战 5 道题 -->
+<section class="slide wide compact">
+  <div class="head">
+    <div class="kicker">实战 · 5 道限时训练</div>
+    <h2>实战题 · <span class="highlight">30 分钟内做完</span></h2>
+    <p class="subtitle">对照追踪表模板做 · 每题限时 6 分钟</p>
+  </div>
+
+  <div class="practice">
+    <div class="label">题 1 · 分支</div>
+    <pre><code>INPUT x
+y = 10
+IF x &gt; 5 THEN
+  y = y + (x - 5) * 3
+END IF
+IF x &gt; 0 THEN
+  y = y + x * 2
+END IF
+OUTPUT y</code></pre>
+    <p>问：<code class="inline">x = 8</code>，y 是多少？<br>答案：<b style="color:var(--green-deep);">19 + 16 = 35</b></p>
+  </div>
+
+  <div class="practice">
+    <div class="label">题 2 · 字符串拼接</div>
+    <pre><code>s = "CODE"
+t = ""
+FOR j = 3 TO 0 STEP -1
+  t = t + s[j]
+NEXT j</code></pre>
+    <p>问：t 的值？<br>答案：<b style="color:var(--green-deep);">"EDOC"</b></p>
+  </div>
+
+  <div class="practice">
+    <div class="label">题 3 · 循环累加</div>
+    <pre><code>sum = 0
+FOR j = 1 TO 5
+  sum = sum + j * 2
+NEXT j</code></pre>
+    <p>问：sum 的值？<br>答案：<b style="color:var(--green-deep);">2+4+6+8+10 = 30</b></p>
+  </div>
+
+  <div class="practice">
+    <div class="label">题 4 · 数组哨兵</div>
+    <pre><code>A(0)=3; A(1)=7; A(2)=2; A(3)=0
+count = 0; j = 0
+WHILE A(j) != 0
+  count = count + 1
+  j = j + 1
+END WHILE</code></pre>
+    <p>问：count 的值？<br>答案：<b style="color:var(--green-deep);">3</b>（遇到 A(3)=0 退出）</p>
+  </div>
+
+  <div class="practice">
+    <div class="label">题 5 · 嵌套循环</div>
+    <pre><code>FOR i = 1 TO 3
+  FOR j = 1 TO 2
+    PRINT i * 10 + j
+  NEXT j
+NEXT i</code></pre>
+    <p>问：输出序列？<br>答案：<b style="color:var(--green-deep);">11, 12, 21, 22, 31, 32</b></p>
+  </div>
+</section>
+
+<!-- 21 · 30 题选择题（用网站版的折叠式）-->
+<section class="slide wide">
+  <div class="head">
+    <div class="kicker">课后作业</div>
+    <h2>30 题选择题 · <span class="highlight">必做</span></h2>
+    <p class="subtitle">6 章节 × 5 题 · 全部 ACSL 风格程序追踪题</p>
+  </div>
+
+  <div class="grid2">
+    <div class="card" style="background:rgba(124,58,237,.05);">
+      <h3 style="color:var(--purple);">📚 章节 1 · ACSL 伪代码语法（5 题）</h3>
+      <p>INPUT / OUTPUT / IF / FOR / 字符串切片 等</p>
+    </div>
+    <div class="card" style="background:rgba(217,119,6,.05);">
+      <h3 style="color:var(--amber-deep);">📚 章节 2 · 分支追踪（5 题）</h3>
+      <p>单 if / 多 if 串联 / 业务逻辑计算</p>
+    </div>
+    <div class="card" style="background:rgba(22,163,74,.05);">
+      <h3 style="color:var(--green-deep);">📚 章节 3 · 循环追踪（5 题）</h3>
+      <p>正向 / 倒序 STEP -1 / 循环体内修改 j</p>
+    </div>
+    <div class="card" style="background:rgba(37,99,235,.05);">
+      <h3 style="color:var(--blue-deep);">📚 章节 4 · 数组追踪（5 题）</h3>
+      <p>单数组 / 哨兵退出 / 双指针追踪</p>
+    </div>
+    <div class="card" style="background:rgba(15,159,154,.05);">
+      <h3 style="color:var(--teal);">📚 章节 5 · 嵌套循环追踪（5 题）</h3>
+      <p>嵌套 while / 追踪表 6 列 / 边界退出</p>
+    </div>
+    <div class="card" style="background:rgba(220,38,38,.04);">
+      <h3 style="color:var(--red);">📚 章节 6 · 字符串追踪（5 题）</h3>
+      <p>拼接 / 倒序 / 切片 S[2:6] / 索引 0 开始</p>
+    </div>
+  </div>
+
+  <div class="tip">
+    📊 <b>做完对答案</b>：在 <a href="https://laoyizun.github.io/acsl-prep/" target="_blank" style="color:var(--purple);">首页 → L3 作业</a> 查看完整 30 题，每题含答案 + 解析<br>
+    🎯 <b>目标</b>：6 章节每章节全对 → L3 内容过关
+  </div>
+</section>
+
+<!-- 22 · 总结 + 下一步 -->
+<section class="slide title-slide">
+  <div class="kicker">总结 · Summary</div>
+  <h1 style="font-size:clamp(36px, 5vw, 60px);">L3 学完了 🎉</h1>
+  <p class="subtitle" style="margin-top:24px;">你掌握了 ACSL 竞赛的核心能力</p>
+
+  <div style="margin-top:32px; text-align:left; max-width:720px; margin-left:auto; margin-right:auto;">
+    <div class="card" style="background:rgba(22,163,74,.06);">
+      <h3 style="color:var(--green-deep);">✅ 学到的新能力</h3>
+      <ul style="line-height:1.8; padding-left:20px;">
+        <li>ACSL 伪代码语法（INPUT / FOR / NEXT / END IF 等）</li>
+        <li>30 秒读完 15 行代码 + 立即给答案</li>
+        <li>系统化追踪表（5 列模板 / 6 列嵌套循环模板）</li>
+        <li>分支追踪 3 步法（通读 → 画表 → 逐 if 执行）</li>
+        <li>倒序 STEP -1 循环 + 字符串拼接</li>
+        <li>嵌套 while + 双指针 + 哨兵值退出</li>
+      </ul>
+    </div>
+  </div>
+
+  <p style="margin-top:32px; font-size:18px; color:var(--muted);">
+    📚 下一节：L4-5 · 第一轮真题 + 模拟考（9.28 - 10.11）<br>
+    <span class="en-tag">Apply L3 tracing skills to past ACSL Contest 1 problems</span>
+  </p>
+
+  <p style="margin-top:18px;">
+    <a href="https://laoyizun.github.io/acsl-prep/" style="display:inline-block; padding:14px 28px; background:var(--purple); color:white; text-decoration:none; border-radius:10px; font-weight:800; font-size:18px;">📚 返回课程目录</a>
+  </p>
+</section>
+
+<!-- 底部导航栏 -->
+<div class="nav-fixed">
+  <div class="summary">
+    <a class="home-link secondary" href="index.html">📚 目录</a>
+    <button class="secondary" onclick="prev()">← 上页</button>
+    <span class="counter"><span id="cur">1</span> / <span id="total">22</span></span>
+    <div class="progress-bar"><span id="bar"></span></div>
+    <button onclick="next()">下页 →</button>
+  </div>
+</div>
+
+<script>
+let cur = 1;
+const total = document.querySelectorAll('section.slide').length;
+document.getElementById('total').textContent = total;
+
+function show() {
+  document.getElementById('cur').textContent = cur;
+  document.getElementById('bar').style.width = (cur / total * 100) + '%';
+  window.scrollTo({ top: (cur - 1) * window.innerHeight, behavior: 'smooth' });
+}
+function next() {
+  if (cur < total) { cur++; show(); }
+}
+function prev() {
+  if (cur > 1) { cur--; show(); }
+}
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') next();
+  if (e.key === 'ArrowLeft' || e.key === 'PageUp') prev();
+  if (e.key === 'Home') { cur = 1; show(); }
+  if (e.key === 'End') { cur = total; show(); }
+});
+let touchStartX = 0;
+document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; });
+document.addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].clientX - touchStartX;
+  if (dx < -50) next();
+  if (dx > 50) prev();
+});
+show();
+</script>
+
+</body>
+</html>
