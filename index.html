@@ -580,17 +580,17 @@ code.inline {
         </div>
       </a>
 
-      <!-- L3 · 备课中 -->
-      <div class="lesson-card disabled">
+      <!-- L3 · 已开放 -->
+      <a class="lesson-card" href="L3.html">
         <div class="lesson-num">L3</div>
-        <h3>程序是怎么运行的（完整版）</h3>
+        <h3>程序是怎么追踪的</h3>
         <p>分支追踪 · 循环追踪 · 数组追踪 · 字符串追踪</p>
         <div class="lesson-meta">
           <span class="meta-chip purple">9.21 - 9.27</span>
-          <span class="meta-chip green">第 1-4 轮分散</span>
-          <span class="meta-chip gray">备课中</span>
+          <span class="meta-chip amber">第一/二/三轮</span>
+          <span class="meta-chip green">已开放 · 22 页</span>
         </div>
-      </div>
+      </a>
 
       <!-- L4-5 · 备课中 -->
       <div class="lesson-card disabled">
@@ -1050,8 +1050,398 @@ code.inline {
       </div>
     </details>
 
+    <details class="hw-flip" open>
+      <summary>L3 · 程序追踪（30 题选择题 · 6 大考点）</summary>
+      <div class="hw-body">
+        <p style="color:var(--muted); font-size:14px;">截止日期：本月底 · 30 题全部 ACSL 风格程序追踪题 · 做题前请先看完 L3 PPT</p>
+
+        <p style="font-size:14px; line-height:1.7;">
+          <b>覆盖范围</b>：ACSL 伪代码语法 + 分支追踪 + 循环追踪 + 数组追踪 + 嵌套循环 + 字符串追踪，共 6 章节 × 5 题 = <b>30 道选择题</b>。<br>
+          <b>难度</b>：★ 基础（找语法感觉）+ ★★ 中等（手算追踪）+ ★★★ ACSL Wiki 真题风格。<br>
+          <b>做法</b>：每题先在纸上画表追踪 → 选答案 → 点 <b>"展开答案"</b> 对解析。<b>不要用代码运行</b>！考试要的就是手算能力。
+        </p>
+
+        <hr style="border:none; border-top:1px dashed var(--line); margin:14px 0;">
+
+        <h4 style="color:var(--purple-deep);">📘 章节 1 · ACSL 伪代码语法（5 题）</h4>
+        <ol class="hw-quiz">
+          <li>
+            <p class="hw-q">In ACSL pseudocode, which correctly reads two numbers into h and r?</p>
+            <ol type="A" class="hw-options">
+              <li><code>input(h, r)</code></li><li><code>INPUT h, r</code></li><li><code>READ h &amp;&amp; r</code></li><li><code>GET h, r</code></li>
+            </ol>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>正确答案：B</b><br>ACSL 用 <code>INPUT x, y</code> 读入多个变量 · 不是 <code>input()</code> 函数</div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q">In ACSL, how do you print the value of variable <code>b</code>?</p>
+            <ol type="A" class="hw-options">
+              <li><code>print(b)</code></li><li><code>OUTPUT b</code></li><li><code>DISPLAY b</code></li><li><code>SHOW b</code></li>
+            </ol>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>正确答案：B</b><br>ACSL 用 <code>OUTPUT variable</code> 输出 · 没有 <code>print()</code></div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q">In ACSL, what is the syntax for accessing the first element of array A?</p>
+            <ol type="A" class="hw-options">
+              <li><code>A[0]</code></li><li><code>A(0)</code></li><li><code>A(1)</code></li><li><code>{A, 0}</code></li>
+            </ol>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>正确答案：B</b><br>ACSL 数组用<b>圆括号</b> <code>A(0)</code>，Python 用方括号 <code>A[0]</code>，含义相同但符号不同</div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q">In ACSL, what is the value of <code>3 / 2</code>?</p>
+            <ol type="A" class="hw-options">
+              <li>1 (integer division)</li><li>1.5 (real division)</li><li>0</li><li>Error</li>
+            </ol>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>正确答案：B</b><br>ACSL 的 <code>/</code> 是<b>实数除法</b>（浮点），3/2 = 1.5（和 Python 一致）</div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q">Given <code>S = "ACSL WDTPD"</code>, what is <code>S[2:6]</code>?</p>
+            <ol type="A" class="hw-options">
+              <li>"CSL"</li><li>"SL W"</li><li>"SL WD"</li><li>" WDT"</li>
+            </ol>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>正确答案：C</b><br>索引从 0 开始：A=0, C=1, S=2, L=3, ' '=4, W=5, D=6。S[2:6] 取位置 2-5 共 4 个字符："SL W" · 但 ACSL <code>[2:6]</code> 是<b>包含位置 6</b>，所以取 5 个字符 = "SL WD"</div>
+            </details>
+          </li>
+        </ol>
+
+        <h4 style="color:var(--purple-deep);">📘 章节 2 · 分支追踪 Branching（5 题）</h4>
+        <ol class="hw-quiz">
+          <li>
+            <p class="hw-q">
+              If <code>x = 8</code>, what is the output?<br><br>
+              <code>INPUT x<br>y = 10<br>IF x &gt; 5 THEN y = y + (x - 5) * 3<br>END IF<br>IF x &gt; 0 THEN y = y + x * 2<br>END IF<br>OUTPUT y</code>
+            </p>
+            <ol type="A" class="hw-options">
+              <li>31</li><li>35</li><li>41</li><li>19</li>
+            </ol>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>正确答案：B</b><br>追踪表：<br>· 初始 y=10<br>· 第 1 IF (8&gt;5): y = 10 + 3×3 = 19<br>· 第 2 IF (8&gt;0): y = 19 + 8×2 = <b>35</b></div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q">
+              If input is <code>h=50, r=10</code>, what is <code>b</code>?<br><br>
+              <code>INPUT h, r<br>b = 0<br>IF h &gt; 48 THEN<br>&nbsp;&nbsp;b = b + (h - 48) * 2 * r<br>&nbsp;&nbsp;h = 48<br>END IF<br>IF h &gt; 40 THEN<br>&nbsp;&nbsp;b = b + (h - 40) * (3/2) * r<br>&nbsp;&nbsp;h = 40<br>END IF<br>b = b + h * r<br>OUTPUT b</code>
+            </p>
+            <ol type="A" class="hw-options">
+              <li>560</li><li>540</li><li>580</li><li>600</li>
+            </ol>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>正确答案：A</b><br>· 第 1 IF: b=40, h=48<br>· 第 2 IF: b=160, h=40<br>· 最后: b=160+40×10 = <b>560</b></div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q">
+              If <code>score=85</code>, what is <code>grade</code>?<br><br>
+              <code>grade = "F"<br>IF score &gt;= 60 THEN grade = "D"<br>END IF<br>IF score &gt;= 70 THEN grade = "C"<br>END IF<br>IF score &gt;= 80 THEN grade = "B"<br>END IF<br>IF score &gt;= 90 THEN grade = "A"<br>END IF</code>
+            </p>
+            <ol type="A" class="hw-options">
+              <li>"F"</li><li>"D"</li><li>"C"</li><li>"B"</li>
+            </ol>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>正确答案：D</b><br>连续 IF 串联：85≥60 → D, 85≥70 → C, 85≥80 → B, 85&lt;90 不变。最终 = <b>"B"</b></div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q">
+              What is the final value of <code>num</code>?<br><br>
+              <code>a = "BANANAS"<br>num = 0; t = ""<br>FOR j = 6 TO 0 STEP -1<br>&nbsp;&nbsp;t = t + a[j]<br>NEXT j<br>FOR j = 0 TO 6<br>&nbsp;&nbsp;IF a[j] == t[j] THEN num = num + 1<br>&nbsp;&nbsp;END IF<br>NEXT j</code>
+            </p>
+            <ol type="A" class="hw-options">
+              <li>0</li><li>3</li><li>5</li><li>7</li>
+            </ol>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>正确答案：C</b><br>循环 1 反转 a 存到 t="SANANAB"。循环 2 数同位置字符：j=0 (B≠S), j=1 (A=A ✓), j=2 (N=N ✓), j=3 (A=A ✓), j=4 (N=N ✓), j=5 (A=A ✓), j=6 (S≠B)。最终 num = <b>5</b></div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q">
+              If <code>x=5</code>, what is the value of <code>result</code>?<br><br>
+              <code>INPUT x<br>result = x * x<br>IF x &gt; 3 THEN result = result + 2 * x<br>END IF<br>result = result + 1<br>OUTPUT result</code>
+            </p>
+            <ol type="A" class="hw-options">
+              <li>25</li><li>35</li><li>36</li><li>40</li>
+            </ol>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>正确答案：C</b><br>· 初始 result=25<br>· IF (5&gt;3): result=25+10=35<br>· 最后: result=35+1 = <b>36</b></div>
+            </details>
+          </li>
+        </ol>
+
+        <h4 style="color:var(--purple-deep);">📘 章节 3 · 循环追踪 Looping（5 题）</h4>
+        <ol class="hw-quiz">
+          <li>
+            <p class="hw-q">
+              What is <code>sum</code>?<br><br>
+              <code>sum = 0<br>FOR j = 1 TO 5<br>&nbsp;&nbsp;sum = sum + j * 2<br>NEXT j</code>
+            </p>
+            <ol type="A" class="hw-options">
+              <li>15</li><li>25</li><li>30</li><li>50</li>
+            </ol>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>正确答案：C</b><br>j 取 1,2,3,4,5，每次 sum += j×2：2+4+6+8+10 = <b>30</b></div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q">
+              What is <code>t</code>?<br><br>
+              <code>s = "CODE"<br>t = ""<br>FOR j = 3 TO 0 STEP -1<br>&nbsp;&nbsp;t = t + s[j]<br>NEXT j</code>
+            </p>
+            <ol type="A" class="hw-options">
+              <li>"CODE"</li><li>"EDOC"</li><li>"OCED"</li><li>"DOCE"</li>
+            </ol>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>正确答案：B</b><br>j=3,2,1,0：s[3]=E, s[2]=D, s[1]=O, s[0]=C → 拼接 = <b>"EDOC"</b></div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q">
+              How many times does the body execute?<br><br>
+              <code>FOR j = 0 TO 5 STEP 2<br>&nbsp;&nbsp;PRINT j<br>NEXT j</code>
+            </p>
+            <ol type="A" class="hw-options">
+              <li>3 times (j=0,2,4)</li><li>5 times</li><li>6 times</li><li>4 times</li>
+            </ol>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>正确答案：A</b><br>STEP 2：j 取 0,2,4，到 5 停止。共 <b>3 次</b></div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q">
+              What is <code>n</code>?<br><br>
+              <code>n = 0<br>FOR j = 10 TO 1 STEP -2<br>&nbsp;&nbsp;n = n + 1<br>NEXT j</code>
+            </p>
+            <ol type="A" class="hw-options">
+              <li>5</li><li>4</li><li>10</li><li>6</li>
+            </ol>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>正确答案：A</b><br>j 取 10,8,6,4,2（到 1 之前停止），共 <b>5 次</b></div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q">
+              What is the final value of <code>x</code>?<br><br>
+              <code>x = 5<br>FOR j = 1 TO 3<br>&nbsp;&nbsp;x = x + j<br>NEXT j</code>
+            </p>
+            <ol type="A" class="hw-options">
+              <li>8</li><li>9</li><li>11</li><li>14</li>
+            </ol>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>正确答案：C</b><br>j=1: x=6, j=2: x=8, j=3: x=8+3 = <b>11</b></div>
+            </details>
+          </li>
+        </ol>
+
+        <h4 style="color:var(--purple-deep);">📘 章节 4 · 数组追踪 Arrays（5 题）</h4>
+        <ol class="hw-quiz">
+          <li>
+            <p class="hw-q">
+              What is <code>sum</code>?<br><br>
+              <code>A(0)=10; A(1)=20; A(2)=30<br>sum = 0<br>FOR j = 0 TO 2<br>&nbsp;&nbsp;sum = sum + A(j)<br>NEXT j</code>
+            </p>
+            <ol type="A" class="hw-options">
+              <li>30</li><li>50</li><li>60</li><li>20</li>
+            </ol>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>正确答案：C</b><br>sum = 10+20+30 = <b>60</b></div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q">
+              How many times does the loop execute?<br><br>
+              <code>A(0)=3; A(1)=7; A(2)=2; A(3)=0<br>count = 0; j = 0<br>WHILE A(j) != 0<br>&nbsp;&nbsp;count = count + 1<br>&nbsp;&nbsp;j = j + 1<br>END WHILE</code>
+            </p>
+            <ol type="A" class="hw-options">
+              <li>2</li><li>3</li><li>4</li><li>0 (infinite loop)</li>
+            </ol>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>正确答案：B</b><br>j=0,1,2 各跑一次，j=3 时 A(3)=0 退出，count = <b>3</b></div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q">
+              What is <code>max_val</code>?<br><br>
+              <code>B(0)=5; B(1)=12; B(2)=8; B(3)=3<br>max_val = B(0); j = 1<br>WHILE j &lt; 4<br>&nbsp;&nbsp;IF B(j) &gt; max_val THEN max_val = B(j)<br>&nbsp;&nbsp;END IF<br>&nbsp;&nbsp;j = j + 1<br>END WHILE</code>
+            </p>
+            <ol type="A" class="hw-options">
+              <li>5</li><li>12</li><li>8</li><li>3</li>
+            </ol>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>正确答案：B</b><br>追踪：5 → 12（B(1)=12>5）→ 12（B(2)=8 不变）→ 12。max = <b>12</b></div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q">
+              What is the value of <code>num</code>?<br><br>
+              <code>scores(0)=85; scores(1)=92; scores(2)=78; scores(3)=95<br>num = 0; j = 0<br>WHILE j &lt; 4<br>&nbsp;&nbsp;IF scores(j) &gt;= 90 THEN<br>&nbsp;&nbsp;&nbsp;&nbsp;num = num + 1<br>&nbsp;&nbsp;END IF<br>&nbsp;&nbsp;j = j + 1<br>END WHILE</code>
+            </p>
+            <ol type="A" class="hw-options">
+              <li>1</li><li>2</li><li>3</li><li>4</li>
+            </ol>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>正确答案：B</b><br>scores(1)=92 和 scores(3)=95 ≥90，共 <b>2 个</b>高分</div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q">
+              What is the value of <code>count</code>?<br><br>
+              <code>X(0)=1; X(1)=2; X(2)=3; X(3)=4<br>count = 0; j = 3<br>WHILE j &gt;= 0<br>&nbsp;&nbsp;IF X(j) MOD 2 == 0 THEN count = count + X(j)<br>&nbsp;&nbsp;END IF<br>&nbsp;&nbsp;j = j - 1<br>END WHILE</code>
+            </p>
+            <ol type="A" class="hw-options">
+              <li>2</li><li>6</li><li>4</li><li>10</li>
+            </ol>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>正确答案：B</b><br>偶数：X(3)=4（+4），X(1)=2（+2）。count = 4+2 = <b>6</b></div>
+            </details>
+          </li>
+        </ol>
+
+        <h4 style="color:var(--purple-deep);">📘 章节 5 · 嵌套循环追踪（5 题）</h4>
+        <ol class="hw-quiz">
+          <li>
+            <p class="hw-q">
+              What does this print?<br><br>
+              <code>FOR i = 1 TO 3<br>&nbsp;&nbsp;FOR j = 1 TO 2<br>&nbsp;&nbsp;&nbsp;&nbsp;PRINT i * 10 + j<br>&nbsp;&nbsp;NEXT j<br>NEXT i</code>
+            </p>
+            <ol type="A" class="hw-options">
+              <li>11, 12, 21, 22, 31, 32</li><li>11, 21, 31, 12, 22, 32</li><li>12, 11, 22, 21, 32, 31</li><li>11, 12, 13, 21, 22, 23</li>
+            </ol>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>正确答案：A</b><br>外层 i 慢，内层 j 快：11, 12, 21, 22, 31, 32</div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q">
+              What is <code>count</code>?<br><br>
+              <code>count = 0<br>FOR i = 1 TO 3<br>&nbsp;&nbsp;FOR j = 1 TO i<br>&nbsp;&nbsp;&nbsp;&nbsp;count = count + 1<br>&nbsp;&nbsp;NEXT j<br>NEXT i</code>
+            </p>
+            <ol type="A" class="hw-options">
+              <li>3</li><li>6</li><li>9</li><li>12</li>
+            </ol>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>正确答案：B</b><br>i=1: 1 次, i=2: 2 次, i=3: 3 次。1+2+3 = <b>6</b></div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q">
+              What is <code>C(4)</code>?<br><br>
+              <code>A(0)=12; A(1)=41; A(2)=52; A(3)=57; A(4)=77; A(5)=-100<br>B(0)=17; B(1)=34; B(2)=81<br>j=0; k=0; n=0<br>WHILE A(k) &gt; 0<br>&nbsp;&nbsp;WHILE B(k) &lt;= A(j)<br>&nbsp;&nbsp;&nbsp;&nbsp;C(n) = B(k); n = n + 1; k = k + 1<br>&nbsp;&nbsp;END WHILE<br>&nbsp;&nbsp;C(n) = A(j); n = n + 1; j = j + 1<br>END WHILE</code>
+            </p>
+            <ol type="A" class="hw-options">
+              <li>12</li><li>41</li><li>52</li><li>17</li>
+            </ol>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>正确答案：C</b><br>追踪表：j=0 → C(0)=12；j=1 → C(1)=17,C(2)=34,C(3)=41；j=2 → <b>C(4)=52</b>；... A(5)=-100 退出</div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q">
+              How many <code>*</code> are printed?<br><br>
+              <code>FOR i = 0 TO 2<br>&nbsp;&nbsp;FOR j = i TO 2<br>&nbsp;&nbsp;&nbsp;&nbsp;PRINT "*"<br>&nbsp;&nbsp;NEXT j<br>NEXT i</code>
+            </p>
+            <ol type="A" class="hw-options">
+              <li>3</li><li>6</li><li>9</li><li>4</li>
+            </ol>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>正确答案：B</b><br>i=0: 3, i=1: 2, i=2: 1。总 = 3+2+1 = <b>6</b></div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q">
+              What is <code>n</code>?<br><br>
+              <code>n = 0<br>FOR i = 1 TO 2<br>&nbsp;&nbsp;FOR j = 1 TO 3<br>&nbsp;&nbsp;&nbsp;&nbsp;IF i == j THEN n = n + 1<br>&nbsp;&nbsp;&nbsp;&nbsp;END IF<br>&nbsp;&nbsp;NEXT j<br>NEXT i</code>
+            </p>
+            <ol type="A" class="hw-options">
+              <li>0</li><li>2</li><li>3</li><li>6</li>
+            </ol>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>正确答案：B</b><br>i==j 的情况：(1,1) 和 (2,2) 共 <b>2 次</b></div>
+            </details>
+          </li>
+        </ol>
+
+        <h4 style="color:var(--purple-deep);">📘 章节 6 · 字符串追踪 Strings（5 题）</h4>
+        <ol class="hw-quiz">
+          <li>
+            <p class="hw-q">
+              What is <code>rev</code>?<br><br>
+              <code>s = "HELLO"<br>rev = ""<br>FOR j = 4 TO 0 STEP -1<br>&nbsp;&nbsp;rev = rev + s[j]<br>NEXT j</code>
+            </p>
+            <ol type="A" class="hw-options">
+              <li>"HELLO"</li><li>"OLLEH"</li><li>"HELLOHELLO"</li><li>"HELL"</li>
+            </ol>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>正确答案：B</b><br>j=4,3,2,1,0：s[4]=O,s[3]=L,s[2]=L,s[1]=E,s[0]=H → "OLLEH"</div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q">
+              What is <code>result</code>?<br><br>
+              <code>s = "PROGRAM"<br>result = s[1] + s[3] + s[5]</code>
+            </p>
+            <ol type="A" class="hw-options">
+              <li>"PRA"</li><li>"RGA"</li><li>"ROG"</li><li>"POM"</li>
+            </ol>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>正确答案：B</b><br>s[1]=R, s[3]=G, s[5]=A → "R"+"G"+"A" = <b>"RGA"</b></div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q">
+              Given <code>S = "ACSL WDTPD"</code>, what is <code>S[:3]</code>?
+            </p>
+            <ol type="A" class="hw-options">
+              <li>"ACS"</li><li>"ACSL"</li><li>"A"</li><li>"ACS "</li>
+            </ol>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>正确答案：A</b><br>S[:3] = 前 3 字符 = "A"+"C"+"S" = <b>"ACS"</b></div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q">
+              What is <code>count</code>?<br><br>
+              <code>word = "MISSISSIPPI"<br>vowels = "AEIOU"<br>count = 0<br>FOR j = 0 TO 10<br>&nbsp;&nbsp;FOR k = 0 TO 4<br>&nbsp;&nbsp;&nbsp;&nbsp;IF word[j] == vowels[k] THEN count = count + 1<br>&nbsp;&nbsp;&nbsp;&nbsp;END IF<br>&nbsp;&nbsp;NEXT k<br>NEXT j</code>
+            </p>
+            <ol type="A" class="hw-options">
+              <li>2</li><li>3</li><li>4</li><li>5</li>
+            </ol>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>正确答案：C</b><br>"MISSISSIPPI" 中 I 出现 4 次（M,S,S,I,S,S,I,P,P,I）</div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q">
+              What is <code>new_s</code>?<br><br>
+              <code>s = "abcdef"<br>new_s = ""<br>FOR j = 0 TO 5<br>&nbsp;&nbsp;IF j MOD 2 == 0 THEN new_s = new_s + s[j]<br>&nbsp;&nbsp;END IF<br>NEXT j</code>
+            </p>
+            <ol type="A" class="hw-options">
+              <li>"ace"</li><li>"bdf"</li><li>"abcdef"</li><li>"abc"</li>
+            </ol>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>正确答案：A</b><br>j 是偶数（0,2,4）：s[0]=a,s[2]=c,s[4]=e → <b>"ace"</b></div>
+            </details>
+          </li>
+        </ol>
+
+        <hr style="border:none; border-top:1px dashed var(--line); margin:18px 0 8px;">
+        <p style="font-size:13px; color:var(--muted);">
+          📊 <b>做完对答案</b>：每章节错题 ≤ 1 道 → 该章节满分 · 错题 ≥ 2 道 → 重做 + 看 L3 PPT 对应章节。<br>
+          🎯 <b>目标</b>：30 题全对 + 每题 60 秒内完成（考试节奏）。<br>
+          💡 <b>做题工具</b>：必须在<b>纸上画追踪表</b>，不要用代码运行 —— 考试要的就是手算能力！
+        </p>
+      </div>
+    </details>
+
     <details class="hw-flip">
-      <summary>L3-L18 · 后续作业</summary>
+      <summary>L4-L18 · 后续作业</summary>
       <div class="hw-body">
         <p style="color:var(--muted);">每周作业将在对应 PPT 的"课后作业"页发布。</p>
         <p>每周固定结构：</p>
@@ -1067,12 +1457,13 @@ code.inline {
   <!-- ===== Tab 3: 记忆卡片 ===== -->
   <div class="tab-content" id="tab-flashcards">
     <h2 class="section-title">📇 记忆卡片</h2>
-    <p class="section-sub">正面题目、反面答案 · 点击卡片可翻转 · L1-L2 已开放</p>
+    <p class="section-sub">正面题目、反面答案 · 点击卡片可翻转 · L1-L3 已开放</p>
 
     <div class="fc-tabs">
-      <button class="fc-tab active" data-filter="all">全部 <span class="count">10</span></button>
+      <button class="fc-tab active" data-filter="all">全部 <span class="count">15</span></button>
       <button class="fc-tab" data-filter="L1">L1 进制 <span class="count">5</span></button>
       <button class="fc-tab" data-filter="L2">L2 递归 <span class="count">5</span></button>
+      <button class="fc-tab" data-filter="L3">L3 追踪 <span class="count">5</span></button>
     </div>
 
     <div class="flashcard-grid">
@@ -1277,7 +1668,85 @@ code.inline {
 · 例：<code>f(x,y) = f(x-1, y) + f(x, y-1)</code>（路径计数）<br>
 · <b>画调用树技巧</b>：每个节点标 <code>(x, y)</code> 两个值<br>
 · <b>练习</b>：ACSL Wiki "Two Variables" 类题目</div>
-        
+
+        </div>
+      </div>
+    </div>
+
+    <div class="flashcard" data-lesson="L3" onclick="this.classList.toggle('flipped')">
+      <span class="fc-flip-hint">点击翻面 ↻</span>
+      <div class="fc-inner">
+        <div class="fc-face fc-front">
+          <div class="fc-tag">L3-C01 · 概念</div>
+          <div class="fc-q">ACSL 程序追踪时，输入输出用什么关键字？和 Python 有什么区别？</div>
+        </div>
+        <div class="fc-face fc-back">
+          <div class="fc-tag" style="background:rgba(22,163,74,.12); color:#047857;">答案 · L3-C01</div>
+          <div class="fc-q" style="color:#047857;">
+· 输入：<code>INPUT x, y</code>（不是 Python 的 <code>input()</code>）<br>
+· 输出：<code>OUTPUT var</code>（不是 <code>print()</code>）<br>
+· ACSL 直接看 OUTPUT 后面的变量名，不带括号
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flashcard" data-lesson="L3" onclick="this.classList.toggle('flipped')">
+      <span class="fc-flip-hint">点击翻面 ↻</span>
+      <div class="fc-inner">
+        <div class="fc-face fc-front">
+          <div class="fc-tag">L3-C02 · 方法</div>
+          <div class="fc-q">分支追踪 3 步法是什么？</div>
+        </div>
+        <div class="fc-face fc-back">
+          <div class="fc-tag" style="background:rgba(22,163,74,.12); color:#047857;">答案 · L3-C02</div>
+          <div class="fc-q" style="color:#047857;">1. <b>通读代码找变量</b>：标出所有被赋值的变量<br>2. <b>画追踪表</b>：每行 = 变量当前值，每列 = 分支节点<br>3. <b>逐 IF 顺序执行</b>：连续 IF 串联（不是 if-else 互斥）</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flashcard" data-lesson="L3" onclick="this.classList.toggle('flipped')">
+      <span class="fc-flip-hint">点击翻面 ↻</span>
+      <div class="fc-inner">
+        <div class="fc-face fc-front">
+          <div class="fc-tag">L3-C03 · 陷阱</div>
+          <div class="fc-q">ACSL 倒序循环 <code>STEP -1</code> 容易出错的 3 个地方？</div>
+        </div>
+        <div class="fc-face fc-back">
+          <div class="fc-tag" style="background:rgba(22,163,74,.12); color:#047857;">答案 · L3-C03</div>
+          <div class="fc-q" style="color:#047857;">1. <b>起点 = 前</b>，<b>终点 = 后</b>（FOR j = 5 TO 1 STEP -1 是 5→1 不是 1→5）<br>2. <b>含头含尾</b>（5,4,3,2,1 共 5 次）<br>3. <b>边界值</b>（FOR j = 0 TO 0 STEP -1 只跑 1 次）</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flashcard" data-lesson="L3" onclick="this.classList.toggle('flipped')">
+      <span class="fc-flip-hint">点击翻面 ↻</span>
+      <div class="fc-inner">
+        <div class="fc-face fc-front">
+          <div class="fc-tag">L3-C04 · 难点</div>
+          <div class="fc-q">嵌套循环追踪表最少要几列？3 个变量 + 嵌套时的追踪表模板？</div>
+        </div>
+        <div class="fc-face fc-back">
+          <div class="fc-tag" style="background:rgba(22,163,74,.12); color:#047857;">答案 · L3-C04</div>
+          <div class="fc-q" style="color:#047857;">嵌套循环追踪表 <b>6 列模板</b>：<br><b>外层变量 | 内层变量 | 进/出内循环 | 关键变量 1 | 关键变量 2 | 当前做了什么</b><br>⚠️ 每次进/出内循环都记一行，不能省！</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flashcard" data-lesson="L3" onclick="this.classList.toggle('flipped')">
+      <span class="fc-flip-hint">点击翻面 ↻</span>
+      <div class="fc-inner">
+        <div class="fc-face fc-front">
+          <div class="fc-tag">L3-C05 · 字符串</div>
+          <div class="fc-q">ACSL 字符串切片 <code>S[:3]</code> / <code>S[4:]</code> / <code>S[2:6]</code> 分别是什么意思？</div>
+        </div>
+        <div class="fc-face fc-back">
+          <div class="fc-tag" style="background:rgba(22,163,74,.12); color:#047857;">答案 · L3-C05</div>
+          <div class="fc-q" style="color:#047857;">S = "ACSL WDTPD"<br>
+· <code>S[:3]</code> = 前 3 字符 = "ACS"<br>
+· <code>S[4:]</code> = 位置 4 起到末尾 = " WDTPD"<br>
+· <code>S[2:6]</code> = 位置 2-5（含头不含尾）= "SL W"<br>
+⚠️ 索引从 <b>0 开始</b></div>
         </div>
       </div>
     </div>
@@ -1285,7 +1754,7 @@ code.inline {
     </div><!-- /flashcard-grid -->
 
     <p style="text-align:center; color:var(--muted); font-size:14px; margin-top:24px;">
-      💡 L3-L18 的记忆卡片将在对应课程完成后开放
+      💡 L4-L18 的记忆卡片将在对应课程完成后开放
     </p>
   </div>
 
