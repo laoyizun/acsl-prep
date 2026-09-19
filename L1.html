@@ -448,13 +448,14 @@ pre .num, code .num { display: inline; min-width: 0; height: auto; background: n
   <div class="left">
     <div class="kicker">Lesson 1 · 第 1 周</div>
     <h1>计算机<span class="highlight">数字系统</span>完整版</h1>
-    <p class="subtitle">Computer Number Systems · 二进制 · 八进制 · 十六进制 · 互转 · 加法 · 补码</p>
+    <p class="subtitle">Computer Number Systems · 二进制 · 八进制 · 十六进制 · 互转 · 加法 · 补码 · 二进制小数</p>
     <div class="chips" style="margin-top:18px;">
       <span class="chip purple">Binary 二进制</span>
       <span class="chip amber">Octal 八进制</span>
       <span class="chip green">Hexadecimal 十六进制</span>
       <span class="chip blue">Conversion 互转</span>
       <span class="chip teal">Two's Complement 补码</span>
+      <span class="chip red">Binary Fraction 二进制小数</span>
     </div>
     <p style="margin-top:32px; font-size:14px; color:var(--muted);">
       ACSL Junior Division · 第一轮考点 · 9 月 7 日 - 9 月 13 日
@@ -706,6 +707,52 @@ So 1011₂ = <b>11₁₀</b></code></pre>
 1×2⁴ + 1×2³ + 0×2² + 1×2¹ + 0×2⁰
 = 16 + 8 + 0 + 2 + 0 = 26</div>
       </details>
+    </div>
+  </div>
+</section>
+
+<!-- 09 · 实战 1：进制互转 5 道 -->
+<section class="slide">
+  <div class="left">
+    <div class="kicker">Concept 4.5 · Binary Fractions</div>
+    <h2>二进制<span class="highlight">小数</span><br><span class="muted" style="font-size:24px; font-weight:600;">Binary Fractions</span></h2>
+    <p class="subtitle">小数点左边用正幂，右边用负幂<br><span class="en-tag">Use 2ⁿ on the left, 2⁻ⁿ on the right</span></p>
+    <div class="practice" style="margin-top:14px;">
+      <div class="label">💡 ACSL 考点</div>
+      <p style="font-size:14px;">ACSL 会考二进制小数（含八进制/十六进制小数），<b>但不考</b>浮点数 IEEE 754。
+      只要会"<b>乘 2 取整法</b>"和"按权展开（含负幂）"。</p>
+    </div>
+  </div>
+  <div class="right">
+    <div class="card">
+      <h3>① 二进制小数 → 十进制<br><span class="muted" style="font-size:14px; font-weight:600;">Binary Fraction → Decimal</span></h3>
+      <p style="font-size:13px; line-height:1.7;">以 <b>101.101₂</b> 为例：</p>
+      <pre><code>位次:    <b>2</b>   <b>1</b>   <b>0</b>   <b>.   -1   -2   -3</b>
+数字:     1    0    1   .    1    0    1
+权:     2²   2¹   2⁰   .  2⁻¹  2⁻²  2⁻³
+      4  +  0  +  1  +  1/2 +  0  + 1/8 = <b>5.625</b>
+
+So 101.101₂ = <b>5.625₁₀</b></code></pre>
+      <p style="font-size:13px; color:var(--muted); margin-top:6px;">
+      小数点右边：第一位 = ×2⁻¹ (1/2)，第二位 = ×2⁻² (1/4)，第三位 = ×2⁻³ (1/8)
+      </p>
+    </div>
+    <div class="card" style="margin-top:12px; border-left:4px solid var(--amber);">
+      <h3 style="color:var(--amber);">② 十进制小数 → 二进制<br><span class="muted" style="font-size:14px; font-weight:600;">Decimal Fraction → Binary (乘 2 取整)</span></h3>
+      <p style="font-size:13px; line-height:1.7;">以 <b>0.625₁₀</b> 为例：</p>
+      <pre><code><b>0.625 × 2 = 1.25</b>  → 整数部分 <b>1</b> ← 第一位小数
+<b>0.25  × 2 = 0.50</b>  → 整数部分 <b>0</b> ← 第二位小数
+<b>0.50  × 2 = 1.00</b>  → 整数部分 <b>1</b> ← 第三位小数（刚好 0，结束）
+
+所以 0.625₁₀ = <b>0.101₂</b></code></pre>
+      <p style="font-size:13px; color:var(--muted); margin-top:6px;">
+      💡 关键：每次取小数部分继续乘 2 · 整数部分从<b>上往下</b>写
+      </p>
+    </div>
+    <div class="bug" style="margin-top:12px;">
+      <div class="label">⚠️ 学生陷阱</div>
+      <p style="font-size:13px;">乘 2 后整数部分可能是 <b>0 或 1</b>，但小数部分永远 &lt; 1。
+      0.625 的小数部分是 0.25 不是 0.625！</p>
     </div>
   </div>
 </section>

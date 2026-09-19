@@ -1460,8 +1460,8 @@ code.inline {
     <p class="section-sub">正面题目、反面答案 · 点击卡片可翻转 · L1-L3 已开放</p>
 
     <div class="fc-tabs">
-      <button class="fc-tab active" data-filter="all">全部 <span class="count">15</span></button>
-      <button class="fc-tab" data-filter="L1">L1 进制 <span class="count">5</span></button>
+      <button class="fc-tab active" data-filter="all">全部 <span class="count">16</span></button>
+      <button class="fc-tab" data-filter="L1">L1 进制 <span class="count">6</span></button>
       <button class="fc-tab" data-filter="L2">L2 递归 <span class="count">5</span></button>
       <button class="fc-tab" data-filter="L3">L3 追踪 <span class="count">5</span></button>
     </div>
@@ -1564,6 +1564,27 @@ code.inline {
 · 例：<code>11010110₂</code> = <code>11 010 110</code> = <code>326₈</code><br>
 · <b>速算技巧</b>：记住 <code>2¹⁰ = 1024</code>，<code>2⁸ = 256</code>，<code>2⁴ = 16</code></div>
         
+        </div>
+      </div>
+    </div>
+
+    <div class="flashcard" data-lesson="L1" onclick="this.classList.toggle('flipped')">
+      <span class="fc-flip-hint">点击翻面 ↻</span>
+      <div class="fc-inner">
+        <div class="fc-face fc-front">
+          <div class="fc-tag">L1-C06 · 小数</div>
+          <div class="fc-q">二进制小数 101.101₂ = ？十进制？十进制小数 0.625₁₀ = ？二进制？</div>
+        </div>
+        <div class="fc-face fc-back">
+          <div class="fc-tag" style="background:rgba(22,163,74,.12); color:#047857;">答案 · L1-C06</div>
+          <div class="fc-q" style="color:#047857;">· <b>二 → 十</b>：101.101 = 2² + 0 + 1 + 1/2 + 0 + 1/8 = <b>5.625</b><br>· <b>十 → 二</b>（乘 2 取整）：0.625×2=1.25, 0.25×2=0.5, 0.5×2=1 → <b>0.101</b><br>· 小数点右边用 <b>2⁻ⁿ</b>（2⁻¹=1/2, 2⁻²=1/4, 2⁻³=1/8）</div>
+          <div class="fc-explain"><b>二进制小数的 2 个核心方法</b>：<br>
+· <b>方法 1：二进制小数 → 十进制</b>（按权展开含负幂）<br>
+  例：<code>101.101₂</code> = 2² + 0 + 2⁰ + 2⁻¹ + 0 + 2⁻³ = 4 + 1 + 0.5 + 0.125 = <b>5.625₁₀</b><br>
+· <b>方法 2：十进制小数 → 二进制</b>（乘 2 取整法）<br>
+  例：<code>0.625₁₀</code> → 0.625×2=1.25 (整 1) → 0.25×2=0.5 (整 0) → 0.5×2=1.0 (整 1) → <b>0.101₂</b><br>
+· ⚠️ ACSL 考点：会做转换即可，<b>不考</b>浮点数 IEEE 754<br>
+· ⚠️ 小数部分永远 &lt; 1，<b>不是</b>原数（0.625 → 取 0.25，不是 0.625）</div>
         </div>
       </div>
     </div>
