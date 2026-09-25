@@ -1204,49 +1204,61 @@ f(9) = 8 + 2 = <b>10</b></pre>
     <p class="subtitle">本周作业 · 三类 · 1-2 小时</p>
   </div>
   <div class="right">
-    <div class="card" style="border-left:4px solid var(--purple);">
-      <h3 style="color:var(--purple);">🖥️ OJ 递归编程 · 3 道</h3>
-      <ul style="font-size:15px; line-height:1.7; padding-left:20px;">
-        <li>1110 分解质因数 · ★★</li>
-        <li>1114 上台阶 · ★★</li>
-        <li>1121 DFS 染色 · ★★★</li>
-      </ul>
-      <p style="font-size:13px; color:var(--muted); margin-top:6px;">OJ 上 <span class="highlight">禁用 AI</span>，自己写自己调试</p>
-    </div>
-    <div class="card" style="margin-top:12px; border-left:4px solid var(--amber);">
-      <h3 style="color:var(--amber);">📝 ACSL Wiki 递归题 · 5 道</h3>
-      <ul style="font-size:15px; line-height:1.7; padding-left:20px;">
-        <li>ACSL Wiki · Recursive Functions · Sample 1-5 风格</li>
-        <li>下载：categories.acsl.org/wiki</li>
-      </ul>
-    </div>
-    <div class="card" style="margin-top:12px; border-left:4px solid var(--green);">
-      <h3 style="color:var(--green);">🌳 调用树手绘 · 3 道</h3>
-      <p style="font-size:14px; color:var(--muted); margin:6px 0 10px;">每道题先看递归定义，再画调用树，最后回填求值</p>
+    <div class="card" style="border-left:4px solid var(--green);">
+      <h3 style="color:var(--green-deep);">🌳 调用树手绘 · 3 道（✏️ 练手起步）</h3>
+      <p style="font-size:14px; color:var(--muted); margin:6px 0 10px;">每道题先看递归定义，再画调用树，最后回填求值<br>不写代码，只在纸上画</p>
 
-      <div style="margin-bottom:14px; padding:10px 14px; background:rgba(124,58,237,.06); border-radius:8px;">
-        <div style="font-weight:800; color:var(--purple-deep); margin-bottom:4px;">题 1 · fact(6) 调用树</div>
+      <div style="margin-bottom:14px; padding:10px 14px; background:rgba(22,163,74,.06); border-radius:8px;">
+        <div style="font-weight:800; color:var(--green-deep); margin-bottom:4px;">题 1 · fact(6) 调用树</div>
         <code class="inline" style="font-size:13px; display:block; line-height:1.7;">
           fact(0) = 1<br>
           fact(n) = n × fact(n-1)   (n ≥ 1)
         </code>
       </div>
 
-      <div style="margin-bottom:14px; padding:10px 14px; background:rgba(124,58,237,.06); border-radius:8px;">
-        <div style="font-weight:800; color:var(--purple-deep); margin-bottom:4px;">题 2 · sum_to(5) 调用树</div>
+      <div style="margin-bottom:14px; padding:10px 14px; background:rgba(22,163,74,.06); border-radius:8px;">
+        <div style="font-weight:800; color:var(--green-deep); margin-bottom:4px;">题 2 · sum_to(5) 调用树</div>
         <code class="inline" style="font-size:13px; display:block; line-height:1.7;">
           sum_to(1) = 1<br>
           sum_to(n) = n + sum_to(n-1)   (n ≥ 2)
         </code>
       </div>
 
-      <div style="margin-bottom:14px; padding:10px 14px; background:rgba(124,58,237,.06); border-radius:8px;">
-        <div style="font-weight:800; color:var(--purple-deep); margin-bottom:4px;">题 3 · fib(6) 调用树（斐波那契数列）</div>
+      <div style="margin-bottom:14px; padding:10px 14px; background:rgba(22,163,74,.06); border-radius:8px;">
+        <div style="font-weight:800; color:var(--green-deep); margin-bottom:4px;">题 3 · fib(6) 调用树（斐波那契数列）</div>
         <code class="inline" style="font-size:13px; display:block; line-height:1.7;">
           fib(0) = 0,  fib(1) = 1<br>
           fib(n) = fib(n-1) + fib(n-2)   (n ≥ 2)
         </code>
       </div>
+    </div>
+
+    <div class="card" style="margin-top:12px; border-left:4px solid var(--amber);">
+      <h3 style="color:var(--amber-deep);">📝 ACSL Wiki 递归题 · 5 道</h3>
+      <p style="font-size:13px; line-height:1.7; margin-top:4px;">
+        <b>主页面</b>：<a href="https://www.categories.acsl.org/wiki/index.php?title=Recursive_Functions" target="_blank" style="color:var(--purple);">categories.acsl.org/wiki/.../Recursive_Functions</a>
+      </p>
+      <p style="font-size:14px; margin-top:8px;"><b>ACSL Wiki 上 4 道核心样题</b>（PPT 里都讲过）：</p>
+      <ul style="font-size:14px; line-height:1.8; padding-left:20px; margin-top:4px;">
+        <li><b>Sample 1 · g(11) = ?</b> · 单变量 + 1 分支（slide 10 讲过）</li>
+        <li><b>Sample 2 · h(13) = ?</b> · 单变量 + 3 分支反弹（slide 11 讲过）</li>
+        <li><b>Sample 3 · f(12, 6) = ?</b> · 双变量追踪（slide 12 讲过）</li>
+        <li><b>Sample 4 · 涂正方形 = ?</b> · 算法题（slide 13 讲过）</li>
+      </ul>
+      <p style="font-size:13px; color:var(--muted); margin-top:6px;">做完 4 道后，去 Wiki 找 Sample 5（如果有时间）</p>
+    </div>
+
+    <div class="card" style="margin-top:12px; border-left:4px solid var(--red);">
+      <h3 style="color:var(--red);">🖥️ OJ 递归编程 · 3 道（⭐ 挑战题）</h3>
+      <ul style="font-size:15px; line-height:1.7; padding-left:20px;">
+        <li><a href="https://oj.cubicbird.com/p/1114" target="_blank" style="color:var(--purple);">OJ 1114 · 上台阶</a> · ★★ · 递归 → 递推</li>
+        <li><a href="https://oj.cubicbird.com/p/1110" target="_blank" style="color:var(--purple);">OJ 1110 · 分解质因数</a> · ★★ · 循环 + 数学</li>
+        <li><a href="https://oj.cubicbird.com/p/1121" target="_blank" style="color:var(--purple);">OJ 1121 · 涂色游戏</a> · ★★★ · DFS 染色</li>
+      </ul>
+      <p style="font-size:13px; color:var(--muted); margin-top:6px;">
+        OJ 上 <span class="highlight">禁用 AI</span>，自己写自己调试<br>
+        💡 <b>建议顺序</b>：先做 <b>1114</b>（最像 PPT 内容）→ 再做 <b>1110</b> → 最后 <b>1121</b>
+      </p>
     </div>
   </div>
 </section>
