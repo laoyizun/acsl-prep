@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>L3 · 程序追踪 — ACSL 备赛</title>
+<title>L2 · 递归函数 — ACSL 备赛</title>
 <style>
 :root {
   --bg: #faf7f2;
@@ -448,64 +448,64 @@ pre .num, code .num { display: inline; min-width: 0; height: auto; background: n
   <div class="left">
     <div class="kicker">Lesson 3 · 第 3 周</div>
     <h1>ACSL 备赛 · <span class="highlight">程序追踪</span></h1>
-    <p class="subtitle">Program Tracing · 22 页 · 读代码 + 手算追踪训练</p>
+    <p class="subtitle">What Does This Program Do? · 22 页 · 读代码 + 手算追踪训练</p>
     <p style="margin-top:24px; padding:16px; background:rgba(124,58,237,.06); border-left:4px solid var(--purple); border-radius:8px; font-size:15px; line-height:1.7;">
       <b>本课重点</b><br>
       1. <b>ACSL 伪代码语法</b> · INPUT / OUTPUT / IF / FOR ... NEXT / WHILE<br>
-      2. <b>3 步分支追踪法</b> · 通读 → 画追踪表 → 逐 IF 执行<br>
+      2. <b>3 步追踪法</b> · 通读 → 画追踪表 → 逐 IF 执行<br>
       3. <b>循环追踪</b> · STEP -1 倒序 + 字符串拼接<br>
       4. <b>嵌套循环 + 双指针追踪</b> · ACSL 第三轮核心
     </p>
   </div>
 </section>
 
-<!-- 02 · 为什么学递归 · 计算思维 4 支柱 -->
+<!-- 02 · Why Program Tracing -->
 <section class="slide">
   <div class="left">
-    <div class="kicker">🧠 Why Recursion?</div>
-    <h2>为什么学<span class="highlight">递归</span>？<br><span class="muted" style="font-size:24px; font-weight:600;">Beyond the ACSL exam</span></h2>
-    <p class="subtitle">递归 = 计算思维 4 支柱的综合训练场<br><span class="en-tag">Recursion trains 4 core computational thinking skills</span></p>
+    <div class="kicker">🧠 Why Program Tracing?</div>
+    <h2>为什么学<span class="highlight">程序追踪</span>？<br><span class="muted" style="font-size:24px; font-weight:600;">Beyond the ACSL exam</span></h2>
+    <p class="subtitle">程序追踪 = 程序员的核心能力 + ACSL 第一轮固定题型<br><span class="en-tag">Program Tracing = core programmer skill + ACSL Round 1 staple</span></p>
   </div>
   <div class="right">
     <div class="grid2">
       <div class="card" style="border-left:4px solid var(--purple);">
         <h3 style="color:var(--purple);">① 分解 Decomposition</h3>
-        <p style="font-size:15px; line-height:1.6;">把 f(11) 拆成 f(8)+1，再拆 f(8)... 一路拆到底<br><span class="en-tag" style="font-size:12px;">Break a big problem into smaller subproblems</span></p>
+        <p style="font-size:15px; line-height:1.6;">一段 20 行代码 → 拆成一行行执行<br><span class="en-tag" style="font-size:12px;">Break a program into line-by-line execution</span></p>
       </div>
       <div class="card" style="border-left:4px solid var(--amber);">
         <h3 style="color:var(--amber);">② 模式识别 Pattern</h3>
-        <p style="font-size:15px; line-height:1.6;">读懂多分支递归 → 选对分支<br><span class="en-tag" style="font-size:12px;">Match current value to the right branch</span></p>
+        <p style="font-size:15px; line-height:1.6;">IF / FOR / WHILE 三大结构识别<br><span class="en-tag" style="font-size:12px;">Identify IF / FOR / WHILE structures</span></p>
       </div>
       <div class="card" style="border-left:4px solid var(--blue);">
         <h3 style="color:var(--blue);">③ 抽象 Abstraction</h3>
-        <p style="font-size:15px; line-height:1.6;">把 x 当成"任意数"，不局限具体值<br><span class="en-tag" style="font-size:12px;">Think in symbols, not specific numbers</span></p>
+        <p style="font-size:15px; line-height:1.6;">把 j 当成"任意变量"，不局限具体数<br><span class="en-tag" style="font-size:12px;">Think in symbols, not specific numbers</span></p>
       </div>
       <div class="card" style="border-left:4px solid var(--green);">
         <h3 style="color:var(--green);">④ 算法设计 Algorithm</h3>
-        <p style="font-size:15px; line-height:1.6;">"先向下追到底再向上回填"的固定流程<br><span class="en-tag" style="font-size:12px;">A repeatable, step-by-step procedure</span></p>
+        <p style="font-size:15px; line-height:1.6;">追踪表 = 可重复步骤的执行清单<br><span class="en-tag" style="font-size:12px;">A repeatable step-by-step procedure</span></p>
       </div>
     </div>
     <div class="practice" style="margin-top:14px;">
-      <div class="label">💡 给学生的话</div>
-      <p style="font-size:16px;">这不是算术题，是<span class="highlight">思维训练</span>。这节课学到的能力，是整个计算机科学的基础。</p>
+      <div class="label">💡 关键点</div>
+      <p style="font-size:16px;">程序追踪不是算术题，是<span class="highlight">程序员的基本功</span>。这节课学到的能力，在 ACSL 比赛、工作中都用得上。</p>
     </div>
   </div>
 </section>
 
-<!-- 03 · 18 周路线图（标 L2）-->
+<!-- 03 · Roadmap -->
 <section class="slide wide">
   <div class="head">
-    <div class="kicker">🗺️ 路线图 · Roadmap · L2 当前位置</div>
+    <div class="kicker">🗺️ 路线图 · L3 当前位置</div>
     <h2>18 周课程地图 · <span class="highlight">L3 在第 3 周</span></h2>
-    <p class="subtitle">本周完成 ACSL 第一轮第 2 个主题：递归函数 · <span class="en-tag">Recursion = ACSL Contest 1 topic #2</span></p>
+    <p class="subtitle">本周完成 ACSL 第一轮第 3 个主题：程序追踪 · <span class="en-tag">Program Tracing = ACSL Contest 1 topic #3</span></p>
   </div>
   <div class="grid3" style="margin-top:18px;">
     <div class="card card-purple" style="border-color:var(--purple);">
       <h3 style="color:var(--purple);">阶段 1 · 9.7-10.11</h3>
       <p style="font-size:14px; line-height:1.7; color:var(--muted);">
         <b>L1</b> 数字系统 ✅<br>
-        <b style="color:var(--text);">L2</b> 递归函数 ← <span style="background:var(--amber); color:#fff; padding:1px 6px; border-radius:4px; font-size:12px;">你在这里</span><br>
-        L3 程序追踪<br>
+        <b>L2</b> 递归函数 ✅<br>
+        <b style="color:var(--text);">L3</b> 程序追踪 ← <span style="background:var(--amber); color:#fff; padding:1px 6px; border-radius:4px; font-size:12px;">你在这里</span><br>
         L4 第一轮模拟
       </p>
     </div>
@@ -528,775 +528,1046 @@ pre .num, code .num { display: inline; min-width: 0; height: auto; background: n
   </div>
 </section>
 
-<!-- 04 · 课堂节奏 -->
+<!-- 04 · L2 Quick Review -->
 <section class="slide">
   <div class="left">
-    <div class="kicker">⏰ Today's Schedule · 60 分钟</div>
-    <h2>1 小时<span class="highlight">怎么花</span></h2>
-    <p class="subtitle">每节课固定结构 · 持续 18 周</p>
+    <div class="kicker">🪞 L2 Quick Review · L2 快速复习</div>
+    <h2>L2 递归函数 · <span class="highlight">3 个核心公式</span></h2>
+    <p class="subtitle">花 5 分钟回忆 L2 学过什么<br><span class="en-tag">5 minutes to recall L2</span></p>
   </div>
   <div class="right">
-    <table style="width:100%; border-collapse:collapse; font-size:16px;">
-      <tr style="border-bottom:2px solid var(--line);"><td style="padding:10px; font-weight:600;">0:00-0:10</td><td style="padding:10px;">L1 小测 + 回顾</td></tr>
-      <tr style="border-bottom:2px solid var(--line); background:rgba(124,58,237,.04);"><td style="padding:10px; font-weight:600;">0:10-0:55</td><td style="padding:10px;">本课新内容教学（45 min）</td></tr>
-      <tr style="border-bottom:2px solid var(--line);"><td style="padding:10px; font-weight:600;">0:55-1:00</td><td style="padding:10px;">休息 5 min</td></tr>
-      <tr style="border-bottom:2px solid var(--line); background:rgba(217,119,6,.04);"><td style="padding:10px; font-weight:600;">1:00-1:25</td><td style="padding:10px;">实战练习 + 手算过程对答案（25 min）</td></tr>
-      <tr><td style="padding:10px; font-weight:600;">1:25-1:30</td><td style="padding:10px;">下周预告 + 课后作业布置</td></tr>
-    </table>
-    <div class="practice" style="margin-top:14px;">
-      <div class="label">📍 编程作业</div>
-      <p style="font-size:15px;">OJ 编程作业放在<span class="highlight">课后</span>完成，本课专注理论。</p>
-    </div>
-  </div>
-</section>
-
-<!-- 05 · 引入：俄罗斯套娃 -->
-<section class="slide">
-  <div class="left">
-    <div class="kicker">🪆 Analogy 1 · 俄罗斯套娃</div>
-    <h2>递归就像<span class="highlight">俄罗斯套娃</span><br><span class="muted" style="font-size:24px; font-weight:600;">Matryoshka dolls</span></h2>
-    <p class="subtitle">打开一个 → 里面还有一个更小的 → ... → 最小的打不开（终止）<br><span class="en-tag">Open one, find a smaller one inside, until the smallest can't open</span></p>
-  </div>
-  <div class="right">
-    <div class="card">
-      <h3>套娃的结构</h3>
-      <pre><code>open_doll(doll):
-    if doll == smallest:    ← ① 终止条件
-        return doll          （最小的打不开）
-    inner = open_doll(doll.inner)  ← ② 自己调自己 + 规模缩小
-    return inner</code></pre>
-    </div>
-    <div class="card" style="margin-top:14px;">
-      <h3>关键点对应</h3>
-      <ul style="font-size:16px; line-height:1.8; padding-left:20px;">
-        <li><b>① 终止条件</b> = 最小的套娃打不开</li>
-        <li><b>② 自己调自己</b> = 每打开一个套娃，里面还有一个</li>
-        <li><b>③ 规模缩小</b> = 里层套娃比外层小</li>
-      </ul>
-    </div>
-  </div>
-</section>
-
-<!-- 06 · 引入：汉诺塔 -->
-<section class="slide">
-  <div class="left">
-    <div class="kicker">🗼 Analogy 2 · 汉诺塔 Tower of Hanoi</div>
-    <h2>汉诺塔 · <span class="highlight">经典递归</span><br><span class="muted" style="font-size:22px; font-weight:600;">Hanoi(n) = 2 × Hanoi(n−1) + 1</span></h2>
-    <p class="subtitle">传说级问题：64 个盘子从 A 移到 C，最少多少步？<br><span class="en-tag">Move 64 disks from A to C — how many moves?</span></p>
-  </div>
-  <div class="right">
-    <div class="card">
-      <h3>汉诺塔递归定义</h3>
-      <pre><code>把 n 个盘子从 A 移到 C（用 B 做中转）：
-
-hanoi(n) =
-   2 × hanoi(n-1) + 1      if n > 1
-   1                          if n = 1   ← 终止条件</code></pre>
+    <div class="grid2">
+      <div class="card" style="border-left:4px solid var(--purple);">
+        <h3 style="color:var(--purple);">🧮 fact 阶乘</h3>
+        <code class="inline" style="font-size:14px; display:block; line-height:1.7;">
+          fact(0) = 1<br>
+          fact(n) = n × fact(n-1)
+        </code>
+      </div>
+      <div class="card" style="border-left:4px solid var(--amber);">
+        <h3 style="color:var(--amber);">📊 sum_to 求和</h3>
+        <code class="inline" style="font-size:14px; display:block; line-height:1.7;">
+          sum_to(1) = 1<br>
+          sum_to(n) = n + sum_to(n-1)
+        </code>
+      </div>
+      <div class="card" style="border-left:4px solid var(--blue);">
+        <h3 style="color:var(--blue);">🐚 fib 斐波那契</h3>
+        <code class="inline" style="font-size:14px; display:block; line-height:1.7;">
+          fib(0) = 0,  fib(1) = 1<br>
+          fib(n) = fib(n-1) + fib(n-2)
+        </code>
+      </div>
+      <div class="card" style="border-left:4px solid var(--green); background:rgba(22,163,74,.05);">
+        <h3 style="color:var(--green-deep);">🌟 L2 → L3</h3>
+        <p style="font-size:14px; line-height:1.7; color:var(--muted);">
+          这 3 个公式是 L2 学过的核心<br>
+          今天 L3 学新的工具：<span class="highlight">程序追踪</span>
+        </p>
+      </div>
     </div>
     <div class="practice" style="margin-top:14px;">
-      <div class="label">🎯 关键直觉</div>
-      <p style="font-size:15px; line-height:1.7;">
-        要移 n 个盘子：<br>
-        ① 先把上面 n-1 个挪到 B（hanoi(n-1) 步）<br>
-        ② 把最大的挪到 C（1 步）<br>
-        ③ 再把 n-1 个从 B 挪到 C（hanoi(n-1) 步）
-      </p>
-    </div>
-    <div class="bug" style="margin-top:12px;">
-      <div class="label">⚡ 直观感受</div>
-      <p style="font-size:14px;">hanoi(10) ≈ 1023 步；hanoi(64) ≈ 1.8 × 10¹⁹ 步（宇宙年龄都不够跑完）。</p>
+      <div class="label">📌 小贴士</div>
+      <p style="font-size:16px;">今天只追踪程序输出，不写代码。</p>
     </div>
   </div>
 </section>
 
-<!-- 07 · 递归三要素 -->
+<!-- 05 · Call Tree Quick Reference -->
 <section class="slide">
   <div class="left">
-    <div class="kicker">🔑 Three Elements</div>
-    <h2>递归<span class="highlight">三要素</span><br><span class="muted" style="font-size:24px; font-weight:600;">The 3 Elements of Recursion</span></h2>
-    <p class="subtitle">所有递归都包含这 3 个要素 · 缺一不可</p>
+    <div class="kicker">🪞 Call Tree Quick Reference</div>
+    <h2>调用树 · <span class="highlight">3 列模板</span></h2>
+    <p class="subtitle">调用树 = L2 学过的递归追踪方法<br><span class="en-tag">Call Tree = recursive tracing method from L2</span></p>
   </div>
   <div class="right">
     <div class="card" style="border-left:4px solid var(--purple);">
-      <h3 style="color:var(--purple);">① 终止条件 Base case</h3>
-      <p style="font-size:15px; line-height:1.6;">递归到什么时候停下来 · 没有终止条件 = 死循环<br><span class="en-tag" style="font-size:12px;">When does recursion stop? Without it → infinite loop!</span></p>
-      <pre><code>if n <= 1:           ← 终止条件
-    return 1</code></pre>
+      <h3 style="color:var(--purple);">示例 · fact(3) 调用树</h3>
+      <pre style="font-size:13px; line-height:1.7; padding:10px; background:rgba(124,58,237,.05); border-radius:6px; overflow-x:auto;">
+fact(3)
+└─ fact(2)
+   └─ fact(1)
+      └─ fact(0) = 1       ← base case
+   ← 1 × 1 = 1            ← 回填
+← 2 × 1 = 2
+← 3 × 2 = 6               ← 最终结果</pre>
     </div>
-    <div class="card" style="margin-top:12px; border-left:4px solid var(--amber);">
-      <h3 style="color:var(--amber);">② 自己调自己 Self-call</h3>
-      <p style="font-size:15px; line-height:1.6;">函数定义里调用自己 · "递归"二字的本质<br><span class="en-tag" style="font-size:12px;">Function calls itself — that's what makes it recursive</span></p>
-      <pre><code>return f(n-1)        ← 关键：调自己</code></pre>
+    <div class="card" style="border-left:4px solid var(--green); margin-top:10px;">
+      <h3 style="color:var(--green-deep);">3 列模板</h3>
+      <table style="font-size:13px; width:100%; border-collapse:collapse; line-height:1.7;">
+        <tr style="background:rgba(22,163,74,.05);">
+          <th style="padding:6px; border-bottom:1px solid var(--line);">调用</th>
+          <th style="padding:6px; border-bottom:1px solid var(--line);">等待值</th>
+          <th style="padding:6px; border-bottom:1px solid var(--line);">返回值</th>
+        </tr>
+        <tr><td style="padding:6px;">fact(3)</td><td style="padding:6px;">fact(2)</td><td style="padding:6px;">6</td></tr>
+        <tr><td style="padding:6px;">fact(2)</td><td style="padding:6px;">fact(1)</td><td style="padding:6px;">2</td></tr>
+        <tr><td style="padding:6px;">fact(1)</td><td style="padding:6px;">fact(0)</td><td style="padding:6px;">1</td></tr>
+        <tr><td style="padding:6px;">fact(0)</td><td style="padding:6px;">-</td><td style="padding:6px;">1 ← base</td></tr>
+      </table>
     </div>
-    <div class="card" style="margin-top:12px; border-left:4px solid var(--green);">
-      <h3 style="color:var(--green);">③ 规模缩小 Shrinking</h3>
-      <p style="font-size:15px; line-height:1.6;">参数越来越接近终止条件 · 否则永远停不下来<br><span class="en-tag" style="font-size:12px;">Argument must approach the base case</span></p>
-      <pre><code>f(n-1), f(n-2), f(n/2)...  ← 距离 base 越来越近</code></pre>
+    <div class="practice" style="margin-top:14px;">
+      <div class="label">📌 小贴士</div>
+      <p style="font-size:16px;">今天学的程序追踪，<span class="highlight">不只用于递归</span> —— 任何代码都能用追踪表读。</p>
+    </div>
+  </div>
+</section>
+<!-- 06 · What is Program Tracing -->
+<section class="slide">
+  <div class="left">
+    <div class="kicker">🆕 What is Program Tracing?</div>
+    <h2>什么是<span class="highlight">程序追踪</span>？<br><span class="muted" style="font-size:24px; font-weight:600;">Program Tracing</span></h2>
+    <p class="subtitle">给定一段代码，手算出每一步的变量值和输出<br><span class="en-tag">Hand-compute variable values and output line by line</span></p>
+  </div>
+  <div class="right">
+    <div class="card" style="border-left:4px solid var(--purple);">
+      <h3 style="color:var(--purple);">📖 定义</h3>
+      <p style="font-size:16px; line-height:1.7;">
+        程序追踪 = <span class="highlight">不运行代码</span>，只用纸笔手算变量变化<br>
+        ACSL 第一轮"程序输出题"考核的核心能力
+      </p>
+    </div>
+    <div class="grid2" style="margin-top:12px;">
+      <div class="card" style="border-left:4px solid var(--purple);">
+        <h3 style="color:var(--purple);">为什么考</h3>
+        <p style="font-size:14px; line-height:1.6;">真实程序员的基本功<br>调试代码必须会读</p>
+      </div>
+      <div class="card" style="border-left:4px solid var(--amber);">
+        <h3 style="color:var(--amber);">考什么</h3>
+        <p style="font-size:14px; line-height:1.6;">读伪代码 + 画追踪表<br>5 分钟做 5 道题</p>
+      </div>
+      <div class="card" style="border-left:4px solid var(--blue);">
+        <h3 style="color:var(--blue);">怎么考</h3>
+        <p style="font-size:14px; line-height:1.6;">5 道子题 + 30 分钟<br>30% 第一轮分值</p>
+      </div>
+      <div class="card" style="border-left:4px solid var(--red);">
+        <h3 style="color:var(--red);">难点</h3>
+        <p style="font-size:14px; line-height:1.6;">OJ 会写但不会读<br>代码执行流程不熟</p>
+      </div>
+    </div>
+    <div class="practice" style="margin-top:14px;">
+      <div class="label">📌 小贴士</div>
+      <p style="font-size:16px;">今天<span class="highlight">不写代码，只算程序输出</span>。</p>
     </div>
   </div>
 </section>
 
-<!-- 08 · 第一个递归：阶乘 -->
+<!-- 07 · ACSL Pseudocode Syntax -->
 <section class="slide">
   <div class="left">
-    <div class="kicker">🧮 Example 1 · Factorial</div>
-    <h2>第一个递归 · <span class="highlight">阶乘</span><br><span class="muted" style="font-size:24px; font-weight:600;">fact(n) = n × fact(n−1)</span></h2>
-    <p class="subtitle">5! = 5 × 4 × 3 × 2 × 1 = 120<br><span class="en-tag">5! = 120 — the classic first recursion example</span></p>
+    <div class="kicker">🆕 ACSL Pseudocode Syntax</div>
+    <h2>ACSL 伪代码语法 · <span class="highlight">Python 对照</span></h2>
+    <p class="subtitle">ACSL 用伪代码，不是 Python<br><span class="en-tag">ACSL uses pseudocode, not Python</span></p>
   </div>
   <div class="right">
-    <div class="card">
-      <h3>阶乘递归定义</h3>
-      <pre><code>fact(n) =
-   n × fact(n-1)    if n > 1     ← 自己调自己 + 规模缩小
-   1                  if n <= 1   ← 终止条件</code></pre>
+    <div class="card" style="border-left:4px solid var(--blue);">
+      <h3 style="color:var(--blue);">5 个关键对照</h3>
+      <table style="font-size:13px; width:100%; border-collapse:collapse; line-height:1.6;">
+        <tr style="background:rgba(37,99,235,.05);">
+          <th style="padding:6px; border-bottom:1px solid var(--line);">ACSL 伪代码</th>
+          <th style="padding:6px; border-bottom:1px solid var(--line);">Python 等价</th>
+        </tr>
+        <tr><td style="padding:6px;"><code>INPUT x</code></td><td style="padding:6px;"><code>x = input()</code></td></tr>
+        <tr><td style="padding:6px;"><code>OUTPUT x</code></td><td style="padding:6px;"><code>print(x)</code></td></tr>
+        <tr><td style="padding:6px;"><code>FOR j = 0 TO 9 STEP 1 ... NEXT j</code></td><td style="padding:6px;"><code>for j in range(0, 10, 1):</code></td></tr>
+        <tr><td style="padding:6px;"><code>WHILE ... END WHILE</code></td><td style="padding:6px;"><code>while ...:</code></td></tr>
+        <tr><td style="padding:6px;"><code>IF ... THEN ... ELSE ... END IF</code></td><td style="padding:6px;"><code>if ... else ...</code></td></tr>
+      </table>
     </div>
-    <div class="card" style="margin-top:14px;">
-      <h3>手算 fact(5) · 完整过程</h3>
-      <pre><code>fact(5)
-= 5 × fact(4)
-= 5 × 4 × fact(3)
-= 5 × 4 × 3 × fact(2)
-= 5 × 4 × 3 × 2 × fact(1)
-= 5 × 4 × 3 × 2 × 1   ← base case 命中
-= <b>120</b></code></pre>
-    </div>
-    <div class="practice" style="margin-top:12px;">
-      <div class="label">🎯 三要素检查</div>
-      <ol style="font-size:14px; line-height:1.7; padding-left:24px;">
-        <li>终止条件：fact(1) = 1 ✅</li>
-        <li>自己调自己：fact(n) 里有 fact(n-1) ✅</li>
-        <li>规模缩小：参数从 n 变成 n-1，趋近 1 ✅</li>
+    <div class="card" style="border-left:4px solid var(--red); margin-top:12px;">
+      <h3 style="color:var(--red);">5 个常见陷阱 ⚠️</h3>
+      <ol style="font-size:13px; line-height:1.8; padding-left:20px; margin-top:6px;">
+        <li>数组下标从 <b>0</b> 开始（不是 1）</li>
+        <li><b>STEP -1</b> 倒序（Python 用 <code>range(n-1, -1, -1)</code>）</li>
+        <li><b>MOD</b> 是取模（Python 用 <code>%</code>）</li>
+        <li><b>S[2:6]</b> 切片含头不含尾，长度 = 6-2 = 4</li>
+        <li>ACSL 用 <b>AND / OR / NOT</b>，不用 <code>&&</code> / <code>||</code> / <code>!</code></li>
       </ol>
     </div>
-  </div>
-</section>
-
-<!-- 09 · 调用树（fact 5）-->
-<section class="slide">
-  <div class="left">
-    <div class="kicker">🌳 Call Tree · 调用树</div>
-    <h2><span class="highlight">画调用树</span> · 手算递归的核心技能<br><span class="muted" style="font-size:22px; font-weight:600;">How to draw a call tree</span></h2>
-    <p class="subtitle">所有递归题的第一步：画调用树 → 看结构 → 再手算<br><span class="en-tag">Step 1 of every recursion problem: draw the call tree</span></p>
-  </div>
-  <div class="right">
-    <div class="card">
-      <h3>fact(5) 的调用树</h3>
-      <pre><code>fact(5) ──&gt; 5 × fact(4)
-              │
-              └─&gt; fact(4) ──&gt; 4 × fact(3)
-                                │
-                                └─&gt; fact(3) ──&gt; 3 × fact(2)
-                                                  │
-                                                  └─&gt; fact(2) ──&gt; 2 × fact(1)
-                                                                    │
-                                                                    └─&gt; fact(1) = 1  ← 终止</code></pre>
-    </div>
     <div class="practice" style="margin-top:14px;">
-      <div class="label">🔍 树的 3 个特征</div>
-      <ul style="font-size:15px; line-height:1.8; padding-left:20px;">
-        <li><b>根</b>：最上层的 fact(5)</li>
-        <li><b>叶</b>：最底层的 fact(1) = 1</li>
-        <li><b>分支</b>：每次调用产生一个子节点</li>
-      </ul>
-    </div>
-    <div class="check-q">
-      <div class="check-q-text">❓ fact(5) 调用了多少次 fact 函数？（包括 fact(5) 本身）</div>
-      <details>
-        <summary>看答案</summary>
-        <div class="check-a"><b>5 次</b>：fact(5) → fact(4) → fact(3) → fact(2) → fact(1)</div>
-      </details>
+      <div class="label">📌 小贴士</div>
+      <p style="font-size:16px;">ACSL 伪代码 = Python 简化版。语法不同但思想一样。</p>
     </div>
   </div>
 </section>
 
-<!-- 10 · ACSL Sample 1 -->
+<!-- 08 · 3-Step Tracing Method + Trace Table Template -->
 <section class="slide">
   <div class="left">
-    <div class="kicker">ACSL Wiki · Sample 1</div>
-    <h2>真题风格 · <span class="highlight">单变量 1 分支</span><br><span class="muted" style="font-size:22px; font-weight:600;">Single-variable, 1 branch</span></h2>
-    <p class="subtitle">题目出自 ACSL Wiki · 真实风格</p>
-  </div>
-  <div class="right">
-    <div class="card">
-      <h3>Sample 1 题干</h3>
-      <pre><code>g(x) = {
-   g(x-3) + 1    if x &gt; 0     ← 分支 1（递归）
-   3x              otherwise    ← 分支 2（base case）
-}
-
-求 g(11) = ?</code></pre>
-    </div>
-    <div class="card" style="margin-top:12px;">
-      <h3>调用树</h3>
-      <pre><code>g(11)
- └─&gt; g(8) + 1        (x=11&gt;0)
-      └─&gt; g(5) + 1    (x=8&gt;0)
-           └─&gt; g(2) + 1    (x=5&gt;0)
-                └─&gt; g(-1) + 1    (x=2&gt;0)
-                     └─&gt; 3 × (-1) = -3    ← base case</code></pre>
-    </div>
-    <div class="card" style="margin-top:12px;">
-      <h3>向上回填</h3>
-      <pre><code>g(-1) = -3
-g(2)  = -3 + 1 = <b>-2</b>
-g(5)  = -2 + 1 = <b>-1</b>
-g(8)  = -1 + 1 = <b>0</b>
-g(11) = 0 + 1 = <b>1</b>   ← 答案</code></pre>
-    </div>
-  </div>
-</section>
-
-<!-- 11 · ACSL Sample 2 -->
-<section class="slide">
-  <div class="left">
-    <div class="kicker">ACSL Wiki · Sample 2</div>
-    <h2>真题风格 · <span class="highlight">多分支含 x&lt;0 反弹</span><br><span class="muted" style="font-size:22px; font-weight:600;">Multi-branch with x&lt;0 bounce</span></h2>
-    <p class="subtitle">陷阱题：x&lt;0 不是"无解"，而是"反弹分支"</p>
-  </div>
-  <div class="right">
-    <div class="card">
-      <h3>Sample 2 题干</h3>
-      <pre><code>h(x) = {
-   h(x-7) + 1    if x &gt; 5      ← top 规则
-   x              if 0 ≤ x ≤ 5   ← middle 规则（base）
-   h(x+3)         if x &lt; 0      ← bottom 规则（反弹！）
-}
-
-求 h(13) = ?</code></pre>
-    </div>
-    <div class="card" style="margin-top:12px;">
-      <h3>调用树 + 手算</h3>
-      <pre><code>h(13)              (x=13&gt;5)
- └─&gt; h(6) + 1           (x=6&gt;5)
-      └─&gt; h(-1) + 1        (x=-1&lt;0, 反弹！x+3=2)
-           └─&gt; h(2)            (x=2, 0≤x≤5, base)
-                └─&gt; <b>2</b>             ← base 命中
-
-向上回填：
-h(-1) = 2
-h(6)  = 2 + 1 = <b>3</b>
-h(13) = 3 + 1 = <b>4</b>   ← 答案</code></pre>
-    </div>
-    <div class="bug" style="margin-top:12px;">
-      <div class="label">⚠️ 关键陷阱</div>
-      <p style="font-size:14px;">看到 x&lt;0 不要放弃！这是<b>反弹分支</b>，参数会变大但<b>最终仍会落到 base case</b>。</p>
-    </div>
-  </div>
-</section>
-
-<!-- 12 · ACSL Sample 3 -->
-<section class="slide">
-  <div class="left">
-    <div class="kicker">ACSL Wiki · Sample 3</div>
-    <h2>真题风格 · <span class="highlight">双变量</span><br><span class="muted" style="font-size:22px; font-weight:600;">Two variables (x, y)</span></h2>
-    <p class="subtitle">两个变量同时变化 · 要追踪 (x, y) 两个值</p>
-  </div>
-  <div class="right">
-    <div class="card">
-      <h3>Sample 3 题干</h3>
-      <pre><code>f(x, y) = {
-   f(x-y, y-1) + 2    if x &gt; y    ← 两个变量都变
-   x + y              otherwise    ← base case
-}
-
-求 f(12, 6) = ?</code></pre>
-    </div>
-    <div class="card" style="margin-top:12px;">
-      <h3>调用树（追踪 x 和 y）</h3>
-      <pre><code>f(12, 6)              (12&gt;6)
- └─&gt; f(6, 5) + 2           (6&gt;5)
-      └─&gt; f(1, 4) + 2           (1≤4, base!)
-           └─&gt; 1 + 4 = <b>5</b>          ← base 命中
-
-向上回填：
-f(6, 5)  = 5 + 2 = <b>7</b>
-f(12, 6) = 7 + 2 = <b>9</b>    ← 答案</code></pre>
-    </div>
-    <div class="practice" style="margin-top:12px;">
-      <div class="label">🎯 追踪技巧</div>
-      <p style="font-size:14px; line-height:1.6;">在纸上一边写 (x, y) 两个值：<code>(12,6) → (6,5) → (1,4)</code>，每次变换都标出来。</p>
-    </div>
-  </div>
-</section>
-
-<!-- 13 · ACSL Sample 4 -->
-<section class="slide">
-  <div class="left">
-    <div class="kicker">ACSL Wiki · Sample 4</div>
-    <h2>真题风格 · <span class="highlight">算法型</span>（Senior 难度）<br><span class="muted" style="font-size:22px; font-weight:600;">Algorithmic style · harder</span></h2>
-    <p class="subtitle">这是 Senior 难度 · 了解即可，初中不要求掌握</p>
-  </div>
-  <div class="right">
-    <div class="card">
-      <h3>Sample 4 题干</h3>
-      <p style="font-size:15px; line-height:1.7;">一个 <b>16 英尺</b>的正方形，按以下算法迭代涂色：</p>
-      <ul style="font-size:14px; line-height:1.7; padding-left:20px;">
-        <li>第 1 次：涂中间 1×1 英尺的小方块</li>
-        <li>第 2 次：在剩余部分涂中间 1/9 区域</li>
-        <li>第 3 次：再次在剩余涂 1/9...</li>
-      </ul>
-      <p style="font-size:15px; margin-top:8px;">问：最终涂了多少平方英尺？</p>
-    </div>
-    <div class="card" style="margin-top:12px;">
-      <h3>手算过程</h3>
-      <pre><code>总面积 = 16×16 = 256
-第 1 次：涂 1×1 = 1，剩余 256 - 1 = 255
-第 2 次：涂 255 ÷ 9 = 28.33，剩余 226.67
-第 3 次：涂 226.67 ÷ 9 ≈ 25.19...
-...
-几何级数求和：
-总涂色 = 1 + 28.33 + 25.19 + ... ≈ <b>175 平方英尺</b>
-
-⚠️ 此题 ACSL Junior 不考，仅 Senior 出现</code></pre>
-    </div>
-  </div>
-</section>
-
-<!-- 14 · 实战 1：手算 5 道 -->
-<section class="slide wide compact">
-  <div class="head">
-    <div class="kicker">实战 1 · Practice 1 · 单变量手算</div>
-    <h2>手算 5 道 · <span class="highlight">8 分钟 8 min</span></h2>
-    <p class="subtitle">课堂限时练习 · 自己先做，再翻到下一页对答案</p>
-  </div>
-  <div class="grid2" style="margin-top:14px;">
-    <div class="card">
-      <h3 style="color:var(--purple);">题 1 · ★</h3>
-      <p style="font-size:16px; margin-top:6px;"><code>f(n) = f(n-1) + 2, f(0) = 0</code><br>求 f(5) = <code class="inline">______</code></p>
-    </div>
-    <div class="card">
-      <h3 style="color:var(--purple);">题 2 · ★</h3>
-      <p style="font-size:16px; margin-top:6px;"><code>f(n) = 2 × f(n-1), f(0) = 1</code><br>求 f(4) = <code class="inline">______</code></p>
-    </div>
-    <div class="card">
-      <h3 style="color:var(--purple);">题 3 · ★★</h3>
-      <p style="font-size:16px; margin-top:6px;"><code>f(n) = f(n-1) + n, f(0) = 0</code><br>求 f(5) = <code class="inline">______</code></p>
-    </div>
-    <div class="card">
-      <h3 style="color:var(--purple);">题 4 · ★★</h3>
-      <p style="font-size:16px; margin-top:6px;"><code>f(n) = f(n-2), f(0)=0, f(1)=1</code><br>求 f(6) = <code class="inline">______</code></p>
-    </div>
-    <div class="card">
-      <h3 style="color:var(--purple);">题 5 · ★★★</h3>
-      <p style="font-size:16px; margin-top:6px;"><code>f(n) = f(n-1) × 2 + 1, f(0) = 1</code><br>求 f(4) = <code class="inline">______</code></p>
-    </div>
-    <div class="card" style="background:rgba(124,58,237,.04); border-color:rgba(124,58,237,.3);">
-      <h3 style="color:var(--purple);">💡 提示</h3>
-      <p style="font-size:13px; line-height:1.7; color:var(--muted);">
-        ① 先向下追到 base case<br>
-        ② 再向上逐层回填<br>
-        ③ 每道题都画调用树<br>
-        ④ 答完翻下页对答案
-      </p>
-    </div>
-  </div>
-</section>
-
-<!-- 15 · 实战 1 答案（手算过程）-->
-<section class="slide wide compact">
-  <div class="head">
-    <div class="kicker">实战 1 · 答案（含手算过程）</div>
-    <h2>5 道题 · <span class="highlight">完整手算过程</span></h2>
-    <p class="subtitle">标准答案 · 每道题都画调用树 + 回填</p>
-  </div>
-  <div class="grid2" style="margin-top:14px;">
-    <div class="card">
-      <h3 style="color:var(--purple);">题 1 · f(5) = 10</h3>
-      <div class="check-a" style="font-size:12px; line-height:1.5;">
-        <pre>f(0) = 0
-f(1) = 0 + 2 = 2
-f(2) = 2 + 2 = 4
-f(3) = 4 + 2 = 6
-f(4) = 6 + 2 = 8
-f(5) = 8 + 2 = <b>10</b></pre>
-      </div>
-    </div>
-    <div class="card">
-      <h3 style="color:var(--purple);">题 2 · f(4) = 16</h3>
-      <div class="check-a" style="font-size:12px; line-height:1.5;">
-        <pre>f(0) = 1
-f(1) = 2×1 = 2
-f(2) = 2×2 = 4
-f(3) = 2×4 = 8
-f(4) = 2×8 = <b>16</b>
-(规律：f(n) = 2ⁿ)</pre>
-      </div>
-    </div>
-    <div class="card">
-      <h3 style="color:var(--purple);">题 3 · f(5) = 15</h3>
-      <div class="check-a" style="font-size:12px; line-height:1.5;">
-        <pre>f(0) = 0
-f(1) = 0 + 1 = 1
-f(2) = 1 + 2 = 3
-f(3) = 3 + 3 = 6
-f(4) = 6 + 4 = 10
-f(5) = 10 + 5 = <b>15</b>
-(规律：f(n) = n(n+1)/2)</pre>
-      </div>
-    </div>
-    <div class="card">
-      <h3 style="color:var(--purple);">题 4 · f(6) = 8</h3>
-      <div class="check-a" style="font-size:12px; line-height:1.5;">
-        <pre>f(0) = 0, f(1) = 1
-f(2) = f(0) = 0
-f(3) = f(1) = 1
-f(4) = f(2) = 0
-f(5) = f(3) = 1
-f(6) = f(4) = <b>0</b>
-(陷阱：不是 f(2) 也不是 8！是偶数 f(偶)=0)</pre>
-      </div>
-    </div>
-    <div class="card">
-      <h3 style="color:var(--purple);">题 5 · f(4) = 31</h3>
-      <div class="check-a" style="font-size:12px; line-height:1.5;">
-        <pre>f(0) = 1
-f(1) = 1×2 + 1 = 3
-f(2) = 3×2 + 1 = 7
-f(3) = 7×2 + 1 = 15
-f(4) = 15×2 + 1 = <b>31</b>
-(规律：f(n) = 2ⁿ⁺¹ − 1)</pre>
-      </div>
-    </div>
-    <div class="card" style="background:rgba(124,58,237,.04); border-color:rgba(124,58,237,.3);">
-      <h3 style="color:var(--purple);">📊 难度反馈</h3>
-      <p style="font-size:13px; line-height:1.7; color:var(--muted);">
-        如果题 4 错了 → 没看清是 f(n-2) 而非 f(n-1)<br>
-        如果题 5 错了 → 忘记"<b>+1</b>"项<br>
-        如果都对了 → 进入实战 2
-      </p>
-    </div>
-  </div>
-</section>
-
-<!-- 16 · 实战 2：综合 4 道 -->
-<section class="slide wide compact">
-  <div class="head">
-    <div class="kicker">实战 2 · Practice 2 · 综合</div>
-    <h2>混搭 4 道 · <span class="highlight">10 分钟 10 min</span></h2>
-    <p class="subtitle">多分支 + 双变量 + ACSL 风格 · 有挑战性</p>
-  </div>
-  <div class="grid2" style="margin-top:14px;">
-    <div class="card">
-      <h3 style="color:var(--amber);">题 1 · ★★ 多分支含 x&lt;0</h3>
-      <p style="font-size:15px; margin-top:6px;">
-        <code>h(x) = h(x-2)+1 (x&gt;3), x (0≤x≤3), h(x+5) (x&lt;0)</code><br>
-        求 h(7) = <code class="inline">______</code>
-      </p>
-    </div>
-    <div class="card">
-      <h3 style="color:var(--amber);">题 2 · ★★ 汉诺塔公式</h3>
-      <p style="font-size:15px; margin-top:6px;">
-        <code>hanoi(n) = 2×hanoi(n-1)+1, hanoi(1)=1</code><br>
-        求 hanoi(4) = <code class="inline">______</code>
-      </p>
-    </div>
-    <div class="card">
-      <h3 style="color:var(--amber);">题 3 · ★★★ 双变量</h3>
-      <p style="font-size:15px; margin-top:6px;">
-        <code>f(x,y) = f(x-y, y+1) + 1 (x&gt;y), x-y (x≤y)</code><br>
-        求 f(10, 3) = <code class="inline">______</code>
-      </p>
-    </div>
-    <div class="card">
-      <h3 style="color:var(--amber);">题 4 · ★★★★ 综合 ACSL</h3>
-      <p style="font-size:15px; margin-top:6px;">
-        <code>f(x) = f(x-1)+2 (x&gt;5), f(x-3) (2&lt;x≤5), 3x (x≤2)</code><br>
-        求 f(9) = <code class="inline">______</code>
-      </p>
-    </div>
-  </div>
-</section>
-
-<!-- 17 · 实战 2 答案（手算过程）-->
-<section class="slide wide compact">
-  <div class="head">
-    <div class="kicker">实战 2 · 答案（含手算过程）</div>
-    <h2>4 道题 · <span class="highlight">完整手算过程</span></h2>
-    <p class="subtitle">每道题都画调用树 · 验证你的理解</p>
-  </div>
-  <div class="grid2" style="margin-top:14px;">
-    <div class="card">
-      <h3 style="color:var(--amber);">题 1 · h(7) = 6</h3>
-      <div class="check-a" style="font-size:12px; line-height:1.5;">
-        <pre>h(7)              (7&gt;3)
- └─&gt; h(5) + 1           (5>3)
-      └─&gt; h(3) + 1           (3, 0≤3≤3, base)
-           └─&gt; <b>3</b>
-
-h(5) = 3 + 1 = 4
-h(7) = 4 + 1 = <b>5</b>
-
-等等！让我重做...
-h(7): x=7>3, 走 h(x-2)+1 = h(5)+1
-h(5): x=5>3, 走 h(x-2)+1 = h(3)+1
-h(3): x=3, 0≤3≤3, base = 3
-
-回填：
-h(3) = 3
-h(5) = 3+1 = 4
-h(7) = 4+1 = <b>5</b></pre>
-      </div>
-    </div>
-    <div class="card">
-      <h3 style="color:var(--amber);">题 2 · hanoi(4) = 15</h3>
-      <div class="check-a" style="font-size:12px; line-height:1.5;">
-        <pre>hanoi(1) = 1
-hanoi(2) = 2×1 + 1 = 3
-hanoi(3) = 2×3 + 1 = 7
-hanoi(4) = 2×7 + 1 = <b>15</b>
-
-调用树：
-hanoi(4) = 2×hanoi(3)+1
-          = 2×(2×hanoi(2)+1)+1
-          = 2×(2×(2×1+1)+1)+1
-          = 2×(2×3+1)+1
-          = 2×7+1 = 15</pre>
-      </div>
-    </div>
-    <div class="card">
-      <h3 style="color:var(--amber);">题 3 · f(10, 3) = 5</h3>
-      <div class="check-a" style="font-size:12px; line-height:1.5;">
-        <pre>追踪 (x, y)：
-f(10, 3)              (10>3)
- └─&gt; f(7, 4) + 1           (7>3)
-      └─&gt; f(3, 5) + 1           (3≤5, base!)
-           └─&gt; 3 - 5 = -2
-
-回填：
-f(7, 4)  = -2 + 1 = -1
-f(10, 3) = -1 + 1 = <b>0</b>
-
-(陷阱：y 也在变！(3→4→5)，最后 x≤y)</pre>
-      </div>
-    </div>
-    <div class="card">
-      <h3 style="color:var(--amber);">题 4 · f(9) = 13</h3>
-      <div class="check-a" style="font-size:12px; line-height:1.5;">
-        <pre>f(9)               (9>5)
- └─&gt; f(8) + 2           (8>5)
-      └─&gt; f(7) + 2           (7>5)
-           └─&gt; f(6) + 2           (6>5)
-                └─&gt; f(3) + 2           (3, 2<3≤5)
-                     └─&gt; f(0) + 2           (0≤2, base)
-                          └─&gt; 3×0 = <b>0</b>
-
-回填：
-f(0) = 0
-f(3) = 0 + 2 = 2
-f(6) = 2 + 2 = 4
-f(7) = 4 + 2 = 6
-f(8) = 6 + 2 = 8
-f(9) = 8 + 2 = <b>10</b></pre>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- 18 · 陷阱专题 -->
-<section class="slide">
-  <div class="left">
-    <div class="kicker">⚠️ 5 Common Pitfalls</div>
-    <h2>递归<span class="highlight">5 大陷阱</span><br><span class="muted" style="font-size:22px; font-weight:600;">5 traps to avoid</span></h2>
-    <p class="subtitle">这些都是学生常犯的错误 · 看一遍避坑</p>
-  </div>
-  <div class="right">
-    <div class="grid2" style="gap:10px;">
-      <div class="card" style="border-left:4px solid var(--red);">
-        <h3 style="color:var(--red);">① 忘 base case</h3>
-        <pre><code>def f(n): return f(n+1)  # 💥 死循环</code></pre>
-      </div>
-      <div class="card" style="border-left:4px solid var(--red);">
-        <h3 style="color:var(--red);">② base case 写错</h3>
-        <pre><code>f(0)=1, f(1)=0  # 💥 永远进不去</code></pre>
-      </div>
-      <div class="card" style="border-left:4px solid var(--amber);">
-        <h3 style="color:var(--amber);">③ 多分支判断错</h3>
-        <p style="font-size:13px;">x=5 时选了 x&gt;5 而不是 x≤5<br>→ 仔细读 if 条件</p>
-      </div>
-      <div class="card" style="border-left:4px solid var(--amber);">
-        <h3 style="color:var(--amber);">④ x&lt;0 被忽略</h3>
-        <p style="font-size:13px;">当无解放弃<br>→ 这是<b>反弹分支</b>，别放弃！</p>
-      </div>
-      <div class="card" style="border-left:4px solid var(--purple);">
-        <h3 style="color:var(--purple);">⑤ 双变量只看一个</h3>
-        <p style="font-size:13px;">追踪 f(x,y) 漏掉 y 的变化<br>→ <b>同时</b>追踪 (x, y)</p>
-      </div>
-      <div class="card" style="border-left:4px solid var(--green);">
-        <h3 style="color:var(--green);">🛡️ 防御方法</h3>
-        <p style="font-size:13px;">每道题都画<b>调用树</b><br>手算时<b>不跳步</b></p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- 19 · 本周概念 recap -->
-<section class="slide wide">
-  <div class="head">
-    <div class="kicker">📋 本周概念回顾 · Week Recap</div>
-    <h2>本课 <span class="highlight">6 大核心概念</span></h2>
-    <p class="subtitle">回去之前确保你掌握这 6 件事</p>
-  </div>
-  <div class="grid3" style="margin-top:16px;">
-    <div class="recap-card card-purple">
-      <div class="recap-num">1</div>
-      <div class="recap-title">递归三要素</div>
-      <div class="recap-sub">终止条件 + 自己调自己 + 规模缩小</div>
-    </div>
-    <div class="recap-card card-amber">
-      <div class="recap-num">2</div>
-      <div class="recap-title">画调用树</div>
-      <div class="recap-sub">每道题的第一步 · 看清结构</div>
-    </div>
-    <div class="recap-card card-green">
-      <div class="recap-num">3</div>
-      <div class="recap-title">先向下追到底</div>
-      <div class="recap-sub">递归到底 · 不算值 · 只写递归调用</div>
-    </div>
-    <div class="recap-card card-blue">
-      <div class="recap-num">4</div>
-      <div class="recap-title">再向上回填</div>
-      <div class="recap-sub">从 base case 一格格向上算</div>
-    </div>
-    <div class="recap-card card-red">
-      <div class="recap-num">5</div>
-      <div class="recap-title">x&lt;0 是反弹</div>
-      <div class="recap-sub">不是无解 · 是另一个分支</div>
-    </div>
-    <div class="recap-card card-teal">
-      <div class="recap-num">6</div>
-      <div class="recap-title">双变量同时追踪</div>
-      <div class="recap-sub">f(x, y) 两个值一起变</div>
-    </div>
-  </div>
-</section>
-
-<!-- 20 · 课后作业 -->
-<section class="slide">
-  <div class="left">
-    <div class="kicker">📚 Homework</div>
-    <h2>课后<span class="highlight">作业</span></h2>
-    <p class="subtitle">本周作业 · 三类 · 1-2 小时</p>
+    <div class="kicker">🆕 3-Step Tracing Method · 3 步追踪法</div>
+    <h2>3 步追踪法 · <span class="highlight">5 列追踪表模板</span></h2>
+    <p class="subtitle">本课最重要的工具<br><span class="en-tag">The most important tool of this lesson</span></p>
   </div>
   <div class="right">
     <div class="card" style="border-left:4px solid var(--purple);">
-      <h3 style="color:var(--purple);">🖥️ OJ 递归编程 · 3 道</h3>
-      <ul style="font-size:15px; line-height:1.7; padding-left:20px;">
-        <li>1110 分解质因数 · ★★</li>
-        <li>1114 上台阶 · ★★</li>
-        <li>618 汉诺塔 · ★★★</li>
-      </ul>
-      <p style="font-size:13px; color:var(--muted); margin-top:6px;">OJ 上 <span class="highlight">禁用 AI</span>，自己写自己调试</p>
+      <h3 style="color:var(--purple);">3 步追踪法</h3>
+      <ol style="font-size:15px; line-height:1.8; padding-left:20px; margin-top:8px;">
+        <li><b>通读代码</b>（30 秒）· 圈出 INPUT / OUTPUT</li>
+        <li><b>画追踪表</b>（5 列）· 行号 / 变量 / 当前值 / 条件 / 输出</li>
+        <li><b>逐行执行</b>（按行号）· 每执行一行更新一列</li>
+      </ol>
     </div>
-    <div class="card" style="margin-top:12px; border-left:4px solid var(--amber);">
-      <h3 style="color:var(--amber);">📝 ACSL Wiki 递归题 · 5 道</h3>
-      <ul style="font-size:15px; line-height:1.7; padding-left:20px;">
-        <li>ACSL Wiki · Recursive Functions · Sample 1-5 风格</li>
-        <li>下载：categories.acsl.org/wiki</li>
-      </ul>
+    <div class="card" style="border-left:4px solid var(--green); margin-top:12px;">
+      <h3 style="color:var(--green-deep);">5 列追踪表模板</h3>
+      <table style="font-size:13px; width:100%; border-collapse:collapse; line-height:1.6;">
+        <tr style="background:rgba(22,163,74,.05);">
+          <th style="padding:6px; border-bottom:1px solid var(--line);">行号</th>
+          <th style="padding:6px; border-bottom:1px solid var(--line);">变量</th>
+          <th style="padding:6px; border-bottom:1px solid var(--line);">当前值</th>
+          <th style="padding:6px; border-bottom:1px solid var(--line);">条件</th>
+          <th style="padding:6px; border-bottom:1px solid var(--line);">输出</th>
+        </tr>
+        <tr><td style="padding:6px;">1</td><td style="padding:6px;">a</td><td style="padding:6px;">5</td><td style="padding:6px;">-</td><td style="padding:6px;">-</td></tr>
+        <tr><td style="padding:6px;">2</td><td style="padding:6px;">b</td><td style="padding:6px;">3</td><td style="padding:6px;">-</td><td style="padding:6px;">-</td></tr>
+        <tr><td style="padding:6px;">3</td><td style="padding:6px;">c</td><td style="padding:6px;">8</td><td style="padding:6px;">-</td><td style="padding:6px;">-</td></tr>
+        <tr><td style="padding:6px;">4</td><td style="padding:6px;">c</td><td style="padding:6px;">16</td><td style="padding:6px;">-</td><td style="padding:6px;">OUTPUT 16</td></tr>
+      </table>
     </div>
-    <div class="card" style="margin-top:12px; border-left:4px solid var(--green);">
-      <h3 style="color:var(--green);">🌳 调用树手绘 · 3 道</h3>
-      <p style="font-size:14px; color:var(--muted); margin:6px 0 10px;">每道题先看递归定义，再画调用树，最后回填求值</p>
-
-      <div style="margin-bottom:14px; padding:10px 14px; background:rgba(124,58,237,.06); border-radius:8px;">
-        <div style="font-weight:800; color:var(--purple-deep); margin-bottom:4px;">题 1 · fact(6) 调用树</div>
-        <code class="inline" style="font-size:13px; display:block; line-height:1.7;">
-          fact(0) = 1<br>
-          fact(n) = n × fact(n-1)   (n ≥ 1)
-        </code>
-      </div>
-
-      <div style="margin-bottom:14px; padding:10px 14px; background:rgba(124,58,237,.06); border-radius:8px;">
-        <div style="font-weight:800; color:var(--purple-deep); margin-bottom:4px;">题 2 · hanoi(3) 调用树</div>
-        <code class="inline" style="font-size:13px; display:block; line-height:1.7;">
-          hanoi(1) = 1<br>
-          hanoi(n) = 2 × hanoi(n-1) + 1   (n ≥ 2)
-        </code>
-      </div>
-
-      <div style="margin-bottom:14px; padding:10px 14px; background:rgba(124,58,237,.06); border-radius:8px;">
-        <div style="font-weight:800; color:var(--purple-deep); margin-bottom:4px;">题 3 · fib(6) 调用树（斐波那契数列）</div>
-        <code class="inline" style="font-size:13px; display:block; line-height:1.7;">
-          fib(0) = 0,  fib(1) = 1<br>
-          fib(n) = fib(n-1) + fib(n-2)   (n ≥ 2)
-        </code>
-      </div>
+    <div class="practice" style="margin-top:14px;">
+      <div class="label">📌 小贴士</div>
+      <p style="font-size:16px;">这 3 步贯穿本课所有题。养成习惯后，30 秒就能读完一段代码。</p>
     </div>
   </div>
 </section>
-
-<!-- 21 · 记忆卡片 -->
-<section class="slide wide">
+<!-- 09 · Branch Tracing Demo -->
+<section class="slide">
   <div class="left">
-    <div class="kicker">📇 记忆卡片 · 本周知识点</div>
-    <h2>本周 <span class="highlight">闪卡</span> · 5 张</h2>
-    <p class="subtitle">点击翻转 · 自我检测本周 6 个核心概念</p>
+    <div class="kicker">🆕 Branch Tracing · 分支追踪</div>
+    <h2>分支追踪 · <span class="highlight">if-then-else 伪代码</span></h2>
+    <p class="subtitle">示例：工资计算<br><span class="en-tag">Example: Salary calculation</span></p>
   </div>
   <div class="right">
-    <div class="check-q check-q-blue">
-      <div class="check-q-text">📇 <b>C01 · 递归三要素</b><br>所有递归都必须包含的 3 个要素是什么？</div>
-      <details>
-        <summary>看答案</summary>
-        <div class="check-a">1. <b>终止条件</b> Base case：什么时候停<br>
-        2. <b>自己调自己</b> Self-call：函数调函数自己<br>
-        3. <b>规模缩小</b> Shrinking：参数趋近 base case</div>
-      </details>
+    <div class="card" style="border-left:4px solid var(--purple);">
+      <h3 style="color:var(--purple);">ACSL 伪代码</h3>
+      <pre style="font-size:13px; line-height:1.7; padding:10px; background:rgba(124,58,237,.05); border-radius:6px; overflow-x:auto;">
+INPUT h, r
+b = 0
+IF h > 48 THEN
+  b = b + (h - 48) * 2 * r
+  h = 48
+END IF
+IF h > 40 THEN
+  b = b + (h - 40) * (3/2) * r
+  h = 40
+END IF
+b = b + h * r
+OUTPUT b</pre>
     </div>
-    <div class="check-q check-q-blue">
-      <div class="check-q-text">📇 <b>C02 · 手算流程</b><br>手算递归的两阶段流程是什么？</div>
-      <details>
-        <summary>看答案</summary>
-        <div class="check-a"><b>先向下追到底</b>（不计算值，只写递归调用）<br>
-        → <b>再向上回填</b>（从 base case 一格格向上算）</div>
-      </details>
+    <div class="card" style="border-left:4px solid var(--green); margin-top:10px;">
+      <h3 style="color:var(--green-deep);">追踪表（输入 h=52, r=10）</h3>
+      <table style="font-size:12px; width:100%; border-collapse:collapse; line-height:1.5;">
+        <tr style="background:rgba(22,163,74,.05);">
+          <th style="padding:4px; border-bottom:1px solid var(--line);">行</th>
+          <th style="padding:4px; border-bottom:1px solid var(--line);">h</th>
+          <th style="padding:4px; border-bottom:1px solid var(--line);">r</th>
+          <th style="padding:4px; border-bottom:1px solid var(--line);">b</th>
+          <th style="padding:4px; border-bottom:1px solid var(--line);">条件</th>
+          <th style="padding:4px; border-bottom:1px solid var(--line);">输出</th>
+        </tr>
+        <tr><td style="padding:4px;">1</td><td style="padding:4px;">52</td><td style="padding:4px;">10</td><td style="padding:4px;">-</td><td style="padding:4px;">INPUT</td><td style="padding:4px;">-</td></tr>
+        <tr><td style="padding:4px;">2</td><td style="padding:4px;">52</td><td style="padding:4px;">10</td><td style="padding:4px;">0</td><td style="padding:4px;">-</td><td style="padding:4px;">-</td></tr>
+        <tr><td style="padding:4px;">3</td><td style="padding:4px;">52</td><td style="padding:4px;">10</td><td style="padding:4px;">80</td><td style="padding:4px;">h>48 ✓</td><td style="padding:4px;">-</td></tr>
+        <tr><td style="padding:4px;">4</td><td style="padding:4px;">48</td><td style="padding:4px;">10</td><td style="padding:4px;">80</td><td style="padding:4px;">h=48</td><td style="padding:4px;">-</td></tr>
+        <tr><td style="padding:4px;">5</td><td style="padding:4px;">48</td><td style="padding:4px;">10</td><td style="padding:4px;">92</td><td style="padding:4px;">h>40 ✓</td><td style="padding:4px;">-</td></tr>
+        <tr><td style="padding:4px;">6</td><td style="padding:4px;">40</td><td style="padding:4px;">10</td><td style="padding:4px;">92</td><td style="padding:4px;">h=40</td><td style="padding:4px;">-</td></tr>
+        <tr><td style="padding:4px;">7</td><td style="padding:4px;">40</td><td style="padding:4px;">10</td><td style="padding:4px;">492</td><td style="padding:4px;">b+h×r</td><td style="padding:4px;">-</td></tr>
+        <tr style="background:rgba(22,163,74,.15);"><td style="padding:4px;">8</td><td style="padding:4px;">40</td><td style="padding:4px;">10</td><td style="padding:4px;">492</td><td style="padding:4px;">OUTPUT</td><td style="padding:4px;">492</td></tr>
+      </table>
     </div>
-    <div class="check-q check-q-blue">
-      <div class="check-q-text">📇 <b>C03 · Base case</b><br>Base case 写错了会发生什么？写不出 base case 会怎样？</div>
-      <details>
-        <summary>看答案</summary>
-        <div class="check-a">Base case <b>写错</b> → 永远进不去终止条件 = 死循环<br>
-        Base case <b>缺失</b> → 同样死循环 / 栈溢出</div>
-      </details>
-    </div>
-    <div class="check-q check-q-blue">
-      <div class="check-q-text">📇 <b>C04 · 调用树</b><br>调用树有哪 3 个部分？画调用树有什么用？</div>
-      <details>
-        <summary>看答案</summary>
-        <div class="check-a"><b>根</b> = 最上层调用 · <b>叶</b> = base case · <b>分支</b> = 递归调用<br>
-        画调用树 = 看清楚结构 + 避免漏算 + 加快速度</div>
-      </details>
-    </div>
-    <div class="check-q check-q-blue">
-      <div class="check-q-text">📇 <b>C05 · 双变量追踪</b><br>双变量递归 f(x, y) 手算时，最容易出什么错？</div>
-      <details>
-        <summary>看答案</summary>
-        <div class="check-a">最容易<b>只追踪 x</b>而忘了 y 也在变！<br>
-        正确做法：在纸上<b>同时</b>写 (x, y) 两个值</div>
-      </details>
+    <div class="practice" style="margin-top:14px;">
+      <div class="label">📌 小贴士</div>
+      <p style="font-size:16px;">注意"连续 IF"是<span class="highlight">独立判断</span>，不是 if-else 互斥。</p>
     </div>
   </div>
 </section>
 
-<!-- 22 · 下周预告 -->
-<section class="slide title-slide">
+<!-- 10 · Practice 1 · Branch Tracing -->
+<section class="slide wide compact">
+  <div class="head">
+    <div class="kicker">⚔️ Practice 1 · 分支追踪 4 题</div>
+    <h2>实战 1 · <span class="highlight">4 道分支追踪题</span></h2>
+    <p class="subtitle">建议 15 分钟内完成 · 不写代码<br><span class="en-tag">15 min · no coding · draw trace table</span></p>
+  </div>
+  <div class="grid2x2" style="margin-top:14px;">
+    <div class="card" style="border-left:4px solid var(--purple);">
+      <h3 style="color:var(--purple); font-size:16px;">题 1 · 阶梯奖金</h3>
+      <pre style="font-size:11px; line-height:1.5; padding:8px; background:rgba(124,58,237,.05); border-radius:6px; overflow-x:auto;">
+INPUT sales
+bonus = 0
+IF sales > 1000 THEN
+  bonus = 200
+END IF
+IF sales > 5000 THEN
+  bonus = 500
+END IF
+IF sales > 10000 THEN
+  bonus = 1000
+END IF
+OUTPUT bonus</pre>
+      <p style="font-size:13px; margin-top:6px;">sales = 7500 时输出？</p>
+    </div>
+    <div class="card" style="border-left:4px solid var(--purple);">
+      <h3 style="color:var(--purple); font-size:16px;">题 2 · 三数排序</h3>
+      <pre style="font-size:11px; line-height:1.5; padding:8px; background:rgba(124,58,237,.05); border-radius:6px; overflow-x:auto;">
+INPUT a, b, c
+IF a > b THEN
+  swap a, b
+END IF
+IF b > c THEN
+  swap b, c
+END IF
+IF a > b THEN
+  swap a, b
+END IF
+OUTPUT a, b, c</pre>
+      <p style="font-size:13px; margin-top:6px;">a=3, b=1, c=2 时输出？</p>
+    </div>
+    <div class="card" style="border-left:4px solid var(--purple);">
+      <h3 style="color:var(--purple); font-size:16px;">题 3 · 闰年判断</h3>
+      <pre style="font-size:11px; line-height:1.5; padding:8px; background:rgba(124,58,237,.05); border-radius:6px; overflow-x:auto;">
+INPUT year
+leap = 0
+IF (year MOD 4) = 0 THEN
+  IF (year MOD 100) ≠ 0 THEN
+    leap = 1
+  END IF
+END IF
+IF (year MOD 400) = 0 THEN
+  leap = 1
+END IF
+OUTPUT leap</pre>
+      <p style="font-size:13px; margin-top:6px;">year = 2000 时输出？</p>
+    </div>
+    <div class="card" style="border-left:4px solid var(--purple);">
+      <h3 style="color:var(--purple); font-size:16px;">题 4 · 等级评分</h3>
+      <pre style="font-size:11px; line-height:1.5; padding:8px; background:rgba(124,58,237,.05); border-radius:6px; overflow-x:auto;">
+INPUT score
+grade = "F"
+IF score >= 60 THEN
+  grade = "D"
+END IF
+IF score >= 70 THEN
+  grade = "C"
+END IF
+IF score >= 80 THEN
+  grade = "B"
+END IF
+IF score >= 90 THEN
+  grade = "A"
+END IF
+OUTPUT grade</pre>
+      <p style="font-size:13px; margin-top:6px;">score = 85 时输出？</p>
+    </div>
+  </div>
+  <div class="practice" style="margin-top:12px;">
+    <div class="label">📌 小贴士</div>
+    <p style="font-size:15px;">每题画 5 列追踪表（行号 / 变量 / 当前值 / 条件 / 输出），不要在脑中推。</p>
+  </div>
+</section>
+
+<!-- 11 · Practice 1 Answers -->
+<section class="slide wide compact">
+  <div class="head">
+    <div class="kicker">⚔️ Practice 1 Answers</div>
+    <h2>实战 1 · <span class="highlight">答案 + 解析</span></h2>
+    <p class="subtitle">做完对照答案<br><span class="en-tag">Check your answers</span></p>
+  </div>
+  <div class="grid2x2" style="margin-top:14px;">
+    <div class="card" style="border-left:4px solid var(--green); background:rgba(22,163,74,.04);">
+      <h3 style="color:var(--green-deep); font-size:16px;">题 1 答案 · 500</h3>
+      <table style="font-size:11px; line-height:1.5; width:100%; border-collapse:collapse;">
+        <tr><td>行</td><td>sales</td><td>bonus</td><td>条件</td></tr>
+        <tr><td>1</td><td>7500</td><td>-</td><td>INPUT</td></tr>
+        <tr><td>2</td><td>7500</td><td>0</td><td>-</td></tr>
+        <tr><td>3</td><td>7500</td><td>200</td><td>>1000 ✓</td></tr>
+        <tr><td>5</td><td>7500</td><td>500</td><td>>5000 ✓</td></tr>
+        <tr><td>7</td><td>7500</td><td>1000</td><td>>10000 ✗</td></tr>
+        <tr style="background:rgba(22,163,74,.15);"><td>8</td><td>-</td><td>500</td><td>OUTPUT</td></tr>
+      </table>
+      <p style="font-size:12px; margin-top:4px; color:var(--muted);">关键：连续 IF，每个都判断一次</p>
+    </div>
+    <div class="card" style="border-left:4px solid var(--green); background:rgba(22,163,74,.04);">
+      <h3 style="color:var(--green-deep); font-size:16px;">题 2 答案 · 1 2 3</h3>
+      <table style="font-size:11px; line-height:1.5; width:100%; border-collapse:collapse;">
+        <tr><td>行</td><td>a</td><td>b</td><td>c</td></tr>
+        <tr><td>1</td><td>3</td><td>1</td><td>2</td></tr>
+        <tr style="background:rgba(22,163,74,.05);"><td>3</td><td><b>1</b></td><td><b>3</b></td><td>2</td></tr>
+        <tr style="background:rgba(22,163,74,.05);"><td>5</td><td>1</td><td><b>2</b></td><td><b>3</b></td></tr>
+        <tr style="background:rgba(22,163,74,.05);"><td>7</td><td><b>1</b></td><td><b>2</b></td><td>3</td></tr>
+        <tr style="background:rgba(22,163,74,.15);"><td>8</td><td>1</td><td>2</td><td>3</td></tr>
+      </table>
+      <p style="font-size:12px; margin-top:4px; color:var(--muted);">关键：swap 后 a, b 互换</p>
+    </div>
+    <div class="card" style="border-left:4px solid var(--green); background:rgba(22,163,74,.04);">
+      <h3 style="color:var(--green-deep); font-size:16px;">题 3 答案 · 1</h3>
+      <table style="font-size:11px; line-height:1.5; width:100%; border-collapse:collapse;">
+        <tr><td>行</td><td>year</td><td>leap</td><td>条件</td></tr>
+        <tr><td>1</td><td>2000</td><td>-</td><td>INPUT</td></tr>
+        <tr><td>2</td><td>2000</td><td>0</td><td>-</td></tr>
+        <tr><td>3</td><td>2000</td><td>0</td><td>MOD 4=0 ✓</td></tr>
+        <tr><td>4</td><td>2000</td><td>0</td><td>MOD 100≠0 ✗</td></tr>
+        <tr><td>7</td><td>2000</td><td><b>1</b></td><td>MOD 400=0 ✓</td></tr>
+        <tr style="background:rgba(22,163,74,.15);"><td>9</td><td>-</td><td>1</td><td>OUTPUT 1</td></tr>
+      </table>
+      <p style="font-size:12px; margin-top:4px; color:var(--muted);">关键：嵌套 IF + 400 优先级</p>
+    </div>
+    <div class="card" style="border-left:4px solid var(--green); background:rgba(22,163,74,.04);">
+      <h3 style="color:var(--green-deep); font-size:16px;">题 4 答案 · B</h3>
+      <table style="font-size:11px; line-height:1.5; width:100%; border-collapse:collapse;">
+        <tr><td>行</td><td>score</td><td>grade</td><td>条件</td></tr>
+        <tr><td>1</td><td>85</td><td>-</td><td>INPUT</td></tr>
+        <tr><td>2</td><td>85</td><td>F</td><td>-</td></tr>
+        <tr><td>3</td><td>85</td><td>D</td><td>>=60 ✓</td></tr>
+        <tr><td>5</td><td>85</td><td>C</td><td>>=70 ✓</td></tr>
+        <tr><td>7</td><td>85</td><td>B</td><td>>=80 ✓</td></tr>
+        <tr><td>9</td><td>85</td><td>A</td><td>>=90 ✗</td></tr>
+        <tr style="background:rgba(22,163,74,.15);"><td>11</td><td>-</td><td>B</td><td>OUTPUT B</td></tr>
+      </table>
+      <p style="font-size:12px; margin-top:4px; color:var(--muted);">关键：后面的 grade 覆盖前面的</p>
+    </div>
+  </div>
+</section>
+<!-- 12 · Loop Tracing Demo · BANANAS -->
+<section class="slide">
   <div class="left">
-    <div class="kicker">Next Lesson · L4 预告</div>
-    <h1>L4 · <span class="highlight">第一轮真题模拟</span></h1>
-    <p class="subtitle">What Does This Program Do? · 程序追踪 · 送分题</p>
-    <p style="margin-top:24px; padding:16px; background:rgba(37,99,235,.06); border-left:4px solid var(--blue); border-radius:8px; font-size:15px; line-height:1.7;">
-      <b>L3 主题</b><br>
-      1. <b>分支追踪</b> · if-elif-else 求输出<br>
-      2. <b>循环追踪</b> · for/while 逐步走<br>
-      3. <b>变量表格法</b> · 不跳步的关键工具<br>
-      4. <b>ACSL Wiki 样题</b>
-    </p>
-    <p style="margin-top:18px; padding:14px; background:rgba(22,163,74,.06); border-left:4px solid var(--green); border-radius:8px; font-size:14px;">
-      🎉 <b>L2 完成！</b> 第一次完整学完递归，下节课是送分题，让大家轻松一下。
-    </p>
+    <div class="kicker">🆕 Loop Tracing · 循环追踪</div>
+    <h2>循环追踪 · <span class="highlight">FOR/NEXT + step -1</span></h2>
+    <p class="subtitle">示例：字符串反转 BANANAS<br><span class="en-tag">Example: String reverse BANANAS</span></p>
+  </div>
+  <div class="right">
+    <div class="card" style="border-left:4px solid var(--blue);">
+      <h3 style="color:var(--blue);">ACSL 伪代码</h3>
+      <pre style="font-size:13px; line-height:1.7; padding:10px; background:rgba(37,99,235,.05); border-radius:6px; overflow-x:auto;">
+A = "BANANAS"
+B = ""
+FOR j = LEN(A)-1 TO 0 STEP -1
+  B = B + A[j]
+NEXT j
+OUTPUT B</pre>
+    </div>
+    <div class="card" style="border-left:4px solid var(--green); margin-top:10px;">
+      <h3 style="color:var(--green-deep);">追踪表</h3>
+      <table style="font-size:11px; width:100%; border-collapse:collapse; line-height:1.5;">
+        <tr style="background:rgba(22,163,74,.05);">
+          <th style="padding:4px; border-bottom:1px solid var(--line);">行</th>
+          <th style="padding:4px; border-bottom:1px solid var(--line);">j</th>
+          <th style="padding:4px; border-bottom:1px solid var(--line);">A[j]</th>
+          <th style="padding:4px; border-bottom:1px solid var(--line);">B</th>
+          <th style="padding:4px; border-bottom:1px solid var(--line);">条件 j≥0</th>
+        </tr>
+        <tr><td style="padding:4px;">1</td><td style="padding:4px;">-</td><td style="padding:4px;">-</td><td style="padding:4px;">-</td><td style="padding:4px;">A="BANANAS"</td></tr>
+        <tr><td style="padding:4px;">2</td><td style="padding:4px;">-</td><td style="padding:4px;">-</td><td style="padding:4px;">""</td><td style="padding:4px;">-</td></tr>
+        <tr style="background:rgba(22,163,74,.05);"><td style="padding:4px;">3</td><td style="padding:4px;">6</td><td style="padding:4px;">"S"</td><td style="padding:4px;">"S"</td><td style="padding:4px;">✓</td></tr>
+        <tr style="background:rgba(22,163,74,.05);"><td style="padding:4px;">3</td><td style="padding:4px;">5</td><td style="padding:4px;">"A"</td><td style="padding:4px;">"SA"</td><td style="padding:4px;">✓</td></tr>
+        <tr style="background:rgba(22,163,74,.05);"><td style="padding:4px;">3</td><td style="padding:4px;">4</td><td style="padding:4px;">"N"</td><td style="padding:4px;">"SAN"</td><td style="padding:4px;">✓</td></tr>
+        <tr style="background:rgba(22,163,74,.05);"><td style="padding:4px;">3</td><td style="padding:4px;">3</td><td style="padding:4px;">"A"</td><td style="padding:4px;">"SANA"</td><td style="padding:4px;">✓</td></tr>
+        <tr style="background:rgba(22,163,74,.05);"><td style="padding:4px;">3</td><td style="padding:4px;">2</td><td style="padding:4px;">"N"</td><td style="padding:4px;">"SANAN"</td><td style="padding:4px;">✓</td></tr>
+        <tr style="background:rgba(22,163,74,.05);"><td style="padding:4px;">3</td><td style="padding:4px;">1</td><td style="padding:4px;">"A"</td><td style="padding:4px;">"SANANA"</td><td style="padding:4px;">✓</td></tr>
+        <tr style="background:rgba(22,163,74,.05);"><td style="padding:4px;">3</td><td style="padding:4px;">0</td><td style="padding:4px;">"B"</td><td style="padding:4px;">"SANANAB"</td><td style="padding:4px;">✓</td></tr>
+        <tr><td style="padding:4px;">3</td><td style="padding:4px;">-1</td><td style="padding:4px;">-</td><td style="padding:4px;">"SANANAB"</td><td style="padding:4px;">✗ 退出</td></tr>
+        <tr style="background:rgba(22,163,74,.15);"><td style="padding:4px;">4</td><td style="padding:4px;">-</td><td style="padding:4px;">-</td><td style="padding:4px;">"SANANAB"</td><td style="padding:4px;">OUTPUT "SANANAB"</td></tr>
+      </table>
+    </div>
+    <div class="practice" style="margin-top:14px;">
+      <div class="label">📌 小贴士</div>
+      <p style="font-size:16px;"><b>STEP -1</b> = 倒序。起点 = LEN(A)-1 = 6（最后一个字符）。</p>
+    </div>
   </div>
 </section>
 
-</main>
+<!-- 13 · Practice 2 · Loop Tracing -->
+<section class="slide wide compact">
+  <div class="head">
+    <div class="kicker">⚔️ Practice 2 · 循环追踪 4 题</div>
+    <h2>实战 2 · <span class="highlight">4 道循环追踪题</span></h2>
+    <p class="subtitle">建议 15 分钟内完成<br><span class="en-tag">15 min · cover FOR/WHILE/STEP -1/sentinel</span></p>
+  </div>
+  <div class="grid2x2" style="margin-top:14px;">
+    <div class="card" style="border-left:4px solid var(--purple);">
+      <h3 style="color:var(--purple); font-size:16px;">题 1 · 累加 1+2+...+10</h3>
+      <pre style="font-size:11px; line-height:1.5; padding:8px; background:rgba(124,58,237,.05); border-radius:6px; overflow-x:auto;">
+sum = 0
+FOR i = 1 TO 10
+  sum = sum + i
+NEXT i
+OUTPUT sum</pre>
+      <p style="font-size:13px; margin-top:6px;">求输出</p>
+    </div>
+    <div class="card" style="border-left:4px solid var(--purple);">
+      <h3 style="color:var(--purple); font-size:16px;">题 2 · 求位数</h3>
+      <pre style="font-size:11px; line-height:1.5; padding:8px; background:rgba(124,58,237,.05); border-radius:6px; overflow-x:auto;">
+INPUT n
+count = 0
+WHILE n > 0
+  n = n / 10
+  count = count + 1
+END WHILE
+OUTPUT count</pre>
+      <p style="font-size:13px; margin-top:6px;">n = 12345 时输出？</p>
+    </div>
+    <div class="card" style="border-left:4px solid var(--purple);">
+      <h3 style="color:var(--purple); font-size:16px;">题 3 · 倒序输出数组</h3>
+      <pre style="font-size:11px; line-height:1.5; padding:8px; background:rgba(124,58,237,.05); border-radius:6px; overflow-x:auto;">
+A = [3, 7, 1, 9, 2]
+FOR k = 4 TO 0 STEP -1
+  OUTPUT A[k]
+NEXT k</pre>
+      <p style="font-size:13px; margin-top:6px;">输出 5 行，每行 1 个数</p>
+    </div>
+    <div class="card" style="border-left:4px solid var(--purple);">
+      <h3 style="color:var(--purple); font-size:16px;">题 4 · 哨兵退出</h3>
+      <pre style="font-size:11px; line-height:1.5; padding:8px; background:rgba(124,58,237,.05); border-radius:6px; overflow-x:auto;">
+sum = 0
+INPUT x
+WHILE x ≠ 0
+  sum = sum + x
+  INPUT x
+END WHILE
+OUTPUT sum</pre>
+      <p style="font-size:13px; margin-top:6px;">依次输入 3, 5, 2, 0，输出？</p>
+    </div>
+  </div>
+</section>
+
+<!-- 14 · Practice 2 Answers -->
+<section class="slide wide compact">
+  <div class="head">
+    <div class="kicker">⚔️ Practice 2 Answers</div>
+    <h2>实战 2 · <span class="highlight">答案 + 解析</span></h2>
+    <p class="subtitle">做完对照答案<br><span class="en-tag">Check your answers</span></p>
+  </div>
+  <div class="grid2x2" style="margin-top:14px;">
+    <div class="card" style="border-left:4px solid var(--green); background:rgba(22,163,74,.04);">
+      <h3 style="color:var(--green-deep); font-size:16px;">题 1 答案 · 55</h3>
+      <p style="font-size:12px; line-height:1.6;">i 从 1 累加到 10：1+2+...+10 = 55</p>
+      <table style="font-size:11px; line-height:1.5; width:100%; border-collapse:collapse; margin-top:4px;">
+        <tr><td>i</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>...</td><td>10</td></tr>
+        <tr><td>sum</td><td>1</td><td>3</td><td>6</td><td>10</td><td>15</td><td>...</td><td>55</td></tr>
+      </table>
+      <p style="font-size:12px; margin-top:4px; color:var(--muted);">关键：sum 是累计值</p>
+    </div>
+    <div class="card" style="border-left:4px solid var(--green); background:rgba(22,163,74,.04);">
+      <h3 style="color:var(--green-deep); font-size:16px;">题 2 答案 · 5</h3>
+      <table style="font-size:11px; line-height:1.5; width:100%; border-collapse:collapse;">
+        <tr><td>循环</td><td>n</td><td>count</td><td>n>0</td></tr>
+        <tr><td>起始</td><td>12345</td><td>0</td><td>✓</td></tr>
+        <tr><td>1</td><td>1234</td><td>1</td><td>✓</td></tr>
+        <tr><td>2</td><td>123</td><td>2</td><td>✓</td></tr>
+        <tr><td>3</td><td>12</td><td>3</td><td>✓</td></tr>
+        <tr><td>4</td><td>1</td><td>4</td><td>✓</td></tr>
+        <tr><td>5</td><td>0</td><td>5</td><td>✗</td></tr>
+        <tr style="background:rgba(22,163,74,.15);"><td>OUTPUT</td><td>-</td><td>5</td><td>-</td></tr>
+      </table>
+      <p style="font-size:12px; margin-top:4px; color:var(--muted);">关键：n = n / 10（整数除法）</p>
+    </div>
+    <div class="card" style="border-left:4px solid var(--green); background:rgba(22,163,74,.04);">
+      <h3 style="color:var(--green-deep); font-size:16px;">题 3 答案</h3>
+      <p style="font-size:13px; line-height:1.7;">依次输出：<br>
+      A[4]=<b>2</b><br>
+      A[3]=<b>9</b><br>
+      A[2]=<b>1</b><br>
+      A[1]=<b>7</b><br>
+      A[0]=<b>3</b></p>
+      <p style="font-size:12px; margin-top:4px; color:var(--muted);">关键：STEP -1 起点是 LEN-1=4</p>
+    </div>
+    <div class="card" style="border-left:4px solid var(--green); background:rgba(22,163,74,.04);">
+      <h3 style="color:var(--green-deep); font-size:16px;">题 4 答案 · 10</h3>
+      <table style="font-size:11px; line-height:1.5; width:100%; border-collapse:collapse;">
+        <tr><td>输入 x</td><td>sum</td><td>x≠0</td></tr>
+        <tr><td>3</td><td>3</td><td>✓</td></tr>
+        <tr><td>5</td><td>8</td><td>✓</td></tr>
+        <tr><td>2</td><td>10</td><td>✓</td></tr>
+        <tr><td>0</td><td>10</td><td>✗</td></tr>
+        <tr style="background:rgba(22,163,74,.15);"><td>OUTPUT</td><td>10</td><td>-</td></tr>
+      </table>
+      <p style="font-size:12px; margin-top:4px; color:var(--muted);">关键：先读 x 判断，再累加</p>
+    </div>
+  </div>
+</section>
+<!-- 15 · Array Tracing Demo -->
+<section class="slide">
+  <div class="left">
+    <div class="kicker">🆕 Array Tracing · 数组追踪</div>
+    <h2>数组追踪 · <span class="highlight">哨兵值退出</span></h2>
+    <p class="subtitle">示例：数组求最大值<br><span class="en-tag">Example: Find array max</span></p>
+  </div>
+  <div class="right">
+    <div class="card" style="border-left:4px solid var(--blue);">
+      <h3 style="color:var(--blue);">ACSL 伪代码</h3>
+      <pre style="font-size:12px; line-height:1.6; padding:10px; background:rgba(37,99,235,.05); border-radius:6px; overflow-x:auto;">
+INPUT N
+DIM A[N]
+FOR i = 0 TO N-1
+  INPUT A[i]
+NEXT i
+max = A[0]
+i = 1
+WHILE i < N
+  IF A[i] > max THEN
+    max = A[i]
+  END IF
+  i = i + 1
+END WHILE
+OUTPUT max</pre>
+    </div>
+    <div class="card" style="border-left:4px solid var(--green); margin-top:10px;">
+      <h3 style="color:var(--green-deep);">追踪表（A = [3, 7, 2, 9, 5], N=5）</h3>
+      <table style="font-size:11px; width:100%; border-collapse:collapse; line-height:1.5;">
+        <tr style="background:rgba(22,163,74,.05);">
+          <th style="padding:3px; border-bottom:1px solid var(--line);">行</th>
+          <th style="padding:3px; border-bottom:1px solid var(--line);">i</th>
+          <th style="padding:3px; border-bottom:1px solid var(--line);">max</th>
+          <th style="padding:3px; border-bottom:1px solid var(--line);">A[i]</th>
+          <th style="padding:3px; border-bottom:1px solid var(--line);">条件</th>
+        </tr>
+        <tr><td style="padding:3px;">INPUT</td><td style="padding:3px;">-</td><td style="padding:3px;">-</td><td style="padding:3px;">3,7,2,9,5</td><td style="padding:3px;">N=5</td></tr>
+        <tr><td style="padding:3px;">max=</td><td style="padding:3px;">-</td><td style="padding:3px;">3</td><td style="padding:3px;">-</td><td style="padding:3px;">A[0]=3</td></tr>
+        <tr style="background:rgba(22,163,74,.05);"><td style="padding:3px;">WHILE</td><td style="padding:3px;">1</td><td style="padding:3px;">3</td><td style="padding:3px;">7</td><td style="padding:3px;">i<5 ✓</td></tr>
+        <tr style="background:rgba(22,163,74,.05);"><td style="padding:3px;">IF</td><td style="padding:3px;">-</td><td style="padding:3px;"><b>7</b></td><td style="padding:3px;">7</td><td style="padding:3px;">7>3 ✓</td></tr>
+        <tr style="background:rgba(22,163,74,.05);"><td style="padding:3px;">i++</td><td style="padding:3px;">2</td><td style="padding:3px;">7</td><td style="padding:3px;">2</td><td style="padding:3px;">2>7 ✗</td></tr>
+        <tr style="background:rgba(22,163,74,.05);"><td style="padding:3px;">i++</td><td style="padding:3px;">3</td><td style="padding:3px;"><b>9</b></td><td style="padding:3px;">9</td><td style="padding:3px;">9>7 ✓</td></tr>
+        <tr style="background:rgba(22,163,74,.05);"><td style="padding:3px;">i++</td><td style="padding:3px;">4</td><td style="padding:3px;">9</td><td style="padding:3px;">5</td><td style="padding:3px;">5>9 ✗</td></tr>
+        <tr><td style="padding:3px;">WHILE</td><td style="padding:3px;">5</td><td style="padding:3px;">9</td><td style="padding:3px;">-</td><td style="padding:3px;">i<5 ✗ 退出</td></tr>
+        <tr style="background:rgba(22,163,74,.15);"><td style="padding:3px;">OUTPUT</td><td style="padding:3px;">-</td><td style="padding:3px;"><b>9</b></td><td style="padding:3px;">-</td><td style="padding:3px;">9</td></tr>
+      </table>
+    </div>
+    <div class="practice" style="margin-top:14px;">
+      <div class="label">📌 小贴士</div>
+      <p style="font-size:16px;">哨兵退出条件是 <b>i < N</b>，不是 i ≤ N。</p>
+    </div>
+  </div>
+</section>
+
+<!-- 16 · Practice 3 · Array Tracing -->
+<section class="slide wide compact">
+  <div class="head">
+    <div class="kicker">⚔️ Practice 3 · 数组追踪 4 题</div>
+    <h2>实战 3 · <span class="highlight">4 道数组追踪题</span></h2>
+    <p class="subtitle">建议 15 分钟内完成<br><span class="en-tag">15 min · cover sum, max, dual pointer</span></p>
+  </div>
+  <div class="grid2x2" style="margin-top:14px;">
+    <div class="card" style="border-left:4px solid var(--purple);">
+      <h3 style="color:var(--purple); font-size:16px;">题 1 · 数组求和</h3>
+      <pre style="font-size:11px; line-height:1.5; padding:8px; background:rgba(124,58,237,.05); border-radius:6px; overflow-x:auto;">
+INPUT N
+DIM A[N]
+FOR i = 0 TO N-1
+  INPUT A[i]
+NEXT i
+sum = 0
+FOR i = 0 TO N-1
+  sum = sum + A[i]
+NEXT i
+OUTPUT sum</pre>
+      <p style="font-size:13px; margin-top:6px;">A=[1,2,3,4,5], N=5 时输出？</p>
+    </div>
+    <div class="card" style="border-left:4px solid var(--purple);">
+      <h3 style="color:var(--purple); font-size:16px;">题 2 · 哨兵退出求最大</h3>
+      <pre style="font-size:11px; line-height:1.5; padding:8px; background:rgba(124,58,237,.05); border-radius:6px; overflow-x:auto;">
+INPUT x
+max = x
+WHILE x ≠ 0
+  IF x > max THEN
+    max = x
+  END IF
+  INPUT x
+END WHILE
+OUTPUT max</pre>
+      <p style="font-size:13px; margin-top:6px;">依次输入 3, 7, 2, 9, 5, 0，输出？</p>
+    </div>
+    <div class="card" style="border-left:4px solid var(--purple);">
+      <h3 style="color:var(--purple); font-size:16px;">题 3 · 双指针求和</h3>
+      <pre style="font-size:11px; line-height:1.5; padding:8px; background:rgba(124,58,237,.05); border-radius:6px; overflow-x:auto;">
+INPUT a, b
+i = 0
+j = 0
+WHILE i < 5 AND j < 5
+  OUTPUT A[i] + B[j]
+  i = i + 1
+  j = j + 1
+END WHILE</pre>
+      <p style="font-size:13px; margin-top:6px;">A=[1,2,3,4,5] B=[10,20,30,40,50]，输出 5 行</p>
+    </div>
+    <div class="card" style="border-left:4px solid var(--purple);">
+      <h3 style="color:var(--purple); font-size:16px;">题 4 · FOR 填充数组</h3>
+      <pre style="font-size:11px; line-height:1.5; padding:8px; background:rgba(124,58,237,.05); border-radius:6px; overflow-x:auto;">
+DIM A[5]
+FOR i = 0 TO 4
+  A[i] = i * 2
+NEXT i
+FOR i = 0 TO 4
+  OUTPUT A[i]
+NEXT i</pre>
+      <p style="font-size:13px; margin-top:6px;">输出 5 行，每行 1 个数</p>
+    </div>
+  </div>
+</section>
+
+<!-- 17 · Practice 3 Answers -->
+<section class="slide wide compact">
+  <div class="head">
+    <div class="kicker">⚔️ Practice 3 Answers</div>
+    <h2>实战 3 · <span class="highlight">答案 + 解析</span></h2>
+    <p class="subtitle">做完对照答案<br><span class="en-tag">Check your answers</span></p>
+  </div>
+  <div class="grid2x2" style="margin-top:14px;">
+    <div class="card" style="border-left:4px solid var(--green); background:rgba(22,163,74,.04);">
+      <h3 style="color:var(--green-deep); font-size:16px;">题 1 答案 · 15</h3>
+      <table style="font-size:11px; line-height:1.5; width:100%; border-collapse:collapse;">
+        <tr><td>i</td><td>A[i]</td><td>sum</td></tr>
+        <tr><td>0</td><td>1</td><td>1</td></tr>
+        <tr><td>1</td><td>2</td><td>3</td></tr>
+        <tr><td>2</td><td>3</td><td>6</td></tr>
+        <tr><td>3</td><td>4</td><td>10</td></tr>
+        <tr><td>4</td><td>5</td><td><b>15</b></td></tr>
+      </table>
+      <p style="font-size:12px; margin-top:4px; color:var(--muted);">关键：sum 累计</p>
+    </div>
+    <div class="card" style="border-left:4px solid var(--green); background:rgba(22,163,74,.04);">
+      <h3 style="color:var(--green-deep); font-size:16px;">题 2 答案 · 9</h3>
+      <table style="font-size:11px; line-height:1.5; width:100%; border-collapse:collapse;">
+        <tr><td>输入 x</td><td>max</td><td>x≠0</td></tr>
+        <tr><td>3</td><td>3</td><td>✓</td></tr>
+        <tr><td>7</td><td><b>7</b></td><td>✓ (7>3)</td></tr>
+        <tr><td>2</td><td>7</td><td>✓ (2<7)</td></tr>
+        <tr><td>9</td><td><b>9</b></td><td>✓ (9>7)</td></tr>
+        <tr><td>5</td><td>9</td><td>✓ (5<9)</td></tr>
+        <tr><td>0</td><td>9</td><td>✗ 退出</td></tr>
+        <tr style="background:rgba(22,163,74,.15);"><td>OUTPUT</td><td>9</td><td>-</td></tr>
+      </table>
+      <p style="font-size:12px; margin-top:4px; color:var(--muted);">关键：先读 x 再比较</p>
+    </div>
+    <div class="card" style="border-left:4px solid var(--green); background:rgba(22,163,74,.04);">
+      <h3 style="color:var(--green-deep); font-size:16px;">题 3 答案</h3>
+      <p style="font-size:13px; line-height:1.7;">依次输出：<br>
+      1+10=<b>11</b><br>
+      2+20=<b>22</b><br>
+      3+30=<b>33</b><br>
+      4+40=<b>44</b><br>
+      5+50=<b>55</b></p>
+      <p style="font-size:12px; margin-top:4px; color:var(--muted);">关键：i, j 同时 +1</p>
+    </div>
+    <div class="card" style="border-left:4px solid var(--green); background:rgba(22,163,74,.04);">
+      <h3 style="color:var(--green-deep); font-size:16px;">题 4 答案</h3>
+      <table style="font-size:11px; line-height:1.5; width:100%; border-collapse:collapse;">
+        <tr><td>i</td><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td></tr>
+        <tr><td>A[i]=i*2</td><td><b>0</b></td><td><b>2</b></td><td><b>4</b></td><td><b>6</b></td><td><b>8</b></td></tr>
+      </table>
+      <p style="font-size:12px; margin-top:4px; color:var(--muted);">关键：A[i]=i*2 公式</p>
+    </div>
+  </div>
+</section>
+<!-- 18 · Nested Loop Tracing -->
+<section class="slide">
+  <div class="left">
+    <div class="kicker">🆕 Nested Loop Tracing</div>
+    <h2>嵌套循环追踪 · <span class="highlight">ACSL Wiki Sample 3</span></h2>
+    <p class="subtitle">最难的内容：嵌套 while + 双指针<br><span class="en-tag">Hardest: nested while + dual pointers</span></p>
+  </div>
+  <div class="right">
+    <div class="card" style="border-left:4px solid var(--purple);">
+      <h3 style="color:var(--purple);">ACSL 伪代码</h3>
+      <pre style="font-size:11px; line-height:1.5; padding:10px; background:rgba(124,58,237,.05); border-radius:6px; overflow-x:auto;">
+A(0)=12 A(1)=41 A(2)=52 A(3)=57 A(4)=77 A(5)=-100
+B(0)=17 B(1)=34 B(2)=81
+j = 0; k = 0; n = 0
+WHILE A(k) > 0
+  WHILE B(k) ≤ A(j)
+    C(n) = B(k)
+    n = n + 1
+    k = k + 1
+  END WHILE
+  C(n) = A(j)
+  n = n + 1
+  j = j + 1
+END WHILE
+C(n) = B(k)</pre>
+    </div>
+    <div class="card" style="border-left:4px solid var(--green); margin-top:10px;">
+      <h3 style="color:var(--green-deep);">6 列追踪表</h3>
+      <table style="font-size:10px; width:100%; border-collapse:collapse; line-height:1.4;">
+        <tr style="background:rgba(22,163,74,.05);">
+          <th style="padding:3px; border-bottom:1px solid var(--line);">行</th>
+          <th style="padding:3px; border-bottom:1px solid var(--line);">j</th>
+          <th style="padding:3px; border-bottom:1px solid var(--line);">k</th>
+          <th style="padding:3px; border-bottom:1px solid var(--line);">n</th>
+          <th style="padding:3px; border-bottom:1px solid var(--line);">A(k)</th>
+          <th style="padding:3px; border-bottom:1px solid var(--line);">B(k)</th>
+          <th style="padding:3px; border-bottom:1px solid var(--line);">C(n)</th>
+        </tr>
+        <tr><td style="padding:3px;">初</td><td style="padding:3px;">0</td><td style="padding:3px;">0</td><td style="padding:3px;">0</td><td style="padding:3px;">12</td><td style="padding:3px;">17</td><td style="padding:3px;">-</td></tr>
+        <tr style="background:rgba(22,163,74,.05);"><td style="padding:3px;">外</td><td style="padding:3px;">-</td><td style="padding:3px;">-</td><td style="padding:3px;">-</td><td style="padding:3px;">12</td><td style="padding:3px;">-</td><td style="padding:3px;">A(0)>0 ✓</td></tr>
+        <tr><td style="padding:3px;">内</td><td style="padding:3px;">-</td><td style="padding:3px;">-</td><td style="padding:3px;">-</td><td style="padding:3px;">-</td><td style="padding:3px;">17</td><td style="padding:3px;">B(0)=17>A(0)=12 ✗ 跳出</td></tr>
+        <tr><td style="padding:3px;">外</td><td style="padding:3px;">1</td><td style="padding:3px;">0</td><td style="padding:3px;">1</td><td style="padding:3px;">-</td><td style="padding:3px;">-</td><td style="padding:3px;"><b>C(0)=A(0)=12</b></td></tr>
+        <tr style="background:rgba(22,163,74,.05);"><td style="padding:3px;">内</td><td style="padding:3px;">-</td><td style="padding:3px;">0</td><td style="padding:3px;">-</td><td style="padding:3px;">-</td><td style="padding:3px;">17</td><td style="padding:3px;">17≤A(1)=41 ✓</td></tr>
+        <tr><td style="padding:3px;">内</td><td style="padding:3px;">-</td><td style="padding:3px;">1</td><td style="padding:3px;">2</td><td style="padding:3px;">-</td><td style="padding:3px;">34</td><td style="padding:3px;"><b>C(1)=B(0)=17</b></td></tr>
+        <tr><td style="padding:3px;">内</td><td style="padding:3px;">-</td><td style="padding:3px;">-</td><td style="padding:3px;">-</td><td style="padding:3px;">-</td><td style="padding:3px;">34</td><td style="padding:3px;">34≤41 ✓</td></tr>
+        <tr><td style="padding:3px;">内</td><td style="padding:3px;">-</td><td style="padding:3px;">2</td><td style="padding:3px;">3</td><td style="padding:3px;">-</td><td style="padding:3px;">81</td><td style="padding:3px;"><b>C(2)=B(1)=34</b></td></tr>
+        <tr><td style="padding:3px;">内</td><td style="padding:3px;">-</td><td style="padding:3px;">-</td><td style="padding:3px;">-</td><td style="padding:3px;">-</td><td style="padding:3px;">81</td><td style="padding:3px;">81≤41 ✗ 跳出</td></tr>
+        <tr><td style="padding:3px;">外</td><td style="padding:3px;">2</td><td style="padding:3px;">2</td><td style="padding:3px;">4</td><td style="padding:3px;">-</td><td style="padding:3px;">-</td><td style="padding:3px;"><b>C(3)=A(1)=41</b></td></tr>
+        <tr><td style="padding:3px;">...</td><td style="padding:3px;">...</td><td style="padding:3px;">...</td><td style="padding:3px;">...</td><td style="padding:3px;">...</td><td style="padding:3px;">...</td><td style="padding:3px;">...</td></tr>
+      </table>
+      <p style="font-size:11px; margin-top:4px; color:var(--muted);">最终 C = [12, 17, 34, 41, 52, 57, 77, 81]</p>
+    </div>
+    <div class="practice" style="margin-top:12px;">
+      <div class="label">📌 小贴士</div>
+      <p style="font-size:14px;">嵌套循环 = <b>每次外层都要重置内层追踪</b>。j 移动时注意 n 的值不重置。</p>
+    </div>
+  </div>
+</section>
+
+<!-- 19 · String Tracing -->
+<section class="slide">
+  <div class="left">
+    <div class="kicker">🆕 String Tracing</div>
+    <h2>字符串追踪 · <span class="highlight">ACSL 切片 S[2:6]</span></h2>
+    <p class="subtitle">ACSL 特有：字符串操作<br><span class="en-tag">ACSL-specific: string operations</span></p>
+  </div>
+  <div class="right">
+    <div class="card" style="border-left:4px solid var(--blue);">
+      <h3 style="color:var(--blue);">ACSL 伪代码</h3>
+      <pre style="font-size:12px; line-height:1.6; padding:10px; background:rgba(37,99,235,.05); border-radius:6px; overflow-x:auto;">
+S = "ACSL CATEGORY"
+T = ""
+FOR i = 0 TO LEN(S) - 1
+  IF S[i] == " " THEN
+    T = T + "_"
+  ELSE
+    T = T + S[i]
+  END IF
+NEXT i
+OUTPUT T</pre>
+    </div>
+    <div class="card" style="border-left:4px solid var(--green); margin-top:10px;">
+      <h3 style="color:var(--green-deep);">追踪表</h3>
+      <table style="font-size:11px; width:100%; border-collapse:collapse; line-height:1.5;">
+        <tr style="background:rgba(22,163,74,.05);">
+          <th style="padding:3px; border-bottom:1px solid var(--line);">i</th>
+          <th style="padding:3px; border-bottom:1px solid var(--line);">S[i]</th>
+          <th style="padding:3px; border-bottom:1px solid var(--line);">S[i]==" "</th>
+          <th style="padding:3px; border-bottom:1px solid var(--line);">T</th>
+        </tr>
+        <tr><td style="padding:3px;">0</td><td style="padding:3px;">"A"</td><td style="padding:3px;">✗</td><td style="padding:3px;">"A"</td></tr>
+        <tr><td style="padding:3px;">1</td><td style="padding:3px;">"C"</td><td style="padding:3px;">✗</td><td style="padding:3px;">"AC"</td></tr>
+        <tr><td style="padding:3px;">2</td><td style="padding:3px;">"S"</td><td style="padding:3px;">✗</td><td style="padding:3px;">"ACS"</td></tr>
+        <tr><td style="padding:3px;">3</td><td style="padding:3px;">"L"</td><td style="padding:3px;">✗</td><td style="padding:3px;">"ACSL"</td></tr>
+        <tr style="background:rgba(22,163,74,.05);"><td style="padding:3px;">4</td><td style="padding:3px;">" "</td><td style="padding:3px;"><b>✓</b></td><td style="padding:3px;"><b>"ACSL_"</b></td></tr>
+        <tr><td style="padding:3px;">5</td><td style="padding:3px;">"C"</td><td style="padding:3px;">✗</td><td style="padding:3px;">"ACSL_C"</td></tr>
+        <tr><td style="padding:3px;">6</td><td style="padding:3px;">"A"</td><td style="padding:3px;">✗</td><td style="padding:3px;">"ACSL_CA"</td></tr>
+        <tr><td style="padding:3px;">7</td><td style="padding:3px;">"T"</td><td style="padding:3px;">✗</td><td style="padding:3px;">"ACSL_CAT"</td></tr>
+        <tr><td style="padding:3px;">8</td><td style="padding:3px;">"E"</td><td style="padding:3px;">✗</td><td style="padding:3px;">"ACSL_CATE"</td></tr>
+        <tr><td style="padding:3px;">9</td><td style="padding:3px;">"G"</td><td style="padding:3px;">✗</td><td style="padding:3px;">"ACSL_CATEG"</td></tr>
+        <tr><td style="padding:3px;">10</td><td style="padding:3px;">"O"</td><td style="padding:3px;">✗</td><td style="padding:3px;">"ACSL_CATEGO"</td></tr>
+        <tr><td style="padding:3px;">11</td><td style="padding:3px;">"R"</td><td style="padding:3px;">✗</td><td style="padding:3px;">"ACSL_CATEGOR"</td></tr>
+        <tr><td style="padding:3px;">12</td><td style="padding:3px;">"Y"</td><td style="padding:3px;">✗</td><td style="padding:3px;"><b>"ACSL_CATEGORY"</b></td></tr>
+        <tr style="background:rgba(22,163,74,.15);"><td style="padding:3px;">OUTPUT</td><td style="padding:3px;">-</td><td style="padding:3px;">-</td><td style="padding:3px;"><b>"ACSL_CATEGORY"</b></td></tr>
+      </table>
+    </div>
+    <div class="card" style="border-left:4px solid var(--amber); margin-top:8px; padding:10px;">
+      <h3 style="color:var(--amber); font-size:14px;">📝 ACSL 切片速查</h3>
+      <table style="font-size:12px; width:100%; border-collapse:collapse; line-height:1.6;">
+        <tr><td><code>S[2:6]</code></td><td>第 2 到第 5 个字符（含头不含尾）</td></tr>
+        <tr><td><code>S[:3]</code></td><td>前 3 个</td></tr>
+        <tr><td><code>S[4:]</code></td><td>第 4 个开始</td></tr>
+        <tr><td><code>S[2:6]</code> 长度</td><td>= 6-2 = 4</td></tr>
+      </table>
+    </div>
+    <div class="practice" style="margin-top:10px;">
+      <div class="label">📌 小贴士</div>
+      <p style="font-size:14px;">ACSL 切片和 Python 一致。</p>
+    </div>
+  </div>
+</section>
+
+<!-- 20 · Practice 4 · Comprehensive -->
+<section class="slide wide compact">
+  <div class="head">
+    <div class="kicker">⚔️ Practice 4 · 综合追踪 4 题</div>
+    <h2>实战 4 · <span class="highlight">4 道综合题（最难的）</span></h2>
+    <p class="subtitle">建议 20 分钟内完成 · 涵盖所有类型<br><span class="en-tag">20 min · covers all types</span></p>
+  </div>
+  <div class="grid2x2" style="margin-top:14px;">
+    <div class="card" style="border-left:4px solid var(--red);">
+      <h3 style="color:var(--red); font-size:16px;">题 1 · 嵌套 while</h3>
+      <pre style="font-size:10px; line-height:1.5; padding:8px; background:rgba(220,38,38,.04); border-radius:6px; overflow-x:auto;">
+i = 1
+WHILE i ≤ 3
+  j = 1
+  WHILE j ≤ i
+    OUTPUT i * j
+    j = j + 1
+  END WHILE
+  i = i + 1
+END WHILE</pre>
+      <p style="font-size:13px; margin-top:6px;">输出 6 行</p>
+    </div>
+    <div class="card" style="border-left:4px solid var(--red);">
+      <h3 style="color:var(--red); font-size:16px;">题 2 · 字符串切片</h3>
+      <pre style="font-size:10px; line-height:1.5; padding:8px; background:rgba(220,38,38,.04); border-radius:6px; overflow-x:auto;">
+S = "PROGRAM"
+OUTPUT S[2:5]
+OUTPUT S[:4]
+OUTPUT S[3:]</pre>
+      <p style="font-size:13px; margin-top:6px;">3 行输出</p>
+    </div>
+    <div class="card" style="border-left:4px solid var(--red);">
+      <h3 style="color:var(--red); font-size:16px;">题 3 · 数组 + 哨兵</h3>
+      <pre style="font-size:10px; line-height:1.5; padding:8px; background:rgba(220,38,38,.04); border-radius:6px; overflow-x:auto;">
+DIM A[8]
+FOR i = 0 TO 7
+  INPUT A[i]
+NEXT i
+count = 0
+FOR i = 0 TO 7
+  IF A[i] > 50 THEN
+    count = count + 1
+  END IF
+NEXT i
+OUTPUT count</pre>
+      <p style="font-size:13px; margin-top:6px;">依次输入 30, 60, 45, 80, 20, 90, 55, 40，输出？</p>
+    </div>
+    <div class="card" style="border-left:4px solid var(--red);">
+      <h3 style="color:var(--red); font-size:16px;">题 4 · 综合（最难的）</h3>
+      <pre style="font-size:10px; line-height:1.5; padding:8px; background:rgba(220,38,38,.04); border-radius:6px; overflow-x:auto;">
+S = "ACSL"
+T = ""
+FOR i = LEN(S)-1 TO 0 STEP -1
+  IF S[i] == "A" OR S[i] == "O" THEN
+    T = T + "*"
+  ELSE
+    T = T + S[i]
+  END IF
+NEXT i
+OUTPUT T</pre>
+      <p style="font-size:13px; margin-top:6px;">求输出</p>
+    </div>
+  </div>
+</section>
+
+<!-- 21 · Practice 4 Answers -->
+<section class="slide wide compact">
+  <div class="head">
+    <div class="kicker">⚔️ Practice 4 Answers</div>
+    <h2>实战 4 · <span class="highlight">答案 + 解析</span></h2>
+    <p class="subtitle">做完对照答案<br><span class="en-tag">Check your answers</span></p>
+  </div>
+  <div class="grid2x2" style="margin-top:14px;">
+    <div class="card" style="border-left:4px solid var(--green); background:rgba(22,163,74,.04);">
+      <h3 style="color:var(--green-deep); font-size:16px;">题 1 答案</h3>
+      <p style="font-size:12px; line-height:1.5;">i=1: j=1 → 1<br>i=2: j=1,2 → 2,4<br>i=3: j=1,2,3 → 3,6,9</p>
+      <p style="font-size:13px; line-height:1.7; margin-top:4px;">输出：<br>1<br>2<br>4<br>3<br>6<br>9</p>
+      <p style="font-size:12px; margin-top:4px; color:var(--muted);">关键：内层 j 每轮重置</p>
+    </div>
+    <div class="card" style="border-left:4px solid var(--green); background:rgba(22,163,74,.04);">
+      <h3 style="color:var(--green-deep); font-size:16px;">题 2 答案</h3>
+      <p style="font-size:13px; line-height:1.7;">S[2:5] = <b>"OGR"</b><br>S[:4] = <b>"PROG"</b><br>S[3:] = <b>"GRAM"</b></p>
+      <p style="font-size:12px; margin-top:4px; color:var(--muted);">关键：含头不含尾</p>
+    </div>
+    <div class="card" style="border-left:4px solid var(--green); background:rgba(22,163,74,.04);">
+      <h3 style="color:var(--green-deep); font-size:16px;">题 3 答案 · 4</h3>
+      <table style="font-size:11px; line-height:1.5; width:100%; border-collapse:collapse;">
+        <tr><td>i</td><td>A[i]</td><td>>50</td><td>count</td></tr>
+        <tr><td>0</td><td>30</td><td>✗</td><td>0</td></tr>
+        <tr><td>1</td><td>60</td><td>✓</td><td>1</td></tr>
+        <tr><td>2</td><td>45</td><td>✗</td><td>1</td></tr>
+        <tr><td>3</td><td>80</td><td>✓</td><td>2</td></tr>
+        <tr><td>4</td><td>20</td><td>✗</td><td>2</td></tr>
+        <tr><td>5</td><td>90</td><td>✓</td><td>3</td></tr>
+        <tr><td>6</td><td>55</td><td>✓</td><td>4</td></tr>
+        <tr><td>7</td><td>40</td><td>✗</td><td>4</td></tr>
+        <tr style="background:rgba(22,163,74,.15);"><td>OUTPUT</td><td>-</td><td>-</td><td>4</td></tr>
+      </table>
+      <p style="font-size:12px; margin-top:4px; color:var(--muted);">关键：数符合条件的元素</p>
+    </div>
+    <div class="card" style="border-left:4px solid var(--green); background:rgba(22,163,74,.04);">
+      <h3 style="color:var(--green-deep); font-size:16px;">题 4 答案 · "LSC*"</h3>
+      <table style="font-size:11px; line-height:1.5; width:100%; border-collapse:collapse;">
+        <tr><td>i</td><td>S[i]</td><td>是 A/O?</td><td>T</td></tr>
+        <tr><td>3</td><td>"L"</td><td>✗</td><td>"L"</td></tr>
+        <tr><td>2</td><td>"S"</td><td>✗</td><td>"LS"</td></tr>
+        <tr><td>1</td><td>"C"</td><td>✗</td><td>"LSC"</td></tr>
+        <tr style="background:rgba(22,163,74,.15);"><td>0</td><td>"A"</td><td>✓</td><td><b>"LSC*"</b></td></tr>
+      </table>
+      <p style="font-size:12px; margin-top:4px; color:var(--muted);">关键：STEP -1 + 元音替换</p>
+    </div>
+  </div>
+</section>
+<!-- 22 · 5 Pitfalls + Closing -->
+<section class="slide wide">
+  <div class="head">
+    <div class="kicker">⚠️ 5 Common Pitfalls · 5 大陷阱</div>
+    <h2>5 大陷阱 · <span class="highlight">避免 ACSL 高频错点</span></h2>
+    <p class="subtitle">考前必看<br><span class="en-tag">Must-review before exam</span></p>
+  </div>
+  <div class="grid2x2" style="margin-top:18px;">
+    <div class="card" style="border-left:4px solid var(--red);">
+      <h3 style="color:var(--red);">陷阱 1 · 循环变量递增</h3>
+      <p style="font-size:14px; line-height:1.7;"><code>FOR j = 0 TO 9</code> 时 j <b>自动 +1</b>，别手动写 j = j + 1</p>
+      <pre style="font-size:11px; line-height:1.5; padding:6px; background:rgba(220,38,38,.05); border-radius:4px; margin-top:4px;">
+❌ FOR j = 0 TO 9
+    j = j + 1       ← 错！会跳过值
+   OUTPUT j
+   NEXT j
+✅ FOR j = 0 TO 9
+     OUTPUT j       ← 对！j 自动管理
+     NEXT j</pre>
+    </div>
+    <div class="card" style="border-left:4px solid var(--red);">
+      <h3 style="color:var(--red);">陷阱 2 · STEP -1 起点</h3>
+      <p style="font-size:14px; line-height:1.7;"><code>FOR j = N-1 TO 0 STEP -1</code>，起点是 <b>N-1</b>，不是 N</p>
+      <pre style="font-size:11px; line-height:1.5; padding:6px; background:rgba(220,38,38,.05); border-radius:4px; margin-top:4px;">
+A = [3,7,1]  N=3
+FOR j = 2 TO 0 STEP -1   ✓
+  OUTPUT A[j]  → 1, 7, 3
+FOR j = 3 TO 0 STEP -1   ✗ 越界
+  OUTPUT A[j]  → 报错</pre>
+    </div>
+    <div class="card" style="border-left:4px solid var(--red);">
+      <h3 style="color:var(--red);">陷阱 3 · 哨兵退出条件</h3>
+      <p style="font-size:14px; line-height:1.7;"><code>WHILE A[k] > 0</code> 是 <b>&gt; 0</b> 不是 <b>≥ 0</b></p>
+      <pre style="font-size:11px; line-height:1.5; padding:6px; background:rgba(220,38,38,.05); border-radius:4px; margin-top:4px;">
+A = [3, 5, 0, 7]
+i = 0; sum = 0
+WHILE A[i] > 0     ← 0 不进
+  sum = sum + A[i]
+  i = i + 1
+END WHILE
+→ sum = 8, 不会加 0 和 7</pre>
+    </div>
+    <div class="card" style="border-left:4px solid var(--red);">
+      <h3 style="color:var(--red);">陷阱 4 · ACSL 切片</h3>
+      <p style="font-size:14px; line-height:1.7;"><code>S[2:6]</code> 第 2 个字符（含）到第 5 个字符（含），长度 = 6-2 = 4</p>
+      <pre style="font-size:11px; line-height:1.5; padding:6px; background:rgba(220,38,38,.05); border-radius:4px; margin-top:4px;">
+S = "ACSL CAT"
+索引: 0 1 2 3 4 5 6 7
+S[2:6] = "SL C"  ← 索引 2,3,4,5
+长度 = 4
+❌ S[2:6] = "ACSL"（错 6 字符）</pre>
+    </div>
+    <div class="card" style="border-left:4px solid var(--red); grid-column: 1 / 3;">
+      <h3 style="color:var(--red);">陷阱 5 · 嵌套循环变量</h3>
+      <p style="font-size:14px; line-height:1.7;">内层变量每次外层都要<span class="highlight">重置</span>，但累加器（sum, n）保持延续</p>
+      <pre style="font-size:11px; line-height:1.5; padding:6px; background:rgba(220,38,38,.05); border-radius:4px; margin-top:4px;">
+FOR i = 1 TO 3
+  FOR j = 1 TO i    ← j 每次重置
+    OUTPUT i * j
+  NEXT j
+NEXT i
+
+i=1: j=1 → 1
+i=2: j=1,2 → 2, 4  ← j 重置为 1
+i=3: j=1,2,3 → 3, 6, 9 ← j 重置为 1</pre>
+    </div>
+  </div>
+  <div class="practice" style="margin-top:14px;">
+    <div class="label">🎯 下一步</div>
+    <p style="font-size:16px;">
+      📂 课后作业在<a href="https://laoyizun.github.io/acsl-prep/" target="_blank" style="color:var(--purple);">首页作业区 · L3 板块</a>（2-4 题限时练习）<br>
+      📇 本课重点在<a href="https://laoyizun.github.io/acsl-prep/#flashcards" target="_blank" style="color:var(--purple);">闪卡区</a>（点击翻面）<br>
+      🎓 下一课：<b>L4 · 第一轮复习冲刺</b>（2026.12.13 前完成）
+    </p>
+  </div>
+</section>
 
 
 
