@@ -162,6 +162,7 @@ pre code .str { color: #a5e88c; }
 pre code .num { color: #ffb547; }
 pre code .com { color: #7c8aa8; font-style: italic; }
 pre code .fn { color: #82d4ff; font-weight: 700; }
+
 code.inline {
   background: rgba(15, 36, 63, .08);
   border: 1px solid rgba(15, 36, 63, .12);
@@ -171,6 +172,24 @@ code.inline {
   font-weight: 700;
   white-space: nowrap;
 }
+
+/* 浅紫色代码块（替代 <pre> 用来显示 ACSL 伪代码） */
+.code-block {
+  background: rgba(124, 58, 237, .05);
+  border: 1px solid rgba(124, 58, 237, .18);
+  color: var(--text);
+  font-family: "JetBrains Mono", "Fira Code", "SF Mono", Consolas, monospace;
+  font-size: 13px;
+  line-height: 1.7;
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin: 8px 0;
+  overflow-x: auto;
+  white-space: pre;
+}
+.code-block.tiny { font-size: 11px; padding: 8px 12px; }
+.code-block.small { font-size: 12px; padding: 10px 14px; }
+
 
 /* 英文术语标注 */
 .en-tag {
@@ -583,14 +602,14 @@ pre .num, code .num { display: inline; min-width: 0; height: auto; background: n
   <div class="right">
     <div class="card" style="border-left:4px solid var(--purple);">
       <h3 style="color:var(--purple);">示例 · fact(3) 调用树</h3>
-      <pre style="font-size:13px; line-height:1.7; padding:10px; background:rgba(124,58,237,.05); border-radius:6px; overflow-x:auto;">
+      <div class="code-block">
 fact(3)
 └─ fact(2)
    └─ fact(1)
       └─ fact(0) = 1       ← base case
    ← 1 × 1 = 1            ← 回填
 ← 2 × 1 = 2
-← 3 × 2 = 6               ← 最终结果</pre>
+← 3 × 2 = 6               ← 最终结果</div>
     </div>
     <div class="card" style="border-left:4px solid var(--green); margin-top:10px;">
       <h3 style="color:var(--green-deep);">3 列模板</h3>
@@ -739,7 +758,7 @@ fact(3)
   <div class="right">
     <div class="card" style="border-left:4px solid var(--purple);">
       <h3 style="color:var(--purple);">ACSL 伪代码</h3>
-      <pre style="font-size:13px; line-height:1.7; padding:10px; background:rgba(124,58,237,.05); border-radius:6px; overflow-x:auto;">
+      <div class="code-block">
 INPUT h, r
 b = 0
 IF h > 48 THEN
@@ -751,7 +770,7 @@ IF h > 40 THEN
   h = 40
 END IF
 b = b + h * r
-OUTPUT b</pre>
+OUTPUT b</div>
     </div>
     <div class="card" style="border-left:4px solid var(--green); margin-top:10px;">
       <h3 style="color:var(--green-deep);">追踪表（输入 h=52, r=10）</h3>
@@ -791,7 +810,7 @@ OUTPUT b</pre>
   <div class="grid2x2" style="margin-top:14px;">
     <div class="card" style="border-left:4px solid var(--purple);">
       <h3 style="color:var(--purple); font-size:16px;">题 1 · 阶梯奖金</h3>
-      <pre style="font-size:11px; line-height:1.5; padding:8px; background:rgba(124,58,237,.05); border-radius:6px; overflow-x:auto;">
+      <div class="code-block tiny">
 INPUT sales
 bonus = 0
 IF sales > 1000 THEN
@@ -803,12 +822,12 @@ END IF
 IF sales > 10000 THEN
   bonus = 1000
 END IF
-OUTPUT bonus</pre>
+OUTPUT bonus</div>
       <p style="font-size:13px; margin-top:6px;">sales = 7500 时输出？</p>
     </div>
     <div class="card" style="border-left:4px solid var(--purple);">
       <h3 style="color:var(--purple); font-size:16px;">题 2 · 三数排序</h3>
-      <pre style="font-size:11px; line-height:1.5; padding:8px; background:rgba(124,58,237,.05); border-radius:6px; overflow-x:auto;">
+      <div class="code-block tiny">
 INPUT a, b, c
 IF a > b THEN
   swap a, b
@@ -819,12 +838,12 @@ END IF
 IF a > b THEN
   swap a, b
 END IF
-OUTPUT a, b, c</pre>
+OUTPUT a, b, c</div>
       <p style="font-size:13px; margin-top:6px;">a=3, b=1, c=2 时输出？</p>
     </div>
     <div class="card" style="border-left:4px solid var(--purple);">
       <h3 style="color:var(--purple); font-size:16px;">题 3 · 闰年判断</h3>
-      <pre style="font-size:11px; line-height:1.5; padding:8px; background:rgba(124,58,237,.05); border-radius:6px; overflow-x:auto;">
+      <div class="code-block tiny">
 INPUT year
 leap = 0
 IF (year MOD 4) = 0 THEN
@@ -835,12 +854,12 @@ END IF
 IF (year MOD 400) = 0 THEN
   leap = 1
 END IF
-OUTPUT leap</pre>
+OUTPUT leap</div>
       <p style="font-size:13px; margin-top:6px;">year = 2000 时输出？</p>
     </div>
     <div class="card" style="border-left:4px solid var(--purple);">
       <h3 style="color:var(--purple); font-size:16px;">题 4 · 等级评分</h3>
-      <pre style="font-size:11px; line-height:1.5; padding:8px; background:rgba(124,58,237,.05); border-radius:6px; overflow-x:auto;">
+      <div class="code-block tiny">
 INPUT score
 grade = "F"
 IF score >= 60 THEN
@@ -855,7 +874,7 @@ END IF
 IF score >= 90 THEN
   grade = "A"
 END IF
-OUTPUT grade</pre>
+OUTPUT grade</div>
       <p style="font-size:13px; margin-top:6px;">score = 85 时输出？</p>
     </div>
   </div>
@@ -937,13 +956,13 @@ OUTPUT grade</pre>
   <div class="right">
     <div class="card" style="border-left:4px solid var(--blue);">
       <h3 style="color:var(--blue);">ACSL 伪代码</h3>
-      <pre style="font-size:13px; line-height:1.7; padding:10px; background:rgba(37,99,235,.05); border-radius:6px; overflow-x:auto;">
+      <div class="code-block" style="background:rgba(37,99,235,.05); border-color:rgba(37,99,235,.25);">
 A = "BANANAS"
 B = ""
 FOR j = LEN(A)-1 TO 0 STEP -1
   B = B + A[j]
 NEXT j
-OUTPUT B</pre>
+OUTPUT B</div>
     </div>
     <div class="card" style="border-left:4px solid var(--green); margin-top:10px;">
       <h3 style="color:var(--green-deep);">追踪表</h3>
@@ -985,45 +1004,45 @@ OUTPUT B</pre>
   <div class="grid2x2" style="margin-top:14px;">
     <div class="card" style="border-left:4px solid var(--purple);">
       <h3 style="color:var(--purple); font-size:16px;">题 1 · 累加 1+2+...+10</h3>
-      <pre style="font-size:11px; line-height:1.5; padding:8px; background:rgba(124,58,237,.05); border-radius:6px; overflow-x:auto;">
+      <div class="code-block tiny">
 sum = 0
 FOR i = 1 TO 10
   sum = sum + i
 NEXT i
-OUTPUT sum</pre>
+OUTPUT sum</div>
       <p style="font-size:13px; margin-top:6px;">求输出</p>
     </div>
     <div class="card" style="border-left:4px solid var(--purple);">
       <h3 style="color:var(--purple); font-size:16px;">题 2 · 求位数</h3>
-      <pre style="font-size:11px; line-height:1.5; padding:8px; background:rgba(124,58,237,.05); border-radius:6px; overflow-x:auto;">
+      <div class="code-block tiny">
 INPUT n
 count = 0
 WHILE n > 0
   n = n / 10
   count = count + 1
 END WHILE
-OUTPUT count</pre>
+OUTPUT count</div>
       <p style="font-size:13px; margin-top:6px;">n = 12345 时输出？</p>
     </div>
     <div class="card" style="border-left:4px solid var(--purple);">
       <h3 style="color:var(--purple); font-size:16px;">题 3 · 倒序输出数组</h3>
-      <pre style="font-size:11px; line-height:1.5; padding:8px; background:rgba(124,58,237,.05); border-radius:6px; overflow-x:auto;">
+      <div class="code-block tiny">
 A = [3, 7, 1, 9, 2]
 FOR k = 4 TO 0 STEP -1
   OUTPUT A[k]
-NEXT k</pre>
+NEXT k</div>
       <p style="font-size:13px; margin-top:6px;">输出 5 行，每行 1 个数</p>
     </div>
     <div class="card" style="border-left:4px solid var(--purple);">
       <h3 style="color:var(--purple); font-size:16px;">题 4 · 哨兵退出</h3>
-      <pre style="font-size:11px; line-height:1.5; padding:8px; background:rgba(124,58,237,.05); border-radius:6px; overflow-x:auto;">
+      <div class="code-block tiny">
 sum = 0
 INPUT x
 WHILE x ≠ 0
   sum = sum + x
   INPUT x
 END WHILE
-OUTPUT sum</pre>
+OUTPUT sum</div>
       <p style="font-size:13px; margin-top:6px;">依次输入 3, 5, 2, 0，输出？</p>
     </div>
   </div>
@@ -1094,7 +1113,7 @@ OUTPUT sum</pre>
   <div class="right">
     <div class="card" style="border-left:4px solid var(--blue);">
       <h3 style="color:var(--blue);">ACSL 伪代码</h3>
-      <pre style="font-size:12px; line-height:1.6; padding:10px; background:rgba(37,99,235,.05); border-radius:6px; overflow-x:auto;">
+      <div class="code-block small">
 INPUT N
 DIM A[N]
 FOR i = 0 TO N-1
@@ -1108,7 +1127,7 @@ WHILE i < N
   END IF
   i = i + 1
 END WHILE
-OUTPUT max</pre>
+OUTPUT max</div>
     </div>
     <div class="card" style="border-left:4px solid var(--green); margin-top:10px;">
       <h3 style="color:var(--green-deep);">追踪表（A = [3, 7, 2, 9, 5], N=5）</h3>
@@ -1148,7 +1167,7 @@ OUTPUT max</pre>
   <div class="grid2x2" style="margin-top:14px;">
     <div class="card" style="border-left:4px solid var(--purple);">
       <h3 style="color:var(--purple); font-size:16px;">题 1 · 数组求和</h3>
-      <pre style="font-size:11px; line-height:1.5; padding:8px; background:rgba(124,58,237,.05); border-radius:6px; overflow-x:auto;">
+      <div class="code-block tiny">
 INPUT N
 DIM A[N]
 FOR i = 0 TO N-1
@@ -1158,12 +1177,12 @@ sum = 0
 FOR i = 0 TO N-1
   sum = sum + A[i]
 NEXT i
-OUTPUT sum</pre>
+OUTPUT sum</div>
       <p style="font-size:13px; margin-top:6px;">A=[1,2,3,4,5], N=5 时输出？</p>
     </div>
     <div class="card" style="border-left:4px solid var(--purple);">
       <h3 style="color:var(--purple); font-size:16px;">题 2 · 哨兵退出求最大</h3>
-      <pre style="font-size:11px; line-height:1.5; padding:8px; background:rgba(124,58,237,.05); border-radius:6px; overflow-x:auto;">
+      <div class="code-block tiny">
 INPUT x
 max = x
 WHILE x ≠ 0
@@ -1172,12 +1191,12 @@ WHILE x ≠ 0
   END IF
   INPUT x
 END WHILE
-OUTPUT max</pre>
+OUTPUT max</div>
       <p style="font-size:13px; margin-top:6px;">依次输入 3, 7, 2, 9, 5, 0，输出？</p>
     </div>
     <div class="card" style="border-left:4px solid var(--purple);">
       <h3 style="color:var(--purple); font-size:16px;">题 3 · 双指针求和</h3>
-      <pre style="font-size:11px; line-height:1.5; padding:8px; background:rgba(124,58,237,.05); border-radius:6px; overflow-x:auto;">
+      <div class="code-block tiny">
 INPUT a, b
 i = 0
 j = 0
@@ -1185,19 +1204,19 @@ WHILE i < 5 AND j < 5
   OUTPUT A[i] + B[j]
   i = i + 1
   j = j + 1
-END WHILE</pre>
+END WHILE</div>
       <p style="font-size:13px; margin-top:6px;">A=[1,2,3,4,5] B=[10,20,30,40,50]，输出 5 行</p>
     </div>
     <div class="card" style="border-left:4px solid var(--purple);">
       <h3 style="color:var(--purple); font-size:16px;">题 4 · FOR 填充数组</h3>
-      <pre style="font-size:11px; line-height:1.5; padding:8px; background:rgba(124,58,237,.05); border-radius:6px; overflow-x:auto;">
+      <div class="code-block tiny">
 DIM A[5]
 FOR i = 0 TO 4
   A[i] = i * 2
 NEXT i
 FOR i = 0 TO 4
   OUTPUT A[i]
-NEXT i</pre>
+NEXT i</div>
       <p style="font-size:13px; margin-top:6px;">输出 5 行，每行 1 个数</p>
     </div>
   </div>
@@ -1267,7 +1286,7 @@ NEXT i</pre>
   <div class="right">
     <div class="card" style="border-left:4px solid var(--purple);">
       <h3 style="color:var(--purple);">ACSL 伪代码</h3>
-      <pre style="font-size:11px; line-height:1.5; padding:10px; background:rgba(124,58,237,.05); border-radius:6px; overflow-x:auto;">
+      <div class="code-block tiny">
 A(0)=12 A(1)=41 A(2)=52 A(3)=57 A(4)=77 A(5)=-100
 B(0)=17 B(1)=34 B(2)=81
 j = 0; k = 0; n = 0
@@ -1281,7 +1300,7 @@ WHILE A(k) > 0
   n = n + 1
   j = j + 1
 END WHILE
-C(n) = B(k)</pre>
+C(n) = B(k)</div>
     </div>
     <div class="card" style="border-left:4px solid var(--green); margin-top:10px;">
       <h3 style="color:var(--green-deep);">6 列追踪表</h3>
@@ -1326,7 +1345,7 @@ C(n) = B(k)</pre>
   <div class="right">
     <div class="card" style="border-left:4px solid var(--blue);">
       <h3 style="color:var(--blue);">ACSL 伪代码</h3>
-      <pre style="font-size:12px; line-height:1.6; padding:10px; background:rgba(37,99,235,.05); border-radius:6px; overflow-x:auto;">
+      <div class="code-block small">
 S = "ACSL CATEGORY"
 T = ""
 FOR i = 0 TO LEN(S) - 1
@@ -1336,7 +1355,7 @@ FOR i = 0 TO LEN(S) - 1
     T = T + S[i]
   END IF
 NEXT i
-OUTPUT T</pre>
+OUTPUT T</div>
     </div>
     <div class="card" style="border-left:4px solid var(--green); margin-top:10px;">
       <h3 style="color:var(--green-deep);">追踪表</h3>
@@ -1389,7 +1408,7 @@ OUTPUT T</pre>
   <div class="grid2x2" style="margin-top:14px;">
     <div class="card" style="border-left:4px solid var(--red);">
       <h3 style="color:var(--red); font-size:16px;">题 1 · 嵌套 while</h3>
-      <pre style="font-size:10px; line-height:1.5; padding:8px; background:rgba(220,38,38,.04); border-radius:6px; overflow-x:auto;">
+      <div class="code-block tiny" style="background:rgba(220,38,38,.04); border-color:rgba(220,38,38,.18);">
 i = 1
 WHILE i ≤ 3
   j = 1
@@ -1398,21 +1417,21 @@ WHILE i ≤ 3
     j = j + 1
   END WHILE
   i = i + 1
-END WHILE</pre>
+END WHILE</div>
       <p style="font-size:13px; margin-top:6px;">输出 6 行</p>
     </div>
     <div class="card" style="border-left:4px solid var(--red);">
       <h3 style="color:var(--red); font-size:16px;">题 2 · 字符串切片</h3>
-      <pre style="font-size:10px; line-height:1.5; padding:8px; background:rgba(220,38,38,.04); border-radius:6px; overflow-x:auto;">
+      <div class="code-block tiny" style="background:rgba(220,38,38,.04); border-color:rgba(220,38,38,.18);">
 S = "PROGRAM"
 OUTPUT S[2:5]
 OUTPUT S[:4]
-OUTPUT S[3:]</pre>
+OUTPUT S[3:]</div>
       <p style="font-size:13px; margin-top:6px;">3 行输出</p>
     </div>
     <div class="card" style="border-left:4px solid var(--red);">
       <h3 style="color:var(--red); font-size:16px;">题 3 · 数组 + 哨兵</h3>
-      <pre style="font-size:10px; line-height:1.5; padding:8px; background:rgba(220,38,38,.04); border-radius:6px; overflow-x:auto;">
+      <div class="code-block tiny" style="background:rgba(220,38,38,.04); border-color:rgba(220,38,38,.18);">
 DIM A[8]
 FOR i = 0 TO 7
   INPUT A[i]
@@ -1423,12 +1442,12 @@ FOR i = 0 TO 7
     count = count + 1
   END IF
 NEXT i
-OUTPUT count</pre>
+OUTPUT count</div>
       <p style="font-size:13px; margin-top:6px;">依次输入 30, 60, 45, 80, 20, 90, 55, 40，输出？</p>
     </div>
     <div class="card" style="border-left:4px solid var(--red);">
       <h3 style="color:var(--red); font-size:16px;">题 4 · 综合（最难的）</h3>
-      <pre style="font-size:10px; line-height:1.5; padding:8px; background:rgba(220,38,38,.04); border-radius:6px; overflow-x:auto;">
+      <div class="code-block tiny" style="background:rgba(220,38,38,.04); border-color:rgba(220,38,38,.18);">
 S = "ACSL"
 T = ""
 FOR i = LEN(S)-1 TO 0 STEP -1
@@ -1438,7 +1457,7 @@ FOR i = LEN(S)-1 TO 0 STEP -1
     T = T + S[i]
   END IF
 NEXT i
-OUTPUT T</pre>
+OUTPUT T</div>
       <p style="font-size:13px; margin-top:6px;">求输出</p>
     </div>
   </div>
@@ -1503,51 +1522,51 @@ OUTPUT T</pre>
     <div class="card" style="border-left:4px solid var(--red);">
       <h3 style="color:var(--red);">陷阱 1 · 循环变量递增</h3>
       <p style="font-size:14px; line-height:1.7;"><code>FOR j = 0 TO 9</code> 时 j <b>自动 +1</b>，别手动写 j = j + 1</p>
-      <pre style="font-size:11px; line-height:1.5; padding:6px; background:rgba(220,38,38,.05); border-radius:4px; margin-top:4px;">
+      <div class="code-block tiny" style="background:rgba(220,38,38,.04); border-color:rgba(220,38,38,.18);">
 ❌ FOR j = 0 TO 9
     j = j + 1       ← 错！会跳过值
    OUTPUT j
    NEXT j
 ✅ FOR j = 0 TO 9
      OUTPUT j       ← 对！j 自动管理
-     NEXT j</pre>
+     NEXT j</div>
     </div>
     <div class="card" style="border-left:4px solid var(--red);">
       <h3 style="color:var(--red);">陷阱 2 · STEP -1 起点</h3>
       <p style="font-size:14px; line-height:1.7;"><code>FOR j = N-1 TO 0 STEP -1</code>，起点是 <b>N-1</b>，不是 N</p>
-      <pre style="font-size:11px; line-height:1.5; padding:6px; background:rgba(220,38,38,.05); border-radius:4px; margin-top:4px;">
+      <div class="code-block tiny" style="background:rgba(220,38,38,.04); border-color:rgba(220,38,38,.18);">
 A = [3,7,1]  N=3
 FOR j = 2 TO 0 STEP -1   ✓
   OUTPUT A[j]  → 1, 7, 3
 FOR j = 3 TO 0 STEP -1   ✗ 越界
-  OUTPUT A[j]  → 报错</pre>
+  OUTPUT A[j]  → 报错</div>
     </div>
     <div class="card" style="border-left:4px solid var(--red);">
       <h3 style="color:var(--red);">陷阱 3 · 哨兵退出条件</h3>
       <p style="font-size:14px; line-height:1.7;"><code>WHILE A[k] > 0</code> 是 <b>&gt; 0</b> 不是 <b>≥ 0</b></p>
-      <pre style="font-size:11px; line-height:1.5; padding:6px; background:rgba(220,38,38,.05); border-radius:4px; margin-top:4px;">
+      <div class="code-block tiny" style="background:rgba(220,38,38,.04); border-color:rgba(220,38,38,.18);">
 A = [3, 5, 0, 7]
 i = 0; sum = 0
 WHILE A[i] > 0     ← 0 不进
   sum = sum + A[i]
   i = i + 1
 END WHILE
-→ sum = 8, 不会加 0 和 7</pre>
+→ sum = 8, 不会加 0 和 7</div>
     </div>
     <div class="card" style="border-left:4px solid var(--red);">
       <h3 style="color:var(--red);">陷阱 4 · ACSL 切片</h3>
       <p style="font-size:14px; line-height:1.7;"><code>S[2:6]</code> 第 2 个字符（含）到第 5 个字符（含），长度 = 6-2 = 4</p>
-      <pre style="font-size:11px; line-height:1.5; padding:6px; background:rgba(220,38,38,.05); border-radius:4px; margin-top:4px;">
+      <div class="code-block tiny" style="background:rgba(220,38,38,.04); border-color:rgba(220,38,38,.18);">
 S = "ACSL CAT"
 索引: 0 1 2 3 4 5 6 7
 S[2:6] = "SL C"  ← 索引 2,3,4,5
 长度 = 4
-❌ S[2:6] = "ACSL"（错 6 字符）</pre>
+❌ S[2:6] = "ACSL"（错 6 字符）</div>
     </div>
     <div class="card" style="border-left:4px solid var(--red); grid-column: 1 / 3;">
       <h3 style="color:var(--red);">陷阱 5 · 嵌套循环变量</h3>
       <p style="font-size:14px; line-height:1.7;">内层变量每次外层都要<span class="highlight">重置</span>，但累加器（sum, n）保持延续</p>
-      <pre style="font-size:11px; line-height:1.5; padding:6px; background:rgba(220,38,38,.05); border-radius:4px; margin-top:4px;">
+      <div class="code-block tiny" style="background:rgba(220,38,38,.04); border-color:rgba(220,38,38,.18);">
 FOR i = 1 TO 3
   FOR j = 1 TO i    ← j 每次重置
     OUTPUT i * j
@@ -1556,7 +1575,7 @@ NEXT i
 
 i=1: j=1 → 1
 i=2: j=1,2 → 2, 4  ← j 重置为 1
-i=3: j=1,2,3 → 3, 6, 9 ← j 重置为 1</pre>
+i=3: j=1,2,3 → 3, 6, 9 ← j 重置为 1</div>
     </div>
   </div>
   <div class="practice" style="margin-top:14px;">
