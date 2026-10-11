@@ -1111,14 +1111,37 @@ OUTPUT sum</div>
   </div>
 </section>
 <!-- 15 · Array Tracing Demo -->
-<section class="slide">
+<section class="slide compact">
   <div class="left">
     <div class="kicker">🆕 Array Tracing · 数组追踪</div>
     <h2>数组追踪 · <span class="highlight">哨兵值退出</span></h2>
     <p class="subtitle">示例：数组求最大值<br><span class="en-tag">Example: Find array max</span></p>
   </div>
   <div class="right">
-    <div class="card" style="border-left:4px solid var(--blue);">
+    <div class="card" style="border-left:4px solid var(--amber); background:rgba(245,158,11,.05);">
+      <h3 style="color:var(--amber);">先搞懂 DIM</h3>
+      <p style="font-size:16px; line-height:1.7;">
+        <b>DIM A[N]</b> = 声明一个<b>长度为 N</b>的数组 A
+        <span style="color:var(--muted);">（DIM = <b>DIMension</b> = "维度 / 容量"）</span>
+      </p>
+      <p style="font-size:15px; line-height:1.7; color:var(--muted); margin-top:6px;">
+        不是赋值！只是<b>腾出 N 个空格子</b>，格子还没装数。
+      </p>
+      <div style="display:flex; gap:14px; margin-top:10px; font-size:14px;">
+        <div style="flex:1; padding:10px 12px; background:rgba(124,58,237,.06); border-radius:6px; border-left:3px solid var(--purple);">
+          <div style="font-weight:800; color:var(--purple); margin-bottom:4px;">ACSL 伪代码</div>
+          <code style="font-family:'JetBrains Mono',monospace; font-size:14px; line-height:1.7;">DIM A[5]</code>
+        </div>
+        <div style="flex:1; padding:10px 12px; background:rgba(22,163,74,.06); border-radius:6px; border-left:3px solid var(--green);">
+          <div style="font-weight:800; color:var(--green-deep); margin-bottom:4px;">Python 等价</div>
+          <code style="font-family:'JetBrains Mono',monospace; font-size:14px; line-height:1.7;">A = [0] * 5</code>
+        </div>
+      </div>
+      <p style="font-size:14px; color:var(--muted); margin-top:10px;">
+        之后用 <code style="color:var(--purple);">A[0]..A[N-1]</code> 装 N 个数，下标从 0 开始。
+      </p>
+    </div>
+    <div class="card" style="border-left:4px solid var(--blue); margin-top:10px;">
       <h3 style="color:var(--blue);">ACSL 伪代码</h3>
       <div class="code-block small">
 INPUT N
