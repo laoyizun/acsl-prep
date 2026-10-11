@@ -728,30 +728,58 @@ fact(3)
     <div class="card" style="border-left:4px solid var(--purple);">
       <h3 style="color:var(--purple);">3 步追踪法</h3>
       <ol style="font-size:15px; line-height:1.8; padding-left:20px; margin-top:8px;">
-        <li><b>通读代码</b>（30 秒）· 圈出 INPUT / OUTPUT</li>
-        <li><b>画追踪表</b>（5 列）· 行号 / 变量 / 当前值 / 条件 / 输出</li>
-        <li><b>逐行执行</b>（按行号）· 每执行一行更新一列</li>
+        <li><b>通读代码</b>（30 秒）· 圈出 INPUT / OUTPUT / DIM</li>
+        <li><b>画追踪表</b>（按需列数）· 行号 = 代码行号 / 每个变量一列 / 数组一列 / 条件 / 输出</li>
+        <li><b>逐行执行</b>（按行号）· 每执行一行更新一行</li>
       </ol>
     </div>
     <div class="card" style="border-left:4px solid var(--green); margin-top:12px;">
-      <h3 style="color:var(--green-deep);">5 列追踪表模板</h3>
+      <h3 style="color:var(--green-deep);">追踪表列设计规则</h3>
+      <p style="font-size:14px; line-height:1.7; color:var(--muted); margin-bottom:8px;">
+        L3 所有 demo/Practice <b>统一用这套规范</b>（ACSL 不规定格式，这只是本课标准）：
+      </p>
       <table style="font-size:13px; width:100%; border-collapse:collapse; line-height:1.6;">
         <tr style="background:rgba(22,163,74,.05);">
           <th style="padding:6px; border-bottom:1px solid var(--line);">行号</th>
-          <th style="padding:6px; border-bottom:1px solid var(--line);">变量</th>
-          <th style="padding:6px; border-bottom:1px solid var(--line);">当前值</th>
+          <th style="padding:6px; border-bottom:1px solid var(--line);">变量 1</th>
+          <th style="padding:6px; border-bottom:1px solid var(--line);">变量 2</th>
+          <th style="padding:6px; border-bottom:1px solid var(--line);">数组/字符串全貌</th>
           <th style="padding:6px; border-bottom:1px solid var(--line);">条件</th>
           <th style="padding:6px; border-bottom:1px solid var(--line);">输出</th>
         </tr>
-        <tr><td style="padding:6px;">1</td><td style="padding:6px;">a</td><td style="padding:6px;">5</td><td style="padding:6px;">-</td><td style="padding:6px;">-</td></tr>
-        <tr><td style="padding:6px;">2</td><td style="padding:6px;">b</td><td style="padding:6px;">3</td><td style="padding:6px;">-</td><td style="padding:6px;">-</td></tr>
-        <tr><td style="padding:6px;">3</td><td style="padding:6px;">c</td><td style="padding:6px;">8</td><td style="padding:6px;">-</td><td style="padding:6px;">-</td></tr>
-        <tr><td style="padding:6px;">4</td><td style="padding:6px;">c</td><td style="padding:6px;">16</td><td style="padding:6px;">-</td><td style="padding:6px;">OUTPUT 16</td></tr>
+        <tr>
+          <td style="padding:6px;"><b>代码行号</b><br><span style="color:var(--muted); font-size:11px;">1,2,3...</span></td>
+          <td style="padding:6px;">每个变量</td>
+          <td style="padding:6px;">独占一列</td>
+          <td style="padding:6px;">整个数组<br>或字符串</td>
+          <td style="padding:6px;">IF/WHILE 判断</td>
+          <td style="padding:6px;">OUTPUT 内容</td>
+        </tr>
       </table>
+      <ul style="font-size:13px; line-height:1.7; margin-top:10px; padding-left:20px; color:var(--text);">
+        <li><b>行号</b> = 伪代码里的行号，不是"动作标签"（不写 INPUT/IF/WHILE）</li>
+        <li><b>每变量一列</b>，不用合并"变量/当前值"两列</li>
+        <li><b>有数组</b> → 数组全貌列画在右；如 A = [3, 7, 2, 9, 5]，被改的就高亮</li>
+        <li><b>例</b>：slide 9 = 6 列；slide 12/15/19 = 5 列；slide 18 嵌套 = 7 列</li>
+      </ul>
+    </div>
+    <div class="card" style="border-left:4px solid var(--blue); margin-top:12px;">
+      <h3 style="color:var(--blue);">考试怎么考</h3>
+      <p style="font-size:15px; line-height:1.7; margin-top:6px;">
+        ACSL <b>不要求交追踪表</b>，只交<b>最终答案</b>（OUTPUT 是什么、最终变量值是多少）。
+      </p>
+      <p style="font-size:15px; line-height:1.7; margin-top:6px;">
+        追踪表是<b>草稿纸</b>，用来：
+      </p>
+      <ol style="font-size:14px; line-height:1.7; padding-left:20px; margin-top:4px;">
+        <li>避免脑算漏步（数组题经常 10+ 步）</li>
+        <li>方便老师改 Practice 时给分</li>
+        <li>考场上 5 分钟做完 5 题，关键在<b>不出错</b></li>
+      </ol>
     </div>
     <div class="practice" style="margin-top:14px;">
       <div class="label">📌 小贴士</div>
-      <p style="font-size:16px;">这 3 步贯穿本课所有题。养成习惯后，30 秒就能读完一段代码。</p>
+      <p style="font-size:16px;">这 3 步 + 列规范贯穿本课所有题。养成习惯后，30 秒就能读完一段代码。</p>
     </div>
   </div>
 </section>
@@ -1166,18 +1194,31 @@ OUTPUT max</div>
           <th style="padding:3px; border-bottom:1px solid var(--line);">行</th>
           <th style="padding:3px; border-bottom:1px solid var(--line);">i</th>
           <th style="padding:3px; border-bottom:1px solid var(--line);">max</th>
-          <th style="padding:3px; border-bottom:1px solid var(--line);">A[i]</th>
+          <th style="padding:3px; border-bottom:1px solid var(--line);">N</th>
+          <th style="padding:3px; border-bottom:1px solid var(--line);">A 数组（被改的高亮）</th>
           <th style="padding:3px; border-bottom:1px solid var(--line);">条件</th>
         </tr>
-        <tr><td style="padding:3px;">INPUT</td><td style="padding:3px;">-</td><td style="padding:3px;">-</td><td style="padding:3px;">3,7,2,9,5</td><td style="padding:3px;">N=5</td></tr>
-        <tr><td style="padding:3px;">max=</td><td style="padding:3px;">-</td><td style="padding:3px;">3</td><td style="padding:3px;">-</td><td style="padding:3px;">A[0]=3</td></tr>
-        <tr style="background:rgba(22,163,74,.05);"><td style="padding:3px;">WHILE</td><td style="padding:3px;">1</td><td style="padding:3px;">3</td><td style="padding:3px;">7</td><td style="padding:3px;">i<5 ✓</td></tr>
-        <tr style="background:rgba(22,163,74,.05);"><td style="padding:3px;">IF</td><td style="padding:3px;">-</td><td style="padding:3px;"><b>7</b></td><td style="padding:3px;">7</td><td style="padding:3px;">7>3 ✓</td></tr>
-        <tr style="background:rgba(22,163,74,.05);"><td style="padding:3px;">i++</td><td style="padding:3px;">2</td><td style="padding:3px;">7</td><td style="padding:3px;">2</td><td style="padding:3px;">2>7 ✗</td></tr>
-        <tr style="background:rgba(22,163,74,.05);"><td style="padding:3px;">i++</td><td style="padding:3px;">3</td><td style="padding:3px;"><b>9</b></td><td style="padding:3px;">9</td><td style="padding:3px;">9>7 ✓</td></tr>
-        <tr style="background:rgba(22,163,74,.05);"><td style="padding:3px;">i++</td><td style="padding:3px;">4</td><td style="padding:3px;">9</td><td style="padding:3px;">5</td><td style="padding:3px;">5>9 ✗</td></tr>
-        <tr><td style="padding:3px;">WHILE</td><td style="padding:3px;">5</td><td style="padding:3px;">9</td><td style="padding:3px;">-</td><td style="padding:3px;">i<5 ✗ 退出</td></tr>
-        <tr style="background:rgba(22,163,74,.15);"><td style="padding:3px;">OUTPUT</td><td style="padding:3px;">-</td><td style="padding:3px;"><b>9</b></td><td style="padding:3px;">-</td><td style="padding:3px;">9</td></tr>
+        <tr><td style="padding:3px;">1</td><td style="padding:3px;">-</td><td style="padding:3px;">-</td><td style="padding:3px;"><b>5</b></td><td style="padding:3px;">[ ?, ?, ?, ?, ? ]</td><td style="padding:3px;">INPUT N</td></tr>
+        <tr><td style="padding:3px;">2</td><td style="padding:3px;">-</td><td style="padding:3px;">-</td><td style="padding:3px;">5</td><td style="padding:3px;">[ _, _, _, _, _ ]</td><td style="padding:3px;">DIM A[5] 腾空</td></tr>
+        <tr><td style="padding:3px;">3-5</td><td style="padding:3px;">0→4</td><td style="padding:3px;">-</td><td style="padding:3px;">5</td><td style="padding:3px;">[<b>3</b>, <b>7</b>, <b>2</b>, <b>9</b>, <b>5</b>]</td><td style="padding:3px;">FOR 读入 5 个</td></tr>
+        <tr><td style="padding:3px;">6</td><td style="padding:3px;">-</td><td style="padding:3px;"><b>3</b></td><td style="padding:3px;">5</td><td style="padding:3px;">[ 3, 7, 2, 9, 5 ]</td><td style="padding:3px;">max=A[0]=3</td></tr>
+        <tr><td style="padding:3px;">7</td><td style="padding:3px;"><b>1</b></td><td style="padding:3px;">3</td><td style="padding:3px;">5</td><td style="padding:3px;">[ 3, 7, 2, 9, 5 ]</td><td style="padding:3px;">i=1</td></tr>
+        <tr style="background:rgba(22,163,74,.05);"><td style="padding:3px;">8</td><td style="padding:3px;">1</td><td style="padding:3px;">3</td><td style="padding:3px;">5</td><td style="padding:3px;">[ 3, 7, 2, 9, 5 ]</td><td style="padding:3px;">1&lt;5 ✓</td></tr>
+        <tr style="background:rgba(22,163,74,.05);"><td style="padding:3px;">9</td><td style="padding:3px;">1</td><td style="padding:3px;">3</td><td style="padding:3px;">5</td><td style="padding:3px;">[ 3, <u>7</u>, 2, 9, 5 ]</td><td style="padding:3px;">A[1]=7&gt;3 ✓</td></tr>
+        <tr style="background:rgba(22,163,74,.05);"><td style="padding:3px;">10</td><td style="padding:3px;">1</td><td style="padding:3px;"><b>7</b></td><td style="padding:3px;">5</td><td style="padding:3px;">[ 3, 7, 2, 9, 5 ]</td><td style="padding:3px;">max=7</td></tr>
+        <tr style="background:rgba(22,163,74,.05);"><td style="padding:3px;">12</td><td style="padding:3px;"><b>2</b></td><td style="padding:3px;">7</td><td style="padding:3px;">5</td><td style="padding:3px;">[ 3, 7, <u>2</u>, 9, 5 ]</td><td style="padding:3px;">i=2</td></tr>
+        <tr style="background:rgba(22,163,74,.05);"><td style="padding:3px;">8</td><td style="padding:3px;">2</td><td style="padding:3px;">7</td><td style="padding:3px;">5</td><td style="padding:3px;">[ 3, 7, 2, 9, 5 ]</td><td style="padding:3px;">2&lt;5 ✓</td></tr>
+        <tr style="background:rgba(22,163,74,.05);"><td style="padding:3px;">9</td><td style="padding:3px;">2</td><td style="padding:3px;">7</td><td style="padding:3px;">5</td><td style="padding:3px;">[ 3, 7, <u>2</u>, 9, 5 ]</td><td style="padding:3px;">2&gt;7 ✗ 不进</td></tr>
+        <tr style="background:rgba(22,163,74,.05);"><td style="padding:3px;">12</td><td style="padding:3px;"><b>3</b></td><td style="padding:3px;">7</td><td style="padding:3px;">5</td><td style="padding:3px;">[ 3, 7, 2, <u>9</u>, 5 ]</td><td style="padding:3px;">i=3</td></tr>
+        <tr style="background:rgba(22,163,74,.05);"><td style="padding:3px;">8</td><td style="padding:3px;">3</td><td style="padding:3px;">7</td><td style="padding:3px;">5</td><td style="padding:3px;">[ 3, 7, 2, 9, 5 ]</td><td style="padding:3px;">3&lt;5 ✓</td></tr>
+        <tr style="background:rgba(22,163,74,.05);"><td style="padding:3px;">9</td><td style="padding:3px;">3</td><td style="padding:3px;">7</td><td style="padding:3px;">5</td><td style="padding:3px;">[ 3, 7, 2, <u>9</u>, 5 ]</td><td style="padding:3px;">9&gt;7 ✓</td></tr>
+        <tr style="background:rgba(22,163,74,.05);"><td style="padding:3px;">10</td><td style="padding:3px;">3</td><td style="padding:3px;"><b>9</b></td><td style="padding:3px;">5</td><td style="padding:3px;">[ 3, 7, 2, 9, 5 ]</td><td style="padding:3px;">max=9</td></tr>
+        <tr style="background:rgba(22,163,74,.05);"><td style="padding:3px;">12</td><td style="padding:3px;"><b>4</b></td><td style="padding:3px;">9</td><td style="padding:3px;">5</td><td style="padding:3px;">[ 3, 7, 2, 9, <u>5</u> ]</td><td style="padding:3px;">i=4</td></tr>
+        <tr style="background:rgba(22,163,74,.05);"><td style="padding:3px;">8</td><td style="padding:3px;">4</td><td style="padding:3px;">9</td><td style="padding:3px;">5</td><td style="padding:3px;">[ 3, 7, 2, 9, 5 ]</td><td style="padding:3px;">4&lt;5 ✓</td></tr>
+        <tr style="background:rgba(22,163,74,.05);"><td style="padding:3px;">9</td><td style="padding:3px;">4</td><td style="padding:3px;">9</td><td style="padding:3px;">5</td><td style="padding:3px;">[ 3, 7, 2, 9, <u>5</u> ]</td><td style="padding:3px;">5&gt;9 ✗ 不进</td></tr>
+        <tr style="background:rgba(22,163,74,.05);"><td style="padding:3px;">12</td><td style="padding:3px;"><b>5</b></td><td style="padding:3px;">9</td><td style="padding:3px;">5</td><td style="padding:3px;">[ 3, 7, 2, 9, 5 ]</td><td style="padding:3px;">i=5</td></tr>
+        <tr><td style="padding:3px;">8</td><td style="padding:3px;">5</td><td style="padding:3px;">9</td><td style="padding:3px;">5</td><td style="padding:3px;">[ 3, 7, 2, 9, 5 ]</td><td style="padding:3px;">5&lt;5 ✗ 退出</td></tr>
+        <tr style="background:rgba(22,163,74,.15);"><td style="padding:3px;">14</td><td style="padding:3px;">-</td><td style="padding:3px;"><b>9</b></td><td style="padding:3px;">5</td><td style="padding:3px;">[ 3, 7, 2, 9, 5 ]</td><td style="padding:3px;">OUTPUT <b>9</b></td></tr>
       </table>
     </div>
     <div class="practice" style="margin-top:14px;">
@@ -1357,6 +1398,7 @@ C(n) = B(k)</div>
         <tr><td style="padding:3px;">...</td><td style="padding:3px;">...</td><td style="padding:3px;">...</td><td style="padding:3px;">...</td><td style="padding:3px;">...</td><td style="padding:3px;">...</td><td style="padding:3px;">...</td></tr>
       </table>
       <p style="font-size:11px; margin-top:4px; color:var(--muted);">最终 C = [12, 17, 34, 41, 52, 57, 77, 81]</p>
+      <p style="font-size:11px; margin-top:4px; color:var(--muted);">注：嵌套循环的"行"列用「初/外/内」标记属于哪层循环（外层 WHILE 走一次，内层 WHILE 走到底），不是代码行号。</p>
     </div>
     <div class="practice" style="margin-top:12px;">
       <div class="label">📌 小贴士</div>
