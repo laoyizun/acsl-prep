@@ -300,7 +300,7 @@ pre .num, code .num { display: inline; min-width: 0; height: auto; background: n
   .slide { padding: 48px 36px 110px; }
   h1 { font-size: 40px; } h2 { font-size: 32px; }
 }
-.slide.compact { padding: 32px 56px 96px; }
+.slide.compact { padding: 32px 56px 140px; }
 .slide.compact.active {
   display: flex !important;
   flex-direction: column;
@@ -416,6 +416,11 @@ pre .num, code .num { display: inline; min-width: 0; height: auto; background: n
 
 /* 网格 */
 .grid2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+.grid2x2 {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 14px;
