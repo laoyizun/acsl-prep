@@ -887,61 +887,47 @@ output x, y, z  → 7, 10, 2
   </div>
 </section>
 
-<!-- 14 · 真题 2 · 73452₈ - 4261₈ + 75₈ = ?₁₆（2023-2024） -->
+<!-- 14 · 真题 2 · 765₈ − 67₈ = ?₈（自己设计） -->
 <section class="slide">
   <div class="left">
     <div class="kicker">真题 2 · 数字系统</div>
-    <h2>73452₈ − 4261₈ + 75₈ = <span class="highlight">?₁₆</span></h2>
-    <p class="subtitle">来源：ACSL 2023-2024 Contest 1 Junior · 5 min 限时</p>
+    <h2>765₈ − 67₈ = <span class="highlight">?₈</span></h2>
+    <p class="subtitle">来源：L4 自编真题 · 5 min 限时</p>
   </div>
   <div class="right">
     <div class="card" style="border-left:4px solid var(--purple);">
       <h3 style="color:var(--purple);">题目</h3>
-      <p style="font-size:18px; line-height:1.7;">73452₈ − 4261₈ + 75₈ 的值用十六进制表示为什么？</p>
+      <p style="font-size:18px; line-height:1.7;">765₈ 减去 67₈ 的值用八进制表示为什么？</p>
       <div style="font-size:17px; line-height:1.9; margin-top:14px;">
-        <div>A. 27771</div>
-        <div>B. 70143</div>
-        <div>C. 7063</div>
-        <div>D. 70163</div>
-        <div>E. 7043</div>
+        <div>A. 676</div>
+        <div>B. 706</div>
+        <div>C. 716</div>
+        <div>D. 686</div>
+        <div>E. 696</div>
       </div>
     </div>
     <details class="card" style="border-left:4px solid var(--green); margin-top:12px;">
       <summary style="cursor:pointer; color:var(--green-deep); font-weight:800; font-size:16px; padding:12px 0;">点这里看答案 + 完整手算过程</summary>
       <div style="padding:14px; background:rgba(22,163,74,.06); border-radius:6px; margin-top:8px;">
-        <p style="font-size:17px; line-height:1.7;"><b>答案：C. 7063</b>（PDF 官方答案，注：见下方说明）</p>
-        <p style="font-size:15px; line-height:1.7; margin-top:10px;"><b>手算过程：</b></p>
-        <p style="font-size:14px; line-height:1.7;"><b>步骤 1：73452₈ − 4261₈（8 进制减法）</b></p>
-        <div class="code-block" style="font-size:13px; line-height:1.7;">
-  7 3 4 5 2
--   4 2 6 1
-  ─────
-位 0: 2 − 1 = 1
-位 1: 5 − 6 不够 → 13 − 6 = 7 (借)
-位 2: 4 已借 → 3 − 2 = 1 (借)
-位 3: 3 − 4 不够 → 11 − 4 = 7 (借)
-位 4: 7 已借 → 6
-= 67171₈
+        <p style="font-size:17px; line-height:1.7;"><b>答案：A. 676</b></p>
+        <p style="font-size:15px; line-height:1.7; margin-top:10px;"><b>手算过程（8 进制逐位减法）：</b></p>
+        <div class="code-block" style="font-size:14px; line-height:1.7;">
+  7 6 5
+-   6 7
+  ───
+位 0: 5 − 7 不够 → 5+8 − 7 = 6 (借 1)
+位 1: 6 − 1(借走) − 6 = −1 → 6+8 − 1 − 6 = 7 (借 1)
+位 2: 7 − 1(借走) = 6
+
+结果：676₈
         </div>
-        <p style="font-size:14px; line-height:1.7; margin-top:8px;"><b>步骤 2：67171₈ + 75₈（8 进制加法）</b></p>
+        <p style="font-size:15px; line-height:1.7; margin-top:10px;"><b>验算：</b></p>
         <div class="code-block" style="font-size:13px; line-height:1.7;">
-  6 7 1 7 1
-+     7 5
-  ─────
-位 0: 1 + 5 = 6
-位 1: 7 + 7 = 14 → 6 进 1
-位 2: 1 + 0 + 1 = 2
-位 3: 7 + 0 = 7
-位 4: 6 + 0 = 6
-= 67266₈
+765₈ = 7·8² + 6·8 + 5 = 448 + 48 + 5 = 501₁₀
+67₈  = 6·8 + 7 = 48 + 7 = 55₁₀
+501 − 55 = 446₁₀
+446₁₀ = 6·8² + 7·8 + 6 = 384 + 56 + 6 = 446 ✓
         </div>
-        <p style="font-size:14px; line-height:1.7; margin-top:8px;"><b>步骤 3：转 16 进制</b></p>
-        <div class="code-block" style="font-size:13px; line-height:1.7;">
-67266₈ = 28342₁₀ = 6EB6₁₆
-        </div>
-        <p style="font-size:14px; line-height:1.7; margin-top:8px; padding:8px; background:rgba(217,119,6,.1); border-left:3px solid var(--amber); border-radius:4px;">
-          <b>说明：</b>严格按手算答案是 6EB6₁₆（不在 5 选 1 中）。PDF 官方答案是 C. 7063（70143₈ = 28771₁₀ = 7063₁₆），PDF soln 中间步骤 "67171₈ + 75₈ = 70143₈" 数学上不自洽（67171+75=67266），疑为 PDF 印刷错误。真考时按 PDF 标准答案选 C。
-        </p>
       </div>
     </details>
   </div>
