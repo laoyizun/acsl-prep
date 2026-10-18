@@ -555,7 +555,7 @@ pre .num, code .num { display: inline; min-width: 0; height: auto; background: n
   </div>
 </section>
 
-<!-- 04 · 真题 1 · 数字系统 · 1 的个数比较 -->
+<!-- 04 · 真题 1 · 2015-2016 5 个数哪个二进制 1 最多 -->
 <section class="slide">
   <div class="left">
     <div class="kicker">真题 1 · 数字系统</div>
@@ -581,7 +581,7 @@ pre .num, code .num { display: inline; min-width: 0; height: auto; background: n
   </div>
 </section>
 
-<!-- 05 · 真题 2 · 数字系统 · 跨进制比较大小 -->
+<!-- 05 · 真题 2 · 2016-2017 4 表达式跨进制比较 -->
 <section class="slide">
   <div class="left">
     <div class="kicker">真题 2 · 数字系统</div>
@@ -607,7 +607,7 @@ pre .num, code .num { display: inline; min-width: 0; height: auto; background: n
   </div>
 </section>
 
-<!-- 06 · 真题 3 · 递归 · 基础递推 -->
+<!-- 06 · 真题 3 · 2015-2016 f(5) 基础递推 -->
 <section class="slide">
   <div class="left">
     <div class="kicker">真题 3 · 递归</div>
@@ -638,7 +638,7 @@ f(x) = (2x + 1) × f(x - 1)   if x > 1
   </div>
 </section>
 
-<!-- 07 · 真题 4 · 递归 · 奇偶分段（2019-2020） -->
+<!-- 07 · 真题 4 · 2019-2020 f(f(f(6))) 多分支 -->
 <section class="slide">
   <div class="left">
     <div class="kicker">真题 4 · 递归</div>
@@ -649,10 +649,10 @@ f(x) = (2x + 1) × f(x - 1)   if x > 1
     <div class="card" style="border-left:4px solid var(--red);">
       <h3 style="color:var(--red);">题目</h3>
       <div class="code-block" style="font-size:14px; line-height:1.7;">
-f(x) = 3^x × x^3           if x ≤ 1 (base)
-f(x) = f(x - 2) + 3        if x 是偶数
-f(x) = f(x - 1) + 3        if x 是奇数（且 x ≤ 9）
-f(x) = 2 × f(x - 3) - 1    if x ≥ 12 且是 3 的倍数
+f(x) = 3^x × x^3            if x ≤ 1 (base)
+f(x) = f(x - 2) + 3         if x 是偶数
+f(x) = f(x - 1) + 3         if x 是奇数 且 x ≤ 9
+f(x) = 2 × f(x - 3) - 1     if x ≥ 12 且是 3 的倍数
 
 求 f(f(f(6))) = ?
       </div>
@@ -671,7 +671,7 @@ f(x) = 2 × f(x - 3) - 1    if x ≥ 12 且是 3 的倍数
   </div>
 </section>
 
-<!-- 08 · 真题 5 · 程序追踪 · 4 变量 5 行 if -->
+<!-- 08 · 真题 5 · 2016-2017 4 变量 5 行 if -->
 <section class="slide">
   <div class="left">
     <div class="kicker">真题 5 · 程序追踪</div>
@@ -681,7 +681,7 @@ f(x) = 2 × f(x - 3) - 1    if x ≥ 12 且是 3 的倍数
   <div class="right">
     <div class="card" style="border-left:4px solid var(--blue);">
       <h3 style="color:var(--blue);">题目</h3>
-      <div class="code-block" style="font-size:12px; line-height:1.7;">
+      <div class="code-block" style="font-size:12px; line-height:1.6;">
 a = 42 : b = 20 : c = 2 : d = 1
 if a / c > b + d then
    a = a / c
@@ -720,7 +720,7 @@ end
   </div>
 </section>
 
-<!-- 09 · 真题 6 · 程序追踪 · 追踪 + 表达式 -->
+<!-- 09 · 真题 6 · 2020-2021 3 行 if + 整数除法 -->
 <section class="slide">
   <div class="left">
     <div class="kicker">真题 6 · 程序追踪</div>
@@ -730,18 +730,21 @@ end
   <div class="right">
     <div class="card" style="border-left:4px solid var(--blue);">
       <h3 style="color:var(--blue);">题目</h3>
-      <div class="code-block" style="font-size:12px; line-height:1.7;">
+      <div class="code-block" style="font-size:12px; line-height:1.6;">
 a = 24 : b = 2 : c = 3
-if a > b + 2 * c then
-   a = a - b
-end if
-if a - b > c then
+if a / c == b ^ c then
    b = b * c
 end if
-if a > 2 * b then
-   c = a - b
+if c + a / b > b then
+   a = a - b * c
 end if
-print a + b / c ^ 2
+b = b + a / 3
+if b > a + c then
+   b = 2 * b
+else
+   c = a / c
+end if
+output a + b / c ^ 2
 end
       </div>
       <div style="font-size:17px; line-height:1.9; margin-top:14px;">
@@ -775,8 +778,8 @@ end
       <h3 style="color:var(--blue);">接下来</h3>
       <ul style="font-size:17px; line-height:1.9; padding-left:20px;">
         <li>slide 11：答案速查表</li>
-        <li>slide 12-14：6 道题详细解析</li>
-        <li>slide 15：错因分析 + 12.13 倒计时</li>
+        <li>slide 12-13：6 道题详细解析</li>
+        <li>slide 14：错因分析 + 12.13 倒计时</li>
       </ul>
     </div>
     <div class="practice" style="margin-top:14px;">
@@ -810,7 +813,7 @@ end
     </table>
     <div class="practice" style="margin-top:14px;">
       <div class="label">小贴士</div>
-      <p style="font-size:15px;">错题详解看下一组 slide（12-14）</p>
+      <p style="font-size:15px;">错题详解看下一组 slide（12-13）</p>
     </div>
   </div>
 </section>
@@ -819,69 +822,76 @@ end
 <section class="slide">
   <div class="left">
     <div class="kicker">答案解析 1</div>
-    <h2>数字系统 + 递归 <span class="highlight">4 题</span></h2>
-    <p class="subtitle">题 1-4 详解</p>
+    <h2>数字系统 + 递归 <span class="highlight">4 题</span> 详解</h2>
+    <p class="subtitle">题 1-4 详解（完整手算）</p>
   </div>
   <div class="right">
     <div class="card" style="border-left:4px solid var(--purple);">
-      <h3 style="color:var(--purple);">题 1：二进制 1 的个数</h3>
-      <div class="code-block" style="font-size:11px; line-height:1.5;">
-414₈ = 100001100₂      (3 个 1)
-1B5₁₆ = 0001 1011 0101₂ = 110110101₂  (6 个 1) ← 最多
-178₁₀ = 10110010₂      (4 个 1)
-200₁₆ = 0010 0000 0000₂ = 10000000000₂ (1 个 1)
-600₈ = 110000000₂      (2 个 1)
+      <h3 style="color:var(--purple);">题 1：5 个数哪个二进制 1 最多（答案 B. 1B5₁₆）</h3>
+      <div class="code-block" style="font-size:12px; line-height:1.6;">
+5 个数全部转 2 进制:
+414₈   = 100001100₂           (3 个 1)
+1B5₁₆  = 0001 1011 0101₂
+       = 110110101₂            (6 个 1) ← 最多
+178₁₀  = 10110010₂            (4 个 1)
+200₁₆  = 0010 0000 0000₂
+       = 10000000000₂          (1 个 1)
+600₈   = 110000000₂           (2 个 1)
+
+答案: B. 1B5₁₆ (6 个 1)
       </div>
-      <p style="font-size:14px; margin-top:6px;">答案：<b>B. 1B5₁₆</b></p>
     </div>
     <div class="card" style="border-left:4px solid var(--blue); margin-top:10px;">
-      <h3 style="color:var(--blue);">题 2：4 表达式最大</h3>
-      <div class="code-block" style="font-size:11px; line-height:1.5;">
-327₈ = 215,  11011011₂ = 219,    a) 215 + 219 = 434
-11011010₂ = 218, 334₈ = 220,    b) 218 + 220 = 438 ← 最大
-330₈ = 216,  11011101₂ = 221,    c) 216 + 221 = 437
-11011001₂ = 217, 332₈ = 218,    d) 217 + 218 = 435
-      </div>
-      <p style="font-size:14px; margin-top:6px;">答案：<b>b (438)</b></p>
-    </div>
-    <div class="card" style="border-left:4px solid var(--red); margin-top:10px;">
-      <h3 style="color:var(--red);">题 3：f(5) 基础递推</h3>
-      <div class="code-block" style="font-size:12px; line-height:1.5;">
-f(1) = 1
-f(2) = 5 × 1 = 5
-f(3) = 7 × 5 = 35
-f(4) = 9 × 35 = 315
-f(5) = 11 × 315 = 3465
-      </div>
-      <p style="font-size:14px; margin-top:6px;">答案：<b>C. 3465</b></p>
-    </div>
-    <div class="card" style="border-left:4px solid var(--red); margin-top:10px;">
-      <h3 style="color:var(--red);">题 4：f(f(f(6)))</h3>
-      <div class="code-block" style="font-size:12px; line-height:1.5;">
-函数（2019-2020 真题）：
-f(x) = 3^x × x^3           if x ≤ 1 (base)
-f(x) = f(x-2) + 3          if x 是偶数
-f(x) = f(x-1) + 3          if x 是奇数 且 x ≤ 9
-f(x) = 2·f(x-3) - 1        if x ≥ 12 且 x 是 3 的倍数
+      <h3 style="color:var(--blue);">题 2：4 表达式最大（答案 b, 438）</h3>
+      <div class="code-block" style="font-size:12px; line-height:1.6;">
+全部转 10 进制:
+a) 327₈ + 11011011₂ = 215 + 219 = 434
+b) 11011010₂ + 334₈ = 218 + 220 = 438 ← 最大
+c) 330₈ + 11011101₂ = 216 + 221 = 437
+d) 11011001₂ + 332₈ = 217 + 218 = 435
 
-调用树（剥洋葱）：
+答案: b (438)
+      </div>
+    </div>
+    <div class="card" style="border-left:4px solid var(--red); margin-top:10px;">
+      <h3 style="color:var(--red);">题 3：f(5) 基础递推（答案 C. 3465）</h3>
+      <div class="code-block" style="font-size:13px; line-height:1.6;">
+f(1) = 1
+f(2) = (2·2+1)·f(1) = 5·1 = 5
+f(3) = (2·3+1)·f(2) = 7·5 = 35
+f(4) = (2·4+1)·f(3) = 9·35 = 315
+f(5) = (2·5+1)·f(4) = 11·315 = 3465
+
+答案: C. 3465
+      </div>
+    </div>
+    <div class="card" style="border-left:4px solid var(--red); margin-top:10px;">
+      <h3 style="color:var(--red);">题 4：f(f(f(6))) 多分支（答案 D. 57）</h3>
+      <div class="code-block" style="font-size:12px; line-height:1.6;">
+函数（2019-2020 真题）:
+f(x) = 3^x·x^3      if x ≤ 1 (base)
+f(x) = f(x-2)+3     if x 是偶数
+f(x) = f(x-1)+3     if x 是奇数 且 x ≤ 9
+f(x) = 2·f(x-3)-1   if x ≥ 12 且是 3 的倍数
+
+调用树（剥洋葱）:
 f(f(f(6))) = f(f(9)) = f(15)
 
-f(6) 走偶数分支：f(6) = f(4) + 3
-f(4) = f(2) + 3, f(2) = f(0) + 3 = 0 + 3 = 3
-f(4) = 3 + 3 = 6
-f(6) = 6 + 3 = 9
+算 f(6) 走偶数分支:
+f(6) = f(4)+3, f(4) = f(2)+3
+f(2) = f(0)+3 = 0+3 = 3
+f(4) = 3+3 = 6, f(6) = 6+3 = 9
 
-f(9) 走奇数且 ≤ 9 分支：f(9) = f(7) + 3
-f(7) = f(5) + 3, f(5) = f(3) + 3
-f(3) = f(1) + 3 = 3 + 3 = 6
-f(5) = 6 + 3 = 9
-f(7) = 9 + 3 = 12
-f(9) = 12 + 3 = 15
+算 f(9) 走奇数且 ≤ 9 分支:
+f(9) = f(7)+3, f(7) = f(5)+3
+f(5) = f(3)+3, f(3) = f(1)+3
+f(1) = 3, f(3) = 6, f(5) = 9
+f(7) = 12, f(9) = 15
 
-f(15) 走 x≥12 且 3 的倍数分支：f(15) = 2·f(12) - 1
-f(12) = 2·f(9) - 1 = 2·15 - 1 = 29
-f(15) = 2·29 - 1 = 57  ← 答案 D
+算 f(15) 走 ≥12 且 3 的倍数分支:
+f(15) = 2·f(12)-1
+f(12) = 2·f(9)-1 = 2·15-1 = 29
+f(15) = 2·29-1 = 57  ← 答案 D
       </div>
     </div>
     <div class="practice" style="margin-top:14px;">
@@ -896,11 +906,12 @@ f(15) = 2·29 - 1 = 57  ← 答案 D
   <div class="left">
     <div class="kicker">答案解析 2</div>
     <h2>程序追踪 <span class="highlight">2 题</span> 详解</h2>
-    <p class="subtitle">题 5-6 详解</p>
+    <p class="subtitle">题 5-6 详解（完整追踪表）</p>
   </div>
   <div class="right">
     <div class="card" style="border-left:4px solid var(--blue);">
-      <h3 style="color:var(--blue);">题 5：4 变量 5 行 if (2016-2017)</h3>
+      <h3 style="color:var(--blue);">题 5：4 变量 5 行 if（2016-2017，答案 A. -12）</h3>
+      <p style="font-size:13px; line-height:1.6;"><b>追踪表（5 列：行/a/b/c/d）：</b></p>
       <table style="font-size:11px; width:100%; border-collapse:collapse; line-height:1.5;">
         <tr style="background:rgba(37,99,235,.08);">
           <th style="padding:4px;">行</th><th style="padding:4px;">a</th><th style="padding:4px;">b</th>
@@ -913,22 +924,36 @@ f(15) = 2·29 - 1 = 57  ← 答案 D
         <tr><td style="padding:4px;">if b/d=int (20/5=4 ✓)</td><td style="padding:4px;">22</td><td style="padding:4px;"><b>4</b></td><td style="padding:4px;">4</td><td style="padding:4px;">5</td></tr>
         <tr style="background:rgba(37,99,235,.04);"><td style="padding:4px;">if c²≥b² (16≥16 ✓)</td><td style="padding:4px;"><b>11</b></td><td style="padding:4px;">4</td><td style="padding:4px;">4</td><td style="padding:4px;">5</td></tr>
       </table>
-      <p style="font-size:13px; margin-top:6px;">2·(a-3)/b - b^d/c^3 = 2·(11-3)/4 - 4^5/4^3 = 2·8/4 - 1024/64 = 4 - 16 = <b>-12</b></p>
-      <p style="font-size:14px; margin-top:6px;">答案：<b>A. -12</b></p>
+      <p style="font-size:13px; line-height:1.6; margin-top:8px;"><b>求值：</b></p>
+      <div class="code-block" style="font-size:12px; line-height:1.6;">
+2·(a-3)/b - b^d/c^3
+= 2·(11-3)/4 - 4^5/4^3
+= 2·8/4 - 1024/64
+= 16/4 - 16
+= 4 - 16
+= -12  ← 答案 A
+      </div>
     </div>
     <div class="card" style="border-left:4px solid var(--blue); margin-top:10px;">
-      <h3 style="color:var(--blue);">题 6：追踪 + 整数除法 (2020-2021)</h3>
+      <h3 style="color:var(--blue);">题 6：3 行 if + 整数除法（2020-2021，答案 A. 8）</h3>
+      <p style="font-size:13px; line-height:1.6;"><b>追踪表（4 列：行/a/b/c）：</b></p>
       <table style="font-size:11px; width:100%; border-collapse:collapse; line-height:1.5;">
         <tr style="background:rgba(37,99,235,.08);">
           <th style="padding:4px;">行</th><th style="padding:4px;">a</th><th style="padding:4px;">b</th><th style="padding:4px;">c</th>
         </tr>
         <tr><td style="padding:4px;">初</td><td style="padding:4px;">24</td><td style="padding:4px;">2</td><td style="padding:4px;">3</td></tr>
-        <tr style="background:rgba(37,99,235,.04);"><td style="padding:4px;">if a>b+2c (24>8 ✓)</td><td style="padding:4px;"><b>22</b></td><td style="padding:4px;">2</td><td style="padding:4px;">3</td></tr>
-        <tr><td style="padding:4px;">if a-b>c (20>3 ✓)</td><td style="padding:4px;">22</td><td style="padding:4px;"><b>6</b></td><td style="padding:4px;">3</td></tr>
-        <tr style="background:rgba(37,99,235,.04);"><td style="padding:4px;">if a>2b (22>12 ✓)</td><td style="padding:4px;">22</td><td style="padding:4px;">6</td><td style="padding:4px;"><b>16</b></td></tr>
+        <tr style="background:rgba(37,99,235,.04);"><td style="padding:4px;">if a/c==b^c (8==8 ✓) b=b·c</td><td style="padding:4px;">24</td><td style="padding:4px;"><b>6</b></td><td style="padding:4px;">3</td></tr>
+        <tr><td style="padding:4px;">if c+a/b>b (3+4=7>6 ✓) a=a-b·c</td><td style="padding:4px;"><b>6</b></td><td style="padding:4px;">6</td><td style="padding:4px;">3</td></tr>
+        <tr style="background:rgba(37,99,235,.04);"><td style="padding:4px;">b = b + a/3 = 6 + 2 = 8</td><td style="padding:4px;">6</td><td style="padding:4px;"><b>8</b></td><td style="padding:4px;">3</td></tr>
+        <tr><td style="padding:4px;">if b>a+c (8>9 ✗) else c=a/c</td><td style="padding:4px;">6</td><td style="padding:4px;">8</td><td style="padding:4px;"><b>2</b></td></tr>
       </table>
-      <p style="font-size:13px; margin-top:6px;">a + b/c² = 22 + 6/16² = 22 + 6/256 (不是 -8) ...</p>
-      <p style="font-size:13px; color:var(--green-deep);">按 2020-2021 标准答案：<b>8 (A)</b></p>
+      <p style="font-size:13px; line-height:1.6; margin-top:8px;"><b>求值：</b></p>
+      <div class="code-block" style="font-size:12px; line-height:1.6;">
+a + b/c^2 = 6 + 8/4 (整数除法) = 6 + 2 = 8  ← 答案 A
+      </div>
+      <p style="font-size:13px; line-height:1.6; margin-top:6px; padding:6px; background:rgba(217,119,6,.1); border-left:3px solid var(--amber); border-radius:4px;">
+        <b>整数除法关键：</b>24/3=8, 24/6=4, 18/3=6, 6/3=2（ACSL 全部按整数除法，7/2=3 不是 3.5）
+      </p>
     </div>
     <div class="practice" style="margin-top:14px;">
       <div class="label">小贴士</div>
@@ -936,6 +961,7 @@ f(15) = 2·29 - 1 = 57  ← 答案 D
     </div>
   </div>
 </section>
+
 
 <!-- 14 · 错因分析 + 临场策略 -->
 <section class="slide">

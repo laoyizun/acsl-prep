@@ -849,7 +849,7 @@ output x, y, z  → 7, 10, 2
   </div>
 </section>
 
-<!-- 13 · 真题 1 · 数字系统 · 进制转换 -->
+<!-- 13 · 真题 1 · 2023₁₀ → 8 进制（2022-2023） -->
 <section class="slide">
   <div class="left">
     <div class="kicker">真题 1 · 数字系统</div>
@@ -869,22 +869,25 @@ output x, y, z  → 7, 10, 2
       </div>
     </div>
     <details class="card" style="border-left:4px solid var(--green); margin-top:12px;">
-      <summary style="cursor:pointer; color:var(--green-deep); font-weight:800; font-size:16px; padding:12px 0;">点这里看答案 + 解析</summary>
+      <summary style="cursor:pointer; color:var(--green-deep); font-weight:800; font-size:16px; padding:12px 0;">点这里看答案 + 完整手算过程</summary>
       <div style="padding:14px; background:rgba(22,163,74,.06); border-radius:6px; margin-top:8px;">
         <p style="font-size:17px; line-height:1.7;"><b>答案：B. 3747</b></p>
+        <p style="font-size:15px; line-height:1.7; margin-top:10px;"><b>手算过程（除 8 取余倒写）：</b></p>
         <div class="code-block" style="font-size:14px; line-height:1.7;">
 2023 ÷ 8 = 252 余 7
 252 ÷ 8 = 31 余 4
 31 ÷ 8 = 3 余 7
 3 ÷ 8 = 0 余 3
+─────────────────
 倒写：3747₈
         </div>
+        <p style="font-size:15px; line-height:1.7; margin-top:10px;"><b>验算：</b>3·8³ + 7·8² + 4·8 + 7 = 1536 + 448 + 32 + 7 = 2023 ✓</p>
       </div>
     </details>
   </div>
 </section>
 
-<!-- 14 · 真题 2 · 数字系统 · 8 进制混合 → 16 进制 -->
+<!-- 14 · 真题 2 · 73452₈ - 4261₈ + 75₈ = ?₁₆（2023-2024） -->
 <section class="slide">
   <div class="left">
     <div class="kicker">真题 2 · 数字系统</div>
@@ -904,45 +907,60 @@ output x, y, z  → 7, 10, 2
       </div>
     </div>
     <details class="card" style="border-left:4px solid var(--green); margin-top:12px;">
-      <summary style="cursor:pointer; color:var(--green-deep); font-weight:800; font-size:16px; padding:12px 0;">点这里看答案 + 解析</summary>
+      <summary style="cursor:pointer; color:var(--green-deep); font-weight:800; font-size:16px; padding:12px 0;">点这里看答案 + 完整手算过程</summary>
       <div style="padding:14px; background:rgba(22,163,74,.06); border-radius:6px; margin-top:8px;">
-        <p style="font-size:17px; line-height:1.7;"><b>答案：C. 7063</b></p>
+        <p style="font-size:17px; line-height:1.7;"><b>答案：C. 7063</b>（PDF 官方答案，注：见下方说明）</p>
+        <p style="font-size:15px; line-height:1.7; margin-top:10px;"><b>手算过程：</b></p>
+        <p style="font-size:14px; line-height:1.7;"><b>步骤 1：73452₈ − 4261₈（8 进制减法）</b></p>
         <div class="code-block" style="font-size:13px; line-height:1.7;">
-73452₈ − 4261₈ = 67171₈  (8 进制减法)
-67171₈ + 75₈ = 70143₈   (8 进制加法)
-
-70143₈ → 转 10 进制：
-7·8⁴ + 0·8³ + 1·8² + 4·8 + 3
-= 28672 + 0 + 64 + 32 + 3 = 28771₁₀
-
-28771₁₀ → 16 进制：
-28771 / 16 = 1798 余 3
-1798 / 16 = 112 余 6
-112 / 16 = 7 余 0
-7 / 16 = 0 余 7
-倒写：7063₁₆
+  7 3 4 5 2
+-   4 2 6 1
+  ─────
+位 0: 2 − 1 = 1
+位 1: 5 − 6 不够 → 13 − 6 = 7 (借)
+位 2: 4 已借 → 3 − 2 = 1 (借)
+位 3: 3 − 4 不够 → 11 − 4 = 7 (借)
+位 4: 7 已借 → 6
+= 67171₈
         </div>
+        <p style="font-size:14px; line-height:1.7; margin-top:8px;"><b>步骤 2：67171₈ + 75₈（8 进制加法）</b></p>
+        <div class="code-block" style="font-size:13px; line-height:1.7;">
+  6 7 1 7 1
++     7 5
+  ─────
+位 0: 1 + 5 = 6
+位 1: 7 + 7 = 14 → 6 进 1
+位 2: 1 + 0 + 1 = 2
+位 3: 7 + 0 = 7
+位 4: 6 + 0 = 6
+= 67266₈
+        </div>
+        <p style="font-size:14px; line-height:1.7; margin-top:8px;"><b>步骤 3：转 16 进制</b></p>
+        <div class="code-block" style="font-size:13px; line-height:1.7;">
+67266₈ = 28342₁₀ = 6EB6₁₆
+        </div>
+        <p style="font-size:14px; line-height:1.7; margin-top:8px; padding:8px; background:rgba(217,119,6,.1); border-left:3px solid var(--amber); border-radius:4px;">
+          <b>说明：</b>严格按手算答案是 6EB6₁₆（不在 5 选 1 中）。PDF 官方答案是 C. 7063（70143₈ = 28771₁₀ = 7063₁₆），PDF soln 中间步骤 "67171₈ + 75₈ = 70143₈" 数学上不自洽（67171+75=67266），疑为 PDF 印刷错误。真考时按 PDF 标准答案选 C。
+        </p>
       </div>
     </details>
   </div>
 </section>
 
-<!-- 15 · 真题 3 · 递归 · 分段函数 -->
+<!-- 15 · 真题 3 · f(18) 区间分段（2022-2023） -->
 <section class="slide">
   <div class="left">
     <div class="kicker">真题 3 · 递归</div>
-    <h2>分段函数 f(18) = <span class="highlight">?</span></h2>
+    <h2>区间分段 f(18) = <span class="highlight">?</span></h2>
     <p class="subtitle">来源：ACSL 2022-2023 Contest 1 Junior · 5 min 限时</p>
   </div>
   <div class="right">
     <div class="card" style="border-left:4px solid var(--red);">
       <h3 style="color:var(--red);">题目</h3>
       <div class="code-block" style="font-size:14px; line-height:1.7;">
-f(x) = {
-  f(x - 3) + 1   if x > 9
-  f(x - 2) - 3   if 5 < x ≤ 9
-  25             if x ≤ 5
-}
+f(x) = 25           if x ≤ 5
+f(x) = f(x-2) - 3   if 5 < x ≤ 9
+f(x) = f(x-3) + 1   if x > 9
 
 求 f(18) = ?
       </div>
@@ -955,28 +973,29 @@ f(x) = {
       </div>
     </div>
     <details class="card" style="border-left:4px solid var(--green); margin-top:12px;">
-      <summary style="cursor:pointer; color:var(--green-deep); font-weight:800; font-size:16px; padding:12px 0;">点这里看答案 + 解析</summary>
+      <summary style="cursor:pointer; color:var(--green-deep); font-weight:800; font-size:16px; padding:12px 0;">点这里看答案 + 完整手算过程</summary>
       <div style="padding:14px; background:rgba(22,163,74,.06); border-radius:6px; margin-top:8px;">
         <p style="font-size:17px; line-height:1.7;"><b>答案：E. 22</b></p>
-        <div class="code-block" style="font-size:14px; line-height:1.7;">
-调用树（向下展开）：
+        <p style="font-size:15px; line-height:1.7; margin-top:10px;"><b>手算过程（向下展开 + 向上回填）：</b></p>
+        <div class="code-block" style="font-size:14px; line-height:1.8;">
+调用树（向下）：
 f(18) → f(15) → f(12) → f(9) → f(7) → f(5) = 25
-                                  (5<x≤9) (5<x≤9) (base)
+                            (x>9) (5<x≤9) (5<x≤9) (base)
 
-回填：
-f(5)  = 25
-f(7)  = 25 - 3 = 22
-f(9)  = 22 - 3 = 19
-f(12) = 19 + 1 = 20
-f(15) = 20 + 1 = 21
-f(18) = 21 + 1 = 22  ← 答案 E
+回填（向上）：
+f(5)  = 25                    (base, x ≤ 5)
+f(7)  = f(5) - 3 = 22         (5 < x ≤ 9)
+f(9)  = f(7) - 3 = 19         (5 < x ≤ 9)
+f(12) = f(9) + 1 = 20         (x > 9)
+f(15) = f(12) + 1 = 21        (x > 9)
+f(18) = f(15) + 1 = 22        (x > 9)  ← 答案
         </div>
       </div>
     </details>
   </div>
 </section>
 
-<!-- 16 · 真题 4 · 递归 · 奇偶分段（2023-2024） -->
+<!-- 16 · 真题 4 · f(f(24)) 奇偶分段（2023-2024） -->
 <section class="slide">
   <div class="left">
     <div class="kicker">真题 4 · 递归</div>
@@ -987,12 +1006,10 @@ f(18) = 21 + 1 = 22  ← 答案 E
     <div class="card" style="border-left:4px solid var(--red);">
       <h3 style="color:var(--red);">题目</h3>
       <div class="code-block" style="font-size:14px; line-height:1.7;">
-f(x) = {
-  f(x/2) + 4       if x 是偶数
-  f(x - 1) + 2     if x 是奇数
-  1                if x = 1
-  9                if x = 9
-}
+f(x) = f(x/2) + 4   if x 是偶数
+f(x) = f(x-1) + 2   if x 是奇数
+f(1)  = 1            base
+f(9)  = 9            base
 
 求 f(f(24)) = ?
 （注意：1 不是质数）
@@ -1006,11 +1023,11 @@ f(x) = {
       </div>
     </div>
     <details class="card" style="border-left:4px solid var(--green); margin-top:12px;">
-      <summary style="cursor:pointer; color:var(--green-deep); font-weight:800; font-size:16px; padding:12px 0;">点这里看答案 + 解析</summary>
+      <summary style="cursor:pointer; color:var(--green-deep); font-weight:800; font-size:16px; padding:12px 0;">点这里看答案 + 完整手算过程</summary>
       <div style="padding:14px; background:rgba(22,163,74,.06); border-radius:6px; margin-top:8px;">
         <p style="font-size:17px; line-height:1.7;"><b>答案：C. 15</b></p>
-        <div class="code-block" style="font-size:13px; line-height:1.7;">
-先算 f(1..12)：
+        <p style="font-size:15px; line-height:1.7; margin-top:10px;"><b>手算过程（先算 f(1..12)，再算 f(24) 和 f(19)）：</b></p>
+        <div class="code-block" style="font-size:13px; line-height:1.8;">
 f(1)  = 1                    (base)
 f(2)  = f(1) + 4 = 5         (偶)
 f(3)  = f(2) + 2 = 7         (奇)
@@ -1025,18 +1042,17 @@ f(11) = f(10) + 2 = 17       (奇)
 f(12) = f(6) + 4 = 15        (偶)
 
 f(24) = f(12) + 4 = 19
-f(19) = f(18) + 2
 f(18) = f(9) + 4 = 13
-f(19) = 13 + 2 = 15
+f(19) = f(18) + 2 = 15
 
-f(f(24)) = f(19) = 15  ← 答案 C
+f(f(24)) = f(19) = 15  ← 答案
         </div>
       </div>
     </details>
   </div>
 </section>
 
-<!-- 17 · 真题 5 · 程序追踪 · 多变量 if-elif -->
+<!-- 17 · 真题 5 · 5 行 if-elif 程序追踪（2021-2022） -->
 <section class="slide">
   <div class="left">
     <div class="kicker">真题 5 · 程序追踪</div>
@@ -1046,7 +1062,7 @@ f(f(24)) = f(19) = 15  ← 答案 C
   <div class="right">
     <div class="card" style="border-left:4px solid var(--blue);">
       <h3 style="color:var(--blue);">题目</h3>
-      <div class="code-block" style="font-size:12px; line-height:1.7;">
+      <div class="code-block" style="font-size:12px; line-height:1.6;">
 a = 0 : b = 2 : c = 4 : d = 6
 if c > d / b then
    c = b * d
@@ -1075,27 +1091,34 @@ output c / d − b + a ^ 3 * d
       </div>
     </div>
     <details class="card" style="border-left:4px solid var(--green); margin-top:12px;">
-      <summary style="cursor:pointer; color:var(--green-deep); font-weight:800; font-size:16px; padding:12px 0;">点这里看答案 + 解析</summary>
+      <summary style="cursor:pointer; color:var(--green-deep); font-weight:800; font-size:16px; padding:12px 0;">点这里看答案 + 完整追踪表</summary>
       <div style="padding:14px; background:rgba(22,163,74,.06); border-radius:6px; margin-top:8px;">
         <p style="font-size:17px; line-height:1.7;"><b>答案：A. -8</b></p>
+        <p style="font-size:15px; line-height:1.7; margin-top:10px;"><b>追踪表（5 列：行/a/b/c/d）：</b></p>
         <table style="font-size:12px; width:100%; border-collapse:collapse; line-height:1.5;">
           <tr style="background:rgba(37,99,235,.08);">
             <th style="padding:4px;">行</th><th style="padding:4px;">a</th><th style="padding:4px;">b</th>
             <th style="padding:4px;">c</th><th style="padding:4px;">d</th>
           </tr>
           <tr><td style="padding:4px;">初</td><td style="padding:4px;">0</td><td style="padding:4px;">2</td><td style="padding:4px;">4</td><td style="padding:4px;">6</td></tr>
-          <tr><td style="padding:4px;">if c>d/b (4>3 ✓)</td><td style="padding:4px;">0</td><td style="padding:4px;">2</td><td style="padding:4px;">12</td><td style="padding:4px;">6</td></tr>
-          <tr><td style="padding:4px;">if b²<c/d (4<2 ✗) else</td><td style="padding:4px;">0</td><td style="padding:4px;">4</td><td style="padding:4px;">12</td><td style="padding:4px;">6</td></tr>
-          <tr><td style="padding:4px;">if c-d<a·b (6<0 ✗)</td><td style="padding:4px;">0</td><td style="padding:4px;">4</td><td style="padding:4px;">12</td><td style="padding:4px;">6</td></tr>
-          <tr><td style="padding:4px;">if a²>1 (0>1 ✗) else</td><td style="padding:4px;">0</td><td style="padding:4px;">10</td><td style="padding:4px;">12</td><td style="padding:4px;">6</td></tr>
+          <tr style="background:rgba(37,99,235,.04);"><td style="padding:4px;">c>d/b (4>3 ✓) → c=b·d</td><td style="padding:4px;">0</td><td style="padding:4px;">2</td><td style="padding:4px;"><b>12</b></td><td style="padding:4px;">6</td></tr>
+          <tr><td style="padding:4px;">b²<c/d (4<2 ✗) else → b=b²</td><td style="padding:4px;">0</td><td style="padding:4px;"><b>4</b></td><td style="padding:4px;">12</td><td style="padding:4px;">6</td></tr>
+          <tr style="background:rgba(37,99,235,.04);"><td style="padding:4px;">c-d<a·b (6<0 ✗)</td><td style="padding:4px;">0</td><td style="padding:4px;">4</td><td style="padding:4px;">12</td><td style="padding:4px;">6</td></tr>
+          <tr><td style="padding:4px;">a²>1 (0>1 ✗) else → b=b+d</td><td style="padding:4px;">0</td><td style="padding:4px;"><b>10</b></td><td style="padding:4px;">12</td><td style="padding:4px;">6</td></tr>
         </table>
-        <p style="font-size:14px; margin-top:6px;">c/d − b + a³·d = 12/6 − 10 + 0³·6 = 2 − 10 + 0 = <b>-8</b></p>
+        <p style="font-size:14px; line-height:1.7; margin-top:10px;"><b>求值：</b></p>
+        <div class="code-block" style="font-size:13px; line-height:1.7;">
+c/d − b + a³·d
+= 12/6 − 10 + 0³·6
+= 2 − 10 + 0
+= -8
+        </div>
       </div>
     </details>
   </div>
 </section>
 
-<!-- 18 · 真题 6 · 程序追踪 · 识别正确代码 -->
+<!-- 18 · 真题 6 · 4 段代码识别（2023-2024） -->
 <section class="slide">
   <div class="left">
     <div class="kicker">真题 6 · 程序追踪</div>
@@ -1126,7 +1149,7 @@ c) if hrs > 40 then
 
 d) pay = 40 * rate
    if hrs > 40 then
-     pay = pay + 1.5 * (hrs-40) * rate
+     pay = pay + 1.5 * (hrs - 40) * rate
    end if
       </div>
       <div style="font-size:17px; line-height:1.9; margin-top:14px;">
@@ -1138,15 +1161,17 @@ d) pay = 40 * rate
       </div>
     </div>
     <details class="card" style="border-left:4px solid var(--green); margin-top:12px;">
-      <summary style="cursor:pointer; color:var(--green-deep); font-weight:800; font-size:16px; padding:12px 0;">点这里看答案 + 解析</summary>
+      <summary style="cursor:pointer; color:var(--green-deep); font-weight:800; font-size:16px; padding:12px 0;">点这里看答案 + 逐段分析</summary>
       <div style="padding:14px; background:rgba(22,163,74,.06); border-radius:6px; margin-top:8px;">
         <p style="font-size:17px; line-height:1.7;"><b>答案：E. b, c</b></p>
-        <ul style="font-size:13px; line-height:1.7; padding-left:18px;">
-          <li><b>a 错</b>：(hrs-40)·rate·1.5 是加班费 + hrs·rate 是全工资 = <b>加班算 2 次</b></li>
-          <li><b>b 对</b>：先算 hrs·rate，加班时 + 0.5·加班小时·rate（= 0.5 倍补差）</li>
-          <li><b>c 对</b>：同 b 但分两个 if</li>
-          <li><b>d 错</b>：hrs<40 时 pay=40·rate 多了</li>
+        <p style="font-size:15px; line-height:1.7; margin-top:10px;"><b>逐段分析：</b></p>
+        <ul style="font-size:14px; line-height:1.8; padding-left:18px;">
+          <li><b>a 错</b>：(hrs-40)·rate·1.5 是 1.5 倍加班费 + hrs·rate 是全工资 = <b>加班算 2.5 倍</b>（实际只要 1.5 倍）</li>
+          <li><b>b 对</b>：先算 hrs·rate 全工资，加班时 + (hrs-40)·rate·0.5 = 0.5 倍补差 → 总共 1.5 倍 ✓</li>
+          <li><b>c 对</b>：同 b 但分两个 if（先算 hrs·rate，加班时 + 0.5 倍）→ 1.5 倍 ✓</li>
+          <li><b>d 错</b>：hrs<40 时 pay=40·rate 多算（<40 小时不工作也给 40 小时钱）</li>
         </ul>
+        <p style="font-size:14px; margin-top:8px;">答案：<b>b, c → E</b></p>
       </div>
     </details>
   </div>
@@ -1161,33 +1186,39 @@ d) pay = 40 * rate
   </div>
   <div class="right">
     <div class="card" style="border-left:4px solid var(--purple);">
-      <h3 style="color:var(--purple);">题 1：2023₁₀ → 8 进制</h3>
-      <div class="code-block" style="font-size:13px; line-height:1.7;">
+      <h3 style="color:var(--purple);">题 1：2023₁₀ → 8 进制（答案 B. 3747）</h3>
+      <div class="code-block" style="font-size:13px; line-height:1.8;">
 2023 ÷ 8 = 252 余 7
 252 ÷ 8 = 31 余 4
 31 ÷ 8 = 3 余 7
 3 ÷ 8 = 0 余 3
+─────────────────
 倒写：3747₈ ← 答案 B
+
+验算：3·8³ + 7·8² + 4·8 + 7
+   = 1536 + 448 + 32 + 7 = 2023 ✓
       </div>
     </div>
     <div class="card" style="border-left:4px solid var(--blue); margin-top:10px;">
-      <h3 style="color:var(--blue);">题 2：73452₈ − 4261₈ + 75₈ = ?₁₆</h3>
+      <h3 style="color:var(--blue);">题 2：73452₈ − 4261₈ + 75₈ = ?₁₆（答案 C. 7063）</h3>
+      <p style="font-size:13px; line-height:1.7;"><b>手算严格答案 6EB6₁₆（不在 5 选 1），按 PDF 官方答案选 C. 7063</b></p>
       <div class="code-block" style="font-size:12px; line-height:1.6;">
-73452₈ − 4261₈ = 67171₈  (8 进制减法, 28281₁₀)
+【步骤 1】73452₈ − 4261₈
+  7 3 4 5 2       → 67171₈
+-   4 2 6 1
+  （8 进制减法，逐位借位）
 
-按官方解（PDF soln 直接给出结果）：
-+ 75₈ = 70143₈  (= 28771₁₀)
+【步骤 2】67171₈ + 75₈
+  6 7 1 7 1       → 67266₈
++     7 5
+  （8 进制加法，14 进 1）
 
-70143₈ → 转 2 进制（3 位一组）：
-7  0  1  4  3
-111 000 001 100 011₂
-= 111000001100011₂ (15 位)
+【步骤 3】67266₈ → 16 进制
+  67266₈ = 28342₁₀ = 6EB6₁₆
 
-→ 4 位一组重组成 16 进制（左侧补 0）：
-0111 0000 1100 0011₂
-= 7    0    6    3  ₁₆
-
-按官方答案：7063₁₆ ← 答案 C
+注：PDF soln 给的 "67171 + 75 = 70143" 数学上不对
+   (67171+75=67266)
+   真实考试按 5 选 1 选 C. 7063
       </div>
     </div>
     <div class="practice" style="margin-top:14px;">
@@ -1206,12 +1237,12 @@ d) pay = 40 * rate
   </div>
   <div class="right">
     <div class="card" style="border-left:4px solid var(--purple);">
-      <h3 style="color:var(--purple);">题 3：f(18), 区间分段</h3>
+      <h3 style="color:var(--purple);">题 3：f(18) 区间分段（答案 E. 22）</h3>
       <div class="code-block" style="font-size:12px; line-height:1.6;">
 函数（2022-2023 真题）：
-f(x) = 25          if x ≤ 5
-f(x) = f(x-2) - 3  if 5 < x ≤ 9
-f(x) = f(x-3) + 1  if x > 9
+f(x) = 25            if x ≤ 5
+f(x) = f(x-2) - 3    if 5 < x ≤ 9
+f(x) = f(x-3) + 1    if x > 9
 
 调用树：
 f(18) → f(15) → f(12) → f(9) → f(7) → f(5) = 25
@@ -1226,19 +1257,27 @@ f(18) = 21 + 1 = 22  ← 答案 E
       </div>
     </div>
     <div class="card" style="border-left:4px solid var(--red); margin-top:10px;">
-      <h3 style="color:var(--red);">题 4：f(f(24)), 奇偶分段</h3>
+      <h3 style="color:var(--red);">题 4：f(f(24)) 奇偶分段（答案 C. 15）</h3>
       <div class="code-block" style="font-size:12px; line-height:1.6;">
 函数（2023-2024 真题）：
-f(x) = f(x/2) + 4   if x 是偶数
-f(x) = f(x-1) + 2   if x 是奇数
+f(x) = f(x/2) + 4    if x 是偶数
+f(x) = f(x-1) + 2    if x 是奇数
 f(1)  = 1            base
 f(9)  = 9            base
 
 先算 f(1..12)：
-f(1) = 1,  f(2) = 5,  f(3) = 7
-f(4) = 9,  f(5) = 11, f(6) = 11
-f(7) = 13, f(8) = 13, f(9) = 9
-f(10) = 15, f(11) = 17, f(12) = 15
+f(1)  = 1             (base)
+f(2)  = f(1) + 4 = 5  (偶)
+f(3)  = f(2) + 2 = 7  (奇)
+f(4)  = f(2) + 4 = 9  (偶)
+f(5)  = f(4) + 2 = 11 (奇)
+f(6)  = f(3) + 4 = 11 (偶)
+f(7)  = f(6) + 2 = 13 (奇)
+f(8)  = f(4) + 4 = 13 (偶)
+f(9)  = 9             (base)
+f(10) = f(5) + 4 = 15 (偶)
+f(11) = f(10) + 2 = 17 (奇)
+f(12) = f(6) + 4 = 15 (偶)
 
 f(24) = f(12) + 4 = 19
 f(18) = f(9) + 4 = 13
@@ -1263,26 +1302,26 @@ f(f(24)) = f(19) = 15  ← 答案 C
   </div>
   <div class="right">
     <div class="card" style="border-left:4px solid var(--blue);">
-      <h3 style="color:var(--blue);">题 5：5 行 if-elif</h3>
-      <table style="font-size:11px; width:100%; border-collapse:collapse; line-height:1.5;">
+      <h3 style="color:var(--blue);">题 5：5 行 if-elif（答案 A. -8）</h3>
+      <table style="font-size:12px; width:100%; border-collapse:collapse; line-height:1.5;">
         <tr style="background:rgba(37,99,235,.08);">
           <th style="padding:4px;">行</th><th style="padding:4px;">a</th><th style="padding:4px;">b</th>
           <th style="padding:4px;">c</th><th style="padding:4px;">d</th>
         </tr>
         <tr><td style="padding:4px;">初</td><td style="padding:4px;">0</td><td style="padding:4px;">2</td><td style="padding:4px;">4</td><td style="padding:4px;">6</td></tr>
-        <tr style="background:rgba(37,99,235,.04);"><td style="padding:4px;">if c>d/b (4>3 ✓)</td><td style="padding:4px;">0</td><td style="padding:4px;">2</td><td style="padding:4px;"><b>12</b></td><td style="padding:4px;">6</td></tr>
-        <tr><td style="padding:4px;">if b²<c/d (4<2 ✗) else</td><td style="padding:4px;">0</td><td style="padding:4px;"><b>4</b></td><td style="padding:4px;">12</td><td style="padding:4px;">6</td></tr>
-        <tr style="background:rgba(37,99,235,.04);"><td style="padding:4px;">if c-d<a·b (6<0 ✗)</td><td style="padding:4px;">0</td><td style="padding:4px;">4</td><td style="padding:4px;">12</td><td style="padding:4px;">6</td></tr>
-        <tr><td style="padding:4px;">if a²>1 (0>1 ✗) else</td><td style="padding:4px;">0</td><td style="padding:4px;"><b>10</b></td><td style="padding:4px;">12</td><td style="padding:4px;">6</td></tr>
+        <tr style="background:rgba(37,99,235,.04);"><td style="padding:4px;">c>d/b (4>3 ✓) → c=b·d</td><td style="padding:4px;">0</td><td style="padding:4px;">2</td><td style="padding:4px;"><b>12</b></td><td style="padding:4px;">6</td></tr>
+        <tr><td style="padding:4px;">b²<c/d (4<2 ✗) else → b=b²</td><td style="padding:4px;">0</td><td style="padding:4px;"><b>4</b></td><td style="padding:4px;">12</td><td style="padding:4px;">6</td></tr>
+        <tr style="background:rgba(37,99,235,.04);"><td style="padding:4px;">c-d<a·b (6<0 ✗)</td><td style="padding:4px;">0</td><td style="padding:4px;">4</td><td style="padding:4px;">12</td><td style="padding:4px;">6</td></tr>
+        <tr><td style="padding:4px;">a²>1 (0>1 ✗) else → b=b+d</td><td style="padding:4px;">0</td><td style="padding:4px;"><b>10</b></td><td style="padding:4px;">12</td><td style="padding:4px;">6</td></tr>
       </table>
-      <p style="font-size:13px; margin-top:6px;">c/d − b + a³·d = 12/6 − 10 + 0³·6 = 2 − 10 + 0 = <b>-8</b> ← 答案 A</p>
+      <p style="font-size:14px; margin-top:8px;">c/d − b + a³·d = 12/6 − 10 + 0³·6 = 2 − 10 + 0 = <b>-8</b></p>
     </div>
     <div class="card" style="border-left:4px solid var(--red); margin-top:10px;">
-      <h3 style="color:var(--red);">题 6：识别正确代码</h3>
-      <ul style="font-size:13px; line-height:1.7; padding-left:18px;">
-        <li><b>a 错</b>：加班算 2 次（(hrs-40)·rate·1.5 是 1.5 倍 + hrs·rate 是全工资 = 2.5 倍）</li>
-        <li><b>b 对</b>：先算 hrs·rate，加班时 +(hrs-40)·rate·0.5（= 0.5 倍补差）→ 正确</li>
-        <li><b>c 对</b>：同 b 分两个 if（先算 hrs·rate，加班时 + 0.5 倍）→ 正确</li>
+      <h3 style="color:var(--red);">题 6：4 段代码识别（答案 E. b, c）</h3>
+      <ul style="font-size:13px; line-height:1.8; padding-left:18px;">
+        <li><b>a 错</b>：(hrs-40)·rate·1.5 + hrs·rate = 加班 1.5 倍 + 全工资 = 2.5 倍</li>
+        <li><b>b 对</b>：先算 hrs·rate，加班时 + (hrs-40)·rate·0.5 = 1.5 倍 ✓</li>
+        <li><b>c 对</b>：同 b 但分两个 if = 1.5 倍 ✓</li>
         <li><b>d 错</b>：hrs<40 时 pay=40·rate 多算</li>
       </ul>
       <p style="font-size:14px; margin-top:6px;">答案：<b>b, c → E</b></p>
@@ -1293,6 +1332,7 @@ f(f(24)) = f(19) = 15  ← 答案 C
     </div>
   </div>
 </section>
+
 
 <!-- 22 · 收尾 · 12.13 考试 Checklist -->
 <section class="slide">
