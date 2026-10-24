@@ -49,7 +49,7 @@ a { color: inherit; }
 .slide {
   position: absolute; inset: 0;
   display: none;
-  padding: 56px 80px 100px;
+  padding: 56px 80px 150px;
   opacity: 0;
   transform: translateX(24px);
   transition: .35s ease;
@@ -186,8 +186,6 @@ code.inline {
   margin: 8px 0;
   overflow-x: auto;
   white-space: pre;
-  max-height: 280px;
-  overflow-y: auto;
 }
 .code-block.tiny { font-size: 11px; padding: 8px 12px; }
 .code-block.small { font-size: 12px; padding: 10px 14px; }
@@ -297,10 +295,10 @@ pre .num, code .num { display: inline; min-width: 0; height: auto; background: n
 
 @media (max-width: 1080px) {
   .slide.active { grid-template-columns: 1fr; gap: 28px; }
-  .slide { padding: 48px 36px 110px; }
+  .slide { padding: 48px 36px 150px; }
   h1 { font-size: 40px; } h2 { font-size: 32px; }
 }
-.slide.compact { padding: 32px 56px 140px; }
+.slide.compact { padding: 32px 56px 150px; }
 .slide.compact.active {
   display: flex !important;
   flex-direction: column;

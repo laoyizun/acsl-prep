@@ -1,0 +1,1252 @@
+<!-- ACSL Prep Template · v1.0 -->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>L5 · 真题模拟测试 — ACSL 备赛</title>
+<style>
+:root {
+  --bg: #faf7f2;
+  --panel: #ffffff;
+  --panel-soft: #fdf9f3;
+  --text: #1a1626;
+  --muted: #5a536b;
+  --line: #e2d9c8;
+  --purple: #7c3aed;
+  --amber: #d97706;
+  --red: #dc2626;
+  --green: #16a34a;
+  --blue: #2563eb;
+  --teal: #0f9f9a;
+  --ink: #2d1b4e;
+  --shadow: 0 18px 46px rgba(124, 58, 237, .10);
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; min-height: 100%; }
+body {
+  font-family: "HarmonyOS Sans", "Source Han Sans SC", "Alibaba PuHuiTi", "PingFang SC", Inter, Arial, sans-serif;
+  color: var(--text);
+  background:
+    linear-gradient(135deg, rgba(124, 58, 237, .08), transparent 36%),
+    linear-gradient(225deg, rgba(217, 119, 6, .08), transparent 34%),
+    var(--bg);
+  font-size: 18px; line-height: 1.7;
+}
+body::before {
+  content: "";
+  position: fixed; inset: 0;
+  background-image:
+    linear-gradient(rgba(124, 58, 237, .05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(124, 58, 237, .05) 1px, transparent 1px);
+  background-size: 38px 38px;
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, .52), transparent 78%);
+  pointer-events: none;
+}
+a { color: inherit; }
+.deck-page { height: 100%; overflow: hidden; }
+.deck { position: relative; z-index: 1; width: 100vw; height: 100vh; }
+.slide {
+  position: absolute; inset: 0;
+  display: none;
+  padding: 56px 80px 150px;
+  opacity: 0;
+  transform: translateX(24px);
+  transition: .35s ease;
+  overflow-y: auto;
+}
+.slide.active {
+  display: grid;
+  grid-template-columns: .95fr 1.05fr;
+  gap: 42px;
+  opacity: 1; transform: translateX(0);
+}
+.slide.wide.active { grid-template-columns: 1fr; }
+.slide.title-slide.active,
+.slide.part-slide.active { grid-template-columns: 1fr; place-items: center; align-content: center; text-align: center; }
+.slide.title-slide .left, .slide.part-slide .left { align-items: center; width: min(1080px, 100%); justify-content: center; }
+.slide.title-slide .right { display: none; }
+.slide.part-slide .right { width: min(1080px, 100%); justify-content: center; }
+.left, .right { min-width: 0; display: flex; flex-direction: column; justify-content: center; }
+.kicker {
+  display: inline-flex; align-items: center; width: max-content;
+  padding: 10px 14px; border-radius: 999px;
+  background: rgba(124, 58, 237, .08);
+  border: 1px solid rgba(124, 58, 237, .22);
+  color: #6d28d9;
+  font-size: 16px; font-weight: 800;
+  margin-bottom: 22px;
+}
+.kicker.amber {
+  background: rgba(217, 119, 6, .1);
+  border-color: rgba(217, 119, 6, .24);
+  color: #b45309;
+}
+h1 { font-size: clamp(42px, 5vw, 66px); line-height: 1.1; margin: 0 0 22px; color: var(--ink); }
+h2 { font-size: clamp(34px, 4vw, 50px); line-height: 1.16; margin: 0 0 20px; color: var(--ink); }
+h3 { margin: 0 0 12px; font-size: 26px; line-height: 1.3; color: var(--ink); }
+.subtitle { max-width: 820px; color: var(--muted); font-size: 22px; line-height: 1.75; margin: 0 0 24px; }
+.highlight { color: var(--purple); font-weight: 900; }
+.muted { color: var(--muted); }
+.chips { display: flex; flex-wrap: wrap; gap: 10px; }
+.chip {
+  display: inline-flex; align-items: center; min-height: 38px;
+  padding: 9px 14px; border-radius: 999px;
+  background: var(--panel-soft); border: 1px solid var(--line);
+  color: #25415f; font-weight: 800; font-size: 16px;
+}
+.chip.purple { background: rgba(124, 58, 237, .1); color: #6d28d9; border-color: rgba(124, 58, 237, .24); }
+.chip.amber  { background: rgba(217, 119, 6, .1); color: #b45309; border-color: rgba(217, 119, 6, .24); }
+.chip.red    { background: rgba(220, 38, 38, .08); color: #b91c1c; border-color: rgba(220, 38, 38, .2); }
+.chip.green  { background: rgba(22, 163, 74, .1); color: #047857; border-color: rgba(22, 163, 74, .22); }
+.chip.blue   { background: rgba(37, 99, 235, .08); color: #1d4ed8; border-color: rgba(37, 99, 235, .18); }
+.chip.teal   { background: rgba(15, 159, 154, .1); color: #0f766e; border-color: rgba(15, 159, 154, .24); }
+
+.card, .metaphor, .step-block, .takeaway, .practice, .bug {
+  background: rgba(255, 255, 255, .88);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  box-shadow: var(--shadow);
+}
+.card { padding: 22px 24px; }
+.metaphor {
+  padding: 22px 24px;
+  border-left: 6px solid var(--amber);
+  font-size: 20px;
+  line-height: 1.7;
+}
+.metaphor .emo { font-size: 30px; margin-right: 12px; vertical-align: middle; }
+.metaphor b { color: var(--amber); }
+.practice {
+  background: linear-gradient(135deg, rgba(22, 163, 74, .04), rgba(15, 159, 154, .04));
+  border: 1px solid rgba(22, 163, 74, .22);
+  padding: 22px 24px;
+}
+.practice .label, .bug .label, .takeaway .label, .metaphor .label {
+  display: inline-flex; align-items: center;
+  padding: 6px 12px; border-radius: 999px;
+  background: rgba(22, 163, 74, .12);
+  color: #047857;
+  font-size: 14px; font-weight: 800;
+  margin-bottom: 14px;
+}
+.bug .label { background: rgba(220, 38, 38, .1); color: #b91c1c; }
+.takeaway { background: var(--ink); color: #edf6ff; padding: 22px 26px; border: 1px solid var(--ink); }
+.takeaway .label { background: rgba(255, 255, 255, .14); color: #edf6ff; }
+.takeaway h3 { color: #edf6ff; }
+.takeaway p { color: #cbd9ed; margin: 6px 0; font-size: 19px; }
+.bug {
+  background: linear-gradient(135deg, rgba(220, 38, 38, .04), rgba(217, 119, 6, .04));
+  border: 1px solid rgba(220, 38, 38, .22);
+  padding: 22px 24px;
+}
+.practice ol, .practice ul, .bug ol, .bug ul { padding-left: 26px; margin: 8px 0; }
+.practice li, .bug li { margin-bottom: 10px; font-size: 19px; line-height: 1.65; }
+.practice li::marker { color: var(--green); font-weight: 800; }
+.bug li::marker { color: var(--red); font-weight: 800; }
+
+pre {
+  background: #0f243f;
+  color: #edf6ff;
+  font-size: 19px;
+  line-height: 1.75;
+  border-radius: 10px;
+  padding: 22px 26px;
+  margin: 12px 0;
+  overflow-x: auto;
+  font-family: "JetBrains Mono", "Fira Code", "SF Mono", Consolas, monospace;
+  white-space: pre;
+}
+pre code .kw { color: #ff9d72; font-weight: 700; }
+pre code .str { color: #a5e88c; }
+pre code .num { color: #ffb547; }
+pre code .com { color: #7c8aa8; font-style: italic; }
+pre code .fn { color: #82d4ff; font-weight: 700; }
+
+code.inline {
+  background: rgba(15, 36, 63, .08);
+  border: 1px solid rgba(15, 36, 63, .12);
+  padding: 2px 8px; border-radius: 6px;
+  font-family: "JetBrains Mono", "Fira Code", "SF Mono", Consolas, monospace;
+  font-size: 0.92em; color: #6d28d9;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* 浅紫色代码块（替代 <pre> 用来显示 ACSL 伪代码） */
+.code-block {
+  background: rgba(124, 58, 237, .05);
+  border: 1px solid rgba(124, 58, 237, .18);
+  color: var(--text);
+  font-family: "JetBrains Mono", "Fira Code", "SF Mono", Consolas, monospace;
+  font-size: 13px;
+  line-height: 1.7;
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin: 8px 0;
+  overflow-x: auto;
+  white-space: pre;
+}
+.code-block.tiny { font-size: 11px; padding: 8px 12px; }
+.code-block.small { font-size: 12px; padding: 10px 14px; }
+
+
+/* 英文术语标注 */
+.en-tag {
+  display: inline-block;
+  margin-top: 4px;
+  padding: 2px 10px;
+  font-family: "Inter", "JetBrains Mono", "SF Mono", Consolas, monospace;
+  font-size: 0.78em;
+  font-weight: 700;
+  color: #1d4ed8;
+  background: rgba(37, 99, 235, .08);
+  border: 1px solid rgba(37, 99, 235, .24);
+  border-radius: 999px;
+  letter-spacing: 0.3px;
+  vertical-align: middle;
+}
+/* 大号英文（h1 / h2 副标） */
+h1 .en-tag, h2 .en-tag {
+  margin-left: 12px;
+  font-size: 0.4em;
+  vertical-align: middle;
+}
+/* chip 上的英文 */
+.chip .en-tag {
+  margin: 0;
+  font-size: 0.78em;
+}
+
+table { width: 100%; border-collapse: collapse; font-size: 19px; line-height: 1.55; margin: 14px 0; }
+th { text-align: left; font-size: 14px; color: #25415f; font-weight: 800;
+     padding: 12px 14px; border-bottom: 2px solid var(--line); background: var(--panel-soft); }
+td { padding: 16px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+tr:last-child td { border-bottom: none; }
+td code, th code { font-size: 17px; }
+
+.flow {
+  display: grid; grid-template-columns: 1fr auto 1fr auto 1fr;
+  gap: 12px; align-items: stretch; margin: 16px 0;
+}
+.flow .step {
+  padding: 18px 16px;
+  background: rgba(255, 255, 255, .88);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: var(--shadow);
+}
+.flow .step .num { font-size: 14px; color: var(--purple); font-weight: 800; }
+.flow .step .ttl { font-size: 22px; font-weight: 900; margin-top: 6px; color: var(--ink); }
+.flow .step .desc { font-size: 15px; color: var(--muted); margin-top: 6px; }
+.flow .arrow { display: grid; place-items: center; color: var(--purple); font-size: 28px; font-weight: 900; }
+
+.warning { border-left: 5px solid var(--amber); padding-left: 18px; }
+.success  { border-left: 5px solid var(--green); padding-left: 18px; }
+.danger   { border-left: 5px solid var(--red);   padding-left: 18px; }
+.info     { border-left: 5px solid var(--purple); padding-left: 18px; }
+
+.big-list { display: grid; gap: 12px; }
+.list-item {
+  display: flex; align-items: center; gap: 16px;
+  padding: 18px 20px; border-radius: 10px;
+  background: rgba(255, 255, 255, .88);
+  border: 1px solid var(--line);
+  font-size: 22px; font-weight: 800;
+  box-shadow: var(--shadow);
+}
+.num {
+  display: grid; place-items: center;
+  min-width: 44px; height: 44px;
+  border-radius: 10px;
+  background: #f0e7ff; color: #6d28d9;
+  font-weight: 900; font-size: 18px;
+}
+pre .num, code .num { display: inline; min-width: 0; height: auto; background: none; border-radius: 0;
+  padding: 0; margin: 0; font-size: inherit; font-weight: inherit; font-family: inherit; }
+
+.nav {
+  position: fixed; z-index: 10;
+  left: 80px; right: 80px; bottom: 28px;
+  display: flex; align-items: center; gap: 16px;
+}
+.nav a { text-decoration: none; }
+.nav button:disabled { opacity: .38; cursor: not-allowed; }
+.counter { font-weight: 900; color: #314860; min-width: 84px; text-align: center; font-size: 18px; }
+.progress-bar { flex: 1; height: 10px; border-radius: 999px; background: rgba(124, 58, 237, .12); overflow: hidden; }
+.progress-bar span {
+  display: block; height: 100%; width: 0;
+  background: linear-gradient(90deg, var(--purple), var(--amber));
+  transition: .25s ease;
+}
+.nav button {
+  display: inline-flex; justify-content: center; align-items: center;
+  min-height: 48px; border: 0; border-radius: 10px;
+  padding: 12px 22px;
+  background: var(--ink); color: #fff;
+  font-weight: 900; cursor: pointer;
+  box-shadow: 0 12px 28px rgba(45, 27, 78, .18);
+  font-size: 16px;
+  text-decoration: none;
+}
+.nav button.secondary, .nav .home-link.secondary { background: #f4eee0; color: var(--ink); border: 1px solid var(--line); box-shadow: none; }
+.nav .home-link.secondary { padding: 12px 22px; }
+
+@media (max-width: 1080px) {
+  .slide.active { grid-template-columns: 1fr; gap: 28px; }
+  .slide { padding: 48px 36px 150px; }
+  h1 { font-size: 40px; } h2 { font-size: 32px; }
+}
+.slide.compact { padding: 32px 56px 150px; }
+.slide.compact.active {
+  display: flex !important;
+  flex-direction: column;
+  gap: 0;
+}
+.slide.compact .head { flex: 0 0 auto; }
+.slide.compact .grid2x2, .slide.compact .grid { flex: 1; min-height: 0; }
+.slide.compact h2 { font-size: clamp(28px, 3.4vw, 40px); margin-bottom: 14px; }
+.slide.compact .subtitle { font-size: 19px; line-height: 1.6; margin-bottom: 14px; }
+.slide.compact .kicker { margin-bottom: 14px; padding: 8px 12px; font-size: 14px; }
+.slide.compact pre { white-space: pre; }
+.slide.compact .practice { padding: 16px 20px; }
+.slide.compact .practice .label { padding: 5px 10px; font-size: 13px; margin-bottom: 8px; }
+
+/* 检验问题卡 */
+.check-q {
+  padding: 14px 18px;
+  margin: 12px 0;
+  background: rgba(245, 158, 11, .08);
+  border-left: 4px solid var(--amber);
+  border-radius: 8px;
+}
+.check-q-blue {
+  background: rgba(124, 58, 237, .08);
+  border-left-color: var(--purple);
+}
+.check-q-text {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.6;
+}
+.check-q details summary {
+  cursor: pointer;
+  color: var(--purple);
+  margin-top: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  list-style: none;
+}
+.check-q details summary::-webkit-details-marker { display: none; }
+.check-q details summary::before { content: '▸ '; color: var(--purple); }
+.check-q details[open] summary::before { content: '▾ '; }
+.check-q details summary:hover { text-decoration: underline; }
+.check-q details[open] summary { margin-bottom: 8px; }
+.check-a {
+  padding: 10px 14px;
+  background: rgba(22, 163, 74, .08);
+  border-radius: 6px;
+  font-family: "JetBrains Mono", "Fira Code", monospace;
+  font-size: 16px;
+  color: #047857;
+  margin-top: 4px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+/* Recap 网格卡片 */
+.recap-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 14px;
+  margin-top: 8px;
+}
+.recap-card {
+  padding: 18px 16px;
+  background: var(--panel);
+  border-radius: 12px;
+  border: 2px solid var(--line);
+  position: relative;
+  min-height: 110px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.recap-card.card-purple { border-color: var(--purple); background: rgba(124, 58, 237, .04); }
+.recap-card.card-amber  { border-color: var(--amber);  background: rgba(217, 119, 6, .04); }
+.recap-card.card-green  { border-color: var(--green);  background: rgba(22, 163, 74, .04); }
+.recap-card.card-blue   { border-color: var(--blue);   background: rgba(37, 99, 235, .04); }
+.recap-card.card-red    { border-color: var(--red);    background: rgba(220, 38, 38, .04); }
+.recap-card.card-teal   { border-color: var(--teal);   background: rgba(15, 159, 154, .04); }
+
+.recap-num {
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1;
+  margin-bottom: 10px;
+  color: var(--text);
+}
+.recap-card.card-purple .recap-num { color: var(--purple); }
+.recap-card.card-amber  .recap-num { color: var(--amber); }
+.recap-card.card-green  .recap-num { color: var(--green); }
+.recap-card.card-blue   .recap-num { color: var(--blue); }
+.recap-card.card-red    .recap-num { color: var(--red); }
+.recap-card.card-teal   .recap-num { color: var(--teal); }
+
+.recap-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+.recap-sub {
+  font-size: 13px;
+  color: var(--muted);
+}
+.recap-next {
+  font-size: 14px;
+  color: var(--muted);
+  margin-top: 16px;
+  text-align: left;
+}
+
+/* 网格 */
+.grid2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+.grid2x2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+.grid3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 14px;
+}
+
+/* ASCII 二进制可视化 */
+.bin-vis {
+  display: inline-block;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 22px;
+  letter-spacing: 4px;
+}
+.bin-vis .bit { padding: 4px 8px; border-radius: 4px; margin: 0 2px; }
+.bin-vis .bit.on  { background: #6d28d9; color: #fff; }
+.bin-vis .bit.off { background: rgba(124, 58, 237, .15); color: #6d28d9; }
+.bin-vis .bit-group { margin: 0 8px; }
+
+/* 卡片链接样式 */
+.link-card {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  padding: 18px 22px;
+  background: rgba(255, 255, 255, .88);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  box-shadow: var(--shadow);
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.link-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 24px 60px rgba(124, 58, 237, .18);
+}
+</style>
+</head>
+<body class="deck-page">
+<main class="deck" id="deck">
+
+  
+<!-- 01 · Cover · Title Slide -->
+<section class="slide title-slide active">
+  <div class="left">
+    <div class="kicker">L5.2 · 模拟考（二）</div>
+    <h1>L5.2 · <span class="highlight">资格轮真题</span></h1>
+    <p class="subtitle">2024-2025 Contest 1 · Junior Division · 17 页 · 笔试 5 道 + 编程题 1 道</p>
+    <p style="margin-top:24px; padding:16px; background:rgba(124,58,237,.06); border-left:4px solid var(--purple); border-radius:8px; font-size:15px; line-height:1.7;">
+      <b>本课重点</b><br>
+      1. <b>最新一届真题</b> · 2024-2025 资格轮原题，一字不改<br>
+      2. <b>完整真考结构</b> · 5 道笔试（30 min）+ 1 道编程题（72 h）<br>
+      3. <b>自己算一遍</b> · 收卷后逐题讲评<br>
+      4. <b>编程题 2 道</b> · L5.1 做 Rings（1402），L5.2 做 Tiles（1403）
+    </p>
+  </div>
+</section>
+
+<!-- 02 · 真考结构说明 -->
+<section class="slide">
+  <div class="left">
+    <div class="kicker">考试结构</div>
+    <h2>ACSL Contest 1 <span class="highlight">怎么考</span></h2>
+    <p class="subtitle">Junior Division · 资格轮</p>
+  </div>
+  <div class="right">
+    <div class="card" style="border-left:4px solid var(--green);">
+      <h3 style="color:var(--green-deep);">笔试部分（30 min · 上机答）</h3>
+      <ul style="font-size:16px; line-height:1.8; padding-left:20px;">
+        <li><b>5 道选择题</b>，每题 5 个选项 A-E</li>
+        <li>主题固定：<b>数字系统 ×2 · 递归 ×2 · 程序追踪 ×1</b></li>
+        <li>答对得 1 分，<b>答错不扣分</b></li>
+        <li>满分 5 分</li>
+      </ul>
+    </div>
+    <div class="card" style="border-left:4px solid var(--red); margin-top:12px;">
+      <h3 style="color:var(--red);">编程部分（72 小时 · 课后交）</h3>
+      <ul style="font-size:16px; line-height:1.8; padding-left:20px;">
+        <li><b>第 6 题</b> = 编程题，不是选择题</li>
+        <li>考试开始后 <b>72 小时内</b>提交代码</li>
+        <li>可以查资料、可以调试</li>
+        <li>满分 <b>1 分</b>（部分分 0.5）</li>
+      </ul>
+    </div>
+    <div class="practice" style="margin-top:14px;">
+      <div class="label">小贴士</div>
+      <p style="font-size:15px;"><b>别以为 6 道都是选择题</b>，第 6 题是写代码，值 1 分但很多人交不上</p>
+    </div>
+  </div>
+</section>
+
+<!-- 03 · 时间分配 + 答题卡 -->
+<section class="slide">
+  <div class="left">
+    <div class="kicker">时间分配</div>
+    <h2>30 分钟 <span class="highlight">节奏</span></h2>
+    <p class="subtitle">按 2024-2025 真考题量设计</p>
+  </div>
+  <div class="right">
+    <div class="card" style="border-left:4px solid var(--green);">
+      <h3 style="color:var(--green-deep);">5 道笔试题（30 min）</h3>
+      <table style="font-size:14px; width:100%; border-collapse:collapse; line-height:1.6; margin-top:8px;">
+        <tr style="background:rgba(22,163,74,.08);">
+          <th style="padding:6px;">题号</th>
+          <th style="padding:6px;">主题</th>
+          <th style="padding:6px;">用时</th>
+        </tr>
+        <tr><td style="padding:6px;">1</td><td style="padding:6px;">数字系统（进制转换）</td><td style="padding:6px;">~ 4 min</td></tr>
+        <tr style="background:rgba(22,163,74,.04);"><td style="padding:6px;">2</td><td style="padding:6px;">数字系统（16 进制加法）</td><td style="padding:6px;">~ 5 min</td></tr>
+        <tr><td style="padding:6px;">3</td><td style="padding:6px;">递归（基础递推）</td><td style="padding:6px;">~ 6 min</td></tr>
+        <tr style="background:rgba(22,163,74,.04);"><td style="padding:6px;">4</td><td style="padding:6px;">递归（多分支，最难）</td><td style="padding:6px;">~ 9 min</td></tr>
+        <tr><td style="padding:6px;">5</td><td style="padding:6px;">程序追踪（赋值）</td><td style="padding:6px;">~ 6 min</td></tr>
+      </table>
+    </div>
+    <div class="card" style="border-left:4px solid var(--blue); margin-top:12px;">
+      <h3 style="color:var(--blue);">答题卡（在草稿纸上画）</h3>
+      <div class="code-block" style="font-size:13px; line-height:1.8;">
+1. [ ] A  B  C  D  E
+2. [ ] A  B  C  D  E
+3. [ ] A  B  C  D  E
+4. [ ] A  B  C  D  E
+5. [ ] A  B  C  D  E
+      </div>
+    </div>
+    <div class="practice" style="margin-top:14px;">
+      <div class="label">小贴士</div>
+      <p style="font-size:15px;"><b>题 4 最难</b>，如果 9 min 还没思路就跳过去，先做别的</p>
+    </div>
+  </div>
+</section>
+
+<!-- 04 · 真题 1 · 2024₁₀ → 8 进制 -->
+<section class="slide">
+  <div class="left">
+    <div class="kicker">真题 1 · 数字系统</div>
+    <h2>2024₁₀ → <span class="highlight">8 进制</span> = ?</h2>
+    <p class="subtitle">2024-2025 Contest 1 · 5 min 限时</p>
+  </div>
+  <div class="right">
+    <div class="card" style="border-left:4px solid var(--purple);">
+      <h3 style="color:var(--purple);">题目</h3>
+      <p style="font-size:18px; line-height:1.7;">将 2024₁₀ 转换为八进制</p>
+      <div style="font-size:17px; line-height:1.9; margin-top:14px;">
+        <div>A. 5730</div>
+        <div>B. 3814</div>
+        <div>C. 3750</div>
+        <div>D. 3754</div>
+        <div>E. 1044</div>
+      </div>
+    </div>
+    <details class="card" style="border-left:4px solid var(--green); margin-top:12px;">
+      <summary style="cursor:pointer; color:var(--green-deep); font-weight:800; font-size:16px; padding:12px 0;">点这里看答案 + 完整手算过程</summary>
+      <div style="padding:14px; background:rgba(22,163,74,.06); border-radius:6px; margin-top:8px;">
+        <p style="font-size:17px; line-height:1.7;"><b>答案：C. 3750</b></p>
+        <p style="font-size:15px; line-height:1.7; margin-top:10px;"><b>方法一 · 除 8 取余倒写：</b></p>
+        <div class="code-block" style="font-size:14px; line-height:1.7;">
+2024 ÷ 8 = 253 余 0
+253 ÷ 8 = 31 余 5
+31 ÷ 8 = 3 余 7
+3 ÷ 8 = 0 余 3
+─────────────────
+倒写：3750₈
+        </div>
+        <p style="font-size:15px; line-height:1.7; margin-top:10px;"><b>方法二 · 官方用 8 进制展开验算：</b></p>
+        <div class="code-block" style="font-size:14px; line-height:1.7;">
+3750₈
+= 3·8³ + 7·8² + 5·8¹ + 0·8⁰
+= 1536 + 448 + 40 + 0
+= 2024 ✓
+        </div>
+      </div>
+    </details>
+  </div>
+</section>
+
+<!-- 05 · 真题 2 · 9876₁₆ + ABC₁₆ -->
+<section class="slide">
+  <div class="left">
+    <div class="kicker">真题 2 · 数字系统</div>
+    <h2>9876₁₆ + ABC₁₆ = <span class="highlight">?₁₆</span></h2>
+    <p class="subtitle">2024-2025 Contest 1 · 5 min 限时</p>
+  </div>
+  <div class="right">
+    <div class="card" style="border-left:4px solid var(--purple);">
+      <h3 style="color:var(--purple);">题目</h3>
+      <p style="font-size:18px; line-height:1.7;">9876₁₆ + ABC₁₆ 的值用 16 进制表示是什么？</p>
+      <div style="font-size:17px; line-height:1.9; margin-top:14px;">
+        <div>A. 9222</div>
+        <div>B. 9232</div>
+        <div>C. A322</div>
+        <div>D. A332</div>
+        <div>E. B332</div>
+      </div>
+    </div>
+    <details class="card" style="border-left:4px solid var(--green); margin-top:12px;">
+      <summary style="cursor:pointer; color:var(--green-deep); font-weight:800; font-size:16px; padding:12px 0;">点这里看答案 + 完整手算过程</summary>
+      <div style="padding:14px; background:rgba(22,163,74,.06); border-radius:6px; margin-top:8px;">
+        <p style="font-size:17px; line-height:1.7;"><b>答案：D. A332</b></p>
+        <p style="font-size:15px; line-height:1.7; margin-top:10px;"><b>方法 · 16 进制逐位相加（从右往左）：</b></p>
+        <div class="code-block" style="font-size:14px; line-height:1.7;">
+  9 8 7 6
++ A B C
+  ─────
+位 0: 6 + C(12) = 18 = 0x12 → 写 2 进 1
+位 1: 7 + B(11) + 1 = 19 = 0x13 → 写 3 进 1
+位 2: 8 + A(10) + 1 = 19 = 0x13 → 写 3 进 1
+位 3: 9 + 0 + 1 = 10 = 0xA → 写 A
+
+结果：A332₁₆
+        </div>
+        <p style="font-size:15px; line-height:1.7; margin-top:10px;"><b>验算（转 10 进制）：</b></p>
+        <div class="code-block" style="font-size:13px; line-height:1.7;">
+9876₁₆ = 9·4096 + 8·256 + 7·16 + 6 = 39030
+ABC₁₆  = 10·256 + 11·16 + 12 = 2748
+39030 + 2748 = 41778
+41778 = 10·4096 + 3·256 + 3·16 + 2 = A332₁₆ ✓
+        </div>
+      </div>
+    </details>
+  </div>
+</section>
+
+<!-- 06 · 真题 3 · f(5) 基础递推 -->
+<section class="slide">
+  <div class="left">
+    <div class="kicker">真题 3 · 递归</div>
+    <h2>基础递推 f(5) = <span class="highlight">?</span></h2>
+    <p class="subtitle">2024-2025 Contest 1 · 6 min 限时</p>
+  </div>
+  <div class="right">
+    <div class="card" style="border-left:4px solid var(--red);">
+      <h3 style="color:var(--red);">题目</h3>
+      <div class="code-block" style="font-size:14px; line-height:1.7;">
+f(x) = 2           若 x ≤ 1
+f(x) = f(x-1) + x  若 x > 1
+
+求 f(5) = ?
+      </div>
+      <div style="font-size:17px; line-height:1.9; margin-top:14px;">
+        <div>A. 11</div>
+        <div>B. 13</div>
+        <div>C. 16</div>
+        <div>D. 20</div>
+        <div>E. 22</div>
+      </div>
+    </div>
+    <details class="card" style="border-left:4px solid var(--green); margin-top:12px;">
+      <summary style="cursor:pointer; color:var(--green-deep); font-weight:800; font-size:16px; padding:12px 0;">点这里看答案 + 完整手算过程</summary>
+      <div style="padding:14px; background:rgba(22,163,74,.06); border-radius:6px; margin-top:8px;">
+        <p style="font-size:17px; line-height:1.7;"><b>答案：C. 16</b></p>
+        <p style="font-size:15px; line-height:1.7; margin-top:10px;"><b>手算过程（一步一值，不要跳）：</b></p>
+        <div class="code-block" style="font-size:14px; line-height:1.7;">
+f(1) = 2                      (base)
+f(2) = f(2-1) + 2 = f(1) + 2 = 2 + 2 = 4
+f(3) = f(3-1) + 3 = f(2) + 3 = 4 + 3 = 7
+f(4) = f(4-1) + 4 = f(3) + 4 = 7 + 4 = 11
+f(5) = f(5-1) + 5 = f(4) + 5 = 11 + 5 = 16
+        </div>
+        <p style="font-size:15px; line-height:1.7; margin-top:10px;"><b>发现的规律：</b>数列为 2, 4, 7, 11, 16, 22, 29, 37, 46…，<b>相邻两项的差依次是 2, 3, 4, 5, 6, 7, 8, 9</b>（每次 +1）。</p>
+        <p style="font-size:14px; line-height:1.7; margin-top:8px; padding:6px; background:rgba(217,119,6,.1); border-left:3px solid var(--amber); border-radius:4px;">
+          <b>小技巧：</b>发现"差递增"的规律后，可以直接用 <b>等差数列求和</b>倒推：2 + (2+3+4+5) = 16，不用一项一项算
+        </p>
+      </div>
+    </details>
+  </div>
+</section>
+
+<!-- 07 · 真题 4 · f(f(f(16))) 多分支（最难） -->
+<section class="slide">
+  <div class="left">
+    <div class="kicker">真题 4 · 递归（最难）</div>
+    <h2>f(f(f(16))) = <span class="highlight">?</span></h2>
+    <p class="subtitle">2024-2025 Contest 1 · 9 min 限时</p>
+  </div>
+  <div class="right">
+    <div class="card" style="border-left:4px solid var(--red);">
+      <h3 style="color:var(--red);">题目</h3>
+      <div class="code-block" style="font-size:13px; line-height:1.7;">
+f(x) = f(x-4) + 1   若 x ≥ 10
+f(x) = f(x+1) - 5   若 6 < x < 10
+f(x) = 2x           若 x ≤ 6
+
+求 f(f(f(16))) = ?
+      </div>
+      <div style="font-size:17px; line-height:1.9; margin-top:14px;">
+        <div>A. 5</div>
+        <div>B. 8</div>
+        <div>C. 10</div>
+        <div>D. 12</div>
+        <div>E. 13</div>
+      </div>
+    </div>
+    <details class="card" style="border-left:4px solid var(--green); margin-top:12px;">
+      <summary style="cursor:pointer; color:var(--green-deep); font-weight:800; font-size:16px; padding:12px 0;">点这里看答案 + 完整手算过程</summary>
+      <div style="padding:14px; background:rgba(22,163,74,.06); border-radius:6px; margin-top:8px;">
+        <p style="font-size:17px; line-height:1.7;"><b>答案：E. 13</b></p>
+        <p style="font-size:15px; line-height:1.7; margin-top:10px;"><b>关键：先算最内层 f(16)，再剥洋葱</b></p>
+        <div class="code-block" style="font-size:13px; line-height:1.75;">
+【第 1 层】算 f(16)
+f(16) = f(16-4) + 1 = f(12) + 1
+f(12) = f(12-4) + 1 = f(8) + 1
+f(8)  = f(8+1) - 5 = f(9) - 5      ← 8 落在 6&lt;x&lt;10
+f(9)  = f(9+1) - 5 = f(10) - 5     ← 9 也落在 6&lt;x&lt;10
+f(10) = f(10-4) + 1 = f(6) + 1     ← 10 落在 x ≥ 10
+f(6)  = 2*6 = 12                    ← 6 落在 x ≤ 6
+
+回填：
+f(10) = 12 + 1  = 13
+f(9)  = 13 - 5  = 8
+f(8)  = 8 - 5   = 3
+f(12) = 3 + 1   = 4
+f(16) = 4 + 1   = 5
+
+【第 2 层】f(f(16)) = f(5)
+f(5) = 2*5 = 10                    ← 5 落在 x ≤ 6
+
+【第 3 层】f(f(f(16))) = f(10)
+f(10) = f(10-4) + 1 = f(6) + 1 = 12 + 1 = 13
+        </div>
+        <p style="font-size:15px; line-height:1.7; margin-top:10px;"><b>所以 f(f(f(16))) = f(f(5)) = f(10) = 13</b></p>
+        <p style="font-size:14px; line-height:1.7; margin-top:8px; padding:6px; background:rgba(217,119,6,.1); border-left:3px solid var(--amber); border-radius:4px;">
+          <b>易错点：</b>第 2 分支 <b>f(x+1)</b> 是「+1」不是「-1」，这题算错基本都错在这里。而且它会<b>往上走</b>（8→9→10），所以必须先一路走到 x ≥ 10 才能回填
+        </p>
+      </div>
+    </details>
+  </div>
+</section>
+
+<!-- 08 · 真题 5 · x/y/z 赋值追踪 -->
+<section class="slide">
+  <div class="left">
+    <div class="kicker">真题 5 · 程序追踪</div>
+    <h2>输出 <span class="highlight">x, y, z</span> = ?</h2>
+    <p class="subtitle">2024-2025 Contest 1 · 6 min 限时</p>
+  </div>
+  <div class="right">
+    <div class="card" style="border-left:4px solid var(--blue);">
+      <h3 style="color:var(--blue);">题目</h3>
+      <div class="code-block" style="font-size:13px; line-height:1.7;">
+x = 8
+y = 9
+z = -2
+x = y + z
+z = y - x
+y = y + 1
+output x, y, z
+      </div>
+      <div style="font-size:17px; line-height:1.9; margin-top:14px;">
+        <div>A. 8, 9, -2</div>
+        <div>B. 11, 10, 1</div>
+        <div>C. 7, 8, 2</div>
+        <div>D. 7, 10, -2</div>
+        <div>E. 7, 10, 2</div>
+      </div>
+    </div>
+    <details class="card" style="border-left:4px solid var(--green); margin-top:12px;">
+      <summary style="cursor:pointer; color:var(--green-deep); font-weight:800; font-size:16px; padding:12px 0;">点这里看答案 + 完整追踪表</summary>
+      <div style="padding:14px; background:rgba(22,163,74,.06); border-radius:6px; margin-top:8px;">
+        <p style="font-size:17px; line-height:1.7;"><b>答案：E. 7, 10, 2</b></p>
+        <p style="font-size:15px; line-height:1.7; margin-top:10px;"><b>追踪表（4 列：行/x/y/z）：</b></p>
+        <table style="font-size:12px; width:100%; border-collapse:collapse; line-height:1.5;">
+          <tr style="background:rgba(37,99,235,.08);">
+            <th style="padding:4px;">行</th><th style="padding:4px;">x</th><th style="padding:4px;">y</th><th style="padding:4px;">z</th>
+          </tr>
+          <tr><td style="padding:4px;">初</td><td style="padding:4px;">8</td><td style="padding:4px;">9</td><td style="padding:4px;">-2</td></tr>
+          <tr style="background:rgba(37,99,235,.04);"><td style="padding:4px;">x = y + z</td><td style="padding:4px;"><b>7</b></td><td style="padding:4px;">9</td><td style="padding:4px;">-2</td></tr>
+          <tr><td style="padding:4px;">z = y − x</td><td style="padding:4px;">7</td><td style="padding:4px;">9</td><td style="padding:4px;"><b>2</b></td></tr>
+          <tr style="background:rgba(37,99,235,.04);"><td style="padding:4px;">y = y + 1</td><td style="padding:4px;">7</td><td style="padding:4px;"><b>10</b></td><td style="padding:4px;">2</td></tr>
+        </table>
+        <p style="font-size:14px; line-height:1.7; margin-top:10px;"><b>逐行手算：</b></p>
+        <div class="code-block" style="font-size:13px; line-height:1.7;">
+x = y + z = 9 + (−2) = 7
+z = y − x = 9 − 7   = 2      ← 注意用的是「新 x = 7」
+y = y + 1 = 9 + 1    = 10
+
+output 7, 10, 2
+        </div>
+        <p style="font-size:14px; line-height:1.7; margin-top:8px; padding:6px; background:rgba(217,119,6,.1); border-left:3px solid var(--amber); border-radius:4px;">
+          <b>易错点：</b>① <b>z = y − x 里的 x 已经是 7 了</b>（不是原来的 8）；② 赋值语句<b>没有 if，纯顺序执行</b>，一行一行往下走
+        </p>
+      </div>
+    </details>
+  </div>
+</section>
+
+<!-- 09 · 第 6 题 · 编程题 ACSL Tiles（OJ 1403） -->
+<section class="slide">
+  <div class="left">
+    <div class="kicker">第 6 题 · 编程题</div>
+    <h2>ACSL <span class="highlight">Tiles</span></h2>
+    <p class="subtitle">2023-2024 Contest 1 Junior · 72 小时提交 · OJ 1403</p>
+  </div>
+  <div class="right">
+    <div class="card" style="border-left:4px solid var(--red);">
+      <h3 style="color:var(--red);">题目 · Tiles</h3>
+      <p style="font-size:14px; line-height:1.7;">每个图块（tile）两端各有一个 <b>1~9</b> 的数字。游戏开始有 <b>4 行</b>，每行有一个数字。规则：</p>
+      <ul style="font-size:14px; line-height:1.75; padding-left:20px;">
+        <li>按顺序处理图块，<b>从第 1 行开始找</b>，找<b>行末数字 == 图块某个数字</b>的行</li>
+        <li>放上去后，该行末尾变成图块的<b>另一个数字</b></li>
+        <li>图块可以<b>翻转</b>（34 和 43 是同一块）</li>
+        <li>4 行都放不下 → 进 <b>discard pile</b>（弃牌堆）</li>
+      </ul>
+      <p style="font-size:14px; line-height:1.7; margin-top:8px;">
+        输出 <b>discard pile 里所有图块上所有数字的总和</b>。
+      </p>
+    </div>
+    <div class="card" style="border-left:4px solid var(--blue); margin-top:12px;">
+      <h3 style="color:var(--blue);">输入输出格式</h3>
+      <div class="code-block" style="font-size:12px; line-height:1.7;">
+输入：第 1 行 = 4 位数（4 行的初始数字，从上到下）
+     第 2 行 = 若干个两位数（每个图块），最多 50 个
+输出：discard pile 中所有图块数字的总和
+      </div>
+    </div>
+    <div class="card" style="border-left:4px solid var(--green); margin-top:12px;">
+      <h3 style="color:var(--green-deep);">样例</h3>
+      <div class="code-block" style="font-size:12px; line-height:1.7;">
+输入：
+5923
+56 85 27 73 14 34 62
+
+输出：
+18
+      </div>
+      <p style="font-size:13px; line-height:1.7; margin-top:8px;">
+        过程：56→第1行 · <b>85 弃</b> · 27→第3行 · 73→第3行 · <b>14 弃</b> · 34→第3行 · 62→第1行<br>
+        弃牌堆 = 85 和 14 → <b>8 + 5 + 1 + 4 = 18</b>
+      </p>
+    </div>
+    <div class="practice" style="margin-top:12px;">
+      <div class="label">小贴士</div>
+      <p style="font-size:14px;">
+        <a href="https://oj.cubicbird.com/p/1403" target="_blank" rel="noopener" style="color:var(--purple); font-weight:800; text-decoration:underline;">点击打开 OJ 1403 题目页 ↗</a>
+        · 语言选 Python，<b>72 小时内交</b>
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- 10 · 时间到 · 收卷 -->
+<section class="slide">
+  <div class="left">
+    <div class="kicker">时间到</div>
+    <h1>30 分钟到 <span class="highlight">收卷</span></h1>
+    <p class="subtitle">真考结束 · 接下来对答案</p>
+  </div>
+  <div class="right">
+    <div class="card" style="border-left:4px solid var(--red);">
+      <h3 style="color:var(--red);">你的答题情况</h3>
+      <ul style="font-size:18px; line-height:1.9; padding-left:20px;">
+        <li>答对：___ 题</li>
+        <li>答错：___ 题</li>
+        <li>跳过：___ 题</li>
+        <li>编程题（Tiles）：<b>课后 72h 内提交</b></li>
+      </ul>
+    </div>
+    <div class="card" style="border-left:4px solid var(--blue); margin-top:12px;">
+      <h3 style="color:var(--blue);">接下来</h3>
+      <ul style="font-size:17px; line-height:1.9; padding-left:20px;">
+        <li>slide 11：答案速查表</li>
+        <li>slide 12-14：5 道题逐题详解 + 编程题思路</li>
+        <li>slide 15-16：错因分析 + 复盘</li>
+        <li>slide 17：收尾</li>
+      </ul>
+    </div>
+    <div class="practice" style="margin-top:14px;">
+      <div class="label">小贴士</div>
+      <p style="font-size:15px;"><b>这 5 道题就是 12.13 的题型</b>，全对说明资格轮稳了</p>
+    </div>
+  </div>
+</section>
+
+<!-- 11 · 答案速查表 -->
+<section class="slide">
+  <div class="left">
+    <div class="kicker">答案速查</div>
+    <h2>5 道题 <span class="highlight">答案</span> + 编程题</h2>
+    <p class="subtitle">2024-2025 Contest 1 官方答案</p>
+  </div>
+  <div class="right">
+    <table style="font-size:15px; width:100%; border-collapse:collapse; line-height:1.7;">
+      <tr style="background:rgba(124,58,237,.1);">
+        <th style="padding:8px; border-bottom:2px solid var(--line);">题号</th>
+        <th style="padding:8px; border-bottom:2px solid var(--line);">主题</th>
+        <th style="padding:8px; border-bottom:2px solid var(--line);">答案</th>
+      </tr>
+      <tr><td style="padding:6px;"><b>1</b></td><td style="padding:6px;">数字系统</td><td style="padding:6px;"><b>3750 (C)</b></td></tr>
+      <tr style="background:rgba(124,58,237,.04);"><td style="padding:6px;"><b>2</b></td><td style="padding:6px;">数字系统</td><td style="padding:6px;"><b>A332 (D)</b></td></tr>
+      <tr><td style="padding:6px;"><b>3</b></td><td style="padding:6px;">递归</td><td style="padding:6px;"><b>16 (C)</b></td></tr>
+      <tr style="background:rgba(124,58,237,.04);"><td style="padding:6px;"><b>4</b></td><td style="padding:6px;">递归</td><td style="padding:6px;"><b>13 (E)</b></td></tr>
+      <tr><td style="padding:6px;"><b>5</b></td><td style="padding:6px;">程序追踪</td><td style="padding:6px;"><b>7, 10, 2 (E)</b></td></tr>
+      <tr style="background:rgba(124,58,237,.04);"><td style="padding:6px;"><b>6</b></td><td style="padding:6px;"><b>编程题</b></td><td style="padding:6px;"><b>Tiles（OJ 1403）</b></td></tr>
+    </table>
+    <div class="practice" style="margin-top:14px;">
+      <div class="label">小贴士</div>
+      <p style="font-size:15px;">逐题详解看 slide 12-14</p>
+    </div>
+  </div>
+</section>
+
+<!-- 12 · 数字系统 2 道题详解 -->
+<section class="slide">
+  <div class="left">
+    <div class="kicker">答案解析 1</div>
+    <h2>数字系统 <span class="highlight">2 题</span> 详解</h2>
+    <p class="subtitle">题 1 + 题 2 完整手算</p>
+  </div>
+  <div class="right">
+    <div class="card" style="border-left:4px solid var(--purple);">
+      <h3 style="color:var(--purple);">题 1：2024₁₀ → 8 进制（答案 C. 3750）</h3>
+      <div class="code-block" style="font-size:13px; line-height:1.8;">
+【除 8 取余，倒写】
+2024 ÷ 8 = 253 余 0
+253 ÷ 8 = 31 余 5
+31 ÷ 8 = 3 余 7
+3 ÷ 8 = 0 余 3
+─────────────────
+倒写：3750₈ ← 答案 C
+
+【8 进制展开验算】
+3750₈ = 3·8³ + 7·8² + 5·8¹ + 0·8⁰
+      = 1536 + 448 + 40 + 0
+      = 2024 ✓
+      </div>
+    </div>
+    <div class="card" style="border-left:4px solid var(--blue); margin-top:10px;">
+      <h3 style="color:var(--blue);">题 2：9876₁₆ + ABC₁₆（答案 D. A332）</h3>
+      <div class="code-block" style="font-size:13px; line-height:1.8;">
+【16 进制逐位相加】
+  9 8 7 6
++ A B C
+  ─────
+位 0: 6 + C(12)      = 18 → 写 2 进 1
+位 1: 7 + B(11) + 1  = 19 → 写 3 进 1
+位 2: 8 + A(10) + 1  = 19 → 写 3 进 1
+位 3: 9 + 0 + 1      = 10 → 写 A
+结果：A332₁₆ ← 答案 D
+
+【转 10 进制验算】
+9876₁₆ = 39030,  ABC₁₆ = 2748
+39030 + 2748 = 41778 = A332₁₆ ✓
+      </div>
+    </div>
+    <div class="practice" style="margin-top:14px;">
+      <div class="label">小贴士</div>
+      <p style="font-size:15px;">16 进制里 <b>A=10, B=11, C=12, D=13, E=14, F=15</b>，加法满 16 进 1</p>
+    </div>
+  </div>
+</section>
+
+<!-- 13 · 递归 2 道题详解 -->
+<section class="slide">
+  <div class="left">
+    <div class="kicker">答案解析 2</div>
+    <h2>递归 <span class="highlight">2 题</span> 详解</h2>
+    <p class="subtitle">题 3 + 题 4 完整手算</p>
+  </div>
+  <div class="right">
+    <div class="card" style="border-left:4px solid var(--red);">
+      <h3 style="color:var(--red);">题 3：f(5) 基础递推（答案 C. 16）</h3>
+      <div class="code-block" style="font-size:13px; line-height:1.7;">
+f(1) = 2                      (base)
+f(2) = f(1) + 2 = 2 + 2 = 4
+f(3) = f(2) + 3 = 4 + 3 = 7
+f(4) = f(3) + 4 = 7 + 4 = 11
+f(5) = f(4) + 5 = 11 + 5 = 16 ← 答案 C
+
+数列：2, 4, 7, 11, 16, 22, 29, 37, 46…
+相邻差：  2, 3,  4,  5,  6,  7,  8,  9（每次 +1）
+      </div>
+    </div>
+    <div class="card" style="border-left:4px solid var(--red); margin-top:10px;">
+      <h3 style="color:var(--red);">题 4：f(f(f(16))) 多分支（答案 E. 13）</h3>
+      <div class="code-block" style="font-size:12px; line-height:1.7;">
+【第 1 层】f(16)
+f(16) = f(12) + 1
+f(12) = f(8)  + 1
+f(8)  = f(9)  - 5      (6&lt;x&lt;10)
+f(9)  = f(10) - 5      (6&lt;x&lt;10)
+f(10) = f(6)  + 1      (x≥10)
+f(6)  = 2*6 = 12       (x≤6)
+回填：f(10)=13, f(9)=8, f(8)=3, f(12)=4, f(16)=5
+
+【第 2 层】f(f(16)) = f(5) = 2*5 = 10
+
+【第 3 层】f(f(f(16))) = f(10) = f(6)+1 = 12+1 = 13 ← 答案 E
+      </div>
+      <p style="font-size:13px; line-height:1.6; margin-top:6px; padding:6px; background:rgba(217,119,6,.1); border-left:3px solid var(--amber); border-radius:4px;">
+        <b>易错：</b>第 2 分支是 <b>f(x+1)-5</b>，会「往上走」，必须一路走到 x≥10 才能回填
+      </p>
+    </div>
+    <div class="practice" style="margin-top:14px;">
+      <div class="label">小贴士</div>
+      <p style="font-size:15px;">递归题 <b>先画调用树，再从底往上回填</b>，绝不能边想边跳</p>
+    </div>
+  </div>
+</section>
+
+<!-- 14 · 程序追踪详解 + 编程题思路 -->
+<section class="slide">
+  <div class="left">
+    <div class="kicker">答案解析 3</div>
+    <h2>程序追踪 + 编程题 <span class="highlight">详解</span></h2>
+    <p class="subtitle">题 5 追踪表 + 第 6 题参考代码</p>
+  </div>
+  <div class="right">
+    <div class="card" style="border-left:4px solid var(--blue);">
+      <h3 style="color:var(--blue);">题 5：x / y / z 追踪（答案 E. 7, 10, 2）</h3>
+      <table style="font-size:12px; width:100%; border-collapse:collapse; line-height:1.5;">
+        <tr style="background:rgba(37,99,235,.08);">
+          <th style="padding:4px;">行</th><th style="padding:4px;">x</th><th style="padding:4px;">y</th><th style="padding:4px;">z</th>
+        </tr>
+        <tr><td style="padding:4px;">初</td><td style="padding:4px;">8</td><td style="padding:4px;">9</td><td style="padding:4px;">-2</td></tr>
+        <tr style="background:rgba(37,99,235,.04);"><td style="padding:4px;">x = y + z</td><td style="padding:4px;"><b>7</b></td><td style="padding:4px;">9</td><td style="padding:4px;">-2</td></tr>
+        <tr><td style="padding:4px;">z = y − x</td><td style="padding:4px;">7</td><td style="padding:4px;">9</td><td style="padding:4px;"><b>2</b></td></tr>
+        <tr style="background:rgba(37,99,235,.04);"><td style="padding:4px;">y = y + 1</td><td style="padding:4px;">7</td><td style="padding:4px;"><b>10</b></td><td style="padding:4px;">2</td></tr>
+      </table>
+      <p style="font-size:13px; line-height:1.6; margin-top:8px;">
+        <b>易错：</b><code>z = y − x</code> 里的 x 已经是 <b>7</b> 了（不是 8）
+      </p>
+    </div>
+    <div class="card" style="border-left:4px solid var(--red); margin-top:10px;">
+      <h3 style="color:var(--red);">第 6 题：编程题 Tiles（思路 + 参考代码）</h3>
+      <p style="font-size:13px; line-height:1.6;"><b>思路 3 步：</b></p>
+      <ol style="font-size:13px; line-height:1.75; padding-left:20px;">
+        <li><b>建 4 行的数组</b>：把输入的 4 位数拆成 4 个数字</li>
+        <li><b>依次处理每个图块</b>：<b>从第 1 行开始往下找</b>，第一个「行末 == 图块某端」的行就放上去</li>
+        <li>都放不下 → 累加 <b>这个图块两个数字之和</b> 到答案</li>
+      </ol>
+      <p style="font-size:13px; line-height:1.6; margin-top:10px;"><b>参考代码（Python）：</b></p>
+      <div class="code-block" style="font-size:12px; line-height:1.65;">
+import sys
+
+data = sys.stdin.read().split()
+rows = [int(c) for c in data[0]]        # 4 行的初始数字
+tiles = data[1:]                       # 所有图块（字符串）
+
+answer = 0
+
+for t in tiles:
+    a = int(t[0])
+    b = int(t[1])
+    placed = False
+
+    for i in range(4):                # 从第 1 行往下找
+        if rows[i] == a:
+            rows[i] = b               # 行末变成另一端
+            placed = True
+            break
+        elif rows[i] == b:
+            rows[i] = a
+            placed = True
+            break
+
+    if not placed:
+        answer += a + b                # 弃牌：两个数字都加
+
+print(answer)
+      </div>
+      <p style="font-size:13px; line-height:1.6; margin-top:8px;"><b>复杂度：</b>时间 O(4m) = O(m)，空间 O(m)（m 是图块个数，≤ 50）</p>
+      <p style="font-size:13px; line-height:1.6; margin-top:6px; padding:6px; background:rgba(217,119,6,.1); border-left:3px solid var(--amber); border-radius:4px;">
+        <b>易错点：</b>① <b>从第 1 行开始找，找到第一个就停</b>（不能随便选一行）；② 弃牌要加 <b>a + b 两个数字</b>，不是一个；③ 图块 <b>可以翻转</b>，所以两个方向都要比
+      </p>
+      <p style="font-size:13px; line-height:1.6; margin-top:8px;">
+        <a href="https://oj.cubicbird.com/p/1403" target="_blank" rel="noopener" style="color:var(--purple); font-weight:800; text-decoration:underline;">点击打开 OJ 1403 题目页 ↗</a>
+      </p>
+    </div>
+    <div class="practice" style="margin-top:14px;">
+      <div class="label">小贴士</div>
+      <p style="font-size:15px;">两题编程题都是 <b>字符串 + 查表 + 累加</b>，套路完全一样</p>
+    </div>
+  </div>
+</section>
+
+<!-- 15 · 错因分析 -->
+<section class="slide">
+  <div class="left">
+    <div class="kicker">错因分析</div>
+    <h2>这 5 道题的 <span class="highlight">坑</span></h2>
+    <p class="subtitle">对照错题本记下来</p>
+  </div>
+  <div class="right">
+    <div class="card" style="border-left:4px solid var(--red);">
+      <h3 style="color:var(--red);">5 大坑（按题号）</h3>
+      <ul style="font-size:15px; line-height:1.85; padding-left:20px;">
+        <li><b>题 1</b>：除 8 取余后 <b>忘了倒写</b>，写成 0753</li>
+        <li><b>题 2</b>：16 进制加法 <b>忘了 A=10, B=11, C=12</b>，或满 16 没进位</li>
+        <li><b>题 3</b>：递推时 <b>跳步</b>，f(5) 直接写成 f(1)+5</li>
+        <li><b>题 4</b>：第 2 分支 <b>f(x+1)</b> 看成了 f(x−1)；没意识到要"往上走"</li>
+        <li><b>题 5</b>：<b>z = y − x 里的 x 是新值 7</b>，不是旧值 8</li>
+      </ul>
+    </div>
+    <div class="card" style="border-left:4px solid var(--green); margin-top:10px;">
+      <h3 style="color:var(--green-deep);">通用的 3 条铁律</h3>
+      <ul style="font-size:15px; line-height:1.85; padding-left:20px;">
+        <li><b>递归必画调用树</b>：向下展开到 base，再从底往上回填</li>
+        <li><b>追踪必列全变量</b>：每个变量一列，每行都更新</li>
+        <li><b>算完必验算</b>：进制题用 8 进制展开验算一遍</li>
+      </ul>
+    </div>
+    <div class="practice" style="margin-top:14px;">
+      <div class="label">小贴士</div>
+      <p style="font-size:15px;">把这 5 条抄进错题本，<b>12.13 之前再看一遍</b></p>
+    </div>
+  </div>
+</section>
+
+<!-- 16 · 编程题专项 -->
+<section class="slide">
+  <div class="left">
+    <div class="kicker">编程题专项</div>
+    <h2>两道编程题 <span class="highlight">套路总结</span></h2>
+    <p class="subtitle">Rings（1402）+ Tiles（1403）</p>
+  </div>
+  <div class="right">
+    <div class="card" style="border-left:4px solid var(--blue);">
+      <h3 style="color:var(--blue);">两道题的共同套路</h3>
+      <div class="code-block" style="font-size:12px; line-height:1.7;">
+① 读入数据（注意行数！）
+② 准备一个「状态数组」（Rings 是分值表，Tiles 是 4 行）
+③ 遍历每一项，能处理就处理
+④ 处理不了的累加到答案
+      </div>
+    </div>
+    <div class="card" style="border-left:4px solid var(--green); margin-top:10px;">
+      <h3 style="color:var(--green-deep);">对照表</h3>
+      <table style="font-size:13px; width:100%; border-collapse:collapse; line-height:1.6;">
+        <tr style="background:rgba(22,163,74,.08);">
+          <th style="padding:5px;">题目</th>
+          <th style="padding:5px;">对照表</th>
+          <th style="padding:5px;">输出</th>
+        </tr>
+        <tr><td style="padding:5px;">Rings <b>(1402)</b></td><td style="padding:5px;">A/R=1, O/G=3, B=6</td><td style="padding:5px;">max min（大的在前）</td></tr>
+        <tr style="background:rgba(22,163,74,.04);"><td style="padding:5px;">Tiles <b>(1403)</b></td><td style="padding:5px;">4 行的当前末尾数字</td><td style="padding:5px;">弃牌数字累加</td></tr>
+      </table>
+    </div>
+    <div class="card" style="border-left:4px solid var(--red); margin-top:10px;">
+      <h3 style="color:var(--red);">提交前 3 项检查</h3>
+      <ul style="font-size:14px; line-height:1.8; padding-left:20px;">
+        <li><b>输入行数对不对</b>（Rings 是 2 行字符串；Tiles 是 1 行数字 + 1 行图块）</li>
+        <li><b>输出顺序对不对</b>（Rings 大的在前；Tiles 就是一个总和）</li>
+        <li><b>样例过了吗</b>（在 OJ 上先跑样例再提交）</li>
+      </ul>
+      <p style="font-size:14px; line-height:1.75; margin-top:10px;">
+        <a href="https://oj.cubicbird.com/p/1402" target="_blank" rel="noopener" style="color:var(--purple); font-weight:800; text-decoration:underline;">→ OJ 1402 Rings</a>
+        &nbsp;·&nbsp;
+        <a href="https://oj.cubicbird.com/p/1403" target="_blank" rel="noopener" style="color:var(--purple); font-weight:800; text-decoration:underline;">→ OJ 1403 Tiles ↗</a>
+      </p>
+    </div>
+    <div class="practice" style="margin-top:14px;">
+      <div class="label">小贴士</div>
+      <p style="font-size:15px;">编程题 <b>占 1 分但很多人得 0 分</b>，认真写完就能拿满</p>
+    </div>
+  </div>
+</section>
+
+<!-- 17 · 收尾 -->
+<section class="slide">
+  <div class="left">
+    <div class="kicker">收尾</div>
+    <h1>资格轮 <span class="highlight">准备好了</span></h1>
+    <p class="subtitle">2024-2025 真题全部做完</p>
+  </div>
+  <div class="right">
+    <div class="card" style="border-left:4px solid var(--green);">
+      <h3 style="color:var(--green-deep);">你现在会做的</h3>
+      <ul style="font-size:16px; line-height:1.9; padding-left:20px;">
+        <li>8 进制 ↔ 10 进制互转（除 8 取余倒写）</li>
+        <li>16 进制加法（A-F 对应 10-15）</li>
+        <li>基础递推 + <b>多分支分段递归</b></li>
+        <li>程序追踪（赋值 + if 分支）</li>
+        <li>字符串 + 查表 + 累加（编程题）</li>
+      </ul>
+    </div>
+    <div class="card" style="border-left:4px solid var(--purple); margin-top:12px;">
+      <h3 style="color:var(--purple);">作业</h3>
+      <ul style="font-size:16px; line-height:1.9; padding-left:20px;">
+        <li>提交 Rings：<b>oj.cubicbird.com/p/1402</b></li>
+        <li>提交 Tiles：<b>oj.cubicbird.com/p/1403</b></li>
+        <li>复盘今天 5 道题，<b>错题抄进错题本</b></li>
+        <li>复习 L4 + L5.1 的 12 道题</li>
+      </ul>
+    </div>
+    <div class="practice" style="margin-top:14px;">
+      <div class="label">小贴士</div>
+      <p style="font-size:15px;">12.13 加油 · <b>你已经把最新真题做完了</b></p>
+    </div>
+  </div>
+</section>
+
+
+<div class="nav">
+  <a class="home-link secondary" href="index.html">📚 目录</a>
+  <button class="secondary" onclick="prev()">← 上页</button>
+  <span class="counter"><span id="cur">1</span> / <span id="total">22</span></span>
+  <div class="progress-bar"><span id="bar"></span></div>
+  <button onclick="next()">下页 →</button>
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  document.getElementById('total').textContent = total;
+  let idx = 0;
+  function show(i) {
+    if (i < 0) i = 0;
+    if (i >= total) i = total - 1;
+    slides.forEach(s => s.classList.remove('active'));
+    slides[i].classList.add('active');
+    document.getElementById('cur').textContent = i + 1;
+    document.getElementById('bar').style.width = ((i + 1) / total * 100) + '%';
+    idx = i;
+    slides[i].scrollTop = 0;
+  }
+  function next() { show(idx + 1); }
+  function prev() { show(idx - 1); }
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'Enter') { e.preventDefault(); next(); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); prev(); }
+  });
+  let tx = 0;
+  document.addEventListener('touchstart', e => { tx = e.touches[0].clientX; });
+  document.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - tx;
+    if (Math.abs(dx) > 50) { if (dx < 0) next(); else prev(); }
+  });
+</script>
+</body>
+</html>

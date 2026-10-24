@@ -49,7 +49,7 @@ a { color: inherit; }
 .slide {
   position: absolute; inset: 0;
   display: none;
-  padding: 56px 80px 100px;
+  padding: 56px 80px 150px;
   opacity: 0;
   transform: translateX(24px);
   transition: .35s ease;
@@ -186,8 +186,6 @@ code.inline {
   margin: 8px 0;
   overflow-x: auto;
   white-space: pre;
-  max-height: 280px;
-  overflow-y: auto;
 }
 .code-block.tiny { font-size: 11px; padding: 8px 12px; }
 .code-block.small { font-size: 12px; padding: 10px 14px; }
@@ -297,10 +295,10 @@ pre .num, code .num { display: inline; min-width: 0; height: auto; background: n
 
 @media (max-width: 1080px) {
   .slide.active { grid-template-columns: 1fr; gap: 28px; }
-  .slide { padding: 48px 36px 110px; }
+  .slide { padding: 48px 36px 150px; }
   h1 { font-size: 40px; } h2 { font-size: 32px; }
 }
-.slide.compact { padding: 32px 56px 140px; }
+.slide.compact { padding: 32px 56px 150px; }
 .slide.compact.active {
   display: flex !important;
   flex-direction: column;
@@ -468,14 +466,14 @@ pre .num, code .num { display: inline; min-width: 0; height: auto; background: n
 <!-- 01 · Cover · Title Slide -->
 <section class="slide title-slide active">
   <div class="left">
-    <div class="kicker">L5 · 模拟考</div>
-    <h1>L5 · <span class="highlight">真题模拟测试</span></h1>
-    <p class="subtitle">ACSL Junior Division Contest 1 · 15 页 · 30 min 6 道题 · 2015-2020 真题</p>
+    <div class="kicker">L5.1 · 模拟考（一）</div>
+    <h1>L5.1 · <span class="highlight">真题模拟测试</span></h1>
+    <p class="subtitle">ACSL Junior Division Contest 1 · 15 页 · 笔试 30 min 5 道题 + 编程题 1 道</p>
     <p style="margin-top:24px; padding:16px; background:rgba(124,58,237,.06); border-left:4px solid var(--purple); border-radius:8px; font-size:15px; line-height:1.7;">
       <b>本课重点</b><br>
-      1. <b>真实考场节奏</b> · 30 分钟 6 道题，1 题 5 min<br>
-      2. <b>6 道真题</b> · 2015-2020 Junior 真题（与 L4 不重复）<br>
-      3. <b>独立完成</b> · 学生自己做，老师在旁计时<br>
+      1. <b>真实考场节奏</b> · 笔试 30 分钟 5 道题，1 题 6 min<br>
+      2. <b>5 道自编题</b> · 覆盖数字系统 / 递归 / 程序追踪<br>
+      3. <b>第 6 题是编程题</b> · ACSL Rings（OJ 1402）<br>
       4. <b>答案 + 详细解析</b> · 收卷后讲评
     </p>
   </div>
@@ -492,7 +490,7 @@ pre .num, code .num { display: inline; min-width: 0; height: auto; background: n
     <div class="card" style="border-left:4px solid var(--green);">
       <h3 style="color:var(--green-deep);">考试规则</h3>
       <ul style="font-size:17px; line-height:1.8; padding-left:20px;">
-        <li><b>6 道题</b>，每题 5 min</li>
+        <li><b>笔试 5 道题</b>，每题 6 min，共 30 min</li>
         <li><b>5 选 1</b>（A-E）</li>
         <li><b>答错不扣分</b>（猜对 1 分）</li>
         <li><b>总分</b> = 对题数 × 1</li>
@@ -508,7 +506,7 @@ pre .num, code .num { display: inline; min-width: 0; height: auto; background: n
     </div>
     <div class="practice" style="margin-top:14px;">
       <div class="label">小贴士</div>
-      <p style="font-size:15px;">L4 训练过的 6 道题已经热身，L5 是真考模拟，<b>严格 30 min 限时</b></p>
+      <p style="font-size:15px;">L4 训练过的 6 道题已经热身，L5.1 是真考模拟，<b>严格 30 min 限时</b></p>
     </div>
   </div>
 </section>
@@ -522,20 +520,27 @@ pre .num, code .num { display: inline; min-width: 0; height: auto; background: n
   </div>
   <div class="right">
     <div class="card" style="border-left:4px solid var(--green);">
-      <h3 style="color:var(--green-deep);">5 道简单题（20 min）· 每题 4 min</h3>
+      <h3 style="color:var(--green-deep);">5 道笔试题（30 min）· 每题 6 min</h3>
       <table style="font-size:14px; width:100%; border-collapse:collapse; line-height:1.6; margin-top:8px;">
         <tr style="background:rgba(22,163,74,.08);">
           <th style="padding:6px;">题号</th>
           <th style="padding:6px;">主题</th>
           <th style="padding:6px;">用时</th>
         </tr>
-        <tr><td style="padding:6px;">1</td><td style="padding:6px;">数字系统</td><td style="padding:6px;">~ 4 min</td></tr>
-        <tr style="background:rgba(22,163,74,.04);"><td style="padding:6px;">2</td><td style="padding:6px;">数字系统</td><td style="padding:6px;">~ 4 min</td></tr>
-        <tr><td style="padding:6px;">3</td><td style="padding:6px;">递归</td><td style="padding:6px;">~ 4 min</td></tr>
-        <tr style="background:rgba(22,163,74,.04);"><td style="padding:6px;">4</td><td style="padding:6px;">递归</td><td style="padding:6px;">~ 4 min</td></tr>
-        <tr><td style="padding:6px;">5</td><td style="padding:6px;">程序追踪</td><td style="padding:6px;">~ 4 min</td></tr>
-        <tr style="background:rgba(217,119,6,.12);"><td style="padding:6px;"><b>6</b></td><td style="padding:6px;"><b>程序追踪（难题）</b></td><td style="padding:6px;"><b>~ 10 min</b></td></tr>
+        <tr><td style="padding:6px;">1</td><td style="padding:6px;">数字系统</td><td style="padding:6px;">~ 5 min</td></tr>
+        <tr style="background:rgba(22,163,74,.04);"><td style="padding:6px;">2</td><td style="padding:6px;">数字系统</td><td style="padding:6px;">~ 5 min</td></tr>
+        <tr><td style="padding:6px;">3</td><td style="padding:6px;">递归</td><td style="padding:6px;">~ 7 min</td></tr>
+        <tr style="background:rgba(22,163,74,.04);"><td style="padding:6px;">4</td><td style="padding:6px;">递归</td><td style="padding:6px;">~ 7 min</td></tr>
+        <tr><td style="padding:6px;">5</td><td style="padding:6px;">程序追踪</td><td style="padding:6px;">~ 6 min</td></tr>
       </table>
+    </div>
+    <div class="card" style="border-left:4px solid var(--red); margin-top:12px;">
+      <h3 style="color:var(--red);">第 6 题 · 编程题（课后 72 小时）</h3>
+      <ul style="font-size:15px; line-height:1.75; padding-left:20px;">
+        <li>OJ 提交：<b>oj.cubicbird.com/p/1402</b>（ACSL Rings）</li>
+        <li>限时 <b>72 小时</b>，写完再交</li>
+        <li>课上读题 + 讲思路，<b>代码课后写</b></li>
+      </ul>
     </div>
     <div class="card" style="border-left:4px solid var(--blue); margin-top:12px;">
       <h3 style="color:var(--blue);">答题卡（在草稿纸上画）</h3>
@@ -545,12 +550,11 @@ pre .num, code .num { display: inline; min-width: 0; height: auto; background: n
 3. [ ] A  B  C  D  E
 4. [ ] A  B  C  D  E
 5. [ ] A  B  C  D  E
-6. [ ] A  B  C  D  E
       </div>
     </div>
     <div class="practice" style="margin-top:14px;">
       <div class="label">小贴士</div>
-      <p style="font-size:15px;">先做 1-5 题，第 6 题留最后</p>
+      <p style="font-size:15px;">先做 1-2 题（数字系统最快），递归题放中间</p>
     </div>
   </div>
 </section>
@@ -710,40 +714,47 @@ output a + b - c + d
   </div>
 </section>
 
-<!-- 09 · 真题 6 · 3 行 if + 整数除法（自己设计） -->
+<!-- 09 · 第 6 题 · 编程题 ACSL Rings（OJ 1402） -->
 <section class="slide">
   <div class="left">
-    <div class="kicker">真题 6 · 程序追踪</div>
-    <h2>整数除法 a + b/c = <span class="highlight">?</span></h2>
-    <p class="subtitle">来源：L5 自编真题 · 5 min 限时</p>
+    <div class="kicker">第 6 题 · 编程题</div>
+    <h2>ACSL <span class="highlight">Rings</span></h2>
+    <p class="subtitle">2024-2025 Contest 1 Junior · 72 小时提交 · OJ 1402</p>
   </div>
   <div class="right">
-    <div class="card" style="border-left:4px solid var(--blue);">
-      <h3 style="color:var(--blue);">题目</h3>
-      <div class="code-block" style="font-size:12px; line-height:1.6;">
-a = 20 : b = 4 : c = 3
-if a / c > b then
-   b = b + c
-end if
-if b - c < a then
-   a = a - b
-end if
-if a + b > 10 then
-   c = c + 1
-end if
-if c ^ 2 > a then
-   b = b - 1
-end if
-output a + b / c
-end
+    <div class="card" style="border-left:4px solid var(--red);">
+      <h3 style="color:var(--red);">题目 · Rings</h3>
+      <p style="font-size:14px; line-height:1.7;">ACSL Rings 是一个双人游戏，向 5 个不同颜色的圆环投球，穿过圆环即可得分：</p>
+      <div class="code-block" style="font-size:12px; line-height:1.7;">
+穿过 蓝色(A) 或 红色(R) 圆环  →  1 分
+穿过 橘色(O) 或 绿色(G) 圆环  →  3 分
+穿过 黑色(B) 圆环            →  6 分
       </div>
-      <div style="font-size:17px; line-height:1.9; margin-top:14px;">
-        <div>A. 12</div>
-        <div>B. 13</div>
-        <div>C. 14</div>
-        <div>D. 18</div>
-        <div>E. 16</div>
+      <p style="font-size:14px; line-height:1.7; margin-top:10px;">
+        输入 <b>2 个字符串</b>（每位玩家所有投球穿过圆环的记录，只含 A R O G B，长度 ≤ 100）。<br>
+        输出 <b>2 个分数</b>，用空格隔开，<b>大的在前</b>（相同则任意顺序）。
+      </p>
+    </div>
+    <div class="card" style="border-left:4px solid var(--blue); margin-top:12px;">
+      <h3 style="color:var(--blue);">样例</h3>
+      <div class="code-block" style="font-size:12px; line-height:1.7;">
+输入：
+BRAG
+BOB
+
+输出：
+15 11
       </div>
+      <p style="font-size:13px; line-height:1.7; margin-top:8px;">
+        解析：BRAG = 6+1+1+3 = <b>11</b>；BOB = 6+3+6 = <b>15</b> → 输出 <b>15 11</b>（大的在前）
+      </p>
+    </div>
+    <div class="practice" style="margin-top:12px;">
+      <div class="label">小贴士</div>
+      <p style="font-size:14px;">
+        <a href="https://oj.cubicbird.com/p/1402" target="_blank" rel="noopener" style="color:var(--purple); font-weight:800; text-decoration:underline;">点击打开 OJ 1402 题目页 ↗</a>
+        · 语言选 Python，<b>72 小时内交</b>
+      </p>
     </div>
   </div>
 </section>
@@ -762,13 +773,14 @@ end
         <li>答对：___ 题</li>
         <li>答错：___ 题</li>
         <li>跳过：___ 题</li>
+        <li>编程题（Rings）：<b>课后 72h 内提交</b></li>
       </ul>
     </div>
     <div class="card" style="border-left:4px solid var(--blue); margin-top:12px;">
       <h3 style="color:var(--blue);">接下来</h3>
       <ul style="font-size:17px; line-height:1.9; padding-left:20px;">
         <li>slide 11：答案速查表</li>
-        <li>slide 12-13：6 道题详细解析</li>
+        <li>slide 12-13：5 道题详细解析 + 编程题思路</li>
         <li>slide 14：错因分析 + 12.13 倒计时</li>
       </ul>
     </div>
@@ -783,7 +795,7 @@ end
 <section class="slide">
   <div class="left">
     <div class="kicker">答案速查</div>
-    <h2>6 道题 <span class="highlight">答案</span></h2>
+    <h2>5 道题 <span class="highlight">答案</span> + 编程题</h2>
     <p class="subtitle">6 题对照 · 详细解析在下一组 slide</p>
   </div>
   <div class="right">
@@ -798,11 +810,11 @@ end
       <tr><td style="padding:6px;"><b>3</b></td><td style="padding:6px;">递归</td><td style="padding:6px;"><b>157 (A)</b></td></tr>
       <tr style="background:rgba(124,58,237,.04);"><td style="padding:6px;"><b>4</b></td><td style="padding:6px;">递归</td><td style="padding:6px;"><b>32 (B)</b></td></tr>
       <tr><td style="padding:6px;"><b>5</b></td><td style="padding:6px;">程序追踪</td><td style="padding:6px;"><b>24 (C)</b></td></tr>
-      <tr style="background:rgba(124,58,237,.04);"><td style="padding:6px;"><b>6</b></td><td style="padding:6px;">程序追踪</td><td style="padding:6px;"><b>14 (C)</b></td></tr>
+      <tr style="background:rgba(124,58,237,.04);"><td style="padding:6px;"><b>6</b></td><td style="padding:6px;"><b>编程题</b></td><td style="padding:6px;"><b>Rings（OJ 1402）</b></td></tr>
     </table>
     <div class="practice" style="margin-top:14px;">
       <div class="label">小贴士</div>
-      <p style="font-size:15px;">错题详解看下一组 slide（12-13）</p>
+      <p style="font-size:15px;">错题详解看下一组 slide（12-13）· 第 6 题是编程题</p>
     </div>
   </div>
 </section>
@@ -812,7 +824,7 @@ end
   <div class="left">
     <div class="kicker">答案解析 1</div>
     <h2>数字系统 + 递归 <span class="highlight">4 题</span> 详解</h2>
-    <p class="subtitle">题 1-4 详解（完整手算）</p>
+    <p class="subtitle">题 1-4 详解（完整手算）· 第 6 题见 slide 13</p>
   </div>
   <div class="right">
     <div class="card" style="border-left:4px solid var(--purple);">
@@ -898,8 +910,8 @@ f(20) = 29 + 3 = 32  ← 答案 B
 <section class="slide">
   <div class="left">
     <div class="kicker">答案解析 2</div>
-    <h2>程序追踪 <span class="highlight">2 题</span> 详解</h2>
-    <p class="subtitle">题 5-6 详解（完整追踪表）</p>
+    <h2>程序追踪 + 编程题 <span class="highlight">详解</span></h2>
+    <p class="subtitle">题 5 详解（完整追踪表）+ 第 6 题编程题思路</p>
   </div>
   <div class="right">
     <div class="card" style="border-left:4px solid var(--blue);">
@@ -925,27 +937,37 @@ a + b − c + d
       </div>
     </div>
     <div class="card" style="border-left:4px solid var(--blue); margin-top:10px;">
-      <h3 style="color:var(--blue);">题 6：整数除法（答案 C. 14）</h3>
-      <p style="font-size:13px; line-height:1.6;"><b>追踪表（4 列：行/a/b/c）：</b></p>
-      <table style="font-size:11px; width:100%; border-collapse:collapse; line-height:1.5;">
-        <tr style="background:rgba(37,99,235,.08);">
-          <th style="padding:4px;">行</th><th style="padding:4px;">a</th><th style="padding:4px;">b</th><th style="padding:4px;">c</th>
-        </tr>
-        <tr><td style="padding:4px;">初</td><td style="padding:4px;">20</td><td style="padding:4px;">4</td><td style="padding:4px;">3</td></tr>
-        <tr style="background:rgba(37,99,235,.04);"><td style="padding:4px;">a/c>b (6>4 ✓) → b=b+c</td><td style="padding:4px;">20</td><td style="padding:4px;"><b>7</b></td><td style="padding:4px;">3</td></tr>
-        <tr><td style="padding:4px;">b-c<a (4<20 ✓) → a=a-b</td><td style="padding:4px;"><b>13</b></td><td style="padding:4px;">7</td><td style="padding:4px;">3</td></tr>
-        <tr style="background:rgba(37,99,235,.04);"><td style="padding:4px;">a+b>10 (20>10 ✓) → c=c+1</td><td style="padding:4px;">13</td><td style="padding:4px;">7</td><td style="padding:4px;"><b>4</b></td></tr>
-        <tr><td style="padding:4px;">c²>a (16>13 ✓) → b=b-1</td><td style="padding:4px;">13</td><td style="padding:4px;"><b>6</b></td><td style="padding:4px;">4</td></tr>
-      </table>
-      <p style="font-size:13px; line-height:1.6; margin-top:8px;"><b>求值：</b></p>
-      <div class="code-block" style="font-size:12px; line-height:1.6;">
-a + b/c (整数除法)
-= 13 + 6/4
-= 13 + 1
-= 14  ← 答案 C
+      <h3 style="color:var(--blue);">第 6 题：编程题 Rings（思路 + 参考代码）</h3>
+      <p style="font-size:13px; line-height:1.6;"><b>思路 3 步：</b></p>
+      <ol style="font-size:13px; line-height:1.75; padding-left:20px;">
+        <li>建一个 <b>分值对照表</b>：A/R = 1，O/G = 3，B = 6</li>
+        <li>写一个 <b>算分函数</b>：遍历字符串，把每个字符的分值累加</li>
+        <li><b>大的在前</b>：用 max / min 输出</li>
+      </ol>
+      <p style="font-size:13px; line-height:1.6; margin-top:10px;"><b>参考代码（Python）：</b></p>
+      <div class="code-block" style="font-size:12px; line-height:1.65;">
+score_map = {'A': 1, 'R': 1, 'O': 3, 'G': 3, 'B': 6}
+
+def score(s):
+    total = 0
+    for ch in s:
+        total += score_map[ch]
+    return total
+
+p1 = input().strip()
+p2 = input().strip()
+
+a = score(p1)
+b = score(p2)
+
+print(max(a, b), min(a, b))
       </div>
+      <p style="font-size:13px; line-height:1.6; margin-top:8px;"><b>复杂度：</b>时间 O(n+m)，空间 O(1)（n, m 是两个字符串长度，≤ 100）</p>
       <p style="font-size:13px; line-height:1.6; margin-top:6px; padding:6px; background:rgba(217,119,6,.1); border-left:3px solid var(--amber); border-radius:4px;">
-        <b>整数除法关键：</b>20/3=6, 7-3=4, 20-7=13, 13+7=20, 16>13 ✓ b-1=6, 6/4=1, 13+1=14
+        <b>易错点：</b>① 别忘了 <b>大的在前</b>（官方样例 BRAG/BOB 输出 15 11 不是 11 15）；② 输入是 <b>2 行</b>，要用两次 input()；③ 分数相同则顺序任意，不用特判
+      </p>
+      <p style="font-size:13px; line-height:1.6; margin-top:8px;">
+        <a href="https://oj.cubicbird.com/p/1402" target="_blank" rel="noopener" style="color:var(--purple); font-weight:800; text-decoration:underline;">点击打开 OJ 1402 题目页 ↗</a>
       </p>
     </div>
     <div class="practice" style="margin-top:14px;">
@@ -961,7 +983,7 @@ a + b/c (整数除法)
   <div class="left">
     <div class="kicker">错因分析</div>
     <h2>常见 <span class="highlight">错因</span></h2>
-    <p class="subtitle">避免这些错 · 12.13 拿 6/6</p>
+    <p class="subtitle">避免这些错 · 12.13 拿满分</p>
   </div>
   <div class="right">
     <div class="card" style="border-left:4px solid var(--red);">
@@ -978,15 +1000,15 @@ a + b/c (整数除法)
       <h3 style="color:var(--green-deep);">12.13 真考临场策略</h3>
       <ul style="font-size:15px; line-height:1.8; padding-left:20px;">
         <li>铅笔 + 草稿纸（<b>不可以用计算器</b>）</li>
-        <li>30 min / 6 题，<b>每题 5 min</b></li>
+        <li>笔试 30 min / 5 题，<b>每题 6 min</b></li>
         <li>答错不扣分，<b>不会就猜</b></li>
-        <li>先做 1-5 题，第 6 题留最后</li>
+        <li>先做 1-2 题（数字系统最快），递归题放中间</li>
         <li>留 2 min 涂答题卡</li>
       </ul>
     </div>
     <div class="practice" style="margin-top:14px;">
       <div class="label">小贴士</div>
-      <p style="font-size:15px;">你已经练了 <b>12 道 ACSL Junior 真题</b>（L4 + L5），覆盖全部 3 大主题，<b>信心满满上考场</b></p>
+      <p style="font-size:15px;">你已经练了 <b>12 道 ACSL Junior 题</b>（L4 + L5.1），覆盖全部 3 大主题，<b>信心满满上考场</b></p>
     </div>
   </div>
 </section>
@@ -1011,14 +1033,14 @@ a + b/c (整数除法)
     <div class="card" style="border-left:4px solid var(--blue); margin-top:12px;">
       <h3 style="color:var(--blue);">下一步</h3>
       <ul style="font-size:17px; line-height:1.9; padding-left:20px;">
-        <li>课后：再做 L4 + L5 的 12 道题</li>
+        <li>课后：再做 L4 + L5.1 的 12 道题 + L5.2 真题</li>
         <li>闪卡复习（首页"闪卡区"）</li>
         <li>12.13 考试当周：L6 真题冲刺</li>
       </ul>
     </div>
     <div class="practice" style="margin-top:14px;">
       <div class="label">12.13</div>
-      <p style="font-size:18px; font-weight:800;">你练了 12 道 ACSL Junior 真题 · 信心满满上考场</p>
+      <p style="font-size:18px; font-weight:800;">你练了 12 道 ACSL Junior 题 + 一整套真题 · 信心满满上考场</p>
     </div>
   </div>
 </section>
