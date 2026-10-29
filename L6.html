@@ -1,0 +1,1408 @@
+<!-- ACSL Prep Template · v1.0 -->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>L6 · 前缀/中缀/后缀表达式 — ACSL 备赛</title>
+<style>
+:root {
+  --bg: #faf7f2;
+  --panel: #ffffff;
+  --panel-soft: #fdf9f3;
+  --text: #1a1626;
+  --muted: #5a536b;
+  --line: #e2d9c8;
+  --purple: #7c3aed;
+  --amber: #d97706;
+  --red: #dc2626;
+  --green: #16a34a;
+  --blue: #2563eb;
+  --teal: #0f9f9a;
+  --ink: #2d1b4e;
+  --shadow: 0 18px 46px rgba(124, 58, 237, .10);
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; min-height: 100%; }
+body {
+  font-family: "HarmonyOS Sans", "Source Han Sans SC", "Alibaba PuHuiTi", "PingFang SC", Inter, Arial, sans-serif;
+  color: var(--text);
+  background:
+    linear-gradient(135deg, rgba(124, 58, 237, .08), transparent 36%),
+    linear-gradient(225deg, rgba(217, 119, 6, .08), transparent 34%),
+    var(--bg);
+  font-size: 18px; line-height: 1.7;
+}
+body::before {
+  content: "";
+  position: fixed; inset: 0;
+  background-image:
+    linear-gradient(rgba(124, 58, 237, .05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(124, 58, 237, .05) 1px, transparent 1px);
+  background-size: 38px 38px;
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, .52), transparent 78%);
+  pointer-events: none;
+}
+a { color: inherit; }
+.deck-page { height: 100%; overflow: hidden; }
+.deck { position: relative; z-index: 1; width: 100vw; height: 100vh; }
+.slide {
+  position: absolute; inset: 0;
+  display: none;
+  padding: 56px 80px 150px;
+  opacity: 0;
+  transform: translateX(24px);
+  transition: .35s ease;
+  overflow-y: auto;
+}
+.slide.active {
+  display: grid;
+  grid-template-columns: .95fr 1.05fr;
+  gap: 42px;
+  opacity: 1; transform: translateX(0);
+}
+.slide.wide.active { grid-template-columns: 1fr; }
+.slide.title-slide.active,
+.slide.part-slide.active { grid-template-columns: 1fr; place-items: center; align-content: center; text-align: center; }
+.slide.title-slide .left, .slide.part-slide .left { align-items: center; width: min(1080px, 100%); justify-content: center; }
+.slide.title-slide .right { display: none; }
+.slide.part-slide .right { width: min(1080px, 100%); justify-content: center; }
+.left, .right { min-width: 0; display: flex; flex-direction: column; justify-content: flex-start; }
+.kicker {
+  display: inline-flex; align-items: center; width: max-content;
+  padding: 10px 14px; border-radius: 999px;
+  background: rgba(124, 58, 237, .08);
+  border: 1px solid rgba(124, 58, 237, .22);
+  color: #6d28d9;
+  font-size: 16px; font-weight: 800;
+  margin-bottom: 22px;
+}
+.kicker.amber {
+  background: rgba(217, 119, 6, .1);
+  border-color: rgba(217, 119, 6, .24);
+  color: #b45309;
+}
+h1 { font-size: clamp(42px, 5vw, 66px); line-height: 1.1; margin: 0 0 22px; color: var(--ink); }
+h2 { font-size: clamp(34px, 4vw, 50px); line-height: 1.16; margin: 0 0 20px; color: var(--ink); }
+h3 { margin: 0 0 12px; font-size: 26px; line-height: 1.3; color: var(--ink); }
+.subtitle { max-width: 820px; color: var(--muted); font-size: 22px; line-height: 1.75; margin: 0 0 24px; }
+.highlight { color: var(--purple); font-weight: 900; }
+.muted { color: var(--muted); }
+.chips { display: flex; flex-wrap: wrap; gap: 10px; }
+.chip {
+  display: inline-flex; align-items: center; min-height: 38px;
+  padding: 9px 14px; border-radius: 999px;
+  background: var(--panel-soft); border: 1px solid var(--line);
+  color: #25415f; font-weight: 800; font-size: 16px;
+}
+.chip.purple { background: rgba(124, 58, 237, .1); color: #6d28d9; border-color: rgba(124, 58, 237, .24); }
+.chip.amber  { background: rgba(217, 119, 6, .1); color: #b45309; border-color: rgba(217, 119, 6, .24); }
+.chip.red    { background: rgba(220, 38, 38, .08); color: #b91c1c; border-color: rgba(220, 38, 38, .2); }
+.chip.green  { background: rgba(22, 163, 74, .1); color: #047857; border-color: rgba(22, 163, 74, .22); }
+.chip.blue   { background: rgba(37, 99, 235, .08); color: #1d4ed8; border-color: rgba(37, 99, 235, .18); }
+.chip.teal   { background: rgba(15, 159, 154, .1); color: #0f766e; border-color: rgba(15, 159, 154, .24); }
+
+.card, .metaphor, .step-block, .takeaway, .practice, .bug {
+  background: rgba(255, 255, 255, .88);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  box-shadow: var(--shadow);
+}
+.card { padding: 22px 24px; }
+.metaphor {
+  padding: 22px 24px;
+  border-left: 6px solid var(--amber);
+  font-size: 20px;
+  line-height: 1.7;
+}
+.metaphor .emo { font-size: 30px; margin-right: 12px; vertical-align: middle; }
+.metaphor b { color: var(--amber); }
+.practice {
+  background: linear-gradient(135deg, rgba(22, 163, 74, .04), rgba(15, 159, 154, .04));
+  border: 1px solid rgba(22, 163, 74, .22);
+  padding: 22px 24px;
+}
+.practice .label, .bug .label, .takeaway .label, .metaphor .label {
+  display: inline-flex; align-items: center;
+  padding: 6px 12px; border-radius: 999px;
+  background: rgba(22, 163, 74, .12);
+  color: #047857;
+  font-size: 14px; font-weight: 800;
+  margin-bottom: 14px;
+}
+.bug .label { background: rgba(220, 38, 38, .1); color: #b91c1c; }
+.takeaway { background: var(--ink); color: #edf6ff; padding: 22px 26px; border: 1px solid var(--ink); }
+.takeaway .label { background: rgba(255, 255, 255, .14); color: #edf6ff; }
+.takeaway h3 { color: #edf6ff; }
+.takeaway p { color: #cbd9ed; margin: 6px 0; font-size: 19px; }
+.bug {
+  background: linear-gradient(135deg, rgba(220, 38, 38, .04), rgba(217, 119, 6, .04));
+  border: 1px solid rgba(220, 38, 38, .22);
+  padding: 22px 24px;
+}
+.practice ol, .practice ul, .bug ol, .bug ul { padding-left: 26px; margin: 8px 0; }
+.practice li, .bug li { margin-bottom: 10px; font-size: 19px; line-height: 1.65; }
+.practice li::marker { color: var(--green); font-weight: 800; }
+.bug li::marker { color: var(--red); font-weight: 800; }
+
+pre {
+  background: #0f243f;
+  color: #edf6ff;
+  font-size: 19px;
+  line-height: 1.75;
+  border-radius: 10px;
+  padding: 22px 26px;
+  margin: 12px 0;
+  overflow-x: auto;
+  font-family: "JetBrains Mono", "Fira Code", "SF Mono", Consolas, monospace;
+  white-space: pre;
+}
+pre code .kw { color: #ff9d72; font-weight: 700; }
+pre code .str { color: #a5e88c; }
+pre code .num { color: #ffb547; }
+pre code .com { color: #7c8aa8; font-style: italic; }
+pre code .fn { color: #82d4ff; font-weight: 700; }
+
+code.inline {
+  background: rgba(15, 36, 63, .08);
+  border: 1px solid rgba(15, 36, 63, .12);
+  padding: 2px 8px; border-radius: 6px;
+  font-family: "JetBrains Mono", "Fira Code", "SF Mono", Consolas, monospace;
+  font-size: 0.92em; color: #6d28d9;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* 浅紫色代码块（替代 <pre> 用来显示 ACSL 伪代码） */
+.code-block {
+  background: rgba(124, 58, 237, .05);
+  border: 1px solid rgba(124, 58, 237, .18);
+  color: var(--text);
+  font-family: "JetBrains Mono", "Fira Code", "SF Mono", Consolas, monospace;
+  font-size: 13px;
+  line-height: 1.7;
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin: 8px 0;
+  overflow-x: auto;
+  white-space: pre;
+}
+.code-block.tiny { font-size: 11px; padding: 8px 12px; }
+.code-block.small { font-size: 12px; padding: 10px 14px; }
+
+
+/* 英文术语标注 */
+.en-tag {
+  display: inline-block;
+  margin-top: 4px;
+  padding: 2px 10px;
+  font-family: "Inter", "JetBrains Mono", "SF Mono", Consolas, monospace;
+  font-size: 0.78em;
+  font-weight: 700;
+  color: #1d4ed8;
+  background: rgba(37, 99, 235, .08);
+  border: 1px solid rgba(37, 99, 235, .24);
+  border-radius: 999px;
+  letter-spacing: 0.3px;
+  vertical-align: middle;
+}
+/* 大号英文（h1 / h2 副标） */
+h1 .en-tag, h2 .en-tag {
+  margin-left: 12px;
+  font-size: 0.4em;
+  vertical-align: middle;
+}
+/* chip 上的英文 */
+.chip .en-tag {
+  margin: 0;
+  font-size: 0.78em;
+}
+
+table { width: 100%; border-collapse: collapse; font-size: 19px; line-height: 1.55; margin: 14px 0; }
+th { text-align: left; font-size: 14px; color: #25415f; font-weight: 800;
+     padding: 12px 14px; border-bottom: 2px solid var(--line); background: var(--panel-soft); }
+td { padding: 16px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+tr:last-child td { border-bottom: none; }
+td code, th code { font-size: 17px; }
+
+.flow {
+  display: grid; grid-template-columns: 1fr auto 1fr auto 1fr;
+  gap: 12px; align-items: stretch; margin: 16px 0;
+}
+.flow .step {
+  padding: 18px 16px;
+  background: rgba(255, 255, 255, .88);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: var(--shadow);
+}
+.flow .step .num { font-size: 14px; color: var(--purple); font-weight: 800; }
+.flow .step .ttl { font-size: 22px; font-weight: 900; margin-top: 6px; color: var(--ink); }
+.flow .step .desc { font-size: 15px; color: var(--muted); margin-top: 6px; }
+.flow .arrow { display: grid; place-items: center; color: var(--purple); font-size: 28px; font-weight: 900; }
+
+.warning { border-left: 5px solid var(--amber); padding-left: 18px; }
+.success  { border-left: 5px solid var(--green); padding-left: 18px; }
+.danger   { border-left: 5px solid var(--red);   padding-left: 18px; }
+.info     { border-left: 5px solid var(--purple); padding-left: 18px; }
+
+.big-list { display: grid; gap: 12px; }
+.list-item {
+  display: flex; align-items: center; gap: 16px;
+  padding: 18px 20px; border-radius: 10px;
+  background: rgba(255, 255, 255, .88);
+  border: 1px solid var(--line);
+  font-size: 22px; font-weight: 800;
+  box-shadow: var(--shadow);
+}
+.num {
+  display: grid; place-items: center;
+  min-width: 44px; height: 44px;
+  border-radius: 10px;
+  background: #f0e7ff; color: #6d28d9;
+  font-weight: 900; font-size: 18px;
+}
+pre .num, code .num { display: inline; min-width: 0; height: auto; background: none; border-radius: 0;
+  padding: 0; margin: 0; font-size: inherit; font-weight: inherit; font-family: inherit; }
+
+.nav {
+  position: fixed; z-index: 10;
+  left: 80px; right: 80px; bottom: 20px;
+  display: flex; align-items: center; gap: 16px;
+  pointer-events: none;
+}
+.nav > * { pointer-events: auto; }
+.nav a { text-decoration: none; }
+.nav button:disabled { opacity: .38; cursor: not-allowed; }
+.counter { font-weight: 900; color: #314860; min-width: 84px; text-align: center; font-size: 18px; }
+.progress-bar { position: fixed; left: 0; right: 0; top: 0; z-index: 12; height: 6px; border-radius: 0; background: rgba(124, 58, 237, .12); overflow: hidden; }
+.progress-bar span {
+  display: block; height: 100%; width: 0;
+  background: linear-gradient(90deg, var(--purple), var(--amber));
+  transition: .25s ease;
+}
+.nav button {
+  display: inline-flex; justify-content: center; align-items: center;
+  min-height: 48px; border: 0; border-radius: 10px;
+  padding: 12px 22px;
+  background: var(--ink); color: #fff;
+  font-weight: 900; cursor: pointer;
+  box-shadow: 0 12px 28px rgba(45, 27, 78, .18);
+  font-size: 16px;
+  text-decoration: none;
+}
+.nav button.secondary, .nav .home-link.secondary { background: #f4eee0; color: var(--ink); border: 1px solid var(--line); box-shadow: none; }
+.nav .home-link.secondary { padding: 12px 22px; }
+
+@media (max-width: 1080px) {
+  .slide.active { grid-template-columns: 1fr; gap: 28px; }
+  .slide { padding: 48px 36px 150px; }
+  h1 { font-size: 40px; } h2 { font-size: 32px; }
+}
+.slide.compact { padding: 32px 56px 150px; }
+.slide.compact .left, .slide.compact .right { gap: 0; }
+.slide.compact .card { padding: 16px 20px; }
+.slide.compact .card h3 { font-size: 21px; margin-bottom: 8px; }
+.slide.compact .card p, .slide.compact .card li { font-size: 15px; line-height: 1.6; }
+.slide.compact .card table { font-size: 12px; }
+.slide.compact .card td, .slide.compact .card th { padding: 5px 8px; }
+.slide.compact .code-block { font-size: 12px; line-height: 1.55; padding: 9px 12px; margin: 5px 0; }
+.slide.compact h1 { font-size: clamp(34px, 4vw, 48px); }
+.slide.compact.active {
+  display: flex !important;
+  flex-direction: column;
+  gap: 0;
+}
+.slide.compact .head { flex: 0 0 auto; }
+.slide.compact .grid2x2, .slide.compact .grid { flex: 1; min-height: 0; }
+.slide.compact h2 { font-size: clamp(28px, 3.4vw, 40px); margin-bottom: 14px; }
+.slide.compact .subtitle { font-size: 19px; line-height: 1.6; margin-bottom: 14px; }
+.slide.compact .kicker { margin-bottom: 14px; padding: 8px 12px; font-size: 14px; }
+.slide.compact pre { white-space: pre; }
+.slide.compact .practice { padding: 16px 20px; }
+.slide.compact .practice .label { padding: 5px 10px; font-size: 13px; margin-bottom: 8px; }
+
+/* 检验问题卡 */
+.check-q {
+  padding: 14px 18px;
+  margin: 12px 0;
+  background: rgba(245, 158, 11, .08);
+  border-left: 4px solid var(--amber);
+  border-radius: 8px;
+}
+.check-q-blue {
+  background: rgba(124, 58, 237, .08);
+  border-left-color: var(--purple);
+}
+.check-q-text {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.6;
+}
+.check-q details summary {
+  cursor: pointer;
+  color: var(--purple);
+  margin-top: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  list-style: none;
+}
+.check-q details summary::-webkit-details-marker { display: none; }
+.check-q details summary::before { content: '▸ '; color: var(--purple); }
+.check-q details[open] summary::before { content: '▾ '; }
+.check-q details summary:hover { text-decoration: underline; }
+.check-q details[open] summary { margin-bottom: 8px; }
+.check-a {
+  padding: 10px 14px;
+  background: rgba(22, 163, 74, .08);
+  border-radius: 6px;
+  font-family: "JetBrains Mono", "Fira Code", monospace;
+  font-size: 16px;
+  color: #047857;
+  margin-top: 4px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+/* Recap 网格卡片 */
+.recap-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 14px;
+  margin-top: 8px;
+}
+.recap-card {
+  padding: 18px 16px;
+  background: var(--panel);
+  border-radius: 12px;
+  border: 2px solid var(--line);
+  position: relative;
+  min-height: 110px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.recap-card.card-purple { border-color: var(--purple); background: rgba(124, 58, 237, .04); }
+.recap-card.card-amber  { border-color: var(--amber);  background: rgba(217, 119, 6, .04); }
+.recap-card.card-green  { border-color: var(--green);  background: rgba(22, 163, 74, .04); }
+.recap-card.card-blue   { border-color: var(--blue);   background: rgba(37, 99, 235, .04); }
+.recap-card.card-red    { border-color: var(--red);    background: rgba(220, 38, 38, .04); }
+.recap-card.card-teal   { border-color: var(--teal);   background: rgba(15, 159, 154, .04); }
+
+.recap-num {
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1;
+  margin-bottom: 10px;
+  color: var(--text);
+}
+.recap-card.card-purple .recap-num { color: var(--purple); }
+.recap-card.card-amber  .recap-num { color: var(--amber); }
+.recap-card.card-green  .recap-num { color: var(--green); }
+.recap-card.card-blue   .recap-num { color: var(--blue); }
+.recap-card.card-red    .recap-num { color: var(--red); }
+.recap-card.card-teal   .recap-num { color: var(--teal); }
+
+.recap-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+.recap-sub {
+  font-size: 13px;
+  color: var(--muted);
+}
+.recap-next {
+  font-size: 14px;
+  color: var(--muted);
+  margin-top: 16px;
+  text-align: left;
+}
+
+/* 网格 */
+.grid2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+.grid2x2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+.grid3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 14px;
+}
+
+/* ASCII 二进制可视化 */
+.bin-vis {
+  display: inline-block;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 22px;
+  letter-spacing: 4px;
+}
+.bin-vis .bit { padding: 4px 8px; border-radius: 4px; margin: 0 2px; }
+.bin-vis .bit.on  { background: #6d28d9; color: #fff; }
+.bin-vis .bit.off { background: rgba(124, 58, 237, .15); color: #6d28d9; }
+.bin-vis .bit-group { margin: 0 8px; }
+
+/* 卡片链接样式 */
+.link-card {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  padding: 18px 22px;
+  background: rgba(255, 255, 255, .88);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  box-shadow: var(--shadow);
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.link-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 24px 60px rgba(124, 58, 237, .18);
+}
+</style>
+</head>
+<body class="deck-page">
+<main class="deck" id="deck">
+
+  
+<!-- 01 · Cover -->
+<section class="slide title-slide active">
+  <div class="left">
+    <div class="kicker">L6 · 第二轮知识点（一）</div>
+    <h1>前缀 / 中缀 / <span class="highlight">后缀表达式</span></h1>
+    <p class="subtitle">ACSL Junior Contest 2 · Prefix / Infix / Postfix Notation · 22 页</p>
+    <p style="margin-top:24px; padding:16px; background:rgba(124,58,237,.06); border-left:4px solid var(--purple); border-radius:8px; font-size:15px; line-height:1.7;">
+      <b>本课重点</b><br>
+      1. <b>同一个算式的三种写法</b> · 为什么要换顺序<br>
+      2. <b>中缀 → 后缀</b> · 手工栈模拟（运算符栈）<br>
+      3. <b>后缀求值</b> · 一个栈搞定<br>
+      4. <b>前缀求值</b> · 从右往左扫<br>
+      5. <b>历年真题</b> · 9 年 18 道表达式题全收录
+    </p>
+  </div>
+</section>
+
+<!-- 02 · 第二轮地图 -->
+<section class="slide">
+  <div class="left">
+    <div class="kicker">第二轮地图</div>
+    <h2>Contest 2 考 <span class="highlight">3 个主题</span></h2>
+    <p class="subtitle">和第一轮完全不同的三块新内容</p>
+  </div>
+  <div class="right">
+    <div class="card" style="border-left:4px solid var(--purple);">
+      <h3 style="color:var(--purple);">🔢 第二轮 3 大主题</h3>
+      <table style="font-size:14px; width:100%; border-collapse:collapse; line-height:1.6; margin-top:8px;">
+        <tr style="background:rgba(124,58,237,.08);">
+          <th style="padding:6px;">#</th><th style="padding:6px;">主题</th><th style="padding:6px;">考什么</th><th style="padding:6px;">课次</th>
+        </tr>
+        <tr><td style="padding:6px;"><b>1</b></td><td style="padding:6px;">前缀/中缀/后缀</td><td style="padding:6px;">表达式转换 + 求值</td><td style="padding:6px;"><b style="color:var(--purple);">L6（今天）</b></td></tr>
+        <tr style="background:rgba(124,58,237,.04);"><td style="padding:6px;"><b>2</b></td><td style="padding:6px;">比特位操作</td><td style="padding:6px;">AND/OR/XOR、移位</td><td style="padding:6px;">L7</td></tr>
+        <tr><td style="padding:6px;"><b>3</b></td><td style="padding:6px;">循环追踪</td><td style="padding:6px;">while / for 嵌套</td><td style="padding:6px;">L8</td></tr>
+      </table>
+    </div>
+    <div class="card" style="border-left:4px solid var(--amber); margin-top:12px;">
+      <h3 style="color:var(--amber);">考试结构（和第一轮一样）</h3>
+      <ul style="font-size:15px; line-height:1.75; padding-left:20px;">
+        <li><b>笔试 5 道选择题</b>，30 分钟，A-E 单选</li>
+        <li>主题分布：表达式 ×2 · 位运算 ×2 · 循环追踪 ×1</li>
+        <li><b>第 6 题是编程题</b>，72 小时交</li>
+      </ul>
+    </div>
+    <div class="practice" style="margin-top:12px;">
+      <div class="label">小贴士</div>
+      <p style="font-size:15px;">第一轮靠 L1-L5 学会了怎么算，这一轮三个主题<b>全是新东西</b></p>
+    </div>
+  </div>
+</section>
+
+<!-- 03 · 为什么要有三种写法 -->
+<section class="slide compact">
+  <div class="left">
+    <div class="kicker">为什么要有三种写法</div>
+    <h2>同一个算式 <span class="highlight">三种顺序</span></h2>
+    <p class="subtitle">看的是同一个东西</p>
+  </div>
+  <div class="right">
+    <div class="card" style="border-left:4px solid var(--purple);">
+      <h3 style="color:var(--purple);">以 3 + 4 * 2 为例（三者值都 = 11）</h3>
+      <div class="code-block" style="font-size:14px; line-height:1.9;">
+中缀 Infix      ：3 + 4 * 2      ← 我们平时写的
+前缀 Prefix     ：+ 3 * 4 2      ← 运算符在前
+后缀 Postfix    ：3 4 2 * +      ← 运算符在后
+      </div>
+    </div>
+    <div class="card" style="border-left:4px solid var(--green); margin-top:12px;">
+      <h3 style="color:var(--green-deep);">为什么要换？</h3>
+      <ul style="font-size:15px; line-height:1.75; padding-left:20px;">
+        <li><b>中缀有歧义</b>：<code>3 + 4 * 2</code> 到底先算哪个？得靠优先级 + 括号</li>
+        <li><b>后缀/前缀没有歧义</b>：<b>不需要优先级，不需要括号</b></li>
+        <li><b>计算机更好算</b>：一个栈就能求值，不用反复回看</li>
+      </ul>
+    </div>
+    <div class="card" style="border-left:4px solid var(--blue); margin-top:12px;">
+      <h3 style="color:var(--blue);">小例子：括号消失了吗？</h3>
+      <div class="code-block" style="font-size:13px; line-height:1.8;">
+中缀：(2 + 3) * 4        = 20
+后缀：2 3 + 4 *          = 20   ← 括号没了，顺序却记住了
+      </div>
+    </div>
+    <div class="practice" style="margin-top:12px;">
+      <div class="label">小贴士</div>
+      <p style="font-size:15px;"><b>后缀 = 运算符在操作数后面</b>，记住这一句就够了</p>
+    </div>
+  </div>
+</section>
+
+<!-- 04 · 三种形式速查表 -->
+<section class="slide">
+  <div class="left">
+    <div class="kicker">速查表</div>
+    <h2>三种形式 <span class="highlight">对照</span></h2>
+    <p class="subtitle">同一个式子的 4 个例子</p>
+  </div>
+  <div class="right">
+    <div class="card" style="border-left:4px solid var(--purple);">
+      <h3 style="color:var(--purple);">同一个表达式的三种形态</h3>
+      <table style="font-size:13px; width:100%; border-collapse:collapse; line-height:1.6; margin-top:8px;">
+        <tr style="background:rgba(124,58,237,.08);">
+          <th style="padding:6px;">中缀</th>
+          <th style="padding:6px;">前缀</th>
+          <th style="padding:6px;">后缀</th>
+          <th style="padding:6px;">值</th>
+        </tr>
+        <tr>
+          <td style="padding:6px;">3 + 4 * 2</td>
+          <td style="padding:6px;">+ 3 * 4 2</td>
+          <td style="padding:6px;">3 4 2 * +</td>
+          <td style="padding:6px;">11</td>
+        </tr>
+        <tr style="background:rgba(124,58,237,.04);">
+          <td style="padding:6px;">(2 + 3) * 4</td>
+          <td style="padding:6px;">* + 2 3 4</td>
+          <td style="padding:6px;">2 3 + 4 *</td>
+          <td style="padding:6px;">20</td>
+        </tr>
+        <tr>
+          <td style="padding:6px;">2 + 3 * 4 - 6 / 2</td>
+          <td style="padding:6px;">- + 2 * 3 4 / 6 2</td>
+          <td style="padding:6px;">2 3 4 * + 6 2 / -</td>
+          <td style="padding:6px;">11</td>
+        </tr>
+        <tr style="background:rgba(124,58,237,.04);">
+          <td style="padding:6px;">3 + 4 * (8 - 4 / 2)</td>
+          <td style="padding:6px;">+ 3 * 4 - 8 / 4 2</td>
+          <td style="padding:6px;">3 4 8 4 2 / - * +</td>
+          <td style="padding:6px;">27</td>
+        </tr>
+      </table>
+    </div>
+    <div class="card" style="border-left:4px solid var(--amber); margin-top:12px;">
+      <h3 style="color:var(--amber);">怎么一眼看出对不对？</h3>
+      <ul style="font-size:14px; line-height:1.75; padding-left:20px;">
+        <li><b>后缀</b>：运算符出现时，它前面<b>紧挨着的两个数</b>就是它的操作数</li>
+        <li><b>前缀</b>：运算符出现时，它<b>后面紧挨着的两个表达式</b>就是它的操作数</li>
+        <li><b>中缀</b>：优先级 <code>* /</code> &gt; <code>+ -</code>，同级从左往右</li>
+      </ul>
+    </div>
+    <div class="practice" style="margin-top:12px;">
+      <div class="label">小贴士</div>
+      <p style="font-size:15px;">考试问的两种：<b>中缀→前缀/后缀</b>（转换题）、<b>前缀/后缀求值</b>（计算题）</p>
+    </div>
+  </div>
+</section>
+
+<!-- 05 · 中缀转后缀：算法 -->
+<section class="slide">
+  <div class="left">
+    <div class="kicker">方法 1</div>
+    <h2>中缀 → 后缀 <span class="highlight">栈模拟</span></h2>
+    <p class="subtitle">考场上要能手工推出来</p>
+  </div>
+  <div class="right">
+    <div class="card" style="border-left:4px solid var(--purple);">
+      <h3 style="color:var(--purple);">两个栈</h3>
+      <ul style="font-size:15px; line-height:1.75; padding-left:20px;">
+        <li><b>输出栈</b>：放操作数（数字/字母）</li>
+        <li><b>运算符栈</b>：放 <code>+ - * /</code></li>
+      </ul>
+    </div>
+    <div class="card" style="border-left:4px solid var(--green); margin-top:12px;">
+      <h3 style="color:var(--green-deep);">5 条规则</h3>
+      <ol style="font-size:15px; line-height:1.75; padding-left:20px;">
+        <li>遇到<b>操作数</b> → 直接丢进输出栈</li>
+        <li>遇到<b>运算符</b> → 先把栈顶优先级<b>≥</b> 它的全弹进输出，再把它压栈</li>
+        <li>遇到 <code>(</code> → 压运算符栈（<b>不弹</b>）</li>
+        <li>遇到 <code>)</code> → 弹到 <code>(</code> 为止，<code>(</code> 本身丢掉</li>
+        <li>全部读完 → 把运算符栈<b>全部弹完</b></li>
+      </ol>
+    </div>
+    <div class="card" style="border-left:4px solid var(--red); margin-top:12px;">
+      <h3 style="color:var(--red);">⚠️ 最容易错的地方</h3>
+      <ul style="font-size:14px; line-height:1.7; padding-left:20px;">
+        <li>规则 2 用的是 <b>≥</b> 不是 <b>&gt;</b>（同级也要先弹）</li>
+        <li>规则 4 里 <code>(</code> <b>要丢掉</b>，不能进输出</li>
+        <li>规则 5 别忘了弹，<b>漏一个运算符答案就错</b></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 06 · 中缀转后缀：完整演示 -->
+<section class="slide compact">
+  <div class="left">
+    <div class="kicker">方法 1 · 演示</div>
+    <h2>2 + 3 * 4 − 6 / 2</h2>
+    <p class="subtitle">一步步推，输出栈 + 运算符栈</p>
+  </div>
+  <div class="right">
+    <div class="card" style="border-left:4px solid var(--purple);">
+      <h3 style="color:var(--purple);">逐步模拟</h3>
+      <table style="font-size:12px; width:100%; border-collapse:collapse; line-height:1.5; margin-top:8px;">
+        <tr style="background:rgba(124,58,237,.08);">
+          <th style="padding:4px;">读到</th><th style="padding:4px;">输出栈</th><th style="padding:4px;">运算符栈</th>
+        </tr>
+        <tr><td style="padding:4px;">2</td><td style="padding:4px;">2</td><td style="padding:4px;">—</td></tr>
+        <tr style="background:rgba(124,58,237,.04);"><td style="padding:4px;">+</td><td style="padding:4px;">2</td><td style="padding:4px;">+</td></tr>
+        <tr><td style="padding:4px;">3</td><td style="padding:4px;">2 3</td><td style="padding:4px;">+</td></tr>
+        <tr style="background:rgba(124,58,237,.04);"><td style="padding:4px;">*</td><td style="padding:4px;">2 3</td><td style="padding:4px;">+ *</td></tr>
+        <tr><td style="padding:4px;">4</td><td style="padding:4px;">2 3 4</td><td style="padding:4px;">+ *</td></tr>
+        <tr style="background:rgba(124,58,237,.04);"><td style="padding:4px;">−</td><td style="padding:4px;">2 3 4 * +</td><td style="padding:4px;">−</td></tr>
+        <tr><td style="padding:4px;">6</td><td style="padding:4px;">2 3 4 * + 6</td><td style="padding:4px;">−</td></tr>
+        <tr style="background:rgba(124,58,237,.04);"><td style="padding:4px;">/</td><td style="padding:4px;">2 3 4 * + 6</td><td style="padding:4px;">− /</td></tr>
+        <tr><td style="padding:4px;">2</td><td style="padding:4px;">2 3 4 * + 6 2</td><td style="padding:4px;">− /</td></tr>
+        <tr style="background:rgba(124,58,237,.04);"><td style="padding:4px;"><b>读完</b></td><td style="padding:4px;"><b>2 3 4 * + 6 2 / −</b></td><td style="padding:4px;">空</td></tr>
+      </table>
+    </div>
+    <div class="card" style="border-left:4px solid var(--green); margin-top:10px;">
+      <h3 style="color:var(--green-deep);">验算</h3>
+      <div class="code-block" style="font-size:13px; line-height:1.7;">
+2 + 3*4 − 6/2 = 2 + 12 − 3 = 11
+
+后缀求值 2 3 4 * + 6 2 / −
+  2 → [2]      3 → [2,3]     4 → [2,3,4]
+  * → [2,12]   + → [14]      6 → [14,6]
+  2 → [14,6,2] / → [14,3]    − → [11] ✓
+      </div>
+    </div>
+    <div class="practice" style="margin-top:12px;">
+      <div class="label">小贴士</div>
+      <p style="font-size:15px;">读到 <code>−</code> 那一刻，<code>*</code> 和 <code>+</code> 都被弹了出来</p>
+    </div>
+  </div>
+</section>
+
+<!-- 07 · 中缀转后缀：带括号 -->
+<section class="slide compact">
+  <div class="left">
+    <div class="kicker">方法 1 · 变式</div>
+    <h2>3 + 4 * (8 − 4 / 2)</h2>
+    <p class="subtitle">括号怎么处理</p>
+  </div>
+  <div class="right">
+    <div class="card" style="border-left:4px solid var(--purple);">
+      <h3 style="color:var(--purple);">逐步模拟</h3>
+      <table style="font-size:12px; width:100%; border-collapse:collapse; line-height:1.5; margin-top:8px;">
+        <tr style="background:rgba(124,58,237,.08);">
+          <th style="padding:4px;">读到</th><th style="padding:4px;">输出栈</th><th style="padding:4px;">运算符栈</th>
+        </tr>
+        <tr><td style="padding:4px;">3</td><td style="padding:4px;">3</td><td style="padding:4px;">—</td></tr>
+        <tr style="background:rgba(124,58,237,.04);"><td style="padding:4px;">+</td><td style="padding:4px;">3</td><td style="padding:4px;">+</td></tr>
+        <tr><td style="padding:4px;">4</td><td style="padding:4px;">3 4</td><td style="padding:4px;">+</td></tr>
+        <tr style="background:rgba(124,58,237,.04);"><td style="padding:4px;">*</td><td style="padding:4px;">3 4</td><td style="padding:4px;">+ *</td></tr>
+        <tr><td style="padding:4px;">(</td><td style="padding:4px;">3 4</td><td style="padding:4px;">+ * (</td></tr>
+        <tr style="background:rgba(124,58,237,.04);"><td style="padding:4px;">8</td><td style="padding:4px;">3 4 8</td><td style="padding:4px;">+ * (</td></tr>
+        <tr><td style="padding:4px;">−</td><td style="padding:4px;">3 4 8</td><td style="padding:4px;">+ * ( −</td></tr>
+        <tr style="background:rgba(124,58,237,.04);"><td style="padding:4px;">4</td><td style="padding:4px;">3 4 8 4</td><td style="padding:4px;">+ * ( −</td></tr>
+        <tr><td style="padding:4px;">/</td><td style="padding:4px;">3 4 8 4</td><td style="padding:4px;">+ * ( − /</td></tr>
+        <tr style="background:rgba(124,58,237,.04);"><td style="padding:4px;">2</td><td style="padding:4px;">3 4 8 4 2</td><td style="padding:4px;">+ * ( − /</td></tr>
+        <tr><td style="padding:4px;">)</td><td style="padding:4px;">3 4 8 4 2 / −</td><td style="padding:4px;">+ *</td></tr>
+        <tr style="background:rgba(124,58,237,.04);"><td style="padding:4px;"><b>读完</b></td><td style="padding:4px;"><b>3 4 8 4 2 / − * +</b></td><td style="padding:4px;">空</td></tr>
+      </table>
+    </div>
+    <div class="card" style="border-left:4px solid var(--green); margin-top:10px;">
+      <h3 style="color:var(--green-deep);">注意这几步</h3>
+      <div class="code-block" style="font-size:13px; line-height:1.7;">
+读到 (   → 压栈，<b>什么都不输出</b>
+读到 )   → 把 ( 之前的 − / 全弹出，<b>( 本身丢掉</b>
+读完全部 → 把剩下的 * + 弹出
+
+后缀：3 4 8 4 2 / − * +
+      </div>
+    </div>
+    <div class="practice" style="margin-top:12px;">
+      <div class="label">小贴士</div>
+      <p style="font-size:15px;">这题正是 <b>2024-2025 真题第 1 题</b>，考的是「转前缀」</p>
+    </div>
+  </div>
+</section>
+
+<!-- 08 · 中缀转前缀 -->
+<section class="slide compact">
+  <div class="left">
+    <div class="kicker">方法 2</div>
+    <h2>中缀 → <span class="highlight">前缀</span></h2>
+    <p class="subtitle">前缀 = 运算符在前</p>
+  </div>
+  <div class="right">
+    <div class="card" style="border-left:4px solid var(--purple);">
+      <h3 style="color:var(--purple);">核心思想：前缀 = 后缀「整体倒过来 + 每个运算符移到前面」</h3>
+      <p style="font-size:14px; line-height:1.7; margin-top:8px;">更简单的办法是<b>先转后缀，再倒序，然后每个运算符「插到它那一段的最后面」</b>——但考场上更实用的是这招：</p>
+    </div>
+    <div class="card" style="border-left:4px solid var(--green); margin-top:12px;">
+      <h3 style="color:var(--green-deep);">实战：3 + 4 * (8 − 4 / 2)</h3>
+      <div class="code-block" style="font-size:13px; line-height:1.8;">
+步骤 1：从<b>里往外</b>包。整式的运算是 +
+        → 先把括号里的 4 * (8 − 4/2) 包起来
+步骤 2：括号内运算是 *
+        → 把 8 − 4/2 包起来
+步骤 3：括号内运算是 −
+        → 把 4 / 2 包起来
+
+从内到外写前缀：
+(1) 4 / 2        → / 4 2
+(2) 8 − (1)      → − 8 / 4 2
+(3) 4 * (2)      → * 4 − 8 / 4 2
+(4) 3 + (3)      → + 3 * 4 − 8 / 4 2
+      </div>
+    </div>
+    <div class="card" style="border-left:4px solid var(--red); margin-top:12px;">
+      <h3 style="color:var(--red);">记忆法</h3>
+      <p style="font-size:15px; line-height:1.7;">
+        <b>从最里层的括号开始，把那一层「运算符 + 左 + 右」拼起来</b>，然后往外一层层包。
+      </p>
+    </div>
+    <div class="practice" style="margin-top:12px;">
+      <div class="label">小贴士</div>
+      <p style="font-size:15px;"><b>官方答案就是 B</b>：<code>+ 3 * 4 − 8 / 4 2</code></p>
+    </div>
+  </div>
+</section>
+
+<!-- 09 · 后缀求值 -->
+<section class="slide compact">
+  <div class="left">
+    <div class="kicker">方法 3</div>
+    <h2>后缀 <span class="highlight">求值</span></h2>
+    <p class="subtitle">一个栈，从左往右扫</p>
+  </div>
+  <div class="right">
+    <div class="card" style="border-left:4px solid var(--purple);">
+      <h3 style="color:var(--purple);">2 条规则</h3>
+      <ul style="font-size:16px; line-height:1.8; padding-left:20px;">
+        <li>遇到<b>数字</b> → 压栈</li>
+        <li>遇到<b>运算符</b> → 弹出<b>两个</b>数，先弹的是<b>右操作数</b>，后弹的是<b>左操作数</b>，算完压回</li>
+      </ul>
+    </div>
+    <div class="card" style="border-left:4px solid var(--green); margin-top:12px;">
+      <h3 style="color:var(--green-deep);">演示：3 4 2 * +</h3>
+      <div class="code-block" style="font-size:14px; line-height:1.85;">
+读 3  → 压栈           [3]
+读 4  → 压栈           [3, 4]
+读 2  → 压栈           [3, 4, 2]
+读 *  → 弹 2 和 4
+        4 × 2 = 8
+        压回            [3, 8]
+读 +  → 弹 8 和 3
+        3 + 8 = 11
+        压回            [11]
+
+最后栈里剩一个数 → 11
+      </div>
+    </div>
+    <div class="card" style="border-left:4px solid var(--red); margin-top:12px;">
+      <h3 style="color:var(--red);">⚠️ 减法的陷阱</h3>
+      <p style="font-size:15px; line-height:1.7;">
+        <code>10 3 −</code> 要算成 <b>10 − 3 = 7</b>，不是 3 − 10。<br>
+        <b>先弹的是右操作数，后弹的是左操作数</b>，顺序反了就错。
+      </p>
+    </div>
+    <div class="practice" style="margin-top:12px;">
+      <div class="label">小贴士</div>
+      <p style="font-size:15px;">整个过程<b>从头到尾一个栈</b>，不用管优先级，不用管括号</p>
+    </div>
+  </div>
+</section>
+
+<!-- 10 · 后缀求值：真题演练 -->
+<section class="slide compact">
+  <div class="left">
+    <div class="kicker">方法 3 · 真题演练</div>
+    <h2>9 8 6 2 − * 2 / + 6 3 / −</h2>
+    <p class="subtitle">2024-2025 真题第 2 题</p>
+  </div>
+  <div class="right">
+    <div class="card" style="border-left:4px solid var(--purple);">
+      <h3 style="color:var(--purple);">逐栈推演</h3>
+      <div class="code-block" style="font-size:14px; line-height:1.85;">
+9  → [9]
+8  → [9, 8]
+6  → [9, 8, 6]
+2  → [9, 8, 6, 2]
+−  → 弹 2 和 6 → 6−2=4   [9, 8, 4]
+*  → 弹 4 和 8 → 8×4=32  [9, 32]
+2  → [9, 32, 2]
+/  → 弹 2 和 32 → 32/2=16 [9, 16]
++  → 弹 16 和 9 → 9+16=25 [25]
+6  → [25, 6]
+3  → [25, 6, 3]
+/  → 弹 3 和 6 → 6/3=2   [25, 2]
+−  → 弹 2 和 25 → 25−2=23 [23]
+
+答案：23
+      </div>
+    </div>
+    <div class="card" style="border-left:4px solid var(--green); margin-top:12px;">
+      <h3 style="color:var(--green-deep);">分块理解更快</h3>
+      <div class="code-block" style="font-size:13px; line-height:1.8;">
+前 9 个 token 算出一半：9 + (8 × (6−2)/2) = 9 + 16 = 25
+后 4 个 token 算出另一半：25 − (6/3) = 25 − 2 = 23
+      </div>
+    </div>
+    <div class="practice" style="margin-top:12px;">
+      <div class="label">小贴士</div>
+      <p style="font-size:15px;">官方答案是 <b>D. 23</b>，别被 A-E 里的 14、20 骗了</p>
+    </div>
+  </div>
+</section>
+
+<!-- 11 · 前缀求值 -->
+<section class="slide compact">
+  <div class="left">
+    <div class="kicker">方法 4</div>
+    <h2>前缀 <span class="highlight">求值</span></h2>
+    <p class="subtitle">跟后缀一样，只是方向反过来</p>
+  </div>
+  <div class="right">
+    <div class="card" style="border-left:4px solid var(--purple);">
+      <h3 style="color:var(--purple);">规则</h3>
+      <ul style="font-size:16px; line-height:1.8; padding-left:20px;">
+        <li><b>从右往左</b>扫</li>
+        <li>遇到<b>数字</b> → 压栈</li>
+        <li>遇到<b>运算符</b> → 弹两个数，<b>先弹的是左操作数</b>，后弹的是右操作数</li>
+      </ul>
+    </div>
+    <div class="card" style="border-left:4px solid var(--green); margin-top:12px;">
+      <h3 style="color:var(--green-deep);">演示：+ 3 * 4 2（从右往左）</h3>
+      <div class="code-block" style="font-size:14px; line-height:1.85;">
+读 2  → 压栈           [2]
+读 4  → 压栈           [2, 4]
+读 *  → 弹 4 和 2
+        4 × 2 = 8
+        压回            [8]
+读 3  → 压栈           [8, 3]
+读 +  → 弹 3 和 8
+        3 + 8 = 11
+        压回            [11]
+
+答案：11
+      </div>
+    </div>
+    <div class="card" style="border-left:4px solid var(--red); margin-top:12px;">
+      <h3 style="color:var(--red);">⚠️ 前缀 vs 后缀的唯一区别</h3>
+      <table style="font-size:13px; width:100%; border-collapse:collapse; line-height:1.6; margin-top:6px;">
+        <tr style="background:rgba(220,38,38,.08);">
+          <th style="padding:5px;">类型</th><th style="padding:5px;">扫描方向</th><th style="padding:5px;">先弹的是</th>
+        </tr>
+        <tr><td style="padding:5px;">后缀</td><td style="padding:5px;">左 → 右</td><td style="padding:5px;"><b>右</b>操作数</td></tr>
+        <tr style="background:rgba(220,38,38,.04);"><td style="padding:5px;">前缀</td><td style="padding:5px;">右 → 左</td><td style="padding:5px;"><b>左</b>操作数</td></tr>
+      </table>
+    </div>
+    <div class="practice" style="margin-top:12px;">
+      <div class="label">小贴士</div>
+      <p style="font-size:15px;">两个都练几遍，考场上就不会混</p>
+    </div>
+  </div>
+</section>
+
+<!-- 12 · 变量表达式 -->
+<section class="slide compact">
+  <div class="left">
+    <div class="kicker">进阶</div>
+    <h2>带变量的 <span class="highlight">表达式</span></h2>
+    <p class="subtitle">第二轮会考字母代换</p>
+  </div>
+  <div class="right">
+    <div class="card" style="border-left:4px solid var(--purple);">
+      <h3 style="color:var(--purple);">ACSL 的字母写法</h3>
+      <div class="code-block" style="font-size:13px; line-height:1.8;">
+A^2        → A 2 ^        （幂）
+2A         → 2 A *        （隐式乘）
+(A+B)/C    → A B + C /    （转后缀）
+      </div>
+    </div>
+    <div class="card" style="border-left:4px solid var(--green); margin-top:12px;">
+      <h3 style="color:var(--green-deep);">真题：求后缀式值（a=4, b=2, c=1）</h3>
+      <div class="code-block" style="font-size:13px; line-height:1.8;">
+a b + c / a b − b / −
+
+a → [4]         b → [4, 2]
++ → [6]         c → [6, 1]
+/ → [6]         a → [6, 4]
+b → [6, 4, 2]   − → [6, 2]
+b → [6, 2, 2]   / → [6, 1]
+− → 6 − 1 = 5
+
+答案：5
+      </div>
+      <p style="font-size:13px; margin-top:8px;">（2016-2017 真题，官方答案 5 ✓）</p>
+    </div>
+    <div class="practice" style="margin-top:12px;">
+      <div class="label">小贴士</div>
+      <p style="font-size:15px;">字母当数字用就行，<b>压栈时把变量的值压进去</b></p>
+    </div>
+  </div>
+</section>
+
+<!-- 13 · 转换题：真题演练 -->
+<section class="slide">
+  <div class="left">
+    <div class="kicker">真题演练 · 转换题</div>
+    <h2>中缀 → 后缀</h2>
+    <p class="subtitle">2023-2024 真题第 2 题</p>
+  </div>
+  <div class="right">
+    <div class="card" style="border-left:4px solid var(--purple);">
+      <h3 style="color:var(--purple);">题目</h3>
+      <p style="font-size:17px; line-height:1.7;">将中缀表达式转成后缀：</p>
+      <div class="code-block" style="font-size:15px; line-height:1.7; margin-top:8px;">
+(A+B)/(C-1) + (2A-3)/D
+      </div>
+      <div style="font-size:14px; line-height:1.8; margin-top:10px;">
+        <div>A. AB+C1−/2A3*−D/+</div>
+        <div>B. AB+C1−/2A*3−D/+</div>
+        <div>C. ABC1−+/2A*3−D/+</div>
+        <div>D. AB+C1−/2A*3−D+/</div>
+        <div>E. AB+C1−/2A*3D−/+</div>
+      </div>
+    </div>
+    <details class="card" style="border-left:4px solid var(--green); margin-top:12px;">
+      <summary style="cursor:pointer; color:var(--green-deep); font-weight:800; font-size:16px; padding:12px 0;">点这里看答案 + 分块拆解</summary>
+      <div style="padding:14px; background:rgba(22,163,74,.06); border-radius:6px; margin-top:8px;">
+        <p style="font-size:17px; line-height:1.7;"><b>答案：B. AB+C1−/2A*3−D/+</b></p>
+        <p style="font-size:15px; line-height:1.7; margin-top:10px;"><b>分块拆解（先拆成 4 块，再各自转后缀）：</b></p>
+        <div class="code-block" style="font-size:13px; line-height:1.75;">
+块 1: (A+B)/(C-1)   → A B + C 1 − /
+块 2: (2A-3)/D       → 2 A * 3 − D /
+整式: 块1 / 块2 +    → 块1 块2 / +
+
+拼起来：
+A B + C 1 − /  2 A * 3 − D /  +
+      </div>
+        <p style="font-size:14px; line-height:1.7; margin-top:10px;"><b>怎么防止选错：</b></p>
+        <ul style="font-size:13px; line-height:1.75; padding-left:20px;">
+          <li><b>A 选项</b>：<code>2A3</code> 错了，<code>2A-3</code> 应该是 <code>2A*3-</code></li>
+          <li><b>C 选项</b>：<code>(C-1)</code> 错写成 <code>(C1-)</code>，减法顺序反了</li>
+          <li><b>D 选项</b>：最后的 <code>+</code> 和 <code>/</code> 顺序反了</li>
+          <li><b>E 选项</b>：<code>3D</code> 错了</li>
+        </ul>
+      </div>
+    </details>
+  </div>
+</section>
+
+<!-- 14 · 前缀求值：真题演练 -->
+<section class="slide">
+  <div class="left">
+    <div class="kicker">真题演练 · 求值题</div>
+    <h2>求前缀式值</h2>
+    <p class="subtitle">2023-2024 真题第 1 题</p>
+  </div>
+  <div class="right">
+    <div class="card" style="border-left:4px solid var(--red);">
+      <h3 style="color:var(--red);">题目</h3>
+      <p style="font-size:14px; margin-top:6px;">求下列前缀表达式的值（所有数字都是一位数）：</p>
+      <div class="code-block" style="font-size:15px; line-height:1.7; margin-top:8px;">
+− + 2 * 3 8 / * 6 2 3
+      </div>
+      <div style="font-size:14px; line-height:1.8; margin-top:10px;">
+        <div>A. 12</div>
+        <div>B. 20</div>
+        <div>C. 22</div>
+        <div>D. 25</div>
+        <div>E. 30</div>
+      </div>
+    </div>
+    <details class="card" style="border-left:4px solid var(--green); margin-top:12px;">
+      <summary style="cursor:pointer; color:var(--green-deep); font-weight:800; font-size:16px; padding:12px 0;">点这里看答案 + 完整推演</summary>
+      <div style="padding:14px; background:rgba(22,163,74,.06); border-radius:6px; margin-top:8px;">
+        <p style="font-size:17px; line-height:1.7;"><b>答案：C. 22</b></p>
+        <p style="font-size:15px; line-height:1.7; margin-top:10px;"><b>方法一 · 画树（推荐，最不容易错）</b></p>
+        <div class="code-block" style="font-size:13px; line-height:1.7;">
+−                        根 = 减法
+├─ 左: + 2 * 3 8         → 2 + (3×8) = 26
+│     ├─ 左: 2
+│     └─ 右: * 3 8      → 3×8 = 24
+└─ 右: / * 6 2 3         → (6×2)÷3 = 4
+      ├─ 左: * 6 2       → 6×2 = 12
+      └─ 右: 3
+
+26 − 4 = 22
+        </div>
+        <p style="font-size:15px; line-height:1.7; margin-top:12px;"><b>方法二 · 栈模拟（从右往左）</b></p>
+        <div class="code-block" style="font-size:13px; line-height:1.7;">
+逆序读：3 2 6 * / 8 3 * 2 + −
+
+读 3  → [3]
+读 2  → [3, 2]
+读 6  → [3, 2, 6]
+读 *  → 左6 右2 → 12    [3, 12]
+读 /  → 左12 右3 → 4    [4]
+读 8  → [4, 8]
+读 3  → [4, 8, 3]
+读 *  → 左3 右8 → 24    [4, 24]
+读 2  → [4, 24, 2]
+读 +  → 左2 右24 → 26   [4, 26]
+读 −  → 左26 右4 → 22   [22]
+        </div>
+        <p style="font-size:14px; line-height:1.7; margin-top:10px; padding:6px; background:rgba(217,119,6,.1); border-left:3px solid var(--amber); border-radius:4px;">
+          <b>易错：</b>逆序读的时候，<code>/</code> 紧跟在 <code>*</code> 后面，读到 <code>/</code> 时栈里只有 <b>[3, 12]</b>（不是 3 个数）。<b>不要跳着读</b>，一个 token 一个 token 读。
+        </p>
+      </div>
+    </details>
+  </div>
+</section>
+
+<!-- 15 · 前缀求值：为什么必须画树 -->
+<section class="slide compact">
+  <div class="left">
+    <div class="kicker">方法 4 · 加深理解</div>
+    <h2>前缀求值 <span class="highlight">为什么容易错</span></h2>
+    <p class="subtitle">和后缀的唯一区别</p>
+  </div>
+  <div class="right">
+    <div class="card" style="border-left:4px solid var(--red);">
+      <h3 style="color:var(--red);">两个坑</h3>
+      <ul style="font-size:15px; line-height:1.8; padding-left:20px;">
+        <li><b>坑 1 · 扫的方向反了</b>：前缀必须<b>从右往左</b>扫，扫成从左往右就全错</li>
+        <li><b>坑 2 · 弹的顺序反了</b>：前缀<b>先弹的是左操作数</b>，后缀才是右操作数</li>
+      </ul>
+    </div>
+    <div class="card" style="border-left:4px solid var(--green); margin-top:12px;">
+      <h3 style="color:var(--green-deep);">同一个式子，三种算法，结果必须一样</h3>
+      <div class="code-block" style="font-size:13px; line-height:1.75;">
+表达式：3 + 4 * 2 = 11
+
+中缀：  3 + 4 * 2      = 3 + 8 = 11
+前缀：  + 3 * 4 2
+        从右扫 2 → 4 → * → 8 → 3 → + → 11
+后缀：  3 4 2 * +
+        从左扫 3 → 4 → 2 → * → 8 → + → 11
+      </div>
+    </div>
+    <div class="card" style="border-left:4px solid var(--blue); margin-top:12px;">
+      <h3 style="color:var(--blue);">前缀求值的可靠做法</h3>
+      <ul style="font-size:14px; line-height:1.75; padding-left:20px;">
+        <li>先<b>数一下运算符个数</b>，确定树有几层</li>
+        <li>再<b>从左往右切</b>出子树（左子树要先能配平）</li>
+        <li>最后<b>自底向上算</b>，或直接从右往左推栈</li>
+      </ul>
+    </div>
+    <div class="practice" style="margin-top:12px;">
+      <div class="label">小贴士</div>
+      <p style="font-size:15px;">前缀题宁可<b>慢一点画树</b>，也别盲推栈</p>
+    </div>
+  </div>
+</section>
+
+<!-- 16 · 真题速查：前缀求值 3 道 -->
+<section class="slide compact">
+  <div class="left">
+    <div class="kicker">真题速查 · 前缀求值</div>
+    <h2>前缀求值 <span class="highlight">3 道真题</span></h2>
+    <p class="subtitle">2023-2024 / 2022-2023 / 2021-2022</p>
+  </div>
+  <div class="right">
+    <div class="card" style="border-left:4px solid var(--red);">
+      <h3 style="color:var(--red);">题 1 · 2023-2024</h3>
+      <div class="code-block" style="font-size:13px; line-height:1.7;">
+− + 2 * 3 8 / * 6 2 3
+
+树：左 = + 2 (3×8) = 26
+    右 = (6×2)÷3 = 4
+26 − 4 = 22  →  C
+      </div>
+    </div>
+    <div class="card" style="border-left:4px solid var(--red); margin-top:10px;">
+      <h3 style="color:var(--red);">题 2 · 2022-2023</h3>
+      <div class="code-block" style="font-size:13px; line-height:1.7;">
++ − * 2 3 / 4 2 ^ 2 3
+
+树：+ 的左 = − * 2 3 / 4 2 → (2×3) = 6, 4÷2 = 2 → 6−2 = 4
+    + 的右 = ^ 2 3 → 2^3 = 8
+4 + 8 = 12  →  C
+      </div>
+    </div>
+    <div class="card" style="border-left:4px solid var(--red); margin-top:10px;">
+      <h3 style="color:var(--red);">题 3 · 2021-2022</h3>
+      <div class="code-block" style="font-size:13px; line-height:1.7;">
++ / 9 3 + * 4 − 8 3 ^ 5 2
+
+树：+ 的左 = / 9 3 → 9÷3 = 3
+    + 的右 = + * 4 (− 8 3) (^ 5 2)
+        * 4 (−8 3) = 4×5 = 20
+        ^ 5 2 = 5^2 = 25
+        20 + 25 = 45
+3 + 45 = 48  →  C
+      </div>
+    </div>
+    <div class="practice" style="margin-top:12px;">
+      <div class="label">小贴士</div>
+      <p style="font-size:15px;">三道答案都是 <b>C</b>，但过程完全不同，<b>别靠猜</b></p>
+    </div>
+  </div>
+</section>
+
+<!-- 17 · 表达式题真题清单（作业） -->
+<section class="slide compact">
+  <div class="left">
+    <div class="kicker">课后作业</div>
+    <h2>表达式题 <span class="highlight">真题 9 道</span></h2>
+    <p class="subtitle">限时 30 分钟 · 每题 3 分钟</p>
+  </div>
+  <div class="right">
+    <div class="card" style="border-left:4px solid var(--purple);">
+      <h3 style="color:var(--purple);">历年表达式真题（9 年 18 题，选 9 道做）</h3>
+      <table style="font-size:12px; width:100%; border-collapse:collapse; line-height:1.55; margin-top:8px;">
+        <tr style="background:rgba(124,58,237,.08);">
+          <th style="padding:4px;">年份</th><th style="padding:4px;">题 1</th><th style="padding:4px;">题 2</th>
+        </tr>
+        <tr><td style="padding:4px;">2024-2025</td><td style="padding:4px;">中缀转前缀</td><td style="padding:4px;">后缀求值</td></tr>
+        <tr style="background:rgba(124,58,237,.04);"><td style="padding:4px;">2023-2024</td><td style="padding:4px;">前缀求值</td><td style="padding:4px;">中缀转后缀</td></tr>
+        <tr><td style="padding:4px;">2022-2023</td><td style="padding:4px;">前缀求值</td><td style="padding:4px;">中缀转后缀</td></tr>
+        <tr style="background:rgba(124,58,237,.04);"><td style="padding:4px;">2021-2022</td><td style="padding:4px;">前缀求值</td><td style="padding:4px;">中缀转后缀</td></tr>
+        <tr><td style="padding:4px;">2020-2021</td><td style="padding:4px;">前缀求值</td><td style="padding:4px;">中缀转后缀</td></tr>
+        <tr style="background:rgba(124,58,237,.04);"><td style="padding:4px;">2019-2020</td><td style="padding:4px;">中缀转后缀</td><td style="padding:4px;">前缀求值</td></tr>
+        <tr><td style="padding:4px;">2018-2019</td><td style="padding:4px;">前缀求值</td><td style="padding:4px;">中缀转后缀</td></tr>
+        <tr style="background:rgba(124,58,237,.04);"><td style="padding:4px;">2016-2017</td><td style="padding:4px;">后缀求值</td><td style="padding:4px;">中缀转前缀</td></tr>
+        <tr><td style="padding:4px;">2015-2016</td><td style="padding:4px;">后缀求值</td><td style="padding:4px;">中缀转前缀</td></tr>
+      </table>
+    </div>
+    <div class="card" style="border-left:4px solid var(--green); margin-top:10px;">
+      <h3 style="color:var(--green-deep);">作业要求</h3>
+      <ul style="font-size:14px; line-height:1.75; padding-left:20px;">
+        <li>每个表达式都写<b>完整中间步骤</b>（栈的每一步）</li>
+        <li>求值题<b>必须写验算</b>（把结果代回原式）</li>
+        <li>转换题<b>必须标出分块</b>（先拆块再转）</li>
+      </ul>
+    </div>
+    <div class="practice" style="margin-top:12px;">
+      <div class="label">小贴士</div>
+      <p style="font-size:15px;">这 9 道就是 <b>12.13 之后第二轮考试</b>会出的题型</p>
+    </div>
+  </div>
+</section>
+
+<!-- 18 · 易错点 -->
+<section class="slide compact">
+  <div class="left">
+    <div class="kicker">易错点</div>
+    <h2>表达式题 <span class="highlight">6 大坑</span></h2>
+    <p class="subtitle">全部来自真题</p>
+  </div>
+  <div class="right">
+    <div class="card" style="border-left:4px solid var(--red);">
+      <h3 style="color:var(--red);">6 个高频错点</h3>
+      <ol style="font-size:15px; line-height:1.8; padding-left:20px;">
+        <li><b>栈规则用 &gt; 而不是 ≥</b> → 同优先级运算顺序错</li>
+        <li><b>括号 ( 忘了丢掉</b> → 输出里多了一个括号</li>
+        <li><b>读完全忘了弹栈</b> → 后缀表达式末尾缺运算符</li>
+        <li><b>后缀减法弹反了</b> → 算成右−左</li>
+        <li><b>隐式乘 2A 没展开</b> → 漏掉 <code>*</code></li>
+        <li><b>整数除法当小数</b> → 8/3 应为 2 不是 2.67</li>
+      </ol>
+    </div>
+    <div class="card" style="border-left:4px solid var(--green); margin-top:10px;">
+      <h3 style="color:var(--green-deep);">3 个保命习惯</h3>
+      <ul style="font-size:15px; line-height:1.8; padding-left:20px;">
+        <li><b>转换题先分块</b>：把长式子按括号拆成 3-4 小块</li>
+        <li><b>求值题先画树</b>：前缀尤其容易配错</li>
+        <li><b>算完代回验算</b>：结果代回原式对不对</li>
+      </ul>
+    </div>
+    <div class="practice" style="margin-top:12px;">
+      <div class="label">小贴士</div>
+      <p style="font-size:15px;">这 6 条抄进错题本，和 L5.2 的 5 条一起看</p>
+    </div>
+  </div>
+</section>
+
+<!-- 19 · 真题速查表 -->
+<section class="slide">
+  <div class="left">
+    <div class="kicker">答案速查</div>
+    <h2>本课真题 <span class="highlight">答案</span></h2>
+    <p class="subtitle">用于课堂自查</p>
+  </div>
+  <div class="right">
+    <table style="font-size:15px; width:100%; border-collapse:collapse; line-height:1.7;">
+      <tr style="background:rgba(124,58,237,.1);">
+        <th style="padding:8px; border-bottom:2px solid var(--line);">题号</th>
+        <th style="padding:8px; border-bottom:2px solid var(--line);">内容</th>
+        <th style="padding:8px; border-bottom:2px solid var(--line);">答案</th>
+      </tr>
+      <tr><td style="padding:6px;"><b>1</b></td><td style="padding:6px;">3 + 4 * 2 三种形式</td><td style="padding:6px;">前缀 <code>+ 3 * 4 2</code></td></tr>
+      <tr style="background:rgba(124,58,237,.04);"><td style="padding:6px;"><b>2</b></td><td style="padding:6px;">2 + 3 * 4 − 6 / 2 转后缀</td><td style="padding:6px;"><code>2 3 4 * + 6 2 / −</code></td></tr>
+      <tr><td style="padding:6px;"><b>3</b></td><td style="padding:6px;">3 + 4 * (8 − 4 / 2) 转前缀</td><td style="padding:6px;"><b>B</b>（2024-2025 真题）</td></tr>
+      <tr style="background:rgba(124,58,237,.04);"><td style="padding:6px;"><b>4</b></td><td style="padding:6px;">后缀 3 4 2 * + 求值</td><td style="padding:6px;">11</td></tr>
+      <tr><td style="padding:6px;"><b>5</b></td><td style="padding:6px;">后缀 9 8 6 2 − * 2 / + 6 3 / −</td><td style="padding:6px;"><b>D. 23</b>（2024-2025 真题）</td></tr>
+      <tr style="background:rgba(124,58,237,.04);"><td style="padding:6px;"><b>6</b></td><td style="padding:6px;">中缀转后缀（2023-2024 真题）</td><td style="padding:6px;"><b>B</b></td></tr>
+      <tr><td style="padding:6px;"><b>7</b></td><td style="padding:6px;">变量后缀（2016-2017 真题）</td><td style="padding:6px;">5</td></tr>
+    </table>
+    <div class="practice" style="margin-top:14px;">
+      <div class="label">小贴士</div>
+      <p style="font-size:15px;">第 3、5、6 题是<b>原题原选项</b>，L9 真题课会再考一次</p>
+    </div>
+  </div>
+</section>
+
+<!-- 20 · 上节回顾 -->
+<section class="slide compact">
+  <div class="left">
+    <div class="kicker">回顾</div>
+    <h2>本课 <span class="highlight">4 个方法</span></h2>
+    <p class="subtitle">一张图记住</p>
+  </div>
+  <div class="right">
+    <div class="card" style="border-left:4px solid var(--purple);">
+      <h3 style="color:var(--purple);">方法汇总</h3>
+      <table style="font-size:13px; width:100%; border-collapse:collapse; line-height:1.65; margin-top:8px;">
+        <tr style="background:rgba(124,58,237,.08);">
+          <th style="padding:6px;">题型</th><th style="padding:6px;">方法</th><th style="padding:6px;">关键点</th>
+        </tr>
+        <tr><td style="padding:6px;">中缀→后缀</td><td style="padding:6px;">运算符栈模拟</td><td style="padding:6px;">弹栈条件用 <b>≥</b></td></tr>
+        <tr style="background:rgba(124,58,237,.04);"><td style="padding:6px;">中缀→前缀</td><td style="padding:6px;">从里往外包</td><td style="padding:6px;">先拆块</td></tr>
+        <tr><td style="padding:6px;">后缀求值</td><td style="padding:6px;">栈，左→右扫</td><td style="padding:6px;">先弹<b>右</b>操作数</td></tr>
+        <tr style="background:rgba(124,58,237,.04);"><td style="padding:6px;">前缀求值</td><td style="padding:6px;">栈，右→左扫</td><td style="padding:6px;">先弹<b>左</b>操作数</td></tr>
+      </table>
+    </div>
+    <div class="card" style="border-left:4px solid var(--green); margin-top:12px;">
+      <h3 style="color:var(--green-deep);">能不能默写出来？</h3>
+      <ul style="font-size:15px; line-height:1.8; padding-left:20px;">
+        <li>中缀 <code>a + b * c</code> → 后缀 = ?</li>
+        <li>中缀 <code>a + b * c</code> → 前缀 = ?</li>
+        <li>后缀 <code>a b c * +</code> 求值时，<code>*</code> 先弹谁？</li>
+      </ul>
+    </div>
+    <div class="practice" style="margin-top:12px;">
+      <div class="label">小贴士</div>
+      <p style="font-size:15px;">答不上来就把 slide 5-11 再看一遍</p>
+    </div>
+  </div>
+</section>
+
+<!-- 21 · 下一节预告 -->
+<section class="slide compact">
+  <div class="left">
+    <div class="kicker">下一节</div>
+    <h1>L7 · <span class="highlight">比特位操作</span></h1>
+    <p class="subtitle">Bit-String Flicking · 第二轮主题 2</p>
+  </div>
+  <div class="right">
+    <div class="card" style="border-left:4px solid var(--blue);">
+      <h3 style="color:var(--blue);">L7 会讲什么</h3>
+      <ul style="font-size:16px; line-height:1.85; padding-left:20px;">
+        <li><b>AND / OR / NOT / XOR</b> · 逐位对齐算</li>
+        <li><b>LSHIFT / RSHIFT</b> · 移位补 0</li>
+        <li><b>LCIRC / RCIRC</b> · 循环移位，转出来的接回去</li>
+        <li><b>复合运算</b> · 括号和优先级</li>
+        <li><b>真题 9 道</b> · 2015-2025 全收录</li>
+      </ul>
+    </div>
+    <div class="card" style="border-left:4px solid var(--green); margin-top:12px;">
+      <h3 style="color:var(--green-deep);">作业</h3>
+      <ul style="font-size:16px; line-height:1.85; padding-left:20px;">
+        <li>完成本课 <b>9 道表达式真题</b></li>
+        <li>把 6 大坑抄进错题本</li>
+        <li>可选：Python 实现转换算法（OJ 提交）</li>
+      </ul>
+    </div>
+    <div class="practice" style="margin-top:12px;">
+      <div class="label">小贴士</div>
+      <p style="font-size:15px;">表达式是第二轮<b>最好拿分</b>的主题，练熟就是送分题</p>
+    </div>
+  </div>
+</section>
+
+<!-- 22 · 收尾 -->
+<section class="slide compact">
+  <div class="left">
+    <div class="kicker">收尾</div>
+    <h1>第二轮 <span class="highlight">开了个好头</span></h1>
+    <p class="subtitle">L6 · 前缀/中缀/后缀表达式</p>
+  </div>
+  <div class="right">
+    <div class="card" style="border-left:4px solid var(--green);">
+      <h3 style="color:var(--green-deep);">本课掌握清单</h3>
+      <ul style="font-size:16px; line-height:1.85; padding-left:20px;">
+        <li>说出三种表达式的区别和用途</li>
+        <li>手工用栈把中缀转成后缀</li>
+        <li>手工把中缀转成前缀（分块法）</li>
+        <li>用栈求后缀和前缀的值</li>
+        <li>认出 ACSL 的 <code>A^2</code>、<code>2A</code> 写法</li>
+      </ul>
+    </div>
+    <div class="card" style="border-left:4px solid var(--purple); margin-top:12px;">
+      <h3 style="color:var(--purple);">第二轮进度</h3>
+      <div style="font-size:15px; line-height:1.8;">
+        <div>✅ 表达式（L6）</div>
+        <div>⬜ 比特位操作（L7）</div>
+        <div>⬜ 循环追踪（L8）</div>
+        <div>⬜ 真题专项（L9）</div>
+        <div>⬜ 第二轮模拟考（L10）</div>
+      </div>
+    </div>
+    <div class="practice" style="margin-top:12px;">
+      <div class="label">小贴士</div>
+      <p style="font-size:15px;">还有 <b>4 节课</b>打完第二轮</p>
+    </div>
+  </div>
+</section>
+
+
+<div class="nav">
+  <a class="home-link secondary" href="index.html">📚 目录</a>
+  <button class="secondary" onclick="prev()">← 上页</button>
+  <span class="counter"><span id="cur">1</span> / <span id="total">22</span></span>
+  <div class="progress-bar"><span id="bar"></span></div>
+  <button onclick="next()">下页 →</button>
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  document.getElementById('total').textContent = total;
+  let idx = 0;
+  function show(i) {
+    if (i < 0) i = 0;
+    if (i >= total) i = total - 1;
+    slides.forEach(s => s.classList.remove('active'));
+    slides[i].classList.add('active');
+    document.getElementById('cur').textContent = i + 1;
+    document.getElementById('bar').style.width = ((i + 1) / total * 100) + '%';
+    idx = i;
+    slides[i].scrollTop = 0;
+  }
+  function next() { show(idx + 1); }
+  function prev() { show(idx - 1); }
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'Enter') { e.preventDefault(); next(); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); prev(); }
+  });
+  let tx = 0;
+  document.addEventListener('touchstart', e => { tx = e.touches[0].clientX; });
+  document.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - tx;
+    if (Math.abs(dx) > 50) { if (dx < 0) next(); else prev(); }
+  });
+</script>
+</body>
+</html>
