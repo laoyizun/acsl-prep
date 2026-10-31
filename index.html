@@ -632,7 +632,7 @@ code.inline {
       <a class="lesson-card" href="L6.html">
         <div class="lesson-num">L6</div>
         <h3>前缀 / 中缀 / 后缀表达式</h3>
-        <p>第二轮主题 1 · 栈模拟转换 + 求值 · 9 年真题 + 作业</p>
+        <p>第二轮主题 1 · 栈模拟转换 + 求值 · 9 年真题</p>
         <div class="lesson-meta">
           <span class="meta-chip purple">11.1 - 11.7</span>
           <span class="meta-chip green">第二轮</span>
@@ -694,7 +694,7 @@ code.inline {
   <!-- ===== Tab 2: 作业 ===== -->
   <div class="tab-content" id="tab-homework">
     <h2 class="section-title">📝 课后作业汇总</h2>
-    <p class="section-sub">做完截图发给老师，下节课讲评</p>
+    <p class="section-sub">做完截图发给老师，下节课讲评 · L6 表达式作业 8 题在下方</p>
 
     <details class="hw-flip" open>
       <summary>L1 · 数字系统完整版（30 题选择题 · 6 大考点）</summary>
@@ -1477,15 +1477,176 @@ code.inline {
     </details>
 
     <details class="hw-flip">
-      <summary>L4-L18 · 后续作业</summary>
+      <summary>L6 · 表达式转换与求值（8 道真题 + 2 道挑战）</summary>
       <div class="hw-body">
-        <p style="color:var(--muted);">每周作业将在对应 PPT 的"课后作业"页发布。</p>
-        <p>每周固定结构：</p>
-        <ul>
-          <li>OJ 编程题 2-3 道（与本周知识联动）</li>
-          <li>ACSL Wiki 样题 5-10 道（覆盖本周主题）</li>
-          <li>偶尔：限时真题训练</li>
-        </ul>
+        <p style="color:var(--muted); font-size:14px;">限时 40 分钟 · ACSL Junior Contest 2 真题 · 做题前请先看完 L6 PPT</p>
+
+        <p style="font-size:14px; line-height:1.7;">
+          <b>覆盖范围</b>：前缀 / 中缀 / 后缀表达式全部 4 种题型。<br>
+          <b>难度</b>：★★ 转换题（Part A）+ ★★★ 求值题（Part B）+ ★★★★ 挑战题（Part C）。<br>
+          <b>做法</b>：转换题<b>必须先分块</b>再转；求值题<b>必须写逐栈过程</b>，算完<b>代回原式验算</b>。
+        </p>
+
+        <hr style="border:none; border-top:1px dashed var(--line); margin:14px 0;">
+
+        <!-- ========== Part A · 转换题 ========== -->
+        <h4 style="color:var(--purple-deep);">📘 Part A · 转换题（中缀 → 后缀 · 4 题 · 每题 4 分钟）</h4>
+        <ol class="hw-quiz">
+          <li>
+            <p class="hw-q">Convert the following infix expression to postfix: <code>(A+B)/(C-1) + (2A-3)/D</code><br><span style="font-size:13px; color:var(--muted);">（2023-2024 真题）</span></p>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body">
+                <b>答案：B · <code>AB+C1−/2A*3−D/+</code></b><br>
+                <b>分块拆解：</b><br>
+                块1 <code>(A+B)/(C-1)</code> → <code>A B + C 1 − /</code><br>
+                块2 <code>(2A-3)/D</code> → <code>2 A * 3 − D /</code><br>
+                整式 <code>块1 / 块2 +</code> → <code>A B + C 1 − / 2 A * 3 − D / +</code><br>
+                <b>干扰项分析：</b>A 把 <code>2A*3−</code> 写成 <code>2A3*−</code> · C 把 <code>(C-1)</code> 写成 <code>(C1-)</code>（减法顺序反）· D 把最后的 <code>/ +</code> 顺序反 · E 把 <code>3D</code> 写错
+              </div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q">Convert to postfix: <code>(A+B)/C − (B*C)/(A−C)</code><br><span style="font-size:13px; color:var(--muted);">（2022-2023 真题）</span></p>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body">
+                <b>答案：A · <code>AB+C/BC*AC−/−</code></b><br>
+                块1 <code>(A+B)/C</code> → <code>A B + C /</code><br>
+                块2 <code>(B*C)/(A−C)</code> → <code>B C * A C − /</code><br>
+                整式 <code>块1 − 块2</code> → <code>A B + C / B C * A C − / −</code>
+              </div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q">Convert to postfix: <code>(A²+B)(B²−C) / (B+D²)</code><br><span style="font-size:13px; color:var(--muted);">（2021-2022 真题）</span></p>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body">
+                <b>答案：D · <code>A 2 ^ B + B 2 ^ C − * B D 2 ^ + /</code></b><br>
+                块1 <code>(A²+B)</code> → <code>A 2 ^ B +</code><br>
+                块2 <code>(B²−C)</code> → <code>B 2 ^ C −</code><br>
+                块3 <code>(B+D²)</code> → <code>B D 2 ^ +</code><br>
+                整式 <code>块1 块2 * 块3 /</code> → <code>A 2 ^ B + B 2 ^ C − * B D 2 ^ + /</code>
+              </div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q">Convert to postfix: <code>a + b*c − 2*(a*b−c)/(a²−b²)</code><br><span style="font-size:13px; color:var(--muted);">（2019-2020 真题 · 原版无选项，写出表达式即可）</span></p>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body">
+                <b>答案：<code>a b c * + 2 a b * c − * a 2 ^ b 2 ^ − / −</code></b><br>
+                块1 <code>a + b*c</code> → <code>a b c * +</code><br>
+                块2 <code>2*(a*b−c)</code> → <code>2 a b * c − *</code><br>
+                块3 <code>(a²−b²)</code> → <code>a 2 ^ b 2 ^ −</code><br>
+                整式 <code>块1 − 块2/块3</code> → <code>a b c * + 2 a b * c − * a 2 ^ b 2 ^ − / −</code>
+              </div>
+            </details>
+          </li>
+        </ol>
+
+        <hr style="border:none; border-top:1px dashed var(--line); margin:18px 0 8px;">
+
+        <!-- ========== Part B · 求值题 ========== -->
+        <h4 style="color:var(--purple-deep);">📗 Part B · 求值题（4 题 · 每题 4 分钟）</h4>
+        <ol class="hw-quiz" start="5">
+          <li>
+            <p class="hw-q">Evaluate the postfix expression: <code>9 8 6 2 − * 2 / + 6 3 / −</code><br><span style="font-size:13px; color:var(--muted);">（2024-2025 真题）</span></p>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body">
+                <b>答案：D · 23</b><br>
+                <b>逐栈过程（从左往右）：</b><br>
+                <code>9</code>→[9] · <code>8</code>→[9,8] · <code>6</code>→[9,8,6] · <code>2</code>→[9,8,6,2]<br>
+                <code>−</code> → 弹2、6 → 6−2=4 → [9,8,4]<br>
+                <code>*</code> → 弹4、8 → 8×4=32 → [9,32]<br>
+                <code>2</code>→[9,32,2] · <code>/</code> → 弹2、32 → 32÷2=16 → [9,16]<br>
+                <code>+</code> → 弹16、9 → 9+16=25 → [25]<br>
+                <code>6</code>→[25,6] · <code>3</code>→[25,6,3] · <code>/</code> → 弹3、6 → 6÷3=2 → [25,2]<br>
+                <code>−</code> → 弹2、25 → 25−2=<b>23</b> → [23]<br>
+                <b>分块验算</b>：前半 <code>9 + (8×(6−2))÷2 = 25</code> · 后半 <code>25 − (6÷3) = 23</code>
+              </div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q">Evaluate the prefix expression: <code>− + 2 * 3 8 / * 6 2 3</code><br><span style="font-size:13px; color:var(--muted);">（2023-2024 真题）</span></p>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body">
+                <b>答案：C · 22</b><br>
+                <b>方法一 · 画树（推荐）</b><br>
+                <code>−</code> 根<br>
+                　左 <code>+ 2 * 3 8</code> → 2 + (3×8) = 26<br>
+                　右 <code>/ * 6 2 3</code> → (6×2)÷3 = 4<br>
+                26 − 4 = <b>22</b><br><br>
+                <b>方法二 · 栈模拟（从右往左）</b><br>
+                <code>3</code>→[3] · <code>2</code>→[3,2] · <code>6</code>→[3,2,6]<br>
+                <code>*</code> → 左6 右2 → 12 → [3,12]<br>
+                <code>/</code> → 左12 右3 → 4 → [4]<br>
+                <code>8</code>→[4,8] · <code>3</code>→[4,8,3] · <code>*</code> → 左3 右8 → 24 → [4,24]<br>
+                <code>2</code>→[4,24,2] · <code>+</code> → 左2 右24 → 26 → [4,26]<br>
+                <code>−</code> → 左26 右4 → <b>22</b> → [22]<br>
+                <b>⚠️ 易错</b>：读到 <code>/</code> 时栈里只有 <b>[3,12]</b> 两个数，不要跳着读 token
+              </div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q">Evaluate the prefix expression: <code>+ − / * 3 6 2 / + 3 9 4 ^ 2 3</code><br><span style="font-size:13px; color:var(--muted);">（2020-2021 真题）</span></p>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body">
+                <b>答案：D · 14</b><br>
+                <b>画树（位置决定结构）：</b><br>
+                <code>+</code> 根<br>
+                　左 <code>− / * 3 6 2 / + 3 9 4</code><br>
+                　　<code>−</code> 的左 <code>/ * 3 6 2</code> → (3×6)÷2 = <b>9</b><br>
+                　　<code>−</code> 的右 <code>/ + 3 9 4</code> → (3+9)÷4 = <b>3</b><br>
+                　　→ 9 − 3 = <b>6</b><br>
+                　右 <code>^ 2 3</code> → 2³ = <b>8</b><br>
+                6 + 8 = <b>14</b><br><br>
+                <b>栈模拟（从右往左）：</b><br>
+                <code>3</code>→[3] · <code>2</code>→[3,2] · <code>^</code> → 左2 右3 → 8 → [8]<br>
+                <code>4</code>→[8,4] · <code>9</code>→[8,4,9] · <code>3</code>→[8,4,9,3]<br>
+                <code>+</code> → 左3 右9 → 12 → [8,4,12] · <code>/</code> → 左12 右4 → 3 → [8,3]<br>
+                <code>2</code>→[8,3,2] · <code>6</code>→[8,3,2,6] · <code>3</code>→[8,3,2,6,3]<br>
+                <code>*</code> → 左3 右6 → 18 → [8,3,2,18] · <code>/</code> → 左18 右2 → 9 → [8,3,9]<br>
+                <code>−</code> → 左9 右3 → 6 → [8,6] · <code>+</code> → 左6 右8 → <b>14</b> → [14]
+              </div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q">Evaluate the postfix expression (a=4, b=2, c=1): <code>a b + c / a b − b / −</code><br><span style="font-size:13px; color:var(--muted);">（2016-2017 真题 · 原版无选项，写出数值即可）</span></p>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body">
+                <b>答案：5</b><br>
+                <code>a</code>→[4] · <code>b</code>→[4,2] · <code>+</code>→[6] · <code>c</code>→[6,1] · <code>/</code>→[6]<br>
+                <code>a</code>→[6,4] · <code>b</code>→[6,4,2] · <code>−</code>→[6,2] · <code>b</code>→[6,2,2] · <code>/</code>→[6,1]<br>
+                <code>−</code> → 弹1、6 → 6−1 = <b>5</b><br>
+                <b>代入验算</b>：<code>a+b = 6</code>，<code>6÷c = 6</code>，<code>a−b = 2</code>，<code>2÷b = 1</code>，<code>6−1 = 5</code> ✓
+              </div>
+            </details>
+          </li>
+        </ol>
+
+        <hr style="border:none; border-top:1px dashed var(--line); margin:18px 0 8px;">
+
+        <!-- ========== Part C · 挑战题 ========== -->
+        <h4 style="color:var(--purple-deep);">📕 Part C · 挑战题（选做 · 2 题）</h4>
+        <ol class="hw-quiz" start="9">
+          <li>
+            <p class="hw-q">Evaluate the prefix expression: <code>+ − / + 8 ^ 4 2 ^ 2 2 / * 3 2 6 / * / 8 4 2 4</code><br><span style="font-size:13px; color:var(--muted);">（2019-2020 真题 · 原版无选项）</span></p>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>答案：6</b><br>表达式很长，<b>强烈建议用画树法</b>：从最里层的 <code>^</code> 和 <code>/</code> 开始逐层算。</div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q">Evaluate the postfix expression (a=12, b=2, c=3): <code>a b / a b c ^ * + a b c * a − * a / −</code><br><span style="font-size:13px; color:var(--muted);">（2015-2016 真题 · 原版无选项）</span></p>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>答案：108</b><br>同样建议画树或分块，<code>^</code> 是幂运算。</div>
+            </details>
+          </li>
+        </ol>
+
+        <hr style="border:none; border-top:1px dashed var(--line); margin:18px 0 8px;">
+        <p style="font-size:13px; color:var(--muted);">
+          📊 <b>做完对答案</b>：Part A + B 共 8 题，限时 40 分钟。错 1 道 → 把对应方法的 PPT 页重看一遍；错 ≥ 2 道 → 下节课前找老师面批。<br>
+          🎯 <b>目标</b>：8 题全对，且转换题能在 2 分钟内写出分块过程、求值题能画出完整栈。<br>
+          💡 <b>做题工具</b>：<b>必须手算</b>，不许用代码跑 —— 考试考的就是手算能力！
+        </p>
       </div>
     </details>
   </div>
@@ -1493,13 +1654,14 @@ code.inline {
   <!-- ===== Tab 3: 记忆卡片 ===== -->
   <div class="tab-content" id="tab-flashcards">
     <h2 class="section-title">📇 记忆卡片</h2>
-    <p class="section-sub">正面题目、反面答案 · 点击卡片可翻转 · L1-L3 已开放</p>
+    <p class="section-sub">正面题目、反面答案 · 点击卡片可翻转 · L1-L3 / L6 已开放</p>
 
     <div class="fc-tabs">
-      <button class="fc-tab active" data-filter="all">全部 <span class="count">16</span></button>
+      <button class="fc-tab active" data-filter="all">全部 <span class="count">24</span></button>
       <button class="fc-tab" data-filter="L1">L1 进制 <span class="count">6</span></button>
       <button class="fc-tab" data-filter="L2">L2 递归 <span class="count">5</span></button>
       <button class="fc-tab" data-filter="L3">L3 追踪 <span class="count">5</span></button>
+      <button class="fc-tab" data-filter="L6">L6 表达式 <span class="count">8</span></button>
     </div>
 
     <div class="flashcard-grid">
@@ -1808,6 +1970,195 @@ code.inline {
       </div>
     </div>
 
+
+    <div class="flashcard" data-lesson="L6" onclick="this.classList.toggle('flipped')">
+      <span class="fc-flip-hint">点击翻面 ↻</span>
+      <div class="fc-inner">
+        <div class="fc-face fc-front">
+          <div class="fc-tag">L6-C01 · 概念</div>
+          <div class="fc-q">中缀、前缀、后缀三种表达式有什么区别？</div>
+        </div>
+        <div class="fc-face fc-back">
+          <div class="fc-tag" style="background:rgba(22,163,74,.12); color:#047857;">答案 · L6-C01</div>
+          <div class="fc-q" style="color:#047857;">
+· <b>中缀 Infix</b>：<code>3 + 4 * 2</code> —— 人平时写的，<b>有歧义</b>，得靠优先级 + 括号<br>
+· <b>前缀 Prefix</b>：<code>+ 3 * 4 2</code> —— 运算符在<b>前</b>面<br>
+· <b>后缀 Postfix</b>：<code>3 4 2 * +</code> —— 运算符在<b>后</b>面<br>
+· <b>关键</b>：前缀和后缀<b>不需要优先级、不需要括号</b>，一个栈就能求值
+          </div>
+          <div class="fc-explain"><b>为什么要有前缀/后缀</b><br>
+· 中缀 <code>3 + 4 * 2</code> 要先确定先算哪个，得引入优先级规则，规则一多就容易错<br>
+· 后缀 <code>3 4 2 * +</code> 直接告诉你：先把 4 和 2 乘，再跟 3 加<br>
+· <b>计算机实现栈求值极方便</b>，所以表达式求值、编译原理都用后缀</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flashcard" data-lesson="L6" onclick="this.classList.toggle('flipped')">
+      <span class="fc-flip-hint">点击翻面 ↻</span>
+      <div class="fc-inner">
+        <div class="fc-face fc-front">
+          <div class="fc-tag">L6-C02 · 概念</div>
+          <div class="fc-q">中缀表达式的运算符优先级怎么排？同优先级怎么办？</div>
+        </div>
+        <div class="fc-face fc-back">
+          <div class="fc-tag" style="background:rgba(22,163,74,.12); color:#047857;">答案 · L6-C02</div>
+          <div class="fc-q" style="color:#047857;">
+优先级从高到低：<br>
+<b>1. <code>^</code></b>（幂）<br>
+<b>2. <code>*</code> <code>/</code></b>（乘除）<br>
+<b>3. <code>+</code> <code>-</code></b>（加减）<br>
+<b>同级运算符从左往右</b>算；括号可以改变优先级
+          </div>
+          <div class="fc-explain"><b>例</b>：<code>3 + 4 * 2</code> → 先算 <code>*</code> → 3+8 = <b>11</b><br>
+<b>例</b>：<code>10 − 4 − 3</code> → 同级从左往右 → (10−4)−3 = <b>3</b>，不是 10−(4−3)<br>
+<b>例</b>：<code>(3 + 4) * 2</code> → 括号优先 → 7×2 = <b>14</b></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flashcard" data-lesson="L6" onclick="this.classList.toggle('flipped')">
+      <span class="fc-flip-hint">点击翻面 ↻</span>
+      <div class="fc-inner">
+        <div class="fc-face fc-front">
+          <div class="fc-tag">L6-C03 · 方法</div>
+          <div class="fc-q">中缀转后缀的 5 条规则是什么？</div>
+        </div>
+        <div class="fc-face fc-back">
+          <div class="fc-tag" style="background:rgba(22,163,74,.12); color:#047857;">答案 · L6-C03</div>
+          <div class="fc-q" style="color:#047857;">
+用<b>两个栈</b>：输出栈（放操作数）+ 运算符栈（放 <code>+ - * /</code>）<br>
+① 遇<b>操作数</b> → 直接输出<br>
+② 遇<b>运算符</b> → 先把栈顶优先级 <b>≥</b> 它的全弹出，再压它<br>
+③ 遇 <code>(</code> → 压栈，<b>不弹任何东西</b><br>
+④ 遇 <code>)</code> → 弹到 <code>(</code> 为止，<code>(</code> <b>本身丢掉</b><br>
+⑤ <b>读完全部</b> → 把运算符栈全部弹完
+          </div>
+          <div class="fc-explain"><b>例</b> <code>2 + 3 * 4 − 6 / 2</code><br>
+读到 <code>−</code> 时，<code>*</code> 和 <code>+</code> 都被弹出 → 输出 <code>2 3 4 * + 6</code><br>
+读完全部 → <code>2 3 4 * + 6 2 / −</code></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flashcard" data-lesson="L6" onclick="this.classList.toggle('flipped')">
+      <span class="fc-flip-hint">点击翻面 ↻</span>
+      <div class="fc-inner">
+        <div class="fc-face fc-front">
+          <div class="fc-tag">L6-C04 · 易错</div>
+          <div class="fc-q">中缀转后缀最容易错在哪三个地方？</div>
+        </div>
+        <div class="fc-face fc-back">
+          <div class="fc-tag" style="background:rgba(220,38,38,.12); color:#b91c1c;">答案 · L6-C04</div>
+          <div class="fc-q" style="color:#b91c1c;">
+① 规则②用 <b>≥</b> 不是 <b>&gt;</b>（同优先级也要先弹）<br>
+② <code>(</code> 要<b>丢掉</b>，不能进输出<br>
+③ 读完全部<b>别忘了弹栈</b>，漏一个运算符答案就错
+          </div>
+          <div class="fc-explain"><b>为什么①容易错</b>：<code>8 − 3 + 1</code> 转换时，读到 <code>+</code>，栈顶是 <code>−</code>，优先级<b>相等</b>，也必须先弹出<br>
+→ 正确后缀 <code>8 3 1 + −</code>（先算 3+1，再 8−4）<br>
+若误用 <code>&gt;</code>，会得到 <code>8 3 − 1 +</code> = 6，答案就错了</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flashcard" data-lesson="L6" onclick="this.classList.toggle('flipped')">
+      <span class="fc-flip-hint">点击翻面 ↻</span>
+      <div class="fc-inner">
+        <div class="fc-face fc-front">
+          <div class="fc-tag">L6-C05 · 方法</div>
+          <div class="fc-q">后缀表达式怎么求值？弹栈的顺序是什么？</div>
+        </div>
+        <div class="fc-face fc-back">
+          <div class="fc-tag" style="background:rgba(22,163,74,.12); color:#047857;">答案 · L6-C05</div>
+          <div class="fc-q" style="color:#047857;">
+<b>从左往右</b>扫，一个栈：<br>
+· 遇<b>数字</b> → 压栈<br>
+· 遇<b>运算符</b> → 弹出两个数：<b>先弹的是右操作数，后弹的是左操作数</b>，算完压回<br>
+最后栈里剩的那个数就是答案
+          </div>
+          <div class="fc-explain"><b>例</b> <code>3 4 2 * +</code><br>
+3→[3] · 4→[3,4] · 2→[3,4,2]<br>
+<code>*</code> 弹 2 和 4 → 4×2=8 → [3,8]<br>
+<code>+</code> 弹 8 和 3 → 3+8 = <b>11</b><br>
+<b>⚠️</b> <code>10 3 −</code> 要算成 <b>10−3=7</b>，不是 3−10</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flashcard" data-lesson="L6" onclick="this.classList.toggle('flipped')">
+      <span class="fc-flip-hint">点击翻面 ↻</span>
+      <div class="fc-inner">
+        <div class="fc-face fc-front">
+          <div class="fc-tag">L6-C06 · 方法</div>
+          <div class="fc-q">前缀表达式怎么求值？和后缀差在哪？</div>
+        </div>
+        <div class="fc-face fc-back">
+          <div class="fc-tag" style="background:rgba(22,163,74,.12); color:#047857;">答案 · L6-C06</div>
+          <div class="fc-q" style="color:#047857;">
+<b>从右往左</b>扫，一个栈：<br>
+· 遇<b>数字</b> → 压栈<br>
+· 遇<b>运算符</b> → 弹出两个数：<b>先弹的是左操作数，后弹的是右操作数</b><br>
+<br>
+<b>和后缀只有两处不同</b>：扫描方向 + 弹栈顺序<b>都反过来</b>
+          </div>
+          <div class="fc-explain"><b>例</b> <code>+ 3 * 4 2</code><br>
+逆序读 2→[2] · 4→[2,4]<br>
+<code>*</code> 弹 4 和 2 → 4×2=8 → [8]<br>
+3→[8,3] · <code>+</code> 弹 3 和 8 → 3+8 = <b>11</b><br>
+<b>对比表</b>：后缀=左→右扫，先弹<b>右</b>；前缀=右→左扫，先弹<b>左</b></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flashcard" data-lesson="L6" onclick="this.classList.toggle('flipped')">
+      <span class="fc-flip-hint">点击翻面 ↻</span>
+      <div class="fc-inner">
+        <div class="fc-face fc-front">
+          <div class="fc-tag">L6-C07 · 方法</div>
+          <div class="fc-q">前缀求值老是算错，有什么更稳的做法？</div>
+        </div>
+        <div class="fc-face fc-back">
+          <div class="fc-tag" style="background:rgba(22,163,74,.12); color:#047857;">答案 · L6-C07</div>
+          <div class="fc-q" style="color:#047857;">
+<b>先画树，再算</b>。<br>
+<b>前缀的树结构完全由位置决定</b>：<br>
+· 第一个 token 是<b>根运算符</b><br>
+· 根之后，依次是<b>左子树</b>、<b>右子树</b>（各要能配平）<br>
+· 递归下去，直到叶子是数字
+          </div>
+          <div class="fc-explain"><b>例</b> <code>− + 2 * 3 8 / * 6 2 3</code><br>
+<code>−</code> 根 → 左 <code>+ 2 * 3 8</code> = 2+(3×8) = <b>26</b><br>
+　　　　右 <code>/ * 6 2 3</code> = (6×2)÷3 = <b>4</b><br>
+26 − 4 = <b>22</b><br>
+<b>⚠️</b> 前缀题宁可慢点画树，也别盲推栈</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flashcard" data-lesson="L6" onclick="this.classList.toggle('flipped')">
+      <span class="fc-flip-hint">点击翻面 ↻</span>
+      <div class="fc-inner">
+        <div class="fc-face fc-front">
+          <div class="fc-tag">L6-C08 · 概念</div>
+          <div class="fc-q">ACSL 里的 <code>A^2</code> 和 <code>2A</code> 是什么意思？</div>
+        </div>
+        <div class="fc-face fc-back">
+          <div class="fc-tag" style="background:rgba(22,163,74,.12); color:#047857;">答案 · L6-C08</div>
+          <div class="fc-q" style="color:#047857;">
+· <code>A^2</code> = A 的平方（幂运算）→ 转后缀 <code>A 2 ^</code><br>
+· <code>2A</code> = 2 × A（<b>隐式乘</b>）→ 转后缀 <code>2 A *</code><br>
+· ACSL 允许省略乘号，<b>转换时必须自己补上 <code>*</code></b>
+          </div>
+          <div class="fc-explain"><b>例</b> <code>(A²+B)(B²−C)/(B+D²)</code><br>
+块1 <code>(A²+B)</code> → <code>A 2 ^ B +</code><br>
+块2 <code>(B²−C)</code> → <code>B 2 ^ C −</code><br>
+块3 <code>(B+D²)</code> → <code>B D 2 ^ +</code><br>
+整式 <code>块1 块2 * 块3 /</code><br>
+→ <code>A 2 ^ B + B 2 ^ C − * B D 2 ^ + /</code></div>
+        </div>
+      </div>
+    </div>
     </div><!-- /flashcard-grid -->
 
     <p style="text-align:center; color:var(--muted); font-size:14px; margin-top:24px;">
