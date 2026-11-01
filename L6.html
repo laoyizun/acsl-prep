@@ -327,7 +327,6 @@ pre .num, code .num { display: inline; min-width: 0; height: auto; background: n
 .slide.compare.active {
   display: grid !important;
   grid-template-columns: 1.06fr .94fr;
-  grid-template-rows: auto 1fr;
   grid-template-areas:
     "head head"
     "left right";
@@ -375,6 +374,92 @@ pre .num, code .num { display: inline; min-width: 0; height: auto; background: n
 .slide.compare .practice { padding: 11px 15px; }
 .slide.compare .practice p { font-size: 13px !important; line-height: 1.5; }
 .slide.compare .practice .label { padding: 4px 9px; font-size: 12px; margin-bottom: 6px; }
+
+/* 题目卡 + 答案折叠（题目与答案分成两个 div，答案默认收起） */
+.ans-card { padding: 0 !important; }
+.ans-card > summary {
+  cursor: pointer; list-style: none;
+  padding: 11px 15px; font-size: 14px; font-weight: 800; color: var(--green-deep);
+  display: flex; align-items: center; gap: 8px;
+}
+.ans-card > summary::-webkit-details-marker { display: none; }
+.ans-card > summary::before {
+  content: "▸"; display: inline-block; font-size: 12px; color: var(--green);
+  transition: transform .2s ease;
+}
+.ans-card[open] > summary::before { transform: rotate(90deg); }
+.ans-card[open] > summary { border-bottom: 1px dashed var(--line); }
+.ans-card > summary:hover { background: rgba(22, 163, 74, .06); }
+.ans-body { padding: 11px 15px 13px; }
+.ans-body > *:first-child { margin-top: 0 !important; }
+
+/* 展开后答案区限高内滚：高度按视口精确计算，保证卡片底边不越过导航条 */
+.ans-body { max-height: max(150px, calc(100vh - 500px)); overflow-y: auto; }
+/* 对照页：可用高度 = 视口 - 上下padding - head - 题目卡 - 间隔 - 折叠条 */
+.slide.compare .ans-body { max-height: max(160px, calc(100vh - 411px)); }
+/* 对照页的答案表格行距再收紧一点，让表格 + 结论条一起放得下 */
+.slide.compare .card table { font-size: 11px; }
+.slide.compare .card td, .slide.compare .card th { padding: 1.5px 6px; }
+
+/* 题目卡：补足高度，让左右两栏视觉平衡 */
+.q-card { border-left: 4px solid var(--purple) !important; }
+.q-card .code-block { margin: 6px 0 0 !important; }
+.q-note { font-size: 12.5px; color: var(--muted); margin-top: 7px; line-height: 1.55; }
+.q-list { font-size: 12.5px; line-height: 1.7; }
+.q-list b { color: var(--purple); }
+/* 对照页的题目卡：撑满左栏剩余空间，与右栏规则卡视觉平衡 */
+.slide.compare .left > .q-card { flex: 1 1 auto; min-height: 130px; display: flex; flex-direction: column; justify-content: center; }
+.slide.compare .left > .ans-card { flex: 0 0 auto; }
+.slide.compare .q-card .qa-expr { font-size: 15px; padding: 9px 12px; }
+.slide.compare .q-card .q-note { font-size: 13px; }
+
+/* 真题速查页：每题一栏，答案独立折叠 */
+.qa-row { margin-bottom: 9px; }
+.qa-row:last-child { margin-bottom: 0; }
+.qa-tag {
+  display: inline-block; padding: 2px 9px; border-radius: 999px;
+  background: rgba(220, 38, 38, .1); color: #b91c1c;
+  font-size: 12px; font-weight: 800; margin-bottom: 5px;
+}
+.qa-expr {
+  font-family: "JetBrains Mono", "Fira Code", "SF Mono", Consolas, monospace;
+  font-size: 13px; font-weight: 700; color: var(--ink);
+  background: rgba(124, 58, 237, .07); border: 1px solid rgba(124, 58, 237, .18);
+  border-radius: 6px; padding: 6px 10px; letter-spacing: .3px;
+}
+
+/* slide 16：3 道题各占一列，答案各自折叠 */
+.slide.qa3.active {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-areas:
+    "head head head"
+    "colA colB colC";
+  gap: 0 18px;
+}
+.slide.qa3 .head {
+  grid-area: head;
+  display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px 14px;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 9px; margin-bottom: 11px;
+}
+.slide.qa3 .head .kicker { margin-bottom: 0; }
+.slide.qa3 .head h2 { font-size: clamp(26px, 2.8vw, 34px); margin: 0; }
+.slide.qa3 .head .subtitle { font-size: 15px; line-height: 1.5; margin: 0; }
+.slide.qa3 .qa-col { display: flex; flex-direction: column; gap: 7px; }
+.slide.qa3 .qa-colA { grid-area: colA; }
+.slide.qa3 .qa-colB { grid-area: colB; }
+.slide.qa3 .qa-colC { grid-area: colC; }
+/* 题目卡撑开余量，答案折叠条紧跟其下 */
+.slide.qa3 .qa-col .q-card { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; justify-content: center; }
+.slide.qa3 .qa-col .ans-card { flex: 0 0 auto; }
+.slide.qa3 .qa-row { margin-bottom: 0; }
+.slide.qa3 .q-card { padding: 10px 14px; }
+.slide.qa3 .qa-expr { font-size: 12.5px; padding: 6px 9px; }
+.slide.qa3 .practice { padding: 11px 15px; }
+.slide.qa3 .practice p { font-size: 13px !important; line-height: 1.5; }
+/* slide 16 展开时答案区高度按视口计算 */
+.slide.qa3 .ans-body { max-height: max(140px, calc(100vh - 330px)); }
 
 /* 检验问题卡 */
 .check-q {
@@ -713,36 +798,44 @@ pre .num, code .num { display: inline; min-width: 0; height: auto; background: n
 <section class="slide compact compare">
   <div class="head">
     <div class="kicker">方法 1 · 演示</div>
-    <h2>2 + 3 * 4 − 6 / 2</h2>
-    <p class="subtitle">左边一步步推，右边 5 条规则同时对照看</p>
+    <h2>中缀 → 后缀 <span class="highlight">完整演示</span></h2>
+    <p class="subtitle">先自己推一遍，再点开答案对照右边 5 条规则</p>
   </div>
 
   <div class="left">
-    <div class="card" style="border-left:4px solid var(--purple);">
-      <h3 style="color:var(--purple);">逐步模拟 <span style="font-weight:500; color:var(--muted); font-size:12.5px;">（最后两列标出用到第几条规则）</span></h3>
-      <table style="font-size:12px; width:100%; border-collapse:collapse; line-height:1.45; margin-top:6px;">
-        <tr style="background:rgba(124,58,237,.08);">
-          <th>读到</th><th>输出栈</th><th>运算符栈</th>
-          <th>用到</th><th>这一步在干嘛</th>
-        </tr>
-        <tr><td>2</td><td>2</td><td>—</td><td class="r">①</td><td class="r-act">操作数直接输出</td></tr>
-        <tr style="background:rgba(124,58,237,.04);"><td>+</td><td>2</td><td>+</td><td class="r">②</td><td class="r-act">栈顶没更高优先级的，压栈</td></tr>
-        <tr><td>3</td><td>2 3</td><td>+</td><td class="r">①</td><td class="r-act">操作数直接输出</td></tr>
-        <tr style="background:rgba(124,58,237,.04);"><td>*</td><td>2 3</td><td>+ *</td><td class="r">②</td><td class="r-act"><code>*</code> 比 <code>+</code> 高，不弹，压栈</td></tr>
-        <tr><td>4</td><td>2 3 4</td><td>+ *</td><td class="r">①</td><td class="r-act">操作数直接输出</td></tr>
-        <tr class="r-key"><td><b>−</b></td><td>2 3 4 * +</td><td>−</td><td class="r">②</td><td class="r-act"><b><code>*</code> 和 <code>+</code> 都被弹掉</b></td></tr>
-        <tr><td>6</td><td>2 3 4 * + 6</td><td>−</td><td class="r">①</td><td class="r-act">操作数直接输出</td></tr>
-        <tr style="background:rgba(124,58,237,.04);"><td>/</td><td>2 3 4 * + 6</td><td>− /</td><td class="r">②</td><td class="r-act"><code>/</code> 比 <code>−</code> 高，不弹，压栈</td></tr>
-        <tr><td>2</td><td>2 3 4 * + 6 2</td><td>− /</td><td class="r">①</td><td class="r-act">操作数直接输出</td></tr>
-        <tr style="background:rgba(124,58,237,.04);"><td><b>读完</b></td><td><b>2 3 4 * + 6 2 / −</b></td><td>空</td><td class="r">⑤</td><td class="r-act">把剩下的全弹出来</td></tr>
-      </table>
-
-      <div style="margin-top:9px; padding:8px 11px; background:rgba(22,163,74,.07); border-left:3px solid var(--green); border-radius:5px; font-size:12.5px; line-height:1.6;">
-        <b style="color:var(--green-deep);">✓ 验算：</b>
-        <code>2 + 3*4 − 6/2 = 2 + 12 − 3 = 11</code> ·
-        后缀求值 <code>2 3 4 * + 6 2 / −</code> → <code>[2]→[2,12]→[14,6]→[14,3]→[11]</code> ✓
-      </div>
+    <div class="card q-card">
+      <div class="qa-tag">题目</div>
+      <div class="qa-expr">2 + 3 * 4 − 6 / 2</div>
+      <div class="q-note">把它转成<b>后缀表达式</b>，写出每一步的输出栈和运算符栈。</div>
     </div>
+
+    <details class="card ans-card">
+      <summary>展开答案 · 逐步模拟 + 验算</summary>
+      <div class="ans-body">
+        <table style="font-size:12px; width:100%; border-collapse:collapse; line-height:1.45;">
+          <tr style="background:rgba(124,58,237,.08);">
+            <th>读到</th><th>输出栈</th><th>运算符栈</th>
+            <th>用到</th><th>这一步在干嘛</th>
+          </tr>
+          <tr><td>2</td><td>2</td><td>—</td><td class="r">①</td><td class="r-act">操作数直接输出</td></tr>
+          <tr style="background:rgba(124,58,237,.04);"><td>+</td><td>2</td><td>+</td><td class="r">②</td><td class="r-act">栈顶没更高优先级的，压栈</td></tr>
+          <tr><td>3</td><td>2 3</td><td>+</td><td class="r">①</td><td class="r-act">操作数直接输出</td></tr>
+          <tr style="background:rgba(124,58,237,.04);"><td>*</td><td>2 3</td><td>+ *</td><td class="r">②</td><td class="r-act"><code>*</code> 比 <code>+</code> 高，不弹，压栈</td></tr>
+          <tr><td>4</td><td>2 3 4</td><td>+ *</td><td class="r">①</td><td class="r-act">操作数直接输出</td></tr>
+          <tr class="r-key"><td><b>−</b></td><td>2 3 4 * +</td><td>−</td><td class="r">②</td><td class="r-act"><b><code>*</code> 和 <code>+</code> 都被弹掉</b></td></tr>
+          <tr><td>6</td><td>2 3 4 * + 6</td><td>−</td><td class="r">①</td><td class="r-act">操作数直接输出</td></tr>
+          <tr style="background:rgba(124,58,237,.04);"><td>/</td><td>2 3 4 * + 6</td><td>− /</td><td class="r">②</td><td class="r-act"><code>/</code> 比 <code>−</code> 高，不弹，压栈</td></tr>
+          <tr><td>2</td><td>2 3 4 * + 6 2</td><td>− /</td><td class="r">①</td><td class="r-act">操作数直接输出</td></tr>
+          <tr style="background:rgba(124,58,237,.04);"><td><b>读完</b></td><td><b>2 3 4 * + 6 2 / −</b></td><td>空</td><td class="r">⑤</td><td class="r-act">把剩下的全弹出来</td></tr>
+        </table>
+
+        <div style="margin-top:9px; padding:8px 11px; background:rgba(22,163,74,.07); border-left:3px solid var(--green); border-radius:5px; font-size:12.5px; line-height:1.6;">
+          <b style="color:var(--green-deep);">✓ 验算：</b>
+          <code>2 + 3*4 − 6/2 = 2 + 12 − 3 = 11</code> ·
+          后缀求值 <code>2 3 4 * + 6 2 / −</code> → <code>[2]→[2,12]→[14,6]→[14,3]→[11]</code> ✓
+        </div>
+      </div>
+    </details>
   </div>
 
   <div class="right">
@@ -764,7 +857,7 @@ pre .num, code .num { display: inline; min-width: 0; height: auto; background: n
 
     <div class="practice">
       <div class="label">小贴士</div>
-      <p style="font-size:14px;">读到 <code>−</code> 那一刻，<code>*</code> 和 <code>+</code> 都被弹了出来 —— 这就是规则 2 里「≥」两个字符的作用</p>
+      <p style="font-size:14px;">读表达式时先把<b>操作数圈出来</b>、<b>运算符标上优先级</b>，再看栈顶该弹谁</p>
     </div>
   </div>
 </section>
@@ -773,37 +866,45 @@ pre .num, code .num { display: inline; min-width: 0; height: auto; background: n
 <section class="slide compact compare">
   <div class="head">
     <div class="kicker">方法 1 · 变式</div>
-    <h2>3 + 4 * (8 − 4 / 2)</h2>
-    <p class="subtitle">括号怎么处理 —— 规则 ③ ④ 派上用场了</p>
+    <h2>中缀 → 后缀 <span class="highlight">带括号</span></h2>
+    <p class="subtitle">规则 ③ ④ 派上用场了 —— 先自己推，再点开答案</p>
   </div>
 
   <div class="left">
-    <div class="card" style="border-left:4px solid var(--purple);">
-      <h3 style="color:var(--purple);">逐步模拟 <span style="font-weight:500; color:var(--muted); font-size:12.5px;">（最后两列标出用到第几条规则）</span></h3>
-      <table style="font-size:12px; width:100%; border-collapse:collapse; line-height:1.45; margin-top:6px;">
-        <tr style="background:rgba(124,58,237,.08);">
-          <th>读到</th><th>输出栈</th><th>运算符栈</th>
-          <th>用到</th><th>这一步在干嘛</th>
-        </tr>
-        <tr><td>3</td><td>3</td><td>—</td><td class="r">①</td><td class="r-act">操作数直接输出</td></tr>
-        <tr style="background:rgba(124,58,237,.04);"><td>+</td><td>3</td><td>+</td><td class="r">②</td><td class="r-act">栈顶没更高优先级的，压栈</td></tr>
-        <tr><td>4</td><td>3 4</td><td>+</td><td class="r">①</td><td class="r-act">操作数直接输出</td></tr>
-        <tr style="background:rgba(124,58,237,.04);"><td>*</td><td>3 4</td><td>+ *</td><td class="r">②</td><td class="r-act"><code>*</code> 比 <code>+</code> 高，不弹，压栈</td></tr>
-        <tr class="r-key"><td><b>(</b></td><td>3 4</td><td>+ * (</td><td class="r">③</td><td class="r-act"><b>括号压栈，什么都不输出</b></td></tr>
-        <tr><td>8</td><td>3 4 8</td><td>+ * (</td><td class="r">①</td><td class="r-act">操作数直接输出</td></tr>
-        <tr style="background:rgba(124,58,237,.04);"><td>−</td><td>3 4 8</td><td>+ * ( −</td><td class="r">②</td><td class="r-act">栈顶是 <code>(</code>，不弹，压栈</td></tr>
-        <tr><td>4</td><td>3 4 8 4</td><td>+ * ( −</td><td class="r">①</td><td class="r-act">操作数直接输出</td></tr>
-        <tr style="background:rgba(124,58,237,.04);"><td>/</td><td>3 4 8 4</td><td>+ * ( − /</td><td class="r">②</td><td class="r-act"><code>/</code> 比 <code>−</code> 高，不弹，压栈</td></tr>
-        <tr><td>2</td><td>3 4 8 4 2</td><td>+ * ( − /</td><td class="r">①</td><td class="r-act">操作数直接输出</td></tr>
-        <tr class="r-key"><td><b>)</b></td><td>3 4 8 4 2 / −</td><td>+ *</td><td class="r">④</td><td class="r-act"><b>弹到 <code>(</code> 为止，<code>(</code> 本身丢掉</b></td></tr>
-        <tr style="background:rgba(124,58,237,.04);"><td><b>读完</b></td><td><b>3 4 8 4 2 / − * +</b></td><td>空</td><td class="r">⑤</td><td class="r-act">把剩下的 <code>* +</code> 全弹出来</td></tr>
-      </table>
-
-      <div style="margin-top:9px; padding:8px 11px; background:rgba(22,163,74,.07); border-left:3px solid var(--green); border-radius:5px; font-size:12.5px; line-height:1.6;">
-        <b style="color:var(--green-deep);">✓ 关键两步：</b>
-        读到 <code>(</code> → 压栈，<b>什么都不输出</b>；读到 <code>)</code> → 把 <code>(</code> 之前的 <code>− /</code> 全弹出，<b><code>(</code> 本身丢掉</b>。
-      </div>
+    <div class="card q-card">
+      <div class="qa-tag">题目</div>
+      <div class="qa-expr">3 + 4 * (8 − 4 / 2)</div>
+      <div class="q-note">把它转成<b>后缀表达式</b>。注意括号怎么处理。</div>
     </div>
+
+    <details class="card ans-card">
+      <summary>展开答案 · 逐步模拟 + 关键两步</summary>
+      <div class="ans-body">
+        <table style="font-size:12px; width:100%; border-collapse:collapse; line-height:1.45;">
+          <tr style="background:rgba(124,58,237,.08);">
+            <th>读到</th><th>输出栈</th><th>运算符栈</th>
+            <th>用到</th><th>这一步在干嘛</th>
+          </tr>
+          <tr><td>3</td><td>3</td><td>—</td><td class="r">①</td><td class="r-act">操作数直接输出</td></tr>
+          <tr style="background:rgba(124,58,237,.04);"><td>+</td><td>3</td><td>+</td><td class="r">②</td><td class="r-act">栈顶没更高优先级的，压栈</td></tr>
+          <tr><td>4</td><td>3 4</td><td>+</td><td class="r">①</td><td class="r-act">操作数直接输出</td></tr>
+          <tr style="background:rgba(124,58,237,.04);"><td>*</td><td>3 4</td><td>+ *</td><td class="r">②</td><td class="r-act"><code>*</code> 比 <code>+</code> 高，不弹，压栈</td></tr>
+          <tr class="r-key"><td><b>(</b></td><td>3 4</td><td>+ * (</td><td class="r">③</td><td class="r-act"><b>括号压栈，什么都不输出</b></td></tr>
+          <tr><td>8</td><td>3 4 8</td><td>+ * (</td><td class="r">①</td><td class="r-act">操作数直接输出</td></tr>
+          <tr style="background:rgba(124,58,237,.04);"><td>−</td><td>3 4 8</td><td>+ * ( −</td><td class="r">②</td><td class="r-act">栈顶是 <code>(</code>，不弹，压栈</td></tr>
+          <tr><td>4</td><td>3 4 8 4</td><td>+ * ( −</td><td class="r">①</td><td class="r-act">操作数直接输出</td></tr>
+          <tr style="background:rgba(124,58,237,.04);"><td>/</td><td>3 4 8 4</td><td>+ * ( − /</td><td class="r">②</td><td class="r-act"><code>/</code> 比 <code>−</code> 高，不弹，压栈</td></tr>
+          <tr><td>2</td><td>3 4 8 4 2</td><td>+ * ( − /</td><td class="r">①</td><td class="r-act">操作数直接输出</td></tr>
+          <tr class="r-key"><td><b>)</b></td><td>3 4 8 4 2 / −</td><td>+ *</td><td class="r">④</td><td class="r-act"><b>弹到 <code>(</code> 为止，<code>(</code> 本身丢掉</b></td></tr>
+          <tr style="background:rgba(124,58,237,.04);"><td><b>读完</b></td><td><b>3 4 8 4 2 / − * +</b></td><td>空</td><td class="r">⑤</td><td class="r-act">把剩下的 <code>* +</code> 全弹出来</td></tr>
+        </table>
+
+        <div style="margin-top:9px; padding:8px 11px; background:rgba(22,163,74,.07); border-left:3px solid var(--green); border-radius:5px; font-size:12.5px; line-height:1.6;">
+          <b style="color:var(--green-deep);">✓ 关键两步：</b>
+          读到 <code>(</code> → 压栈，<b>什么都不输出</b>；读到 <code>)</code> → 把 <code>(</code> 之前的 <code>− /</code> 全弹出，<b><code>(</code> 本身丢掉</b>。
+        </div>
+      </div>
+    </details>
   </div>
 
   <div class="right">
@@ -839,9 +940,16 @@ pre .num, code .num { display: inline; min-width: 0; height: auto; background: n
   </div>
 
   <div class="left">
-    <div class="card" style="border-left:4px solid var(--purple);">
-      <h3 style="color:var(--purple);">实战演示 <span style="font-weight:500; color:var(--muted); font-size:12.5px;">（3 + 4 * (8 − 4 / 2)）</span></h3>
-      <div class="code-block" style="font-size:12px; line-height:1.75; margin-top:6px;">
+    <div class="card q-card">
+      <div class="qa-tag">题目</div>
+      <div class="qa-expr">3 + 4 * (8 − 4 / 2)</div>
+      <div class="q-note">把它转成<b>前缀表达式</b>（2024-2025 真题第 1 题）。</div>
+    </div>
+
+    <details class="card ans-card">
+      <summary>展开答案 · 实战演示 + 结果</summary>
+      <div class="ans-body">
+        <div class="code-block" style="font-size:12px; line-height:1.75;">
 步骤 1：从<b>里往外</b>包。整式的运算是 +
         → 先把括号里的 4 * (8 − 4/2) 包起来
 步骤 2：括号内运算是 *
@@ -854,16 +962,14 @@ pre .num, code .num { display: inline; min-width: 0; height: auto; background: n
 (2) 8 − (1)      → − 8 / 4 2
 (3) 4 * (2)      → * 4 − 8 / 4 2
 (4) 3 + (3)      → + 3 * 4 − 8 / 4 2
+        </div>
+        <div style="margin-top:9px; padding:8px 11px; background:rgba(22,163,74,.07); border-left:3px solid var(--green); border-radius:5px; font-size:12.5px; line-height:1.6;">
+          <b style="color:var(--green-deep);">✓ 结果：</b>
+          前缀 = <code>+ 3 * 4 − 8 / 4 2</code>（官方答案 B）<br>
+          <span style="color:var(--muted);">检验：4/2=2 → 8−2=6 → 4*6=24 → 3+24=27 ✓（和中缀值一致）</span>
+        </div>
       </div>
-    </div>
-
-    <div class="card" style="border-left:4px solid var(--green);">
-      <h3 style="color:var(--green-deep);">✓ 结果</h3>
-      <div style="font-size:14px; line-height:1.7; margin-top:4px;">
-        前缀 = <code>+ 3 * 4 − 8 / 4 2</code> —— <b>官方答案就是 B</b><br>
-        <span style="color:var(--muted); font-size:13px;">检验：4/2=2 → 8−2=6 → 4*6=24 → 3+24=27 ✓（和中缀值一致）</span>
-      </div>
-    </div>
+    </details>
   </div>
 
   <div class="right">
@@ -904,24 +1010,32 @@ pre .num, code .num { display: inline; min-width: 0; height: auto; background: n
   </div>
 
   <div class="left">
-    <div class="card" style="border-left:4px solid var(--purple);">
-      <h3 style="color:var(--purple);">演示：3 4 2 * + <span style="font-weight:500; color:var(--muted); font-size:12.5px;">（右列标出用到第几条规则）</span></h3>
-      <table style="font-size:12px; width:100%; border-collapse:collapse; line-height:1.5; margin-top:6px;">
-        <tr style="background:rgba(124,58,237,.08);">
-          <th>读到</th><th>动作</th><th>栈</th><th>用到</th>
-        </tr>
-        <tr><td>3</td><td>压栈</td><td>[3]</td><td class="r">①</td></tr>
-        <tr style="background:rgba(124,58,237,.04);"><td>4</td><td>压栈</td><td>[3, 4]</td><td class="r">①</td></tr>
-        <tr><td>2</td><td>压栈</td><td>[3, 4, 2]</td><td class="r">①</td></tr>
-        <tr style="background:rgba(124,58,237,.04);"><td><b>*</b></td><td>弹 <b>2</b> 和 <b>4</b> → 4 × 2 = 8，压回</td><td>[3, 8]</td><td class="r">②</td></tr>
-        <tr class="r-key"><td><b>+</b></td><td>弹 <b>8</b> 和 <b>3</b> → 3 + 8 = 11，压回</td><td>[11]</td><td class="r">②</td></tr>
-      </table>
-
-      <div style="margin-top:9px; padding:8px 11px; background:rgba(22,163,74,.07); border-left:3px solid var(--green); border-radius:5px; font-size:12.5px; line-height:1.6;">
-        <b style="color:var(--green-deep);">✓ 最后栈里剩一个数 → 11</b>
-        <span style="color:var(--muted);">　整个过程从头到尾一个栈，不用管优先级，不用管括号</span>
-      </div>
+    <div class="card q-card">
+      <div class="qa-tag">题目</div>
+      <div class="qa-expr">3 4 2 * +</div>
+      <div class="q-note">求这个<b>后缀表达式</b>的值，写出每一步栈里剩下什么。</div>
     </div>
+
+    <details class="card ans-card">
+      <summary>展开答案 · 演示 + 结果</summary>
+      <div class="ans-body">
+        <table style="font-size:12px; width:100%; border-collapse:collapse; line-height:1.5;">
+          <tr style="background:rgba(124,58,237,.08);">
+            <th>读到</th><th>动作</th><th>栈</th><th>用到</th>
+          </tr>
+          <tr><td>3</td><td>压栈</td><td>[3]</td><td class="r">①</td></tr>
+          <tr style="background:rgba(124,58,237,.04);"><td>4</td><td>压栈</td><td>[3, 4]</td><td class="r">①</td></tr>
+          <tr><td>2</td><td>压栈</td><td>[3, 4, 2]</td><td class="r">①</td></tr>
+          <tr style="background:rgba(124,58,237,.04);"><td><b>*</b></td><td>弹 <b>2</b> 和 <b>4</b> → 4 × 2 = 8，压回</td><td>[3, 8]</td><td class="r">②</td></tr>
+          <tr class="r-key"><td><b>+</b></td><td>弹 <b>8</b> 和 <b>3</b> → 3 + 8 = 11，压回</td><td>[11]</td><td class="r">②</td></tr>
+        </table>
+
+        <div style="margin-top:9px; padding:8px 11px; background:rgba(22,163,74,.07); border-left:3px solid var(--green); border-radius:5px; font-size:12.5px; line-height:1.6;">
+          <b style="color:var(--green-deep);">✓ 最后栈里剩一个数 → 11</b>
+          <span style="color:var(--muted);">　整个过程从头到尾一个栈，不用管优先级，不用管括号</span>
+        </div>
+      </div>
+    </details>
   </div>
 
   <div class="right">
@@ -954,37 +1068,45 @@ pre .num, code .num { display: inline; min-width: 0; height: auto; background: n
 <section class="slide compact compare">
   <div class="head">
     <div class="kicker">方法 3 · 真题演练</div>
-    <h2>9 8 6 2 − * 2 / + 6 3 / −</h2>
+    <h2>后缀求值 <span class="highlight">真题演练</span></h2>
     <p class="subtitle">2024-2025 真题第 2 题</p>
   </div>
 
   <div class="left">
-    <div class="card" style="border-left:4px solid var(--purple);">
-      <h3 style="color:var(--purple);">逐栈推演 <span style="font-weight:500; color:var(--muted); font-size:12.5px;">（右列标出用到第几条规则）</span></h3>
-      <table style="font-size:12px; width:100%; border-collapse:collapse; line-height:1.5; margin-top:6px;">
-        <tr style="background:rgba(124,58,237,.08);">
-          <th>读到</th><th>动作</th><th>栈</th><th>用到</th>
-        </tr>
-        <tr><td>9</td><td>压栈</td><td>[9]</td><td class="r">①</td></tr>
-        <tr style="background:rgba(124,58,237,.04);"><td>8</td><td>压栈</td><td>[9, 8]</td><td class="r">①</td></tr>
-        <tr><td>6</td><td>压栈</td><td>[9, 8, 6]</td><td class="r">①</td></tr>
-        <tr style="background:rgba(124,58,237,.04);"><td>2</td><td>压栈</td><td>[9, 8, 6, 2]</td><td class="r">①</td></tr>
-        <tr><td>−</td><td>弹 2 和 6 → 6−2 = 4</td><td>[9, 8, 4]</td><td class="r">②</td></tr>
-        <tr style="background:rgba(124,58,237,.04);"><td>*</td><td>弹 4 和 8 → 8×4 = 32</td><td>[9, 32]</td><td class="r">②</td></tr>
-        <tr><td>2</td><td>压栈</td><td>[9, 32, 2]</td><td class="r">①</td></tr>
-        <tr style="background:rgba(124,58,237,.04);"><td>/</td><td>弹 2 和 32 → 32/2 = 16</td><td>[9, 16]</td><td class="r">②</td></tr>
-        <tr><td>+</td><td>弹 16 和 9 → 9+16 = 25</td><td>[25]</td><td class="r">②</td></tr>
-        <tr style="background:rgba(124,58,237,.04);"><td>6</td><td>压栈</td><td>[25, 6]</td><td class="r">①</td></tr>
-        <tr><td>3</td><td>压栈</td><td>[25, 6, 3]</td><td class="r">①</td></tr>
-        <tr style="background:rgba(124,58,237,.04);"><td>/</td><td>弹 3 和 6 → 6/3 = 2</td><td>[25, 2]</td><td class="r">②</td></tr>
-        <tr class="r-key"><td>−</td><td>弹 2 和 25 → 25−2 = 23</td><td>[23]</td><td class="r">②</td></tr>
-      </table>
-
-      <div style="margin-top:9px; padding:8px 11px; background:rgba(22,163,74,.07); border-left:3px solid var(--green); border-radius:5px; font-size:12.5px; line-height:1.6;">
-        <b style="color:var(--green-deep);">✓ 答案：23</b>
-        <span style="color:var(--muted);">　分块验算：前 9 个 token → 9 + (8 × (6−2)/2) = 25；后 4 个 → 25 − (6/3) = 23</span>
-      </div>
+    <div class="card q-card">
+      <div class="qa-tag">题目</div>
+      <div class="qa-expr">9 8 6 2 − * 2 / + 6 3 / −</div>
+      <div class="q-note">求这个<b>后缀表达式</b>的值。<br>（2024-2025 真题第 2 题，官方答案 D. 23）</div>
     </div>
+
+    <details class="card ans-card">
+      <summary>展开答案 · 逐栈推演</summary>
+      <div class="ans-body">
+        <table style="font-size:12px; width:100%; border-collapse:collapse; line-height:1.5;">
+          <tr style="background:rgba(124,58,237,.08);">
+            <th>读到</th><th>动作</th><th>栈</th><th>用到</th>
+          </tr>
+          <tr><td>9</td><td>压栈</td><td>[9]</td><td class="r">①</td></tr>
+          <tr style="background:rgba(124,58,237,.04);"><td>8</td><td>压栈</td><td>[9, 8]</td><td class="r">①</td></tr>
+          <tr><td>6</td><td>压栈</td><td>[9, 8, 6]</td><td class="r">①</td></tr>
+          <tr style="background:rgba(124,58,237,.04);"><td>2</td><td>压栈</td><td>[9, 8, 6, 2]</td><td class="r">①</td></tr>
+          <tr><td>−</td><td>弹 2 和 6 → 6−2 = 4</td><td>[9, 8, 4]</td><td class="r">②</td></tr>
+          <tr style="background:rgba(124,58,237,.04);"><td>*</td><td>弹 4 和 8 → 8×4 = 32</td><td>[9, 32]</td><td class="r">②</td></tr>
+          <tr><td>2</td><td>压栈</td><td>[9, 32, 2]</td><td class="r">①</td></tr>
+          <tr style="background:rgba(124,58,237,.04);"><td>/</td><td>弹 2 和 32 → 32/2 = 16</td><td>[9, 16]</td><td class="r">②</td></tr>
+          <tr><td>+</td><td>弹 16 和 9 → 9+16 = 25</td><td>[25]</td><td class="r">②</td></tr>
+          <tr style="background:rgba(124,58,237,.04);"><td>6</td><td>压栈</td><td>[25, 6]</td><td class="r">①</td></tr>
+          <tr><td>3</td><td>压栈</td><td>[25, 6, 3]</td><td class="r">①</td></tr>
+          <tr style="background:rgba(124,58,237,.04);"><td>/</td><td>弹 3 和 6 → 6/3 = 2</td><td>[25, 2]</td><td class="r">②</td></tr>
+          <tr class="r-key"><td>−</td><td>弹 2 和 25 → 25−2 = 23</td><td>[23]</td><td class="r">②</td></tr>
+        </table>
+
+        <div style="margin-top:9px; padding:8px 11px; background:rgba(22,163,74,.07); border-left:3px solid var(--green); border-radius:5px; font-size:12.5px; line-height:1.6;">
+          <b style="color:var(--green-deep);">✓ 答案：23</b><br>
+          <span style="color:var(--muted);">分块验算：前 9 个 token → 9 + (8 × (6−2)/2) = 25；后 4 个 → 25 − (6/3) = 23</span>
+        </div>
+      </div>
+    </details>
   </div>
 
   <div class="right">
@@ -1022,24 +1144,32 @@ pre .num, code .num { display: inline; min-width: 0; height: auto; background: n
   </div>
 
   <div class="left">
-    <div class="card" style="border-left:4px solid var(--purple);">
-      <h3 style="color:var(--purple);">演示：+ 3 * 4 2 <span style="font-weight:500; color:var(--muted); font-size:12.5px;">（从右往左读，右列标出用到第几条规则）</span></h3>
-      <table style="font-size:12px; width:100%; border-collapse:collapse; line-height:1.5; margin-top:6px;">
-        <tr style="background:rgba(124,58,237,.08);">
-          <th>读到</th><th>动作</th><th>栈</th><th>用到</th>
-        </tr>
-        <tr><td>2</td><td>压栈</td><td>[2]</td><td class="r">②</td></tr>
-        <tr style="background:rgba(124,58,237,.04);"><td>4</td><td>压栈</td><td>[2, 4]</td><td class="r">②</td></tr>
-        <tr><td><b>*</b></td><td>弹 <b>4</b> 和 <b>2</b> → 4 × 2 = 8，压回</td><td>[8]</td><td class="r">③</td></tr>
-        <tr style="background:rgba(124,58,237,.04);"><td>3</td><td>压栈</td><td>[8, 3]</td><td class="r">②</td></tr>
-        <tr class="r-key"><td><b>+</b></td><td>弹 <b>3</b> 和 <b>8</b> → 3 + 8 = 11，压回</td><td>[11]</td><td class="r">③</td></tr>
-      </table>
-
-      <div style="margin-top:9px; padding:8px 11px; background:rgba(22,163,74,.07); border-left:3px solid var(--green); border-radius:5px; font-size:12.5px; line-height:1.6;">
-        <b style="color:var(--green-deep);">✓ 答案：11</b>
-        <span style="color:var(--muted);">　逆序读一遍：2 4 * 3 + → 跟后缀求值长得一模一样，只是方向反了</span>
-      </div>
+    <div class="card q-card">
+      <div class="qa-tag">题目</div>
+      <div class="qa-expr">+ 3 * 4 2</div>
+      <div class="q-note">求这个<b>前缀表达式</b>的值，注意要从<b>右往左</b>读。</div>
     </div>
+
+    <details class="card ans-card">
+      <summary>展开答案 · 演示 + 结果</summary>
+      <div class="ans-body">
+        <table style="font-size:12px; width:100%; border-collapse:collapse; line-height:1.5;">
+          <tr style="background:rgba(124,58,237,.08);">
+            <th>读到</th><th>动作</th><th>栈</th><th>用到</th>
+          </tr>
+          <tr><td>2</td><td>压栈</td><td>[2]</td><td class="r">②</td></tr>
+          <tr style="background:rgba(124,58,237,.04);"><td>4</td><td>压栈</td><td>[2, 4]</td><td class="r">②</td></tr>
+          <tr><td><b>*</b></td><td>弹 <b>4</b> 和 <b>2</b> → 4 × 2 = 8，压回</td><td>[8]</td><td class="r">③</td></tr>
+          <tr style="background:rgba(124,58,237,.04);"><td>3</td><td>压栈</td><td>[8, 3]</td><td class="r">②</td></tr>
+          <tr class="r-key"><td><b>+</b></td><td>弹 <b>3</b> 和 <b>8</b> → 3 + 8 = 11，压回</td><td>[11]</td><td class="r">③</td></tr>
+        </table>
+
+        <div style="margin-top:9px; padding:8px 11px; background:rgba(22,163,74,.07); border-left:3px solid var(--green); border-radius:5px; font-size:12.5px; line-height:1.6;">
+          <b style="color:var(--green-deep);">✓ 答案：11</b><br>
+          <span style="color:var(--muted);">逆序读一遍：2 4 * 3 + → 跟后缀求值长得一模一样，只是方向反了</span>
+        </div>
+      </div>
+    </details>
   </div>
 
   <div class="right">
@@ -1082,30 +1212,38 @@ pre .num, code .num { display: inline; min-width: 0; height: auto; background: n
   </div>
 
   <div class="left">
-    <div class="card" style="border-left:4px solid var(--purple);">
-      <h3 style="color:var(--purple);">真题：求后缀式值 <span style="font-weight:500; color:var(--muted); font-size:12.5px;">（a=4, b=2, c=1）</span></h3>
-      <table style="font-size:12px; width:100%; border-collapse:collapse; line-height:1.5; margin-top:6px;">
-        <tr style="background:rgba(124,58,237,.08);">
-          <th>读到</th><th>动作</th><th>栈</th><th>用到</th>
-        </tr>
-        <tr><td>a</td><td>压栈 → 4</td><td>[4]</td><td class="r">①</td></tr>
-        <tr style="background:rgba(124,58,237,.04);"><td>b</td><td>压栈 → 2</td><td>[4, 2]</td><td class="r">①</td></tr>
-        <tr><td>+</td><td>弹 2 和 4 → 4+2 = 6</td><td>[6]</td><td class="r">②</td></tr>
-        <tr style="background:rgba(124,58,237,.04);"><td>c</td><td>压栈 → 1</td><td>[6, 1]</td><td class="r">①</td></tr>
-        <tr><td>/</td><td>弹 1 和 6 → 6/1 = 6</td><td>[6]</td><td class="r">②</td></tr>
-        <tr style="background:rgba(124,58,237,.04);"><td>a</td><td>压栈 → 4</td><td>[6, 4]</td><td class="r">①</td></tr>
-        <tr><td>b</td><td>压栈 → 2</td><td>[6, 4, 2]</td><td class="r">①</td></tr>
-        <tr style="background:rgba(124,58,237,.04);"><td>−</td><td>弹 2 和 4 → 4−2 = 2</td><td>[6, 2]</td><td class="r">②</td></tr>
-        <tr><td>b</td><td>压栈 → 2</td><td>[6, 2, 2]</td><td class="r">①</td></tr>
-        <tr style="background:rgba(124,58,237,.04);"><td>/</td><td>弹 2 和 2 → 2/2 = 1</td><td>[6, 1]</td><td class="r">②</td></tr>
-        <tr class="r-key"><td>−</td><td>弹 1 和 6 → 6−1 = 5</td><td>[5]</td><td class="r">②</td></tr>
-      </table>
-
-      <div style="margin-top:9px; padding:8px 11px; background:rgba(22,163,74,.07); border-left:3px solid var(--green); border-radius:5px; font-size:12.5px; line-height:1.6;">
-        <b style="color:var(--green-deep);">✓ 答案：5</b>
-        <span style="color:var(--muted);">　代入验算：a+b=6 → 6÷c=6 → a−b=2 → 2÷b=1 → 6−1=5（2016-2017 真题，官方答案 5 ✓）</span>
-      </div>
+    <div class="card q-card">
+      <div class="qa-tag">题目</div>
+      <div class="qa-expr">a b + c / a b − b / −</div>
+      <div class="q-note">已知 <b>a=4, b=2, c=1</b>，求这个后缀表达式的值。</div>
     </div>
+
+    <details class="card ans-card">
+      <summary>展开答案 · 逐栈过程 + 验算</summary>
+      <div class="ans-body">
+        <table style="font-size:12px; width:100%; border-collapse:collapse; line-height:1.5;">
+          <tr style="background:rgba(124,58,237,.08);">
+            <th>读到</th><th>动作</th><th>栈</th><th>用到</th>
+          </tr>
+          <tr><td>a</td><td>压栈 → 4</td><td>[4]</td><td class="r">①</td></tr>
+          <tr style="background:rgba(124,58,237,.04);"><td>b</td><td>压栈 → 2</td><td>[4, 2]</td><td class="r">①</td></tr>
+          <tr><td>+</td><td>弹 2 和 4 → 4+2 = 6</td><td>[6]</td><td class="r">②</td></tr>
+          <tr style="background:rgba(124,58,237,.04);"><td>c</td><td>压栈 → 1</td><td>[6, 1]</td><td class="r">①</td></tr>
+          <tr><td>/</td><td>弹 1 和 6 → 6/1 = 6</td><td>[6]</td><td class="r">②</td></tr>
+          <tr style="background:rgba(124,58,237,.04);"><td>a</td><td>压栈 → 4</td><td>[6, 4]</td><td class="r">①</td></tr>
+          <tr><td>b</td><td>压栈 → 2</td><td>[6, 4, 2]</td><td class="r">①</td></tr>
+          <tr style="background:rgba(124,58,237,.04);"><td>−</td><td>弹 2 和 4 → 4−2 = 2</td><td>[6, 2]</td><td class="r">②</td></tr>
+          <tr><td>b</td><td>压栈 → 2</td><td>[6, 2, 2]</td><td class="r">①</td></tr>
+          <tr style="background:rgba(124,58,237,.04);"><td>/</td><td>弹 2 和 2 → 2/2 = 1</td><td>[6, 1]</td><td class="r">②</td></tr>
+          <tr class="r-key"><td>−</td><td>弹 1 和 6 → 6−1 = 5</td><td>[5]</td><td class="r">②</td></tr>
+        </table>
+
+        <div style="margin-top:9px; padding:8px 11px; background:rgba(22,163,74,.07); border-left:3px solid var(--green); border-radius:5px; font-size:12.5px; line-height:1.6;">
+          <b style="color:var(--green-deep);">✓ 答案：5</b><br>
+          <span style="color:var(--muted);">代入验算：a+b=6 → 6÷c=6 → a−b=2 → 2÷b=1 → 6−1=5（2016-2017 真题，官方答案 5 ✓）</span>
+        </div>
+      </div>
+    </details>
   </div>
 
   <div class="right">
@@ -1157,9 +1295,9 @@ A^2        → A 2 ^        （幂）
         <div>E. AB+C1−/2A*3D−/+</div>
       </div>
     </div>
-    <details class="card" style="border-left:4px solid var(--green); margin-top:12px;">
-      <summary style="cursor:pointer; color:var(--green-deep); font-weight:800; font-size:16px; padding:12px 0;">点这里看答案 + 分块拆解</summary>
-      <div style="padding:14px; background:rgba(22,163,74,.06); border-radius:6px; margin-top:8px;">
+    <details class="card ans-card" style="border-left:4px solid var(--green) !important; margin-top:12px;">
+      <summary>展开答案 · 分块拆解</summary>
+      <div class="ans-body">
         <p style="font-size:17px; line-height:1.7;"><b>答案：B. AB+C1−/2A*3−D/+</b></p>
         <p style="font-size:15px; line-height:1.7; margin-top:10px;"><b>分块拆解（先拆成 4 块，再各自转后缀）：</b></p>
         <div class="code-block" style="font-size:13px; line-height:1.75;">
@@ -1204,9 +1342,9 @@ A B + C 1 − /  2 A * 3 − D /  +
         <div>E. 30</div>
       </div>
     </div>
-    <details class="card" style="border-left:4px solid var(--green); margin-top:12px;">
-      <summary style="cursor:pointer; color:var(--green-deep); font-weight:800; font-size:16px; padding:12px 0;">点这里看答案 + 完整推演</summary>
-      <div style="padding:14px; background:rgba(22,163,74,.06); border-radius:6px; margin-top:8px;">
+    <details class="card ans-card" style="border-left:4px solid var(--green) !important; margin-top:12px;">
+      <summary>展开答案 · 完整推演</summary>
+      <div class="ans-body">
         <p style="font-size:17px; line-height:1.7;"><b>答案：C. 22</b></p>
         <p style="font-size:15px; line-height:1.7; margin-top:10px;"><b>方法一 · 画树（推荐，最不容易错）</b></p>
         <div class="code-block" style="font-size:13px; line-height:1.7;">
@@ -1287,49 +1425,85 @@ A B + C 1 − /  2 A * 3 − D /  +
 </section>
 
 <!-- 16 · 真题速查：前缀求值 3 道 -->
-<section class="slide compact">
-  <div class="left">
+<section class="slide compact qa3">
+  <div class="head">
     <div class="kicker">真题速查 · 前缀求值</div>
     <h2>前缀求值 <span class="highlight">3 道真题</span></h2>
-    <p class="subtitle">2023-2024 / 2022-2023 / 2021-2022</p>
+    <p class="subtitle">2023-2024 / 2022-2023 / 2021-2022 · 直接写数值答案，先画树再算</p>
   </div>
-  <div class="right">
-    <div class="card" style="border-left:4px solid var(--red);">
-      <h3 style="color:var(--red);">题 1 · 2023-2024</h3>
-      <div class="code-block" style="font-size:13px; line-height:1.7;">
-− + 2 * 3 8 / * 6 2 3
 
-树：左 = + 2 (3×8) = 26
-    右 = (6×2)÷3 = 4
-26 − 4 = 22  →  C
-      </div>
+  <div class="qa-col qa-colA">
+    <!-- 题 1 -->
+    <div class="card q-card qa-row">
+      <div class="qa-tag">题 1 · 2023-2024</div>
+      <div class="qa-expr">− + 2 * 3 8 / * 6 2 3</div>
     </div>
-    <div class="card" style="border-left:4px solid var(--red); margin-top:10px;">
-      <h3 style="color:var(--red);">题 2 · 2022-2023</h3>
-      <div class="code-block" style="font-size:13px; line-height:1.7;">
-+ − * 2 3 / 4 2 ^ 2 3
+    <details class="card ans-card qa-row">
+      <summary>题 1 · 答案与画树过程</summary>
+      <div class="ans-body">
+        <div class="code-block" style="font-size:12px; line-height:1.65;">
+−                        根 = 减法
+├─ 左: + 2 * 3 8         → 2 + (3×8) = 26
+│     ├─ 左: 2
+│     └─ 右: * 3 8      → 3×8 = 24
+└─ 右: / * 6 2 3         → (6×2)÷3 = 4
+      ├─ 左: * 6 2       → 6×2 = 12
+      └─ 右: 3
 
-树：+ 的左 = − * 2 3 / 4 2 → (2×3) = 6, 4÷2 = 2 → 6−2 = 4
-    + 的右 = ^ 2 3 → 2^3 = 8
-4 + 8 = 12  →  C
+26 − 4 = 22
+        </div>
+        <p style="font-size:15px; font-weight:800; color:var(--green-deep); margin-top:8px;">答案：22</p>
       </div>
-    </div>
-    <div class="card" style="border-left:4px solid var(--red); margin-top:10px;">
-      <h3 style="color:var(--red);">题 3 · 2021-2022</h3>
-      <div class="code-block" style="font-size:13px; line-height:1.7;">
-+ / 9 3 + * 4 − 8 3 ^ 5 2
+    </details>
+  </div>
 
-树：+ 的左 = / 9 3 → 9÷3 = 3
-    + 的右 = + * 4 (− 8 3) (^ 5 2)
-        * 4 (−8 3) = 4×5 = 20
-        ^ 5 2 = 5^2 = 25
-        20 + 25 = 45
-3 + 45 = 48  →  C
-      </div>
+  <div class="qa-col qa-colB">
+    <!-- 题 2 -->
+    <div class="card q-card qa-row">
+      <div class="qa-tag">题 2 · 2022-2023</div>
+      <div class="qa-expr">+ − * 2 3 / 4 2 ^ 2 3</div>
     </div>
-    <div class="practice" style="margin-top:12px;">
+    <details class="card ans-card qa-row">
+      <summary>题 2 · 答案与画树过程</summary>
+      <div class="ans-body">
+        <div class="code-block" style="font-size:12px; line-height:1.65;">
++ 的左 = − * 2 3 / 4 2
+    * 2 3 = 6     / 4 2 = 2
+    6 − 2 = 4
++ 的右 = ^ 2 3 → 2^3 = 8
+
+4 + 8 = 12
+        </div>
+        <p style="font-size:15px; font-weight:800; color:var(--green-deep); margin-top:8px;">答案：12</p>
+      </div>
+    </details>
+  </div>
+
+  <div class="qa-col qa-colC">
+    <!-- 题 3 -->
+    <div class="card q-card qa-row">
+      <div class="qa-tag">题 3 · 2021-2022</div>
+      <div class="qa-expr">+ / 9 3 + * 4 − 8 3 ^ 5 2</div>
+    </div>
+    <details class="card ans-card qa-row">
+      <summary>题 3 · 答案与画树过程</summary>
+      <div class="ans-body">
+        <div class="code-block" style="font-size:12px; line-height:1.65;">
++ 的左 = / 9 3 → 9÷3 = 3
++ 的右 = + * 4 (− 8 3) (^ 5 2)
+    * 4 (−8 3) = 4×5 = 20
+    ^ 5 2 = 5^2 = 25
+    20 + 25 = 45
+
+3 + 45 = 48
+        </div>
+        <p style="font-size:15px; font-weight:800; color:var(--green-deep); margin-top:8px;">答案：48</p>
+      </div>
+    </details>
+
+    <div class="practice">
       <div class="label">小贴士</div>
-      <p style="font-size:15px;">三道答案都是 <b>C</b>，但过程完全不同，<b>别靠猜</b></p>
+      <p style="font-size:13px;">三道题结构完全不同，但都是同一个套路：<b>先画树，再自底向上算</b>，别靠猜</p>
     </div>
   </div>
 </section>
@@ -1425,20 +1599,42 @@ A B + C 1 − /  2 A * 3 − D /  +
     <p class="subtitle">用于课堂自查</p>
   </div>
   <div class="right">
-    <table style="font-size:15px; width:100%; border-collapse:collapse; line-height:1.7;">
-      <tr style="background:rgba(124,58,237,.1);">
-        <th style="padding:8px; border-bottom:2px solid var(--line);">题号</th>
-        <th style="padding:8px; border-bottom:2px solid var(--line);">内容</th>
-        <th style="padding:8px; border-bottom:2px solid var(--line);">答案</th>
-      </tr>
-      <tr><td style="padding:6px;"><b>1</b></td><td style="padding:6px;">3 + 4 * 2 三种形式</td><td style="padding:6px;">前缀 <code>+ 3 * 4 2</code></td></tr>
-      <tr style="background:rgba(124,58,237,.04);"><td style="padding:6px;"><b>2</b></td><td style="padding:6px;">2 + 3 * 4 − 6 / 2 转后缀</td><td style="padding:6px;"><code>2 3 4 * + 6 2 / −</code></td></tr>
-      <tr><td style="padding:6px;"><b>3</b></td><td style="padding:6px;">3 + 4 * (8 − 4 / 2) 转前缀</td><td style="padding:6px;"><b>B</b>（2024-2025 真题）</td></tr>
-      <tr style="background:rgba(124,58,237,.04);"><td style="padding:6px;"><b>4</b></td><td style="padding:6px;">后缀 3 4 2 * + 求值</td><td style="padding:6px;">11</td></tr>
-      <tr><td style="padding:6px;"><b>5</b></td><td style="padding:6px;">后缀 9 8 6 2 − * 2 / + 6 3 / −</td><td style="padding:6px;"><b>D. 23</b>（2024-2025 真题）</td></tr>
-      <tr style="background:rgba(124,58,237,.04);"><td style="padding:6px;"><b>6</b></td><td style="padding:6px;">中缀转后缀（2023-2024 真题）</td><td style="padding:6px;"><b>B</b></td></tr>
-      <tr><td style="padding:6px;"><b>7</b></td><td style="padding:6px;">变量后缀（2016-2017 真题）</td><td style="padding:6px;">5</td></tr>
-    </table>
+    <div class="card q-card">
+      <div class="qa-tag">本课题目清单</div>
+      <div class="q-list">
+        <div><b>1.</b> 3 + 4 * 2 三种形式</div>
+        <div><b>2.</b> 2 + 3 * 4 − 6 / 2 转后缀</div>
+        <div><b>3.</b> 3 + 4 * (8 − 4 / 2) 转前缀（2024-2025 真题）</div>
+        <div><b>4.</b> 后缀 3 4 2 * + 求值</div>
+        <div><b>5.</b> 后缀 9 8 6 2 − * 2 / + 6 3 / −（2024-2025 真题）</div>
+        <div><b>6.</b> 中缀转后缀（2023-2024 真题）</div>
+        <div><b>7.</b> 变量后缀（2016-2017 真题）</div>
+      </div>
+    </div>
+
+    <details class="card ans-card" style="border-left:4px solid var(--green) !important; margin-top:12px;">
+      <summary>展开答案 · 对答案</summary>
+      <div class="ans-body">
+        <table style="font-size:15px; width:100%; border-collapse:collapse; line-height:1.7;">
+          <tr style="background:rgba(124,58,237,.1);">
+            <th style="padding:6px; border-bottom:2px solid var(--line);">题号</th>
+            <th style="padding:6px; border-bottom:2px solid var(--line);">内容</th>
+            <th style="padding:6px; border-bottom:2px solid var(--line);">答案</th>
+          </tr>
+          <tr><td style="padding:6px;"><b>1</b></td><td style="padding:6px;">3 + 4 * 2 三种形式</td><td style="padding:6px;">前缀 <code>+ 3 * 4 2</code></td></tr>
+          <tr style="background:rgba(124,58,237,.04);"><td style="padding:6px;"><b>2</b></td><td style="padding:6px;">2 + 3 * 4 − 6 / 2 转后缀</td><td style="padding:6px;"><code>2 3 4 * + 6 2 / −</code></td></tr>
+          <tr><td style="padding:6px;"><b>3</b></td><td style="padding:6px;">3 + 4 * (8 − 4 / 2) 转前缀</td><td style="padding:6px;"><code>+ 3 * 4 − 8 / 4 2</code>（B）</td></tr>
+          <tr style="background:rgba(124,58,237,.04);"><td style="padding:6px;"><b>4</b></td><td style="padding:6px;">后缀 3 4 2 * + 求值</td><td style="padding:6px;">11</td></tr>
+          <tr><td style="padding:6px;"><b>5</b></td><td style="padding:6px;">后缀 9 8 6 2 − * 2 / + 6 3 / −</td><td style="padding:6px;">23（D）</td></tr>
+          <tr style="background:rgba(124,58,237,.04);"><td style="padding:6px;"><b>6</b></td><td style="padding:6px;">中缀转后缀（2023-2024 真题）</td><td style="padding:6px;"><code>AB+C1−/2A*3−D/+</code>（B）</td></tr>
+          <tr><td style="padding:6px;"><b>7</b></td><td style="padding:6px;">变量后缀（2016-2017 真题）</td><td style="padding:6px;">5</td></tr>
+        </table>
+        <p style="font-size:14px; line-height:1.7; margin-top:10px; padding:6px; background:rgba(217,119,6,.1); border-left:3px solid var(--amber); border-radius:4px;">
+          <b>补充：</b>slide 16 的 3 道前缀求值真题答案分别是 <b>22 / 12 / 48</b>，也在那一页的折叠区里。
+        </p>
+      </div>
+    </details>
+
     <div class="practice" style="margin-top:14px;">
       <div class="label">小贴士</div>
       <p style="font-size:15px;">第 3、5、6 题是<b>原题原选项</b>，L9 真题课会再考一次</p>
