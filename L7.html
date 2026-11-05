@@ -1,0 +1,2011 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>L7 · 比特位操作 — ACSL 备赛</title>
+<style>
+:root {
+  --bg: #faf7f2;
+  --panel: #ffffff;
+  --panel-soft: #fdf9f3;
+  --text: #1a1626;
+  --muted: #5a536b;
+  --line: #e2d9c8;
+  --purple: #7c3aed;
+  --amber: #d97706;
+  --red: #dc2626;
+  --green: #16a34a;
+  --blue: #2563eb;
+  --teal: #0f9f9a;
+  --ink: #2d1b4e;
+  --shadow: 0 18px 46px rgba(124, 58, 237, .10);
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; min-height: 100%; }
+body {
+  font-family: "HarmonyOS Sans", "Source Han Sans SC", "Alibaba PuHuiTi", "PingFang SC", Inter, Arial, sans-serif;
+  color: var(--text);
+  background:
+    linear-gradient(135deg, rgba(124, 58, 237, .08), transparent 36%),
+    linear-gradient(225deg, rgba(217, 119, 6, .08), transparent 34%),
+    var(--bg);
+  font-size: 18px; line-height: 1.7;
+}
+body::before {
+  content: "";
+  position: fixed; inset: 0;
+  background-image:
+    linear-gradient(rgba(124, 58, 237, .05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(124, 58, 237, .05) 1px, transparent 1px);
+  background-size: 38px 38px;
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, .52), transparent 78%);
+  pointer-events: none;
+}
+a { color: inherit; }
+.deck-page { height: 100%; overflow: hidden; }
+.deck { position: relative; z-index: 1; width: 100vw; height: 100vh; }
+.slide {
+  position: absolute; inset: 0;
+  display: none;
+  padding: 56px 80px 150px;
+  opacity: 0;
+  transform: translateX(24px);
+  transition: .35s ease;
+  overflow-y: auto;
+}
+.slide.active {
+  display: grid;
+  grid-template-columns: .95fr 1.05fr;
+  gap: 42px;
+  opacity: 1; transform: translateX(0);
+}
+.slide.wide.active { grid-template-columns: 1fr; }
+.slide.title-slide.active,
+.slide.part-slide.active { grid-template-columns: 1fr; place-items: center; align-content: center; text-align: center; }
+.slide.title-slide .left, .slide.part-slide .left { align-items: center; width: min(1080px, 100%); justify-content: center; }
+.slide.title-slide .right { display: none; }
+.slide.part-slide .right { width: min(1080px, 100%); justify-content: center; }
+.left, .right { min-width: 0; display: flex; flex-direction: column; justify-content: flex-start; }
+.kicker {
+  display: inline-flex; align-items: center; width: max-content;
+  padding: 10px 14px; border-radius: 999px;
+  background: rgba(124, 58, 237, .08);
+  border: 1px solid rgba(124, 58, 237, .22);
+  color: #6d28d9;
+  font-size: 16px; font-weight: 800;
+  margin-bottom: 22px;
+}
+.kicker.amber {
+  background: rgba(217, 119, 6, .1);
+  border-color: rgba(217, 119, 6, .24);
+  color: #b45309;
+}
+h1 { font-size: clamp(42px, 5vw, 66px); line-height: 1.1; margin: 0 0 22px; color: var(--ink); }
+h2 { font-size: clamp(34px, 4vw, 50px); line-height: 1.16; margin: 0 0 20px; color: var(--ink); }
+h3 { margin: 0 0 12px; font-size: 26px; line-height: 1.3; color: var(--ink); }
+.subtitle { max-width: 820px; color: var(--muted); font-size: 22px; line-height: 1.75; margin: 0 0 24px; }
+.highlight { color: var(--purple); font-weight: 900; }
+.muted { color: var(--muted); }
+.chips { display: flex; flex-wrap: wrap; gap: 10px; }
+.chip {
+  display: inline-flex; align-items: center; min-height: 38px;
+  padding: 9px 14px; border-radius: 999px;
+  background: var(--panel-soft); border: 1px solid var(--line);
+  color: #25415f; font-weight: 800; font-size: 16px;
+}
+.chip.purple { background: rgba(124, 58, 237, .1); color: #6d28d9; border-color: rgba(124, 58, 237, .24); }
+.chip.amber  { background: rgba(217, 119, 6, .1); color: #b45309; border-color: rgba(217, 119, 6, .24); }
+.chip.red    { background: rgba(220, 38, 38, .08); color: #b91c1c; border-color: rgba(220, 38, 38, .2); }
+.chip.green  { background: rgba(22, 163, 74, .1); color: #047857; border-color: rgba(22, 163, 74, .22); }
+.chip.blue   { background: rgba(37, 99, 235, .08); color: #1d4ed8; border-color: rgba(37, 99, 235, .18); }
+.chip.teal   { background: rgba(15, 159, 154, .1); color: #0f766e; border-color: rgba(15, 159, 154, .24); }
+
+.card, .metaphor, .step-block, .takeaway, .practice, .bug {
+  background: rgba(255, 255, 255, .88);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  box-shadow: var(--shadow);
+}
+.card { padding: 22px 24px; }
+.metaphor {
+  padding: 22px 24px;
+  border-left: 6px solid var(--amber);
+  font-size: 20px;
+  line-height: 1.7;
+}
+.metaphor .emo { font-size: 30px; margin-right: 12px; vertical-align: middle; }
+.metaphor b { color: var(--amber); }
+.practice {
+  background: linear-gradient(135deg, rgba(22, 163, 74, .04), rgba(15, 159, 154, .04));
+  border: 1px solid rgba(22, 163, 74, .22);
+  padding: 22px 24px;
+}
+.practice .label, .bug .label, .takeaway .label, .metaphor .label {
+  display: inline-flex; align-items: center;
+  padding: 6px 12px; border-radius: 999px;
+  background: rgba(22, 163, 74, .12);
+  color: #047857;
+  font-size: 14px; font-weight: 800;
+  margin-bottom: 14px;
+}
+.bug .label { background: rgba(220, 38, 38, .1); color: #b91c1c; }
+.takeaway { background: var(--ink); color: #edf6ff; padding: 22px 26px; border: 1px solid var(--ink); }
+.takeaway .label { background: rgba(255, 255, 255, .14); color: #edf6ff; }
+.takeaway h3 { color: #edf6ff; }
+.takeaway p { color: #cbd9ed; margin: 6px 0; font-size: 19px; }
+.bug {
+  background: linear-gradient(135deg, rgba(220, 38, 38, .04), rgba(217, 119, 6, .04));
+  border: 1px solid rgba(220, 38, 38, .22);
+  padding: 22px 24px;
+}
+.practice ol, .practice ul, .bug ol, .bug ul { padding-left: 26px; margin: 8px 0; }
+.practice li, .bug li { margin-bottom: 10px; font-size: 19px; line-height: 1.65; }
+.practice li::marker { color: var(--green); font-weight: 800; }
+.bug li::marker { color: var(--red); font-weight: 800; }
+
+pre {
+  background: #0f243f;
+  color: #edf6ff;
+  font-size: 19px;
+  line-height: 1.75;
+  border-radius: 10px;
+  padding: 22px 26px;
+  margin: 12px 0;
+  overflow-x: auto;
+  font-family: "JetBrains Mono", "Fira Code", "SF Mono", Consolas, monospace;
+  white-space: pre;
+}
+pre code .kw { color: #ff9d72; font-weight: 700; }
+pre code .str { color: #a5e88c; }
+pre code .num { color: #ffb547; }
+pre code .com { color: #7c8aa8; font-style: italic; }
+pre code .fn { color: #82d4ff; font-weight: 700; }
+
+code.inline {
+  background: rgba(15, 36, 63, .08);
+  border: 1px solid rgba(15, 36, 63, .12);
+  padding: 2px 8px; border-radius: 6px;
+  font-family: "JetBrains Mono", "Fira Code", "SF Mono", Consolas, monospace;
+  font-size: 0.92em; color: #6d28d9;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* 浅紫色代码块（替代 <pre> 用来显示 ACSL 伪代码） */
+.code-block {
+  background: rgba(124, 58, 237, .05);
+  border: 1px solid rgba(124, 58, 237, .18);
+  color: var(--text);
+  font-family: "JetBrains Mono", "Fira Code", "SF Mono", Consolas, monospace;
+  font-size: 13px;
+  line-height: 1.7;
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin: 8px 0;
+  overflow-x: auto;
+  white-space: pre;
+}
+.code-block.tiny { font-size: 11px; padding: 8px 12px; }
+.code-block.small { font-size: 12px; padding: 10px 14px; }
+
+
+/* 英文术语标注 */
+.en-tag {
+  display: inline-block;
+  margin-top: 4px;
+  padding: 2px 10px;
+  font-family: "Inter", "JetBrains Mono", "SF Mono", Consolas, monospace;
+  font-size: 0.78em;
+  font-weight: 700;
+  color: #1d4ed8;
+  background: rgba(37, 99, 235, .08);
+  border: 1px solid rgba(37, 99, 235, .24);
+  border-radius: 999px;
+  letter-spacing: 0.3px;
+  vertical-align: middle;
+}
+/* 大号英文（h1 / h2 副标） */
+h1 .en-tag, h2 .en-tag {
+  margin-left: 12px;
+  font-size: 0.4em;
+  vertical-align: middle;
+}
+/* chip 上的英文 */
+.chip .en-tag {
+  margin: 0;
+  font-size: 0.78em;
+}
+
+table { width: 100%; border-collapse: collapse; font-size: 19px; line-height: 1.55; margin: 14px 0; }
+th { text-align: left; font-size: 14px; color: #25415f; font-weight: 800;
+     padding: 12px 14px; border-bottom: 2px solid var(--line); background: var(--panel-soft); }
+td { padding: 16px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+tr:last-child td { border-bottom: none; }
+td code, th code { font-size: 17px; }
+
+.flow {
+  display: grid; grid-template-columns: 1fr auto 1fr auto 1fr;
+  gap: 12px; align-items: stretch; margin: 16px 0;
+}
+.flow .step {
+  padding: 18px 16px;
+  background: rgba(255, 255, 255, .88);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: var(--shadow);
+}
+.flow .step .num { font-size: 14px; color: var(--purple); font-weight: 800; }
+.flow .step .ttl { font-size: 22px; font-weight: 900; margin-top: 6px; color: var(--ink); }
+.flow .step .desc { font-size: 15px; color: var(--muted); margin-top: 6px; }
+.flow .arrow { display: grid; place-items: center; color: var(--purple); font-size: 28px; font-weight: 900; }
+
+.warning { border-left: 5px solid var(--amber); padding-left: 18px; }
+.success  { border-left: 5px solid var(--green); padding-left: 18px; }
+.danger   { border-left: 5px solid var(--red);   padding-left: 18px; }
+.info     { border-left: 5px solid var(--purple); padding-left: 18px; }
+
+.big-list { display: grid; gap: 12px; }
+.list-item {
+  display: flex; align-items: center; gap: 16px;
+  padding: 18px 20px; border-radius: 10px;
+  background: rgba(255, 255, 255, .88);
+  border: 1px solid var(--line);
+  font-size: 22px; font-weight: 800;
+  box-shadow: var(--shadow);
+}
+.num {
+  display: grid; place-items: center;
+  min-width: 44px; height: 44px;
+  border-radius: 10px;
+  background: #f0e7ff; color: #6d28d9;
+  font-weight: 900; font-size: 18px;
+}
+pre .num, code .num { display: inline; min-width: 0; height: auto; background: none; border-radius: 0;
+  padding: 0; margin: 0; font-size: inherit; font-weight: inherit; font-family: inherit; }
+
+.nav {
+  position: fixed; z-index: 10;
+  left: 80px; right: 80px; bottom: 20px;
+  display: flex; align-items: center; gap: 16px;
+  pointer-events: none;
+}
+.nav > * { pointer-events: auto; }
+.nav a { text-decoration: none; }
+.nav button:disabled { opacity: .38; cursor: not-allowed; }
+.counter { font-weight: 900; color: #314860; min-width: 84px; text-align: center; font-size: 18px; }
+.progress-bar { position: fixed; left: 0; right: 0; top: 0; z-index: 12; height: 6px; border-radius: 0; background: rgba(124, 58, 237, .12); overflow: hidden; }
+.progress-bar span {
+  display: block; height: 100%; width: 0;
+  background: linear-gradient(90deg, var(--purple), var(--amber));
+  transition: .25s ease;
+}
+.nav button {
+  display: inline-flex; justify-content: center; align-items: center;
+  min-height: 48px; border: 0; border-radius: 10px;
+  padding: 12px 22px;
+  background: var(--ink); color: #fff;
+  font-weight: 900; cursor: pointer;
+  box-shadow: 0 12px 28px rgba(45, 27, 78, .18);
+  font-size: 16px;
+  text-decoration: none;
+}
+.nav button.secondary, .nav .home-link.secondary { background: #f4eee0; color: var(--ink); border: 1px solid var(--line); box-shadow: none; }
+.nav .home-link.secondary { padding: 12px 22px; }
+
+@media (max-width: 1080px) {
+  .slide.active { grid-template-columns: 1fr; gap: 28px; }
+  .slide { padding: 48px 36px 150px; }
+  h1 { font-size: 40px; } h2 { font-size: 32px; }
+}
+.slide.compact { padding: 32px 56px 150px; }
+.slide.compact .left, .slide.compact .right { gap: 0; }
+.slide.compact .card { padding: 16px 20px; }
+.slide.compact .card h3 { font-size: 21px; margin-bottom: 8px; }
+.slide.compact .card p, .slide.compact .card li { font-size: 15px; line-height: 1.6; }
+.slide.compact .card table { font-size: 12px; }
+.slide.compact .card td, .slide.compact .card th { padding: 5px 8px; }
+.slide.compact .code-block { font-size: 12px; line-height: 1.55; padding: 9px 12px; margin: 5px 0; }
+.slide.compact h1 { font-size: clamp(34px, 4vw, 48px); }
+.slide.compact.active {
+  display: flex !important;
+  flex-direction: column;
+  gap: 0;
+}
+.slide.compact .head { flex: 0 0 auto; }
+.slide.compact .grid2x2, .slide.compact .grid { flex: 1; min-height: 0; }
+.slide.compact h2 { font-size: clamp(28px, 3.4vw, 40px); margin-bottom: 14px; }
+.slide.compact .subtitle { font-size: 19px; line-height: 1.6; margin-bottom: 14px; }
+.slide.compact .kicker { margin-bottom: 14px; padding: 8px 12px; font-size: 14px; }
+.slide.compact pre { white-space: pre; }
+.slide.compact .practice { padding: 16px 20px; }
+.slide.compact .practice .label { padding: 5px 10px; font-size: 13px; margin-bottom: 8px; }
+
+/* 规则 + 演示 并排对照页 */
+.slide.compare.active {
+  display: grid !important;
+  grid-template-columns: 1.06fr .94fr;
+  grid-template-areas:
+    "head head"
+    "left right";
+  gap: 0 22px;
+}
+.slide.compare .head {
+  grid-area: head;
+  display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px 14px;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 9px; margin-bottom: 11px;
+}
+.slide.compare .head .kicker { margin-bottom: 0; }
+.slide.compare .head h2 { font-size: clamp(26px, 2.8vw, 34px); margin: 0; }
+.slide.compare .head .subtitle { font-size: 15px; line-height: 1.5; margin: 0; }
+.slide.compare .left { grid-area: left; }
+.slide.compare .right { grid-area: right; }
+.slide.compare .left, .slide.compare .right { gap: 0; }
+.slide.compare .card + .card, .slide.compare .card + .practice { margin-top: 9px; }
+.slide.compare .card { padding: 12px 15px; }
+.slide.compare .card h3 { font-size: 19px; margin-bottom: 6px; }
+.slide.compare .card table { font-size: 11.5px; }
+.slide.compare .card td, .slide.compare .card th { padding: 2.5px 6px; }
+.slide.compare .code-block { font-size: 11.5px; line-height: 1.5; padding: 8px 10px; margin: 0; }
+.slide.compare .rule-list { counter-reset: rule; list-style: none; padding: 0 !important; margin: 0; }
+.slide.compare .rule-list li {
+  position: relative; padding: 6px 0 6px 36px; font-size: 14px; line-height: 1.5;
+  border-bottom: 1px dashed var(--line);
+}
+.slide.compare .rule-list li:last-child { border-bottom: none; }
+.slide.compare .rule-list li::before {
+  counter-increment: rule; content: counter(rule);
+  position: absolute; left: 0; top: 5px;
+  width: 25px; height: 25px; border-radius: 50%;
+  background: rgba(124, 58, 237, .12); color: var(--purple);
+  font-size: 12.5px; font-weight: 800; line-height: 25px; text-align: center;
+}
+.slide.compare .rule-list .r-hit {
+  display: block; margin-top: 2px; font-size: 12.5px; color: var(--muted); line-height: 1.45;
+}
+.slide.compare .rule-list .r-hit b { color: var(--amber); }
+.slide.compare td.r { font-weight: 800; color: var(--purple); white-space: nowrap; }
+.slide.compare td.r-act { color: var(--muted); font-size: 11px; white-space: nowrap; }
+.slide.compare tr.r-key td { background: rgba(217, 119, 6, .1) !important; }
+.slide.compare tr.r-key td.r { color: #b45309; }
+.slide.compare .practice { padding: 11px 15px; }
+.slide.compare .practice p { font-size: 13px !important; line-height: 1.5; }
+.slide.compare .practice .label { padding: 4px 9px; font-size: 12px; margin-bottom: 6px; }
+
+/* 题目卡 + 答案折叠（题目与答案分成两个 div，答案默认收起） */
+.ans-card { padding: 0 !important; }
+.ans-card > summary {
+  cursor: pointer; list-style: none;
+  padding: 11px 15px; font-size: 14px; font-weight: 800; color: var(--green-deep);
+  display: flex; align-items: center; gap: 8px;
+}
+.ans-card > summary::-webkit-details-marker { display: none; }
+.ans-card > summary::before {
+  content: "▸"; display: inline-block; font-size: 12px; color: var(--green);
+  transition: transform .2s ease;
+}
+.ans-card[open] > summary::before { transform: rotate(90deg); }
+.ans-card[open] > summary { border-bottom: 1px dashed var(--line); }
+.ans-card > summary:hover { background: rgba(22, 163, 74, .06); }
+.ans-body { padding: 11px 15px 13px; }
+.ans-body > *:first-child { margin-top: 0 !important; }
+
+/* 展开后答案区限高内滚：高度按视口精确计算，保证卡片底边不越过导航条 */
+.ans-body { max-height: max(150px, calc(100vh - 500px)); overflow-y: auto; }
+/* 对照页：可用高度 = 视口 - 上下padding - head - 题目卡 - 间隔 - 折叠条 */
+.slide.compare .ans-body { max-height: max(160px, calc(100vh - 411px)); }
+/* 对照页的答案表格行距再收紧一点，让表格 + 结论条一起放得下 */
+.slide.compare .card table { font-size: 11px; }
+.slide.compare .card td, .slide.compare .card th { padding: 1.5px 6px; }
+
+/* 题目卡：补足高度，让左右两栏视觉平衡 */
+.q-card { border-left: 4px solid var(--purple) !important; }
+.q-card .code-block { margin: 6px 0 0 !important; }
+.q-note { font-size: 12.5px; color: var(--muted); margin-top: 7px; line-height: 1.55; }
+.q-list { font-size: 12.5px; line-height: 1.7; }
+.q-list b { color: var(--purple); }
+/* 对照页的题目卡：撑满左栏剩余空间，与右栏规则卡视觉平衡 */
+.slide.compare .left > .q-card { flex: 1 1 auto; min-height: 130px; display: flex; flex-direction: column; justify-content: center; }
+.slide.compare .left > .ans-card { flex: 0 0 auto; }
+.slide.compare .q-card .qa-expr { font-size: 15px; padding: 9px 12px; }
+.slide.compare .q-card .q-note { font-size: 13px; }
+
+/* 真题速查页：每题一栏，答案独立折叠 */
+.qa-row { margin-bottom: 9px; }
+.qa-row:last-child { margin-bottom: 0; }
+.qa-tag {
+  display: inline-block; padding: 2px 9px; border-radius: 999px;
+  background: rgba(220, 38, 38, .1); color: #b91c1c;
+  font-size: 12px; font-weight: 800; margin-bottom: 5px;
+}
+.qa-expr {
+  font-family: "JetBrains Mono", "Fira Code", "SF Mono", Consolas, monospace;
+  font-size: 13px; font-weight: 700; color: var(--ink);
+  background: rgba(124, 58, 237, .07); border: 1px solid rgba(124, 58, 237, .18);
+  border-radius: 6px; padding: 6px 10px; letter-spacing: .3px;
+}
+
+/* slide 16：3 道题各占一列，答案各自折叠 */
+.slide.qa3.active {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-areas:
+    "head head head"
+    "colA colB colC";
+  gap: 0 18px;
+}
+.slide.qa3 .head {
+  grid-area: head;
+  display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px 14px;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 9px; margin-bottom: 11px;
+}
+.slide.qa3 .head .kicker { margin-bottom: 0; }
+.slide.qa3 .head h2 { font-size: clamp(26px, 2.8vw, 34px); margin: 0; }
+.slide.qa3 .head .subtitle { font-size: 15px; line-height: 1.5; margin: 0; }
+.slide.qa3 .qa-col { display: flex; flex-direction: column; gap: 7px; }
+.slide.qa3 .qa-colA { grid-area: colA; }
+.slide.qa3 .qa-colB { grid-area: colB; }
+.slide.qa3 .qa-colC { grid-area: colC; }
+/* 题目卡撑开余量，答案折叠条紧跟其下 */
+.slide.qa3 .qa-col .q-card { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; justify-content: center; }
+.slide.qa3 .qa-col .ans-card { flex: 0 0 auto; }
+.slide.qa3 .qa-row { margin-bottom: 0; }
+.slide.qa3 .q-card { padding: 10px 14px; }
+.slide.qa3 .qa-expr { font-size: 12.5px; padding: 6px 9px; }
+.slide.qa3 .practice { padding: 11px 15px; }
+.slide.qa3 .practice p { font-size: 13px !important; line-height: 1.5; }
+/* slide 16 展开时答案区高度按视口计算 */
+.slide.qa3 .ans-body { max-height: max(140px, calc(100vh - 330px)); }
+
+/* 检验问题卡 */
+.check-q {
+  padding: 14px 18px;
+  margin: 12px 0;
+  background: rgba(245, 158, 11, .08);
+  border-left: 4px solid var(--amber);
+  border-radius: 8px;
+}
+.check-q-blue {
+  background: rgba(124, 58, 237, .08);
+  border-left-color: var(--purple);
+}
+.check-q-text {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.6;
+}
+.check-q details summary {
+  cursor: pointer;
+  color: var(--purple);
+  margin-top: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  list-style: none;
+}
+.check-q details summary::-webkit-details-marker { display: none; }
+.check-q details summary::before { content: '▸ '; color: var(--purple); }
+.check-q details[open] summary::before { content: '▾ '; }
+.check-q details summary:hover { text-decoration: underline; }
+.check-q details[open] summary { margin-bottom: 8px; }
+.check-a {
+  padding: 10px 14px;
+  background: rgba(22, 163, 74, .08);
+  border-radius: 6px;
+  font-family: "JetBrains Mono", "Fira Code", monospace;
+  font-size: 16px;
+  color: #047857;
+  margin-top: 4px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+/* Recap 网格卡片 */
+.recap-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 14px;
+  margin-top: 8px;
+}
+.recap-card {
+  padding: 18px 16px;
+  background: var(--panel);
+  border-radius: 12px;
+  border: 2px solid var(--line);
+  position: relative;
+  min-height: 110px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.recap-card.card-purple { border-color: var(--purple); background: rgba(124, 58, 237, .04); }
+.recap-card.card-amber  { border-color: var(--amber);  background: rgba(217, 119, 6, .04); }
+.recap-card.card-green  { border-color: var(--green);  background: rgba(22, 163, 74, .04); }
+.recap-card.card-blue   { border-color: var(--blue);   background: rgba(37, 99, 235, .04); }
+.recap-card.card-red    { border-color: var(--red);    background: rgba(220, 38, 38, .04); }
+.recap-card.card-teal   { border-color: var(--teal);   background: rgba(15, 159, 154, .04); }
+
+.recap-num {
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1;
+  margin-bottom: 10px;
+  color: var(--text);
+}
+.recap-card.card-purple .recap-num { color: var(--purple); }
+.recap-card.card-amber  .recap-num { color: var(--amber); }
+.recap-card.card-green  .recap-num { color: var(--green); }
+.recap-card.card-blue   .recap-num { color: var(--blue); }
+.recap-card.card-red    .recap-num { color: var(--red); }
+.recap-card.card-teal   .recap-num { color: var(--teal); }
+
+.recap-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+.recap-sub {
+  font-size: 13px;
+  color: var(--muted);
+}
+.recap-next {
+  font-size: 14px;
+  color: var(--muted);
+  margin-top: 16px;
+  text-align: left;
+}
+
+/* 网格 */
+.grid2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+.grid2x2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+.grid3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 14px;
+}
+
+/* ASCII 二进制可视化 */
+.bin-vis {
+  display: inline-block;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 22px;
+  letter-spacing: 4px;
+}
+.bin-vis .bit { padding: 4px 8px; border-radius: 4px; margin: 0 2px; }
+.bin-vis .bit.on  { background: #6d28d9; color: #fff; }
+.bin-vis .bit.off { background: rgba(124, 58, 237, .15); color: #6d28d9; }
+.bin-vis .bit-group { margin: 0 8px; }
+
+/* 卡片链接样式 */
+.link-card {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  padding: 18px 22px;
+  background: rgba(255, 255, 255, .88);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  box-shadow: var(--shadow);
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.link-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 24px 60px rgba(124, 58, 237, .18);
+}
+
+
+/* ===================== L7 · 比特位操作 专属 ===================== */
+/* 位串显示：等宽 + 逐位区分 */
+.bits {
+  font-family: "JetBrains Mono", "Fira Code", "SF Mono", Consolas, monospace;
+  letter-spacing: 3px;
+  font-weight: 700;
+}
+/* 位对齐演示（上下两行 + 运算符行） */
+.bit-grid {
+  font-family: "JetBrains Mono", "Fira Code", "SF Mono", Consolas, monospace;
+  font-size: 15px; letter-spacing: 4px; line-height: 1.5;
+  white-space: pre; text-align: center;
+}
+.bit-grid .op { color: var(--purple); font-weight: 800; }
+.bit-grid .sep { color: var(--line); }
+.bit-grid .res { color: var(--green); font-weight: 800; }
+/* 真值表 */
+.tt { font-size: 13px; border-collapse: collapse; width: 100%; }
+.tt th, .tt td { padding: 4px 8px; text-align: center; border-bottom: 1px solid var(--line); }
+.tt th { background: rgba(124,58,237,.08); font-weight: 800; }
+.tt td.hi { color: var(--purple); font-weight: 800; }
+/* 优先级链 */
+.prio-chain {
+  font-family: "JetBrains Mono", "Fira Code", "SF Mono", Consolas, monospace;
+  font-size: 14px; font-weight: 800; letter-spacing: .5px;
+  background: rgba(124,58,237,.07); border: 1px solid rgba(124,58,237,.2);
+  border-radius: 8px; padding: 11px 14px; text-align: center;
+  color: var(--purple); line-height: 1.8;
+}
+.prio-chain .ar { color: var(--muted); font-weight: 600; }
+/* 步骤表（解题过程） */
+.step-list { font-size: 13px; line-height: 1.75; }
+.step-list .st {
+  display: flex; gap: 9px; align-items: flex-start;
+  padding: 6px 0; border-bottom: 1px dashed var(--line);
+}
+.step-list .st:last-child { border-bottom: none; }
+.step-list .sn {
+  flex: 0 0 auto; width: 22px; height: 22px; border-radius: 50%;
+  background: rgba(124,58,237,.13); color: var(--purple);
+  font-size: 12px; font-weight: 800; line-height: 22px; text-align: center;
+}
+.step-list .sb { flex: 1 1 auto; min-width: 0; }
+.step-list .sc {
+  font-family: "JetBrains Mono", "Fira Code", "SF Mono", Consolas, monospace;
+  font-size: 13px; letter-spacing: 2.5px; white-space: pre; overflow-x: auto;
+  color: var(--ink); line-height: 1.6;
+}
+/* 结论条 */
+.concl {
+  margin-top: 9px; padding: 8px 11px;
+  background: rgba(22,163,74,.07); border-left: 3px solid var(--green);
+  border-radius: 5px; font-size: 12.5px; line-height: 1.6;
+}
+.concl b.ans { color: var(--green-deep); font-size: 15px; }
+/* 错例警示 */
+.wrong {
+  margin-top: 8px; padding: 7px 10px;
+  background: rgba(220,38,38,.07); border-left: 3px solid var(--red);
+  border-radius: 5px; font-size: 12.5px; line-height: 1.6;
+}
+.wrong .w-ans { color: var(--red); font-weight: 800; }
+/* 答案表（18 道速查） */
+.ans-table { font-size: 12px; width: 100%; border-collapse: collapse; line-height: 1.5; }
+.ans-table th, .ans-table td { padding: 3px 6px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.ans-table th { background: rgba(124,58,237,.09); font-weight: 800; }
+.ans-table td.ex { font-family: "JetBrains Mono","Fira Code","SF Mono",Consolas,monospace; font-size: 10.5px; color: var(--ink); }
+.ans-table td.rv { color: var(--green-deep); font-weight: 800; white-space: nowrap; }
+/* 对照表（移位 vs 循环） */
+.vs-table { font-size: 13.5px; width: 100%; border-collapse: collapse; line-height: 1.55; }
+.vs-table th, .vs-table td { padding: 6px 9px; border-bottom: 1px solid var(--line); }
+.vs-table th { background: rgba(124,58,237,.08); font-weight: 800; }
+.vs-table td.k { font-weight: 800; color: var(--purple); white-space: nowrap; }
+.vs-table code { font-size: 12px; }
+/* L7 题目卡里的位串 */
+.slide .qa-expr.bits { letter-spacing: 3px; }
+</style>
+</head>
+<body class="deck-page">
+<main class="deck" id="deck">
+
+<!-- 01 · Cover -->
+<section class="slide title-slide active">
+  <div class="left">
+    <div class="kicker">L7 · 第二轮知识点（二）</div>
+    <h1>比特位<span class="highlight">操作</span></h1>
+    <p class="subtitle">ACSL Junior Contest 2 · Bit-String Flicking · 22 页</p>
+    <p style="margin-top:24px; padding:16px; background:rgba(124,58,237,.06); border-left:4px solid var(--purple); border-radius:8px; font-size:15px; line-height:1.7;">
+      <b>本课重点</b><br>
+      1. <b>位串是什么</b> · 定长 5 位，高位补 0<br>
+      2. <b>NOT / AND / OR / XOR</b> · 逐位对齐算<br>
+      3. <b>LSHIFT / RSHIFT</b> · 移位补 0，丢弃越界位<br>
+      4. <b>LCIRC / RCIRC</b> · 循环移位，绕回来<br>
+      5. <b>历年真题</b> · 10 年 18 道位运算题全收录
+    </p>
+  </div>
+</section>
+
+<!-- 02 · 第二轮地图 -->
+<section class="slide">
+  <div class="left">
+    <div class="kicker">第二轮地图</div>
+    <h2>Contest 2 考 <span class="highlight">3 个主题</span></h2>
+    <p class="subtitle">位运算题在第 3、4 题，位置 10 年没变过</p>
+  </div>
+  <div class="right">
+    <div class="card" style="border-left:4px solid var(--purple);">
+      <h3 style="color:var(--purple);">🔢 第二轮 3 大主题</h3>
+      <table style="font-size:14px; width:100%; border-collapse:collapse; margin-top:8px;">
+        <tr style="background:rgba(124,58,237,.08);">
+          <th style="padding:6px;">#</th><th style="padding:6px;">主题</th><th style="padding:6px;">考什么</th><th style="padding:6px;">课次</th><th style="padding:6px;">题号</th>
+        </tr>
+        <tr><td style="padding:6px;">1</td><td style="padding:6px;">前缀/中缀/后缀</td><td style="padding:6px;">表达式转换 + 求值</td><td style="padding:6px;">L6 ✅</td><td style="padding:6px;">第 1、2 题</td></tr>
+        <tr style="background:rgba(217,119,6,.08);"><td style="padding:6px;"><b>2</b></td><td style="padding:6px;"><b>比特位操作</b></td><td style="padding:6px;"><b>位串求值</b></td><td style="padding:6px;"><b>L7（今天）</b></td><td style="padding:6px;"><b>第 3、4 题</b></td></tr>
+        <tr><td style="padding:6px;">3</td><td style="padding:6px;">循环追踪</td><td style="padding:6px;">while / for 嵌套</td><td style="padding:6px;">L8</td><td style="padding:6px;">第 5 题</td></tr>
+      </table>
+    </div>
+    <div class="card" style="border-left:4px solid var(--green); margin-top:12px;">
+      <h3 style="color:var(--green-deep);">✅ 位运算题从未间断</h3>
+      <p style="font-size:14px; line-height:1.7; margin-top:6px;">
+        从 <b>2015-2016</b> 到 <b>2024-2025</b>，连续 <b>10 年</b>每年固定 2 道（第 3、4 题），题型和位置<b>完全没变</b>。<br>
+        <span style="color:var(--muted);">这是第二轮<b>最稳定</b>的送分题 —— 题型固定，规律可背。</span>
+      </p>
+    </div>
+    <div class="card" style="border-left:4px solid var(--amber); margin-top:12px;">
+      <h3 style="color:var(--amber);">⏱️ 考试结构</h3>
+      <p style="font-size:14px; line-height:1.7; margin-top:6px;">
+        笔试 <b>5 道选择题 / 30 分钟</b> · A-E 单选<br>
+        第 6 题是编程题，<b>72 小时</b>内交
+      </p>
+    </div>
+    <div class="practice" style="margin-top:12px;">
+      <div class="label">小贴士</div>
+      <p style="font-size:15px;">位运算题年年考、题号不变 —— 这意味着你只要把 18 道真题做透，<b>这道题就稳了</b></p>
+    </div>
+  </div>
+</section>
+
+<!-- 03 · 位串是什么 -->
+<section class="slide compact compare">
+  <div class="head">
+    <div class="kicker">基础</div>
+    <h2>位串 = <span class="highlight">一串 0 和 1</span></h2>
+    <p class="subtitle">三条规则记牢，后面所有题都靠它</p>
+  </div>
+  <div class="left">
+    <div class="card q-card">
+      <div class="qa-tag">概念</div>
+      <div class="qa-expr bits">10110</div>
+      <div class="q-note">这 5 位从右往左编号，第 0 位是<b>最低位</b>。</div>
+    </div>
+
+    <div class="card" style="border-left:4px solid var(--purple);">
+      <h3 style="color:var(--purple);">位串的三要素</h3>
+      <div style="font-size:13.5px; line-height:1.7; margin-top:6px;">
+        <b>1 · 定长</b> —— 本课所有位串都是 <b>5 位</b>，短的<b>高位补 0</b><br>
+        <span class="bits" style="font-size:13px;">101</span> → <span class="bits" style="font-size:13px;">00101</span><br>
+        <b>2 · 对齐</b> —— 两个位串运算，<b>右边对齐</b>（都是 5 位，直接对齐）<br>
+        <b>3 · 位置</b> —— 从右往左编号，第 0 位是最低位
+      </div>
+    </div>
+
+    <div class="card" style="border-left:4px solid var(--green);">
+      <h3 style="color:var(--green-deep);">✓ 高位补 0 的例子</h3>
+      <div class="bit-grid" style="font-size:13px; margin-top:4px;">
+十进制 5  =  <span class="res">00101</span>   ← 高位补 0 到 5 位
+十进制 10 =  <span class="res">01010</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="right">
+    <div class="card" style="border-left:4px solid var(--red);">
+      <h3 style="color:var(--red);">⚠️ 三个高频错</h3>
+      <ul style="font-size:14px; line-height:1.75; padding-left:20px; margin-top:4px;">
+        <li>忘了<b>定长</b>：<code>NOT 011</code> = <code>100</code>（3 位）<br><span style="color:var(--muted);">错！正确是 <code>10011</code>（5 位）</span></li>
+        <li>忘了<b>高位补 0</b>：<code>5</code> 写成 <code>101</code><br><span style="color:var(--muted);">错！正确是 <code>00101</code></span></li>
+        <li>把位串当<b>十进制数</b>算</li>
+      </ul>
+    </div>
+
+    <div class="practice">
+      <div class="label">小贴士</div>
+      <p style="font-size:14px;">所有运算结果都<b>保持 5 位</b> —— 这是检查自己算对没的最快方法</p>
+    </div>
+  </div>
+</section>
+
+<!-- 04 · NOT -->
+<section class="slide compact compare">
+  <div class="head">
+    <div class="kicker">基础运算 1 / 4</div>
+    <h2><span class="highlight">NOT</span>（取反）</h2>
+    <p class="subtitle">逐位翻转，长度不变</p>
+  </div>
+
+  <div class="left">
+    <div class="card q-card">
+      <div class="qa-tag">题目</div>
+      <div class="qa-expr bits">NOT 01101 = ?</div>
+      <div class="q-note">写出 5 位结果。</div>
+    </div>
+
+    <details class="card ans-card">
+      <summary>展开答案 · 逐位过程</summary>
+      <div class="ans-body">
+        <div class="bit-grid" style="font-size:16px;">
+  0  1  1  0  1
+  ↓  ↓  ↓  ↓  ↓
+  1  0  0  1  0
+        </div>
+        <div class="concl">
+          <b class="ans">答案：10010</b><br>
+          <span style="color:var(--muted);">每一位独立翻转：0→1、1→1→0 …… 结果长度还是 5 位</span>
+        </div>
+      </div>
+    </details>
+  </div>
+
+  <div class="right">
+    <div class="card" style="border-left:4px solid var(--purple);">
+      <h3 style="color:var(--purple);">规则</h3>
+      <ul class="rule-list" style="margin-top:4px;">
+        <li><code>0 → 1</code>，<code>1 → 0</code>，<b>每一位独立取反</b>
+          <span class="r-hit">规则 ①</span></li>
+        <li>长度<b>不变</b>，还是 5 位
+          <span class="r-hit">规则 ②</span></li>
+        <li><b>一元运算</b> —— 只作用于一个位串
+          <span class="r-hit">规则 ③</span></li>
+        <li><code>NOT</code> 优先级<b>最高</b>（比 AND 还高）
+          <span class="r-hit">规则 ④</span></li>
+      </ul>
+    </div>
+
+    <div class="card" style="border-left:4px solid var(--red);">
+      <h3 style="color:var(--red);">⚠️ 陷阱</h3>
+      <p style="font-size:14px; line-height:1.65;">
+        <code>NOT</code> 后面如果跟 <code>AND</code>，<b>NOT 只作用于紧挨着的那一个位串</b>。<br>
+        <code>NOT 01101 AND 10110</code> = <code>10010 AND 10110</code>
+      </p>
+    </div>
+
+    <div class="practice">
+      <div class="label">小贴士</div>
+      <p style="font-size:14px;">NOT 的结果一定和原串<b>互补</b>（每位相反）</p>
+    </div>
+  </div>
+</section>
+
+<!-- 05 · AND -->
+<section class="slide compact compare">
+  <div class="head">
+    <div class="kicker">基础运算 2 / 4</div>
+    <h2><span class="highlight">AND</span>（与）</h2>
+    <p class="subtitle">有 0 必是 0，全 1 才是 1</p>
+  </div>
+
+  <div class="left">
+    <div class="card q-card">
+      <div class="qa-tag">题目</div>
+      <div class="qa-expr bits">10110 AND 01100 = ?</div>
+      <div class="q-note">逐位对齐，每一位独立算。</div>
+    </div>
+
+    <details class="card ans-card">
+      <summary>展开答案 · 逐位过程</summary>
+      <div class="ans-body">
+        <div class="bit-grid" style="font-size:16px;">
+    1  0  1  1  0
+<span class="op">&amp;</span>  0  1  1  0  0
+  <span class="sep">─────────────</span>
+    0  0  1  0  0
+        </div>
+        <div class="concl">
+          <b class="ans">答案：00100</b><br>
+          <span style="color:var(--muted);">只有第 3 位（从右数）两边都是 1，结果才是 1</span>
+        </div>
+      </div>
+    </details>
+  </div>
+
+  <div class="right">
+    <div class="card" style="border-left:4px solid var(--purple);">
+      <h3 style="color:var(--purple);">真值表</h3>
+      <table class="tt" style="margin-top:4px;">
+        <tr><th>a</th><th>b</th><th>AND</th></tr>
+        <tr><td>0</td><td>0</td><td>0</td></tr>
+        <tr><td>0</td><td>1</td><td>0</td></tr>
+        <tr><td>1</td><td>0</td><td>0</td></tr>
+        <tr><td>1</td><td>1</td><td class="hi">1</td></tr>
+      </table>
+      <p style="font-size:13px; color:var(--muted); margin-top:6px;">口诀：<b style="color:var(--purple);">同 1 才 1</b></p>
+    </div>
+
+    <div class="card" style="border-left:4px solid var(--amber);">
+      <h3 style="color:var(--amber);">💡 AND 的用途</h3>
+      <p style="font-size:14px; line-height:1.65;">
+        <b>挑出两位都是 1 的位置</b>（掩码 / mask）<br>
+        <span style="color:var(--muted);">例：<code>10110 AND 01100</code> 只保留了第 3 位</span>
+      </p>
+    </div>
+
+    <div class="practice">
+      <div class="label">小贴士</div>
+      <p style="font-size:14px;">AND 的结果<b>不会比任何一个操作数更大</b>（1 的个数只会变少）</p>
+    </div>
+  </div>
+</section>
+
+<!-- 06 · OR -->
+<section class="slide compact compare">
+  <div class="head">
+    <div class="kicker">基础运算 3 / 4</div>
+    <h2><span class="highlight">OR</span>（或）</h2>
+    <p class="subtitle">有 1 必是 1，全 0 才是 0</p>
+  </div>
+
+  <div class="left">
+    <div class="card q-card">
+      <div class="qa-tag">题目</div>
+      <div class="qa-expr bits">10110 OR 01100 = ?</div>
+      <div class="q-note">逐位对齐，每一位独立算。</div>
+    </div>
+
+    <details class="card ans-card">
+      <summary>展开答案 · 逐位过程</summary>
+      <div class="ans-body">
+        <div class="bit-grid" style="font-size:16px;">
+    1  0  1  1  0
+<span class="op">|</span>  0  1  1  0  0
+  <span class="sep">─────────────</span>
+    1  1  1  1  0
+        </div>
+        <div class="concl">
+          <b class="ans">答案：11110</b><br>
+          <span style="color:var(--muted);">只要有一边是 1，这一位就是 1</span>
+        </div>
+      </div>
+    </details>
+  </div>
+
+  <div class="right">
+    <div class="card" style="border-left:4px solid var(--purple);">
+      <h3 style="color:var(--purple);">真值表</h3>
+      <table class="tt" style="margin-top:4px;">
+        <tr><th>a</th><th>b</th><th>OR</th></tr>
+        <tr><td>0</td><td>0</td><td>0</td></tr>
+        <tr><td>0</td><td>1</td><td class="hi">1</td></tr>
+        <tr><td>1</td><td>0</td><td class="hi">1</td></tr>
+        <tr><td>1</td><td>1</td><td class="hi">1</td></tr>
+      </table>
+      <p style="font-size:13px; color:var(--muted); margin-top:6px;">口诀：<b style="color:var(--purple);">同 0 才 0</b></p>
+    </div>
+
+    <div class="card" style="border-left:4px solid var(--amber);">
+      <h3 style="color:var(--amber);">💡 OR 的用途</h3>
+      <p style="font-size:14px; line-height:1.65;">
+        <b>把某几位强行置 1</b>（置位 / set）<br>
+        <span style="color:var(--muted);">例：<code>10110 OR 01100</code> 把第 2、3 位都置成 1</span>
+      </p>
+    </div>
+
+    <div class="practice">
+      <div class="label">小贴士</div>
+      <p style="font-size:14px;">OR 的结果<b>不会比任何一个操作数更小</b>（1 的个数只会变多）</p>
+    </div>
+  </div>
+</section>
+
+<!-- 07 · XOR -->
+<section class="slide compact compare">
+  <div class="head">
+    <div class="kicker">基础运算 4 / 4</div>
+    <h2><span class="highlight">XOR</span>（异或）</h2>
+    <p class="subtitle">相同为 0，不同为 1</p>
+  </div>
+
+  <div class="left">
+    <div class="card q-card">
+      <div class="qa-tag">题目</div>
+      <div class="qa-expr bits">10110 XOR 01100 = ?</div>
+      <div class="q-note">逐位对齐，看每一位<b>一样还是不一样</b>。</div>
+    </div>
+
+    <details class="card ans-card">
+      <summary>展开答案 · 逐位过程</summary>
+      <div class="ans-body">
+        <div class="bit-grid" style="font-size:16px;">
+    1  0  1  1  0
+<span class="op">⊕</span>  0  1  1  0  0
+  <span class="sep">─────────────</span>
+    1  1  0  1  0
+        </div>
+        <div class="concl">
+          <b class="ans">答案：11010</b><br>
+          <span style="color:var(--muted);">第 3 位两边都是 1 → 0；其余不同的位 → 1</span>
+        </div>
+      </div>
+    </details>
+  </div>
+
+  <div class="right">
+    <div class="card" style="border-left:4px solid var(--purple);">
+      <h3 style="color:var(--purple);">真值表</h3>
+      <table class="tt" style="margin-top:4px;">
+        <tr><th>a</th><th>b</th><th>XOR</th></tr>
+        <tr><td>0</td><td>0</td><td>0</td></tr>
+        <tr><td>0</td><td>1</td><td class="hi">1</td></tr>
+        <tr><td>1</td><td>0</td><td class="hi">1</td></tr>
+        <tr><td>1</td><td>1</td><td>0</td></tr>
+      </table>
+      <p style="font-size:13px; color:var(--muted); margin-top:6px;">口诀：<b style="color:var(--purple);">不同才 1</b></p>
+    </div>
+
+    <div class="card" style="border-left:4px solid var(--blue);">
+      <h3 style="color:var(--blue);">💡 XOR 的两个妙用</h3>
+      <div style="font-size:13.5px; line-height:1.7; margin-top:4px;">
+        <code>X XOR X</code> = <code>00000</code>（自己异或自己全 0）<br>
+        <code>X XOR 11111</code> = <b>取反</b>（和全 1 异或 = 按位取反）
+      </div>
+    </div>
+
+    <div class="card" style="border-left:4px solid var(--red);">
+      <h3 style="color:var(--red);">⚠️ 优先级</h3>
+      <p style="font-size:14px; line-height:1.65;">
+        <code>XOR</code> 和 <code>AND</code> <b>优先级相同</b>，从左往右算。
+      </p>
+    </div>
+
+    <div class="practice">
+      <div class="label">小贴士</div>
+      <p style="font-size:14px;">XOR = 「不一样就 1」，可以理解为<b>加法不进位</b>（模 2 加法）</p>
+    </div>
+  </div>
+</section>
+
+<!-- 08 · 四种运算对比表 -->
+<section class="slide compact">
+  <div class="left">
+    <div class="kicker">对比</div>
+    <h2>NOT / AND / OR / XOR <span class="highlight">一览</span></h2>
+    <p class="subtitle">基础运算的 4 条规则 + 优先级</p>
+  </div>
+  <div class="right">
+    <div class="card" style="border-left:4px solid var(--purple);">
+      <h3 style="color:var(--purple);">4 种运算速查</h3>
+      <table style="font-size:13.5px; width:100%; border-collapse:collapse; margin-top:8px; line-height:1.6;">
+        <tr style="background:rgba(124,58,237,.08);">
+          <th style="padding:6px;">运算</th><th style="padding:6px;">元数</th><th style="padding:6px;">规则</th><th style="padding:6px;">口诀</th><th style="padding:6px;">演示</th>
+        </tr>
+        <tr><td style="padding:5px;"><code>NOT</code></td><td style="padding:5px;">一元</td><td style="padding:5px;">0↔1</td><td style="padding:5px;">逐位翻转</td><td style="padding:5px;" class="bits" style="font-size:12px;"><code>NOT 01101</code> = <b>10010</b></td></tr>
+        <tr style="background:rgba(124,58,237,.04);"><td style="padding:5px;"><code>AND</code></td><td style="padding:5px;">二元</td><td style="padding:5px;">同 1 才 1</td><td style="padding:5px;">有 0 必 0</td><td style="padding:5px;"><code>10110 AND 01100</code> = <b>00100</b></td></tr>
+        <tr><td style="padding:5px;"><code>OR</code></td><td style="padding:5px;">二元</td><td style="padding:5px;">同 0 才 0</td><td style="padding:5px;">有 1 必 1</td><td style="padding:5px;"><code>10110 OR 01100</code> = <b>11110</b></td></tr>
+        <tr style="background:rgba(124,58,237,.04);"><td style="padding:5px;"><code>XOR</code></td><td style="padding:5px;">二元</td><td style="padding:5px;">不同才 1</td><td style="padding:5px;">相同为 0</td><td style="padding:5px;"><code>10110 XOR 01100</code> = <b>11010</b></td></tr>
+      </table>
+    </div>
+
+    <div class="card" style="border-left:4px solid var(--green); margin-top:12px;">
+      <h3 style="color:var(--green-deep);">🔢 优先级顺序（从高到低）</h3>
+      <div class="prio-chain" style="margin-top:8px;">
+        NOT  <span class="ar">&gt;</span>  LSHIFT / RSHIFT / LCIRC / RCIRC  <span class="ar">&gt;</span>  AND / XOR  <span class="ar">&gt;</span>  OR
+      </div>
+      <p style="font-size:13px; color:var(--muted); margin-top:7px; line-height:1.6;">
+        · <code>AND</code> 和 <code>XOR</code> <b>同级</b>，从左往右<br>
+        · <code>OR</code> <b>最低</b> —— 最后算
+      </p>
+    </div>
+
+    <div class="card" style="border-left:4px solid var(--red); margin-top:12px;">
+      <h3 style="color:var(--red);">⚠️ 每年第 3 题最爱考的坑</h3>
+      <p style="font-size:14px; line-height:1.7; margin-top:4px;">
+        <code>A OR B AND C</code> 到底是 <code>A OR (B AND C)</code> 还是 <code>(A OR B) AND C</code>？<br>
+        <b style="color:var(--red);">错一步，答案就变成另一个选项。</b>
+      </p>
+    </div>
+
+    <div class="practice" style="margin-top:12px;">
+      <div class="label">小贴士</div>
+      <p style="font-size:15px;">拿不准就<b>加括号</b> —— 括号优先级最高，永远不会错</p>
+    </div>
+  </div>
+</section>
+
+<!-- 09 · LSHIFT / RSHIFT -->
+<section class="slide compact compare">
+  <div class="head">
+    <div class="kicker">方法 1</div>
+    <h2><span class="highlight">LSHIFT / RSHIFT</span>（移位）</h2>
+    <p class="subtitle">丢位 + 补 0，长度不变</p>
+  </div>
+
+  <div class="left">
+    <div class="card q-card">
+      <div class="qa-tag">题目</div>
+      <div class="qa-expr bits">LSHIFT-1 10110 = ?</div>
+      <div class="q-note">左移 1 位。<b>丢哪边、补什么？</b></div>
+    </div>
+
+    <details class="card ans-card">
+      <summary>展开答案 · 逐位过程</summary>
+      <div class="ans-body">
+        <div class="step-list">
+          <div class="st">
+            <div class="sn">1</div>
+            <div class="sb">
+              <b>LSHIFT-1</b>：<span class="bits">10110</span> → 丢高 1 位，低位补 0
+              <div class="sc">  1 0 1 1 0
+← 1 0 1 1 0
+  ─────────────
+  0 1 1 0 0</div>
+            </div>
+          </div>
+          <div class="st">
+            <div class="sn">2</div>
+            <div class="sb">
+              <b>RSHIFT-1</b>：<span class="bits">10110</span> → 丢低 1 位，高位补 0
+              <div class="sc">  1 0 1 1 0
+1 0 1 1 0 →
+  ─────────────
+  0 1 0 1 1</div>
+            </div>
+          </div>
+        </div>
+        <div class="concl">
+          <b class="ans">LSHIFT-1 10110 = 01100</b>　·　<b class="ans">RSHIFT-1 10110 = 01011</b><br>
+          <span style="color:var(--muted);">移完还是 5 位 —— 一位都没多、一位都没少，只是位置变了</span>
+        </div>
+      </div>
+    </details>
+  </div>
+
+  <div class="right">
+    <div class="card" style="border-left:4px solid var(--purple);">
+      <h3 style="color:var(--purple);">规则</h3>
+      <ol class="rule-list" style="margin-top:4px;">
+        <li><code>LSHIFT-n</code>：<b>左移 n 位</b> —— 高位<b>丢弃</b>，低位<b>补 0</b>
+          <span class="r-hit">规则 ①</span></li>
+        <li><code>RSHIFT-n</code>：<b>右移 n 位</b> —— 低位<b>丢弃</b>，高位<b>补 0</b>
+          <span class="r-hit">规则 ②</span></li>
+        <li>移完<b>长度不变</b>（还是 5 位）
+          <span class="r-hit">规则 ③</span></li>
+      </ol>
+    </div>
+
+    <div class="card" style="border-left:4px solid var(--amber);">
+      <h3 style="color:var(--amber);">💡 二进制的意义</h3>
+      <p style="font-size:14px; line-height:1.65;">
+        <code>LSHIFT-n</code> = <b>乘 2ⁿ</b><br>
+        <code>RSHIFT-n</code> = <b>除 2ⁿ</b>（向下取整）<br>
+        <span style="color:var(--muted);">因为二进制里 10 就是 2 的意思</span>
+      </p>
+    </div>
+
+    <div class="card" style="border-left:4px solid var(--red);">
+      <h3 style="color:var(--red);">⚠️ 别搞混</h3>
+      <p style="font-size:14px; line-height:1.65;">
+        移位 <b>丢位补 0</b>，循环移位 <b>绕回来</b> —— 这是本页和下页最大的区别
+      </p>
+    </div>
+
+    <div class="practice">
+      <div class="label">小贴士</div>
+      <p style="font-size:14px;"><code>LSHIFT-3 10101</code> = <code>01000</code>（3 位全被丢弃，补 3 个 0）</p>
+    </div>
+  </div>
+</section>
+
+<!-- 10 · LCIRC / RCIRC -->
+<section class="slide compact compare">
+  <div class="head">
+    <div class="kicker">方法 2</div>
+    <h2><span class="highlight">LCIRC / RCIRC</span>（循环移位）</h2>
+    <p class="subtitle">一位都不丢，绕圈回来</p>
+  </div>
+
+  <div class="left">
+    <div class="card q-card">
+      <div class="qa-tag">题目</div>
+      <div class="qa-expr bits">LCIRC-1 10110 = ?</div>
+      <div class="q-note">循环左移 1 位。<b>最右边会变成什么？</b></div>
+    </div>
+
+    <details class="card ans-card">
+      <summary>展开答案 · 逐位过程</summary>
+      <div class="ans-body">
+        <div class="step-list">
+          <div class="st">
+            <div class="sn">1</div>
+            <div class="sb">
+              <b>LCIRC-1</b>：最高位 <code>1</code> 绕到最右边
+              <div class="sc">  1 0 1 1 0
+← 1 0 1 1 0
+  ─────────────
+  0 1 1 0 1</div>
+            </div>
+          </div>
+          <div class="st">
+            <div class="sn">2</div>
+            <div class="sb">
+              <b>RCIRC-1</b>：最低位 <code>0</code> 绕到最左边
+              <div class="sc">  1 0 1 1 0
+0 1 0 1 1 →
+  ─────────────
+  0 1 0 1 1</div>
+            </div>
+          </div>
+        </div>
+        <div class="concl">
+          <b class="ans">LCIRC-1 10110 = 01101</b>　·　<b class="ans">RCIRC-1 10110 = 01011</b><br>
+          <span style="color:var(--muted);">结果还是原来的 5 位，<b>一位都没丢</b> —— 只是转了个圈</span>
+        </div>
+      </div>
+    </details>
+  </div>
+
+  <div class="right">
+    <div class="card" style="border-left:4px solid var(--purple);">
+      <h3 style="color:var(--purple);">规则</h3>
+      <ol class="rule-list" style="margin-top:4px;">
+        <li><code>LCIRC-n</code>：<b>循环左移 n 位</b> —— 最高位<b>挪到最右边</b>，其余左移
+          <span class="r-hit">规则 ①</span></li>
+        <li><code>RCIRC-n</code>：<b>循环右移 n 位</b> —— 最低位<b>挪到最左边</b>，其余右移
+          <span class="r-hit">规则 ②</span></li>
+        <li><b>一位都不丢</b>，绕圈回来
+          <span class="r-hit">规则 ③</span></li>
+      </ol>
+    </div>
+
+    <div class="card" style="border-left:4px solid var(--blue);">
+      <h3 style="color:var(--blue);">💡 循环移位 = 旋转</h3>
+      <p style="font-size:14px; line-height:1.65;">
+        移 n 位 = 转 <b>n</b> 圈。<br>
+        n 可以<b>大于 5</b>，会自动取模：<br>
+        <code>LCIRC-5 10101</code> = <code>10101</code>（转 5 圈 = 原样）
+      </p>
+    </div>
+
+    <div class="card" style="border-left:4px solid var(--red);">
+      <h3 style="color:var(--red);">⚠️ 千万别记反</h3>
+      <p style="font-size:14px; line-height:1.65;">
+        记忆法：<b style="color:var(--purple);">L = Left = 往左 = 高的跑到低的</b><br>
+        <code>LCIRC</code> 最高位出去，<code>RCIRC</code> 最低位出去
+      </p>
+    </div>
+
+    <div class="practice">
+      <div class="label">小贴士</div>
+      <p style="font-size:14px;"><code>LCIRC-2 10101</code> = <code>10110</code>（<code>101</code> + <code>01</code>）</p>
+    </div>
+  </div>
+</section>
+
+<!-- 11 · 移位 vs 循环移位 -->
+<section class="slide compact compare">
+  <div class="head">
+    <div class="kicker">易混点</div>
+    <h2>移位 和 <span class="highlight">循环移位</span> 差在哪</h2>
+    <p class="subtitle">最常混的一对，用一张表彻底分开</p>
+  </div>
+
+  <div class="left">
+    <div class="card q-card">
+      <div class="qa-tag">对比</div>
+      <div class="qa-expr bits" style="font-size:12px;">LSHIFT-1 10110 = 01100<br>LCIRC-1 10110 = 01101</div>
+      <div class="q-note">同一串、同样移 1 位，结果<b>不一样</b>。</div>
+    </div>
+
+    <div class="card" style="border-left:4px solid var(--purple);">
+      <h3 style="color:var(--purple);">逐项对比</h3>
+      <table class="vs-table" style="margin-top:6px;">
+        <tr><th></th><th>LSHIFT / RSHIFT</th><th>LCIRC / RCIRC</th></tr>
+        <tr><td class="k">越界的位</td><td><b>丢掉</b></td><td><b>绕回来</b></td></tr>
+        <tr><td class="k">空出来的位</td><td><b>补 0</b></td><td><b>用移过来的位填</b></td></tr>
+        <tr><td class="k">信息</td><td>会<b>丢失</b></td><td><b>不丢失</b></td></tr>
+        <tr><td class="k">例子</td><td><code>LSHIFT-1 10110</code><br>= <b>01100</b></td><td><code>LCIRC-1 10110</code><br>= <b>01101</b></td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="right">
+    <div class="card" style="border-left:4px solid var(--green);">
+      <h3 style="color:var(--green-deep);">一句话记住</h3>
+      <p style="font-size:16px; line-height:1.6; margin-top:4px;">
+        移位是<b style="color:var(--amber);">「挤出去」</b>，循环是<b style="color:var(--blue);">「转个圈」</b>
+      </p>
+    </div>
+
+    <div class="card" style="border-left:4px solid var(--red);">
+      <h3 style="color:var(--red);">⚠️ 最常见的错</h3>
+      <p style="font-size:14px; line-height:1.7; margin-top:4px;">
+        把 <code>LCIRC</code> 当 <code>LSHIFT</code> 做 —— 结果末位是 0 还是 1 就错了：<br>
+        <code>LSHIFT-1 10110</code> = <code>01100</code>（丢掉了 <code>1</code>）<br>
+        <code>LCIRC-1 10110</code> = <code>01101</code>（<code>1</code> 绕到最右）
+      </p>
+    </div>
+
+    <div class="practice">
+      <div class="label">小贴士</div>
+      <p style="font-size:14px;">看到 <b style="color:var(--purple);">C</b> 就是 <b style="color:var(--purple);">C</b>ircular（循环），没有 <b style="color:var(--purple);">C</b> 就是丢位补 0</p>
+    </div>
+  </div>
+</section>
+
+<!-- 12 · 移位量的边界情况 -->
+<section class="slide compact">
+  <div class="left">
+    <div class="kicker">边界</div>
+    <h2>移 <span class="highlight">几位</span> 的三种情况</h2>
+    <p class="subtitle">以 <code class="bits" style="font-size:15px;">10101</code> 为例</p>
+  </div>
+  <div class="right">
+    <div class="card" style="border-left:4px solid var(--purple);">
+      <h3 style="color:var(--purple);">6 种情况全记住</h3>
+      <table style="font-size:13.5px; width:100%; border-collapse:collapse; margin-top:8px; line-height:1.6;">
+        <tr style="background:rgba(124,58,237,.08);">
+          <th style="padding:6px;">运算</th><th style="padding:6px;">结果</th><th style="padding:6px;">说明</th>
+        </tr>
+        <tr><td style="padding:5px;"><code>LSHIFT-1 10101</code></td><td style="padding:5px;" class="bits"><b>01010</b></td><td style="padding:5px;">高位丢 1 位，低位补 0</td></tr>
+        <tr style="background:rgba(124,58,237,.04);"><td style="padding:5px;"><code>LSHIFT-3 10101</code></td><td style="padding:5px;" class="bits"><b>01000</b></td><td style="padding:5px;">丢 3 位（只剩 <code>01</code>），补 3 个 0</td></tr>
+        <tr><td style="padding:5px;"><code>RSHIFT-1 10101</code></td><td style="padding:5px;" class="bits"><b>01010</b></td><td style="padding:5px;">低位丢 1 位，高位补 0</td></tr>
+        <tr style="background:rgba(124,58,237,.04);"><td style="padding:5px;"><code>RSHIFT-3 10101</code></td><td style="padding:5px;" class="bits"><b>00010</b></td><td style="padding:5px;">丢 3 位（只剩 <code>01</code>），补 3 个 0</td></tr>
+        <tr><td style="padding:5px;"><code>LCIRC-2 10101</code></td><td style="padding:5px;" class="bits"><b>10110</b></td><td style="padding:5px;">转 2 圈，不丢位</td></tr>
+        <tr style="background:rgba(124,58,237,.04);"><td style="padding:5px;"><code>RCIRC-2 10101</code></td><td style="padding:5px;" class="bits"><b>01101</b></td><td style="padding:5px;">转 2 圈，不丢位</td></tr>
+      </table>
+    </div>
+
+    <div class="card" style="border-left:4px solid var(--red); margin-top:12px;">
+      <h3 style="color:var(--red);">⚠️ 两个高频错</h3>
+      <ul style="font-size:14px; line-height:1.75; padding-left:20px; margin-top:4px;">
+        <li><code>LSHIFT-3 10101</code> 有人写成 <code>10101</code>（以为丢的位还在）<br><span style="color:var(--muted);">错！正确是 <code>01000</code></span></li>
+        <li><code>LCIRC-5 10101</code>（转 5 圈 = 原样）<br><span style="color:var(--muted);">= <code>10101</code>，n 超过 5 要<b>取模</b></span></li>
+      </ul>
+    </div>
+
+    <div class="practice" style="margin-top:12px;">
+      <div class="label">小贴士</div>
+      <p style="font-size:15px;">移位<b>永远保持 5 位</b> —— 这是判断自己算对没的最快方法</p>
+    </div>
+  </div>
+</section>
+
+<!-- 13 · 真题里的四种形态 -->
+<section class="slide compact">
+  <div class="left">
+    <div class="kicker">题型归纳</div>
+    <h2>真题里的 <span class="highlight">4 种形态</span></h2>
+    <p class="subtitle">10 年 18 道题统计出来的套路</p>
+  </div>
+  <div class="right">
+    <div class="card" style="border-left:4px solid var(--purple);">
+      <h3 style="color:var(--purple);">形态分布</h3>
+      <table style="font-size:13.5px; width:100%; border-collapse:collapse; margin-top:8px; line-height:1.6;">
+        <tr style="background:rgba(124,58,237,.08);">
+          <th style="padding:6px;">形态</th><th style="padding:6px;">次数</th><th style="padding:6px;">例子</th>
+        </tr>
+        <tr><td style="padding:5px;">单个 NOT + AND/OR</td><td style="padding:5px;"><b>8 次</b></td><td style="padding:5px;" class="bits"><code>01011 OR NOT 01101</code></td></tr>
+        <tr style="background:rgba(124,58,237,.04);"><td style="padding:5px;">移位 + 位运算混合</td><td style="padding:5px;"><b>6 次</b></td><td style="padding:5px;"><code>(LSHIFT-2 01101) OR (RCIRC-3 10110) AND …</code></td></tr>
+        <tr><td style="padding:5px;">嵌套（多层括号）</td><td style="padding:5px;"><b>3 次</b></td><td style="padding:5px;"><code>(LCIRC-2 (RSHIFT-1 (NOT 01110)))</code></td></tr>
+        <tr style="background:rgba(124,58,237,.04);"><td style="padding:5px;">纯位运算无括号</td><td style="padding:5px;"><b>1 次</b></td><td style="padding:5px;"><code>10100 OR 01100 AND 01011</code></td></tr>
+      </table>
+    </div>
+
+    <div class="card" style="border-left:4px solid var(--green); margin-top:12px;">
+      <h3 style="color:var(--green-deep);">🧭 解题 3 步</h3>
+      <ol class="rule-list" style="margin-top:4px;">
+        <li><b>拆最内层括号</b>（从里往外算）
+          <span class="r-hit">第 1 步</span></li>
+        <li><b>算移位</b>（先定位移，再看丢位还是循环）
+          <span class="r-hit">第 2 步</span></li>
+        <li><b>最后算 AND / OR / XOR</b>（记住 AND 比 OR 优先）
+          <span class="r-hit">第 3 步</span></li>
+      </ol>
+    </div>
+
+    <div class="card" style="border-left:4px solid var(--red); margin-top:12px;">
+      <h3 style="color:var(--red);">⚠️ 每年第 4 题几乎都是混合式</h3>
+      <p style="font-size:14px; line-height:1.65;">移位 + 括号嵌套 —— 最难的就是它，但套路是固定的</p>
+    </div>
+
+    <div class="practice" style="margin-top:12px;">
+      <div class="label">小贴士</div>
+      <p style="font-size:15px;">先写出<b>中间结果</b>，再往下算，不要一步到底</p>
+    </div>
+  </div>
+</section>
+
+<!-- 14 · 真题 1：单式 -->
+<section class="slide compact compare">
+  <div class="head">
+    <div class="kicker">真题演练 1</div>
+    <h2>单式 <span class="highlight">OR + NOT</span></h2>
+    <p class="subtitle">2024-2025 第 3 题</p>
+  </div>
+
+  <div class="left">
+    <div class="card q-card">
+      <div class="qa-tag">2024-2025 · 第 3 题</div>
+      <div class="qa-expr bits">01011 OR NOT 01101</div>
+      <div class="q-note">直接写出 5 位二进制结果。</div>
+    </div>
+
+    <details class="card ans-card">
+      <summary>展开答案 · 逐步过程</summary>
+      <div class="ans-body">
+        <div class="step-list">
+          <div class="st">
+            <div class="sn">1</div>
+            <div class="sb">
+              <b>先算 NOT</b>（优先级最高）<span class="bits">01101</span> → <span class="bits">10010</span>
+              <div class="sc">  0 1 1 0 1
+  ↓ ↓ ↓ ↓ ↓
+  1 0 0 1 0</div>
+            </div>
+          </div>
+          <div class="st">
+            <div class="sn">2</div>
+            <div class="sb">
+              <b>再算 OR</b>
+              <div class="sc">    0 1 0 1 1
+  | 1 0 0 1 0
+  ─────────────
+    1 1 0 1 1</div>
+            </div>
+          </div>
+        </div>
+        <div class="concl">
+          <b class="ans">答案：11011</b>（官方 A）<br>
+          <span style="color:var(--muted);">验证：结果还是 5 位 ✓</span>
+        </div>
+      </div>
+    </details>
+  </div>
+
+  <div class="right">
+    <div class="card" style="border-left:4px solid var(--purple);">
+      <h3 style="color:var(--purple);">本步用到的规则</h3>
+      <ol class="rule-list" style="margin-top:4px;">
+        <li><code>NOT</code> 优先级<b>最高</b> → 先算 <code>NOT 01101</code>
+          <span class="r-hit">左表第 1 步</span></li>
+        <li><code>OR</code> 是<b>最低</b>优先级 → 后算
+          <span class="r-hit">左表第 2 步</span></li>
+        <li>每步结果都保持 <b>5 位</b>
+          <span class="r-hit">检查法</span></li>
+      </ol>
+    </div>
+
+    <div class="practice">
+      <div class="label">小贴士</div>
+      <p style="font-size:14px;">这题是<b>最简单的一类</b>：只有 2 个运算、0 层括号 —— 先做 NOT 再做 OR 就完了</p>
+    </div>
+  </div>
+</section>
+
+<!-- 15 · 真题 2：优先级陷阱 -->
+<section class="slide compact compare">
+  <div class="head">
+    <div class="kicker">真题演练 2</div>
+    <h2>优先级 <span class="highlight">陷阱</span></h2>
+    <p class="subtitle">2022-2023 第 3 题 · 每年第 3 题的固定坑</p>
+  </div>
+
+  <div class="left">
+    <div class="card q-card">
+      <div class="qa-tag">2022-2023 · 第 3 题</div>
+      <div class="qa-expr bits">10100 OR 01100 AND 01011</div>
+      <div class="q-note">先算哪一步？<b>AND 优先还是 OR 优先？</b></div>
+    </div>
+
+    <details class="card ans-card">
+      <summary>展开答案 · 逐步过程 + 错例</summary>
+      <div class="ans-body">
+        <div class="step-list">
+          <div class="st">
+            <div class="sn">1</div>
+            <div class="sb">
+              <b>AND 优先</b>，先算 <span class="bits">01100 AND 01011</span>
+              <div class="sc">    0 1 1 0 0
+  & 0 1 0 1 1
+  ─────────────
+    0 1 0 0 0</div>
+            </div>
+          </div>
+          <div class="st">
+            <div class="sn">2</div>
+            <div class="sb">
+              <b>再算 OR</b>
+              <div class="sc">    1 0 1 0 0
+  | 0 1 0 0 0
+  ─────────────
+    1 1 1 0 0</div>
+            </div>
+          </div>
+        </div>
+        <div class="concl">
+          <b class="ans">答案：11100</b>（官方 B）
+        </div>
+        <div class="wrong">
+          <b>如果算错成 <code>(10100 OR 01100) AND 01011</code>：</b><br>
+          <span class="bits">11100 AND 01011</span> = <span class="w-ans">01000</span><br>
+          <span style="color:var(--muted);">—— 这正好是本题的一个选项，选错就丢分</span>
+        </div>
+      </div>
+    </details>
+  </div>
+
+  <div class="right">
+    <div class="card" style="border-left:4px solid var(--purple);">
+      <h3 style="color:var(--purple);">优先级规则</h3>
+      <ol class="rule-list" style="margin-top:4px;">
+        <li><code>AND</code> <b>比</b> <code>OR</code> 优先 → 先算 AND
+          <span class="r-hit">左表第 1 步</span></li>
+        <li>只有 <code>OR</code> 剩下 → 再算 OR
+          <span class="r-hit">左表第 2 步</span></li>
+        <li><code>AND</code> 和 <code>XOR</code> <b>同级</b>，从左往右
+          <span class="r-hit">扩展知识</span></li>
+      </ol>
+    </div>
+
+    <div class="card" style="border-left:4px solid var(--red);">
+      <h3 style="color:var(--red);">⚠️ 两种错法</h3>
+      <p style="font-size:13.5px; line-height:1.7;">
+        ① 算成 <code>(A OR B) AND C</code> → <span class="w-ans">01000</span><br>
+        ② 把 <code>AND</code> 当 <code>OR</code> → <span class="w-ans">11111</span><br>
+        <span style="color:var(--muted);">两个错答案都在选项里</span>
+      </p>
+    </div>
+
+    <div class="practice">
+      <div class="label">小贴士</div>
+      <p style="font-size:14px;">拿不准就<b>加括号</b> —— 括号优先级最高，永远不会错</p>
+    </div>
+  </div>
+</section>
+
+<!-- 16 · 真题 3：混合式 -->
+<section class="slide compact compare">
+  <div class="head">
+    <div class="kicker">真题演练 3</div>
+    <h2>混合式 <span class="highlight">移位 + 优先级</span></h2>
+    <p class="subtitle">2024-2025 第 4 题 · 每年最难的那道</p>
+  </div>
+
+  <div class="left">
+    <div class="card q-card">
+      <div class="qa-tag">2024-2025 · 第 4 题</div>
+      <div class="qa-expr" style="font-size:11.5px; letter-spacing:.5px;">(LSHIFT-2 01101) OR (RCIRC-3 10110) AND (RSHIFT-1 11011)</div>
+      <div class="q-note">3 个括号 + AND/OR 优先级，分 5 步算。</div>
+    </div>
+
+    <details class="card ans-card">
+      <summary>展开答案 · 5 步完整过程</summary>
+      <div class="ans-body">
+        <div class="step-list">
+          <div class="st">
+            <div class="sn">1</div>
+            <div class="sb"><b>LSHIFT-2 01101</b> → 丢高 2 位补 2 个 0 = <span class="bits">10100</span></div>
+          </div>
+          <div class="st">
+            <div class="sn">2</div>
+            <div class="sb"><b>RCIRC-3 10110</b> → 转 3 圈 = <span class="bits">11010</span></div>
+          </div>
+          <div class="st">
+            <div class="sn">3</div>
+            <div class="sb"><b>RSHIFT-1 11011</b> → 丢低 1 位补 1 个 0 = <span class="bits">01101</span></div>
+          </div>
+          <div class="st">
+            <div class="sn">4</div>
+            <div class="sb">
+              <b>AND 优先</b>：<span class="bits">11010 AND 01101</span>
+              <div class="sc">    1 1 0 1 0
+  & 0 1 1 0 1
+  ─────────────
+    0 1 0 0 0</div>
+            </div>
+          </div>
+          <div class="st">
+            <div class="sn">5</div>
+            <div class="sb">
+              <b>最后 OR</b>
+              <div class="sc">    1 0 1 0 0
+  | 0 1 0 0 0
+  ─────────────
+    1 1 1 0 0</div>
+            </div>
+          </div>
+        </div>
+        <div class="concl">
+          <b class="ans">答案：11100</b>（官方 C）
+        </div>
+      </div>
+    </details>
+  </div>
+
+  <div class="right">
+    <div class="card" style="border-left:4px solid var(--purple);">
+      <h3 style="color:var(--purple);">混合题的固定套路</h3>
+      <ol class="rule-list" style="margin-top:4px;">
+        <li><b>括号先算</b>（3 个括号分别算）→ 第 1、2、3 步
+          <span class="r-hit">左表第 1-3 步</span></li>
+        <li>再按优先级算 <b>AND</b> → 第 4 步
+          <span class="r-hit">左表第 4 步</span></li>
+        <li>最后 <b>OR</b> → 第 5 步
+          <span class="r-hit">左表第 5 步</span></li>
+      </ol>
+    </div>
+
+    <div class="card" style="border-left:4px solid var(--red);">
+      <h3 style="color:var(--red);">⚠️ 第 2 步容易算错</h3>
+      <p style="font-size:13.5px; line-height:1.7;">
+        <code>RCIRC-3 10110</code> 等于 <code>RCIRC-2</code><br>
+        <span style="color:var(--muted);">（5 位循环，转 3 圈 = 转 2 圈）</span><br>
+        <b>RCIRC-2 10110</b> = <span class="bits">10101</span>
+      </p>
+    </div>
+
+    <div class="practice">
+      <div class="label">小贴士</div>
+      <p style="font-size:14px;">3 个括号 → <b>先写出 3 个中间结果</b>，再处理 AND/OR，思路就清楚了</p>
+    </div>
+  </div>
+</section>
+
+<!-- 17 · 真题 4：嵌套式 -->
+<section class="slide compact compare">
+  <div class="head">
+    <div class="kicker">真题演练 4</div>
+    <h2>嵌套式 <span class="highlight">由里往外</span></h2>
+    <p class="subtitle">2022-2023 第 4 题</p>
+  </div>
+
+  <div class="left">
+    <div class="card q-card">
+      <div class="qa-tag">2022-2023 · 第 4 题</div>
+      <div class="qa-expr" style="font-size:12.5px; letter-spacing:.5px;">(LCIRC-2 (RSHIFT-1 (NOT 01110)))</div>
+      <div class="q-note">3 层括号，<b>从最里层往外</b>算。</div>
+    </div>
+
+    <details class="card ans-card">
+      <summary>展开答案 · 3 步由内往外</summary>
+      <div class="ans-body">
+        <div class="step-list">
+          <div class="st">
+            <div class="sn">1</div>
+            <div class="sb">
+              <b>最里层</b>：<code>NOT 01110</code>
+              <div class="sc">  0 1 1 1 0
+  ↓ ↓ ↓ ↓ ↓
+  1 0 0 0 1</div>
+            </div>
+          </div>
+          <div class="st">
+            <div class="sn">2</div>
+            <div class="sb">
+              <b>中间层</b>：<code>RSHIFT-1 10001</code> → 丢最低位 <code>1</code>，高位补 0
+              <div class="sc">  1 0 0 0 1
+0 0 0 0 1 →
+  ─────────────
+  0 1 0 0 0</div>
+            </div>
+          </div>
+          <div class="st">
+            <div class="sn">3</div>
+            <div class="sb">
+              <b>最外层</b>：<code>LCIRC-2 01000</code> → 转 2 圈
+              <div class="sc">  0 1 0 0 0
+← 0 1 0 0 0
+  ─────────────
+  0 0 0 0 1</div>
+            </div>
+          </div>
+        </div>
+        <div class="concl">
+          <b class="ans">答案：00001</b>（官方 C）<br>
+          <span style="color:var(--muted);">原来只有 1 个 <code>1</code>，转 2 圈后它到了最右边</span>
+        </div>
+      </div>
+    </details>
+  </div>
+
+  <div class="right">
+    <div class="card" style="border-left:4px solid var(--purple);">
+      <h3 style="color:var(--purple);">嵌套题 3 条</h3>
+      <ol class="rule-list" style="margin-top:4px;">
+        <li><b>从里往外</b>算（最内层括号先算）
+          <span class="r-hit">左表第 1 步</span></li>
+        <li>每次只处理<b>一层</b>
+          <span class="r-hit">左表第 2、3 步</span></li>
+        <li>每层结果<b>都是 5 位</b>
+          <span class="r-hit">检查法</span></li>
+      </ol>
+    </div>
+
+    <div class="card" style="border-left:4px solid var(--amber);">
+      <h3 style="color:var(--amber);">💡 快速验算</h3>
+      <p style="font-size:13.5px; line-height:1.7;">
+        <code>01000</code> 里只有 1 个 <code>1</code>，转 2 圈后这个 <code>1</code> 到了<b>最右边</b> → <code>00001</code>。<br>
+        <span style="color:var(--muted);">不用一步步算，看 <code>1</code> 的个数和位置就能猜到答案</span>
+      </p>
+    </div>
+
+    <div class="practice">
+      <div class="label">小贴士</div>
+      <p style="font-size:14px;">嵌套题<b>不要一次读完</b> —— 先把最里层算出来，括号变成一个数，再继续</p>
+    </div>
+  </div>
+</section>
+
+<!-- 18 · 9 年 18 道答案表 -->
+<section class="slide compact">
+  <div class="left">
+    <div class="kicker">真题速查</div>
+    <h2>9 年 <span class="highlight">18 道</span> · 答案一览</h2>
+    <p class="subtitle">左边是第 3 题，右边是第 4 题</p>
+  </div>
+  <div class="right">
+    <div class="card" style="border-left:4px solid var(--purple);">
+      <h3 style="color:var(--purple);">全部题目 + 答案</h3>
+      <table class="ans-table" style="margin-top:6px;">
+        <tr>
+          <th rowspan="2" style="width:13%; vertical-align:middle;">年份</th>
+          <th colspan="2" style="width:43.5%;">第 3 题</th>
+          <th colspan="2" style="width:43.5%;">第 4 题</th>
+        </tr>
+        <tr>
+          <th style="width:34%;">题面</th><th style="width:9.5%;">答案</th>
+          <th style="width:34%;">题面</th><th style="width:9.5%;">答案</th>
+        </tr>
+        <tr><td><b>2024-2025</b></td>
+          <td class="ex">01011 OR NOT 01101</td><td class="rv">11011 (A)</td>
+          <td class="ex">(LSHIFT-2 01101) OR (RCIRC-3 10110) AND (RSHIFT-1 11011)</td><td class="rv">11100 (C)</td></tr>
+        <tr style="background:rgba(124,58,237,.04);"><td><b>2023-2024</b></td>
+          <td class="ex">00110 OR 01100 XOR 11010</td><td class="rv">10110 (E)</td>
+          <td class="ex">(LSHIFT-1 01110) AND (RCIRC-2 (10110 OR NOT 10101))</td><td class="rv">10100 (A)</td></tr>
+        <tr><td><b>2022-2023</b></td>
+          <td class="ex">10100 OR 01100 AND 01011</td><td class="rv">11100 (B)</td>
+          <td class="ex">(LCIRC-2 (RSHIFT-1 (NOT 01110)))</td><td class="rv">00001 (C)</td></tr>
+        <tr style="background:rgba(124,58,237,.04);"><td><b>2021-2022</b></td>
+          <td class="ex">01100 OR 11011 AND 01010</td><td class="rv">01110 (B)</td>
+          <td class="ex">(LCIRC-2 01100) AND NOT 11010 OR (RSHIFT-1 01100)</td><td class="rv">00111 (C)</td></tr>
+        <tr><td><b>2020-2021</b></td>
+          <td class="ex">(01011 OR (NOT 10010) AND 00011)</td><td class="rv">01011 (A)</td>
+          <td class="ex">(NOT (RSHIFT-2 (LCIRC-2 10011)))</td><td class="rv">11100 (E)</td></tr>
+        <tr style="background:rgba(124,58,237,.04);"><td><b>2019-2020</b></td>
+          <td class="ex">10110 OR 11001 AND 01011</td><td class="rv">11111</td>
+          <td class="ex">(RSHIFT-1 (LCIRC-2 (LSHIFT-3 (RCIRC-2 10101))))</td><td class="rv">00000</td></tr>
+        <tr><td><b>2018-2019</b></td>
+          <td class="ex">10011 OR 01110 AND 10101</td><td class="rv">10111</td>
+          <td class="ex">(LCIRC-2 01101) OR (RSHIFT-1 11111)</td><td class="rv">11111</td></tr>
+        <tr style="background:rgba(124,58,237,.04);"><td><b>2016-2017</b></td>
+          <td class="ex">01101 OR (NOT 11100) AND 00101</td><td class="rv">01101</td>
+          <td class="ex">(NOT 01110) AND (RSHIFT-2 01001) OR (LCIRC-1 01011)</td><td class="rv">10110</td></tr>
+        <tr><td><b>2015-2016</b></td>
+          <td class="ex">01101 OR (NOT 10111) AND 10010</td><td class="rv">01101</td>
+          <td class="ex">(LCIRC-2 01110) OR ((NOT 10110) AND (RSHIFT-1 01110))</td><td class="rv">11001</td></tr>
+      </table>
+    </div>
+
+    <div class="card" style="border-left:4px solid var(--green); margin-top:10px;">
+      <h3 style="color:var(--green-deep);">✅ 两个关键事实</h3>
+      <p style="font-size:13.5px; line-height:1.7; margin-top:4px;">
+        · <b>2015-2016 起每年 2 道，从未间断</b><br>
+        · <b>2020-2021 起改成 A-E 选择题</b>；2019-2020 及更早是中文版开放作答（<b>无选项</b>）
+      </p>
+    </div>
+
+    <div class="practice" style="margin-top:10px;">
+      <div class="label">小贴士</div>
+      <p style="font-size:14px;">早年开放作答年份可以<b>不给选项</b>，直接写答案 —— L6 slide 16 就是这么处理的</p>
+    </div>
+  </div>
+</section>
+
+<!-- 19 · 命题规律 -->
+<section class="slide compact">
+  <div class="left">
+    <div class="kicker">命题规律</div>
+    <h2>位运算题 <span class="highlight">10 年</span>考了什么</h2>
+    <p class="subtitle">题号完全没变 —— 这是最稳定的送分题</p>
+  </div>
+  <div class="right">
+    <div class="card" style="border-left:4px solid var(--purple);">
+      <h3 style="color:var(--purple);">10 年题号分布</h3>
+      <table style="font-size:13px; width:100%; border-collapse:collapse; margin-top:8px; line-height:1.55;">
+        <tr style="background:rgba(124,58,237,.08);">
+          <th style="padding:5px;">年份</th><th style="padding:5px;">第 3 题</th><th style="padding:5px;">第 4 题</th>
+        </tr>
+        <tr><td style="padding:4px;"><b>2024-2025</b></td><td style="padding:4px;">OR + NOT</td><td style="padding:4px;">移位混合</td></tr>
+        <tr style="background:rgba(124,58,237,.04);"><td style="padding:4px;"><b>2023-2024</b></td><td style="padding:4px;">OR + XOR</td><td style="padding:4px;">移位混合</td></tr>
+        <tr><td style="padding:4px;"><b>2022-2023</b></td><td style="padding:4px;">OR + AND</td><td style="padding:4px;">嵌套（循环+移位）</td></tr>
+        <tr style="background:rgba(124,58,237,.04);"><td style="padding:4px;"><b>2021-2022</b></td><td style="padding:4px;">OR + AND</td><td style="padding:4px;">循环 + NOT 混合</td></tr>
+        <tr><td style="padding:4px;"><b>2020-2021</b></td><td style="padding:4px;">括号 + NOT + AND</td><td style="padding:4px;">嵌套（移位+循环）</td></tr>
+        <tr style="background:rgba(124,58,237,.04);"><td style="padding:4px;"><b>2019-2020</b></td><td style="padding:4px;">OR + AND</td><td style="padding:4px;"><b>四层嵌套</b></td></tr>
+        <tr><td style="padding:4px;"><b>2018-2019</b></td><td style="padding:4px;">OR + AND</td><td style="padding:4px;">循环 + 移位</td></tr>
+        <tr style="background:rgba(124,58,237,.04);"><td style="padding:4px;"><b>2016-2017</b></td><td style="padding:4px;">OR + NOT + AND</td><td style="padding:4px;">混合</td></tr>
+        <tr><td style="padding:4px;"><b>2015-2016</b></td><td style="padding:4px;">OR + NOT + AND</td><td style="padding:4px;">混合</td></tr>
+      </table>
+    </div>
+
+    <div class="card" style="border-left:4px solid var(--green); margin-top:12px;">
+      <h3 style="color:var(--green-deep);">📊 3 条规律</h3>
+      <ul style="font-size:14px; line-height:1.75; padding-left:20px; margin-top:4px;">
+        <li><b>题号固定</b> —— 10 年全部是第 3、4 题，位置从未变</li>
+        <li><b>第 3 题简单</b> —— 最多 2 层括号 + 2 个运算</li>
+        <li><b>第 4 题最难</b> —— 几乎必有<b>移位 + 嵌套</b></li>
+      </ul>
+    </div>
+
+    <div class="card" style="border-left:4px solid var(--amber); margin-top:12px;">
+      <h3 style="color:var(--amber);">⚠️ 选项干扰项的 4 种套路</h3>
+      <ul style="font-size:13.5px; line-height:1.7; padding-left:20px; margin-top:4px;">
+        <li>AND / OR 优先级搞反</li>
+        <li>移位补 0 补错（补到左边还是右边）</li>
+        <li>循环移位当普通移位做</li>
+        <li>位串长度算错（忘了定长 5 位）</li>
+      </ul>
+    </div>
+
+    <div class="practice" style="margin-top:12px;">
+      <div class="label">小贴士</div>
+      <p style="font-size:15px;">把这 4 种套路记住，考场上能直接排除 3 个选项</p>
+    </div>
+  </div>
+</section>
+
+<!-- 20 · 7 大坑 -->
+<section class="slide compact compare">
+  <div class="head">
+    <div class="kicker">易错点</div>
+    <h2>位运算 <span class="highlight">7 大坑</span></h2>
+    <p class="subtitle">全部来自真题 —— 每一条都真的有人踩过</p>
+  </div>
+
+  <div class="left">
+    <div class="card q-card">
+      <div class="qa-tag">自测</div>
+      <div class="qa-expr" style="font-size:12px; letter-spacing:.3px; line-height:1.6;">
+NOT 011 = ?<br>
+LSHIFT-3 10101 = ?<br>
+5 的 5 位二进制 = ?
+      </div>
+      <div class="q-note">这 3 个分别对应坑 ① ⑥ ② —— 想清楚再展开。</div>
+    </div>
+
+    <details class="card ans-card">
+      <summary>展开答案 · 7 个坑 + 3 个保命习惯</summary>
+      <div class="ans-body">
+        <div style="font-size:13px; line-height:1.75;">
+          <b style="color:var(--red);">① 忘了定长</b> —— <code>NOT 011</code> 应是 <code>10011</code>（5 位），不是 <code>100</code><br>
+          <b style="color:var(--red);">② 高位没补 0</b> —— <code>5</code> 写成 <code>00101</code> 不是 <code>101</code><br>
+          <b style="color:var(--red);">③ AND / OR 优先级搞反</b> —— <code>A OR B AND C</code><br>
+          <b style="color:var(--red);">④ XOR 当 AND</b> —— 两者优先级<b>相同</b>，从左往右<br>
+          <b style="color:var(--red);">⑤ 循环移位当普通移位</b> —— <code>LCIRC</code> 不丢位<br>
+          <b style="color:var(--red);">⑥ 移位位数算错</b> —— <code>LSHIFT-3 10101</code> = <code>01000</code> 不是 <code>10101</code><br>
+          <b style="color:var(--red);">⑦ 移完忘了补 0</b> —— 结果长度必须还是 5 位
+        </div>
+        <div class="concl">
+          <b style="color:var(--green-deep);">🛡 3 个保命习惯</b><br>
+          <b>① 先写中间结果</b>（别一步到底）<br>
+          <b>② 每步检查长度</b>（必须还是 5 位）<br>
+          <b>③ 最后代回原式复核</b>
+        </div>
+      </div>
+    </details>
+  </div>
+
+  <div class="right">
+    <div class="card" style="border-left:4px solid var(--purple);">
+      <h3 style="color:var(--purple);">最常踩的 3 个（按频率）</h3>
+      <ol class="rule-list" style="margin-top:4px;">
+        <li><b>AND / OR 优先级搞反</b>（每年第 3 题都考）
+          <span class="r-hit">第 ③ 条</span></li>
+        <li><b>循环移位当普通移位</b>
+          <span class="r-hit">第 ⑤ 条</span></li>
+        <li><b>忘了定长 / 高位补 0</b>
+          <span class="r-hit">第 ① ② 条</span></li>
+      </ol>
+    </div>
+
+    <div class="practice">
+      <div class="label">小贴士</div>
+      <p style="font-size:14px;">做完题<b>数一遍位数</b> —— 不是 5 位就一定错了</p>
+    </div>
+  </div>
+</section>
+
+<!-- 21 · 方法回顾 + L8 预告 -->
+<section class="slide compact">
+  <div class="left">
+    <div class="kicker">回顾</div>
+    <h2>本课 <span class="highlight">6 个方法</span></h2>
+    <p class="subtitle">全部背下来，位运算就通关了</p>
+  </div>
+  <div class="right">
+    <div class="card" style="border-left:4px solid var(--purple);">
+      <h3 style="color:var(--purple);">6 个方法速查</h3>
+      <table style="font-size:14px; width:100%; border-collapse:collapse; margin-top:8px; line-height:1.65;">
+        <tr style="background:rgba(124,58,237,.08);">
+          <th style="padding:6px;">运算</th><th style="padding:6px;">规则</th><th style="padding:6px;">一句话</th>
+        </tr>
+        <tr><td style="padding:5px;"><code>NOT</code></td><td style="padding:5px;">0↔1</td><td style="padding:5px;">逐位翻转</td></tr>
+        <tr style="background:rgba(124,58,237,.04);"><td style="padding:5px;"><code>AND</code></td><td style="padding:5px;">同 1 才 1</td><td style="padding:5px;">有 0 必 0</td></tr>
+        <tr><td style="padding:5px;"><code>OR</code></td><td style="padding:5px;">同 0 才 0</td><td style="padding:5px;">有 1 必 1</td></tr>
+        <tr style="background:rgba(124,58,237,.04);"><td style="padding:5px;"><code>XOR</code></td><td style="padding:5px;">不同才 1</td><td style="padding:5px;">相同为 0</td></tr>
+        <tr><td style="padding:5px;"><code>LSHIFT</code> / <code>RSHIFT</code></td><td style="padding:5px;">丢位补 0</td><td style="padding:5px;">挤出去</td></tr>
+        <tr style="background:rgba(124,58,237,.04);"><td style="padding:5px;"><code>LCIRC</code> / <code>RCIRC</code></td><td style="padding:5px;">绕圈不丢</td><td style="padding:5px;">转个圈</td></tr>
+      </table>
+    </div>
+
+    <div class="card" style="border-left:4px solid var(--blue); margin-top:12px;">
+      <h3 style="color:var(--blue);">📘 下一节 · L8 · 循环追踪</h3>
+      <ul style="font-size:14px; line-height:1.75; padding-left:20px; margin-top:4px;">
+        <li><code>while</code> / <code>for</code> 循环怎么写</li>
+        <li><b>嵌套循环</b>的执行顺序（外层套内层）</li>
+        <li>变量<b>追踪表</b>怎么做 —— 一行一行记</li>
+        <li>历年真题<b>第 5 题</b>全收录</li>
+      </ul>
+    </div>
+
+    <div class="practice" style="margin-top:12px;">
+      <div class="label">小贴士</div>
+      <p style="font-size:15px;">第二轮还剩 <b>2 节课</b>知识点（L8 循环追踪），然后 L9 真题、L10 模考</p>
+    </div>
+  </div>
+</section>
+
+<!-- 22 · 收尾 -->
+<section class="slide">
+  <div class="left">
+    <div class="kicker">收尾</div>
+    <h1>位运算这块<span class="highlight">拿下了</span></h1>
+    <p class="subtitle">10 年 18 道题，全部验算通过</p>
+  </div>
+  <div class="right">
+    <div class="card" style="border-left:4px solid var(--green);">
+      <h3 style="color:var(--green-deep);">✅ 本课掌握清单</h3>
+      <ul style="font-size:15px; line-height:1.85; padding-left:20px; margin-top:4px;">
+        <li>说出 4 种位运算的规则和口诀</li>
+        <li>区分<b>移位</b>和<b>循环移位</b></li>
+        <li>背出优先级顺序 <code>NOT &gt; 移位 &gt; AND/XOR &gt; OR</code></li>
+        <li>知道所有位串<b>定长 5 位</b>、高位补 0</li>
+        <li>用 3 步法解混合式真题</li>
+      </ul>
+    </div>
+
+    <div class="card" style="border-left:4px solid var(--purple); margin-top:14px;">
+      <h3 style="color:var(--purple);">🗺 第二轮进度</h3>
+      <p style="font-size:16px; line-height:2; margin-top:6px;">
+        ✅ 表达式（L6）<br>
+        ✅ 比特位操作（L7）<br>
+        ⬜ 循环追踪（L8）<br>
+        ⬜ 真题专项（L9）<br>
+        ⬜ 第二轮模拟考（L10）
+      </p>
+    </div>
+
+    <div class="practice" style="margin-top:14px;">
+      <div class="label">小贴士</div>
+      <p style="font-size:15px;">还有 <b>3 节课</b>打完第二轮 —— 位运算这块稳了，继续往前打</p>
+    </div>
+  </div>
+</section>
+
+
+</main>
+
+<div class="nav">
+  <a class="home-link secondary" href="index.html">📚 目录</a>
+  <button class="secondary" onclick="prev()">← 上页</button>
+  <span class="counter"><span id="cur">1</span> / <span id="total">22</span></span>
+  <div class="progress-bar"><span id="bar"></span></div>
+  <button onclick="next()">下页 →</button>
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  document.getElementById('total').textContent = total;
+  let idx = 0;
+  function show(i) {
+    if (i < 0) i = 0;
+    if (i >= total) i = total - 1;
+    slides.forEach(s => s.classList.remove('active'));
+    slides[i].classList.add('active');
+    document.getElementById('cur').textContent = i + 1;
+    document.getElementById('bar').style.width = ((i + 1) / total * 100) + '%';
+    idx = i;
+    slides[i].scrollTop = 0;
+  }
+  function next() { show(idx + 1); }
+  function prev() { show(idx - 1); }
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'Enter') { e.preventDefault(); next(); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); prev(); }
+  });
+  let tx = 0;
+  document.addEventListener('touchstart', e => { tx = e.touches[0].clientX; });
+  document.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - tx;
+    if (Math.abs(dx) > 50) { if (dx < 0) next(); else prev(); }
+  });
+</script>
+</body>
+</html>

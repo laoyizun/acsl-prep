@@ -640,13 +640,25 @@ code.inline {
         </div>
       </a>
 
-      <!-- L7-10 · 备课中 -->
-      <div class="lesson-card disabled">
-        <div class="lesson-num">L7-10</div>
-        <h3>比特位 + 循环追踪 + 真题 + 模考</h3>
-        <p>位运算 · 循环追踪强化 · 第二轮真题专项 · 第二轮模拟考</p>
+      <!-- L7 · 比特位操作 -->
+      <a class="lesson-card" href="L7.html">
+        <div class="lesson-num">L7</div>
+        <h3>比特位操作</h3>
+        <p>第二轮主题 2 · AND/OR/XOR + 移位循环 · 10 年真题</p>
         <div class="lesson-meta">
-          <span class="meta-chip purple">11.8 - 12.13</span>
+          <span class="meta-chip purple">11.8 - 11.14</span>
+          <span class="meta-chip green">第二轮</span>
+          <span class="meta-chip green">已开放 · 22 页</span>
+        </div>
+      </a>
+
+      <!-- L8-10 · 备课中 -->
+      <div class="lesson-card disabled">
+        <div class="lesson-num">L8-10</div>
+        <h3>循环追踪 + 真题 + 模考</h3>
+        <p>循环追踪强化 · 第二轮真题专项 · 第二轮模拟考</p>
+        <div class="lesson-meta">
+          <span class="meta-chip purple">11.15 - 12.13</span>
           <span class="meta-chip green">第二轮</span>
           <span class="meta-chip gray">备课中</span>
         </div>
@@ -1649,6 +1661,241 @@ code.inline {
         </p>
       </div>
     </details>
+
+    <!-- ===== L7 · 比特位操作 作业 ===== -->
+    <details class="hw-block">
+      <summary>L7 · 比特位操作（8 道基础 + 4 道真题 + 2 道挑战）</summary>
+      <div class="hw-body">
+        <p style="font-size:13px; color:var(--muted); margin-bottom:12px;">
+          <b>覆盖范围</b>：NOT / AND / OR / XOR 四种基础运算 + LSHIFT / RSHIFT / LCIRC / RCIRC 四种移位 + 运算优先级<br>
+          <b>难度</b>：★★ 基础运算（Part A）· ★★★ 移位与循环（Part B）· ★★★★ 真题实战（Part C）· ★★★★★ 挑战（Part D）<br>
+          <b>限时</b>：40 分钟 ｜ <b>说明</b>：全部手算，不许用代码跑
+        </p>
+
+        <h4 class="hw-part">📘 Part A · 基础运算（4 题 · 每题 3 分钟）</h4>
+
+        <div class="hw-item">
+          <div class="hw-q">A1. <code>NOT 10110</code> = ?</div>
+          <details class="hw-ans"><summary>展开答案</summary><div class="hw-ans-body">
+            <p><b>答案：<code>01001</code></b></p>
+            <p>逐位翻转：</p>
+            <div class="code-block" style="font-size:13px; line-height:1.6;">
+  1 0 1 1 0
+  ↓ ↓ ↓ ↓ ↓
+  0 1 0 0 1
+            </div>
+            <p style="color:var(--muted); font-size:13px;">别忘了定长 5 位，高位是 0 也要翻成 1。</p>
+          </div></details>
+        </div>
+
+        <div class="hw-item">
+          <div class="hw-q">A2. <code>10110 AND 01100</code> = ?</div>
+          <details class="hw-ans"><summary>展开答案</summary><div class="hw-ans-body">
+            <p><b>答案：<code>00100</code></b></p>
+            <div class="code-block" style="font-size:13px; line-height:1.6;">
+    1 0 1 1 0
+  & 0 1 1 0 0
+  ─────────────
+    0 0 1 0 0
+            </div>
+            <p style="color:var(--muted); font-size:13px;">只有第 3 位（从右数）两边都是 1。</p>
+          </div></details>
+        </div>
+
+        <div class="hw-item">
+          <div class="hw-q">A3. <code>10110 OR 01100</code> = ?</div>
+          <details class="hw-ans"><summary>展开答案</summary><div class="hw-ans-body">
+            <p><b>答案：<code>11110</code></b></p>
+            <div class="code-block" style="font-size:13px; line-height:1.6;">
+    1 0 1 1 0
+  | 0 1 1 0 0
+  ─────────────
+    1 1 1 1 0
+            </div>
+            <p style="color:var(--muted); font-size:13px;">只要有一边是 1，这一位就是 1。</p>
+          </div></details>
+        </div>
+
+        <div class="hw-item">
+          <div class="hw-q">A4. <code>10110 XOR 01100</code> = ?</div>
+          <details class="hw-ans"><summary>展开答案</summary><div class="hw-ans-body">
+            <p><b>答案：<code>11010</code></b></p>
+            <div class="code-block" style="font-size:13px; line-height:1.6;">
+    1 0 1 1 0
+  ⊕ 0 1 1 0 0
+  ─────────────
+    1 1 0 1 0
+            </div>
+            <p style="color:var(--muted); font-size:13px;">第 3 位两边都是 1 → 0；其余不同的位 → 1。</p>
+          </div></details>
+        </div>
+
+        <h4 class="hw-part">📗 Part B · 移位与循环（4 题 · 每题 3 分钟）</h4>
+
+        <div class="hw-item">
+          <div class="hw-q">B1. <code>LSHIFT-2 10101</code> = ?</div>
+          <details class="hw-ans"><summary>展开答案</summary><div class="hw-ans-body">
+            <p><b>答案：<code>10100</code></b></p>
+            <p>左移 2 位 = 丢高 2 位 + 低位补 2 个 0：<code>101</code> 剩下来 → <code>10100</code></p>
+            <p style="color:var(--red); font-size:13px;">⚠️ 常见错：写成 <code>10101</code>（以为丢的位还在）—— 丢掉的位不会回来！</p>
+          </div></details>
+        </div>
+
+        <div class="hw-item">
+          <div class="hw-q">B2. <code>RSHIFT-2 10101</code> = ?</div>
+          <details class="hw-ans"><summary>展开答案</summary><div class="hw-ans-body">
+            <p><b>答案：<code>00101</code></b></p>
+            <p>右移 2 位 = 丢低 2 位 + 高位补 2 个 0：<code>101</code> 剩下来 → <code>00101</code></p>
+            <p style="color:var(--muted); font-size:13px;">对比 B1：<b>移位方向不同，补 0 的位置就相反</b>。</p>
+          </div></details>
+        </div>
+
+        <div class="hw-item">
+          <div class="hw-q">B3. <code>LCIRC-2 10101</code> = ?</div>
+          <details class="hw-ans"><summary>展开答案</summary><div class="hw-ans-body">
+            <p><b>答案：<code>10110</code></b></p>
+            <p>循环左移 2 位 = 最高 2 位（<code>10</code>）挪到最右边：<code>101</code> + <code>01</code> → <code>10110</code></p>
+            <p style="color:var(--muted); font-size:13px;">一位都没丢 —— 这点和 B1 的移位完全不同。</p>
+          </div></details>
+        </div>
+
+        <div class="hw-item">
+          <div class="hw-q">B4. <code>RCIRC-2 10101</code> = ?</div>
+          <details class="hw-ans"><summary>展开答案</summary><div class="hw-ans-body">
+            <p><b>答案：<code>01101</code></b></p>
+            <p>循环右移 2 位 = 最低 2 位（<code>01</code>）挪到最左边：<code>01</code> + <code>101</code> → <code>01101</code></p>
+            <p style="color:var(--muted); font-size:13px;">记忆法：<b>L = Left = 往左 = 高的跑到低的</b>。</p>
+          </div></details>
+        </div>
+
+        <h4 class="hw-part">📕 Part C · 真题实战（4 题 · 每题 5 分钟）</h4>
+
+        <div class="hw-item">
+          <div class="hw-q">C1. <code>01011 OR NOT 01101</code> = ? <span style="color:var(--muted); font-size:12px;">（2024-2025 第 3 题）</span></div>
+          <details class="hw-ans"><summary>展开答案</summary><div class="hw-ans-body">
+            <p><b>答案：<code>11011</code></b>（官方 A）</p>
+            <div class="code-block" style="font-size:13px; line-height:1.6;">
+第 1 步：NOT 01101（NOT 优先级最高）
+  0 1 1 0 1  →  1 0 0 1 0
+
+第 2 步：OR
+    0 1 0 1 1
+  | 1 0 0 1 0
+  ─────────────
+    1 1 0 1 1
+            </div>
+            <p style="color:var(--muted); font-size:13px;">检查：结果还是 5 位 ✓</p>
+          </div></details>
+        </div>
+
+        <div class="hw-item">
+          <div class="hw-q">C2. <code>10100 OR 01100 AND 01011</code> = ? <span style="color:var(--muted); font-size:12px;">（2022-2023 第 3 题）</span></div>
+          <details class="hw-ans"><summary>展开答案</summary><div class="hw-ans-body">
+            <p><b>答案：<code>11100</code></b>（官方 B）</p>
+            <div class="code-block" style="font-size:13px; line-height:1.6;">
+第 1 步：AND 优先！01100 AND 01011
+    0 1 1 0 0
+  & 0 1 0 1 1
+  ─────────────
+    0 1 0 0 0
+
+第 2 步：OR
+    1 0 1 0 0
+  | 0 1 0 0 0
+  ─────────────
+    1 1 1 0 0
+            </div>
+            <p style="color:var(--red); font-size:13px;">⚠️ 如果算成 <code>(10100 OR 01100) AND 01011</code> = <code>01000</code> —— 这正好是本题的一个选项！</p>
+          </div></details>
+        </div>
+
+        <div class="hw-item">
+          <div class="hw-q">C3. <code>(LSHIFT-2 01101) OR (RCIRC-3 10110) AND (RSHIFT-1 11011)</code> = ? <span style="color:var(--muted); font-size:12px;">（2024-2025 第 4 题）</span></div>
+          <details class="hw-ans"><summary>展开答案</summary><div class="hw-ans-body">
+            <p><b>答案：<code>11100</code></b>（官方 C）</p>
+            <div class="code-block" style="font-size:13px; line-height:1.65;">
+第 1 步：LSHIFT-2 01101  → 10100
+第 2 步：RCIRC-3 10110   → 11010
+第 3 步：RSHIFT-1 11011  → 01101
+
+第 4 步：AND 优先
+    1 1 0 1 0
+  & 0 1 1 0 1
+  ─────────────
+    0 1 0 0 0
+
+第 5 步：OR
+    1 0 1 0 0
+  | 0 1 0 0 0
+  ─────────────
+    1 1 1 0 0
+            </div>
+            <p style="color:var(--red); font-size:13px;">⚠️ 第 2 步 <code>RCIRC-3 10110</code> = <code>RCIRC-2 10110</code> = <code>11010</code>（5 位循环，转 3 圈 = 转 2 圈）</p>
+          </div></details>
+        </div>
+
+        <div class="hw-item">
+          <div class="hw-q">C4. <code>(LCIRC-2 (RSHIFT-1 (NOT 01110)))</code> = ? <span style="color:var(--muted); font-size:12px;">（2022-2023 第 4 题）</span></div>
+          <details class="hw-ans"><summary>展开答案</summary><div class="hw-ans-body">
+            <p><b>答案：<code>00001</code></b>（官方 C）</p>
+            <div class="code-block" style="font-size:13px; line-height:1.65;">
+第 1 步（最里层）：NOT 01110  → 10001
+第 2 步（中间层）：RSHIFT-1 10001 → 01000
+第 3 步（最外层）：LCIRC-2 01000  → 00001
+            </div>
+            <p style="color:var(--muted); font-size:13px;">快速验算：<code>01000</code> 里只有 1 个 <code>1</code>，转 2 圈后它到了最右边 → <code>00001</code> ✓</p>
+          </div></details>
+        </div>
+
+        <h4 class="hw-part">📙 Part D · 挑战题（选做 · 2 题）</h4>
+
+        <div class="hw-item">
+          <div class="hw-q">D1. <code>(LCIRC-2 01100) AND NOT 11010 OR (RSHIFT-1 01100)</code> = ? <span style="color:var(--muted); font-size:12px;">（2021-2022 第 4 题）</span></div>
+          <details class="hw-ans"><summary>展开答案</summary><div class="hw-ans-body">
+            <p><b>答案：<code>00111</code></b>（官方 C）</p>
+            <div class="code-block" style="font-size:13px; line-height:1.65;">
+第 1 步：LCIRC-2 01100   → 10001
+第 2 步：NOT 11010        → 00101
+第 3 步：RSHIFT-1 01100   → 00110
+
+第 4 步：AND 优先
+    1 0 0 0 1
+  & 0 0 1 0 1
+  ─────────────
+    0 0 0 0 1
+
+第 5 步：OR
+    0 0 0 0 1
+  | 0 0 1 1 0
+  ─────────────
+    0 0 1 1 1
+            </div>
+          </div></details>
+        </div>
+
+        <div class="hw-item">
+          <div class="hw-q">D2. <code>(RSHIFT-1 (LCIRC-2 (LSHIFT-3 (RCIRC-2 10101))))</code> = ? <span style="color:var(--muted); font-size:12px;">（2019-2020 第 4 题）</span></div>
+          <details class="hw-ans"><summary>展开答案</summary><div class="hw-ans-body">
+            <p><b>答案：<code>00000</code></b></p>
+            <div class="code-block" style="font-size:13px; line-height:1.65;">
+由里往外：
+第 1 步：RCIRC-2 10101  → 01101
+第 2 步：LSHIFT-3 01101  → 01000
+第 3 步：LCIRC-2 01000  → 00001
+第 4 步：RSHIFT-1 00001  → 00000
+            </div>
+            <p style="color:var(--muted); font-size:13px;">4 层嵌套 —— 这就是 2019-2020 第 4 题，开放作答没有选项。</p>
+          </div></details>
+        </div>
+
+        <hr style="border:none; border-top:1px dashed var(--line); margin:18px 0 8px;">
+        <p style="font-size:13px; color:var(--muted);">
+          📊 <b>做完对答案</b>：Part A + B 共 8 题，限时 40 分钟。错 1 道 → 把对应方法的 PPT 页重看一遍；错 ≥ 2 道 → 下节课前找老师面批。<br>
+          🎯 <b>目标</b>：8 题全对，且移位题能立刻说出「丢哪边、补什么」，真题题能 5 步内写完。<br>
+          💡 <b>做题工具</b>：<b>必须手算</b>，不许用代码跑 —— 考试考的就是手算能力！
+        </p>
+      </div>
+    </details>
   </div>
 
   <!-- ===== Tab 3: 记忆卡片 ===== -->
@@ -1657,11 +1904,12 @@ code.inline {
     <p class="section-sub">正面题目、反面答案 · 点击卡片可翻转 · L1-L3 / L6 已开放</p>
 
     <div class="fc-tabs">
-      <button class="fc-tab active" data-filter="all">全部 <span class="count">24</span></button>
+      <button class="fc-tab active" data-filter="all">全部 <span class="count">32</span></button>
       <button class="fc-tab" data-filter="L1">L1 进制 <span class="count">6</span></button>
       <button class="fc-tab" data-filter="L2">L2 递归 <span class="count">5</span></button>
       <button class="fc-tab" data-filter="L3">L3 追踪 <span class="count">5</span></button>
       <button class="fc-tab" data-filter="L6">L6 表达式 <span class="count">8</span></button>
+      <button class="fc-tab" data-filter="L7">L7 位运算 <span class="count">8</span></button>
     </div>
 
     <div class="flashcard-grid">
@@ -2156,6 +2404,165 @@ code.inline {
 块3 <code>(B+D²)</code> → <code>B D 2 ^ +</code><br>
 整式 <code>块1 块2 * 块3 /</code><br>
 → <code>A 2 ^ B + B 2 ^ C − * B D 2 ^ + /</code></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flashcard" data-lesson="L7" onclick="this.classList.toggle('flipped')">
+      <span class="fc-flip-hint">点击翻面 ↻</span>
+      <div class="fc-inner">
+        <div class="fc-face fc-front">
+          <div class="fc-tag">L7-C01 · 概念</div>
+          <div class="fc-q">位串运算有哪三条基本规则？</div>
+        </div>
+        <div class="fc-face fc-back">
+          <div class="fc-tag" style="background:rgba(22,163,74,.12); color:#047857;">答案 · L7-C01</div>
+          <div class="fc-q" style="color:#047857;">定长 · 对齐 · 位置</div>
+          <div class="fc-explain">
+            <b>定长</b>：都是 5 位，短的<b>高位补 0</b>（<code>5</code> = <code>00101</code>）<br>
+            <b>对齐</b>：两个位串<b>右边对齐</b><br>
+            <b>位置</b>：从右往左编号，第 0 位是最低位
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flashcard" data-lesson="L7" onclick="this.classList.toggle('flipped')">
+      <span class="fc-flip-hint">点击翻面 ↻</span>
+      <div class="fc-inner">
+        <div class="fc-face fc-front">
+          <div class="fc-tag">L7-C02 · 方法</div>
+          <div class="fc-q">NOT / AND / OR / XOR 各自的规则和口诀？</div>
+        </div>
+        <div class="fc-face fc-back">
+          <div class="fc-tag" style="background:rgba(22,163,74,.12); color:#047857;">答案 · L7-C02</div>
+          <div class="fc-q" style="color:#047857;">NOT 0↔1 ｜ AND 同1才1 ｜ OR 同0才0 ｜ XOR 不同才1</div>
+          <div class="fc-explain">
+            <b>NOT</b>：逐位翻转（一位数）｜口诀「0↔1」<br>
+            <b>AND</b>：有 0 必 0 ｜口诀「同 1 才 1」<br>
+            <b>OR</b>：有 1 必 1 ｜口诀「同 0 才 0」<br>
+            <b>XOR</b>：相同为 0 ｜口诀「不同才 1」
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flashcard" data-lesson="L7" onclick="this.classList.toggle('flipped')">
+      <span class="fc-flip-hint">点击翻面 ↻</span>
+      <div class="fc-inner">
+        <div class="fc-face fc-front">
+          <div class="fc-tag">L7-C03 · 概念</div>
+          <div class="fc-q">位运算的优先级顺序是什么？AND 和 XOR 同级吗？</div>
+        </div>
+        <div class="fc-face fc-back">
+          <div class="fc-tag" style="background:rgba(22,163,74,.12); color:#047857;">答案 · L7-C03</div>
+          <div class="fc-q" style="color:#047857;">NOT &gt; 移位 &gt; AND / XOR &gt; OR</div>
+          <div class="fc-explain">
+            从高到低：<code>NOT</code> → <code>LSHIFT/RSHIFT/LCIRC/RCIRC</code> → <code>AND</code>/<code>XOR</code> → <code>OR</code><br>
+            <b>AND 和 XOR 同级</b>，从左往右算；<b>OR 最低</b>，最后算。<br>
+            拿不准就<b>加括号</b>。
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flashcard" data-lesson="L7" onclick="this.classList.toggle('flipped')">
+      <span class="fc-flip-hint">点击翻面 ↻</span>
+      <div class="fc-inner">
+        <div class="fc-face fc-front">
+          <div class="fc-tag">L7-C04 · 方法</div>
+          <div class="fc-q">LSHIFT 和 RSHIFT 怎么算？丢的是哪边、补的是什么？</div>
+        </div>
+        <div class="fc-face fc-back">
+          <div class="fc-tag" style="background:rgba(22,163,74,.12); color:#047857;">答案 · L7-C04</div>
+          <div class="fc-q" style="color:#047857;">LSHIFT 丢高位补低位 ｜ RSHIFT 丢低位补高位</div>
+          <div class="fc-explain">
+            <code>LSHIFT-n</code>：<b>左移</b> n 位，高位<b>丢弃</b>，低位<b>补 0</b><br>
+            <code>RSHIFT-n</code>：<b>右移</b> n 位，低位<b>丢弃</b>，高位<b>补 0</b><br>
+            移完长度<b>不变</b>（还是 5 位）<br>
+            例：<code>LSHIFT-3 10101</code> = <code>01000</code>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flashcard" data-lesson="L7" onclick="this.classList.toggle('flipped')">
+      <span class="fc-flip-hint">点击翻面 ↻</span>
+      <div class="fc-inner">
+        <div class="fc-face fc-front">
+          <div class="fc-tag">L7-C05 · 方法</div>
+          <div class="fc-q">LCIRC 和 RCIRC 怎么算？怎么快速区分？</div>
+        </div>
+        <div class="fc-face fc-back">
+          <div class="fc-tag" style="background:rgba(22,163,74,.12); color:#047857;">答案 · L7-C05</div>
+          <div class="fc-q" style="color:#047857;">循环移位，一位都不丢，绕圈回来</div>
+          <div class="fc-explain">
+            <code>LCIRC-n</code>：<b>最高位</b>挪到最右边<br>
+            <code>RCIRC-n</code>：<b>最低位</b>挪到最左边<br>
+            <b>快速区分</b>：看到 <b>C</b>（Circular）就是循环，<b>没有 C 就是丢位补 0</b><br>
+            记忆法：<b>L = Left = 往左 = 高的跑到低的</b>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flashcard" data-lesson="L7" onclick="this.classList.toggle('flipped')">
+      <span class="fc-flip-hint">点击翻面 ↻</span>
+      <div class="fc-inner">
+        <div class="fc-face fc-front">
+          <div class="fc-tag">L7-C06 · 易错</div>
+          <div class="fc-q">移位和循环移位最容易混的地方在哪？</div>
+        </div>
+        <div class="fc-face fc-back">
+          <div class="fc-tag" style="background:rgba(22,163,74,.12); color:#047857;">答案 · L7-C06</div>
+          <div class="fc-q" style="color:#047857;">移位丢位补 0，循环转圈不丢</div>
+          <div class="fc-explain">
+            同一串、同样移 1 位：<br>
+            <code>LSHIFT-1 10110</code> = <code>01100</code>（丢了 <code>1</code>）<br>
+            <code>LCIRC-1 10110</code> = <code>01101</code>（<code>1</code> 绕到最右）<br>
+            一句话：移位是「<b>挤出去</b>」，循环是「<b>转个圈</b>」
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flashcard" data-lesson="L7" onclick="this.classList.toggle('flipped')">
+      <span class="fc-flip-hint">点击翻面 ↻</span>
+      <div class="fc-inner">
+        <div class="fc-face fc-front">
+          <div class="fc-tag">L7-C07 · 易错</div>
+          <div class="fc-q">位运算最常踩的坑有哪些？</div>
+        </div>
+        <div class="fc-face fc-back">
+          <div class="fc-tag" style="background:rgba(22,163,74,.12); color:#047857;">答案 · L7-C07</div>
+          <div class="fc-q" style="color:#047857;">定长、补 0、优先级、循环 vs 移位</div>
+          <div class="fc-explain">
+            ① 忘定长（<code>NOT 011</code> ≠ <code>100</code>）<br>
+            ② 高位没补 0（<code>5</code> = <code>00101</code>）<br>
+            ③ AND/OR 优先级搞反（每年第 3 题都考）<br>
+            ④ 循环移位当普通移位做<br>
+            ⑤ 移完忘了检查长度
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flashcard" data-lesson="L7" onclick="this.classList.toggle('flipped')">
+      <span class="fc-flip-hint">点击翻面 ↻</span>
+      <div class="fc-inner">
+        <div class="fc-face fc-front">
+          <div class="fc-tag">L7-C08 · 方法</div>
+          <div class="fc-q">遇到混合式真题（如 <code>(LSHIFT-2 …) OR (…) AND (…)</code>）怎么下手？</div>
+        </div>
+        <div class="fc-face fc-back">
+          <div class="fc-tag" style="background:rgba(22,163,74,.12); color:#047857;">答案 · L7-C08</div>
+          <div class="fc-q" style="color:#047857;">3 步：拆括号 → 算移位 → 最后 AND/OR</div>
+          <div class="fc-explain">
+            <b>第 1 步</b>：把每个括号里的<b>中间结果先写出来</b><br>
+            <b>第 2 步</b>：算移位（先定位移，再看是丢位还是循环）<br>
+            <b>第 3 步</b>：按优先级算 AND / OR（AND 先、OR 后）<br>
+            别一步到底，<b>每步都检查还是 5 位</b>
+          </div>
         </div>
       </div>
     </div>
