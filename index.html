@@ -382,14 +382,14 @@ details.hw-flip .hw-body p {
   position: relative;
   perspective: 1200px;
   margin-bottom: 0;
-  min-height: 220px;
+  height: 320px;
   cursor: pointer;
 }
 .flashcard.hidden { display: none; }
 .flashcard .fc-inner {
   position: relative;
   width: 100%;
-  min-height: 220px;
+  height: 100%;
   transition: transform .6s cubic-bezier(0.4, 0, 0.2, 1);
   transform-style: preserve-3d;
 }
@@ -456,8 +456,44 @@ details.hw-flip .hw-body p {
   border-color: rgba(22, 163, 74, .35);
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
 }
+/* 卡片内容超出时内部滚动（正面问题 + 背面答案） */
+.flashcard .fc-q {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 10px;
+  line-height: 1.6;
+  flex: 0 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(124, 58, 237, .35) transparent;
+}
+.flashcard .fc-q::-webkit-scrollbar { width: 5px; }
+.flashcard .fc-q::-webkit-scrollbar-thumb {
+  background: rgba(124, 58, 237, .3);
+  border-radius: 3px;
+}
+/* 背面：问题固定，答案长则自己滚 */
+.flashcard .fc-back .fc-q {
+  overflow-y: auto;
+  flex: 0 1 auto;
+  min-height: 0;
+  margin-bottom: 8px;
+  max-height: 46%;
+}
+/* 可滚动区域的底部渐隐提示（内容超出时能看出来） */
+.flashcard .fc-scroll-hint {
+  position: absolute;
+  left: 18px; right: 18px; bottom: 10px;
+  height: 20px; pointer-events: none;
+  background: linear-gradient(to top, rgba(255,255,255,.96), rgba(255,255,255,0));
+  border-radius: 0 0 8px 8px;
+  opacity: 0; transition: opacity .2s ease;
+}
+.flashcard .fc-back:hover .fc-scroll-hint { opacity: 1; }
 .flashcard .fc-flip-hint {
   position: absolute;
   bottom: 12px;
@@ -1892,7 +1928,9 @@ code.inline {
 · 从右往左数：第 1 位权重 <code>2⁰=1</code>，第 2 位 <code>2¹=2</code>，第 3 位 <code>2²=4</code>……<br>
 · 第 <code>n</code> 位权重 = <code>2ⁿ⁻¹</code>（从右数起）<br>
 · 例：<code>1011₂</code> = 1×8 + 0×4 + 1×2 + 1×1 = <b>11</b><br>
-· <b>口诀</b>：从右往左，权重依次是 1、2、4、8、16、32……</div>
+· <b>口诀</b>：从右往左，权重依次是 1、2、4、8、16、32……
+          <div class="fc-scroll-hint"></div>
+        </div>
         </div>
       </div>
     </div>
@@ -1912,7 +1950,9 @@ code.inline {
 · <code>A=10, B=11, C=12, D=13, E=14, F=15</code><br>
 · 1 位十六进制 = 4 位二进制，所以常用作二进制缩写<br>
 · 例：<code>2A₁₆</code> = 2×16 + 10 = <b>42</b><br>
-· <b>记忆</b>：F 是 15 = 二进制 <code>1111</code>（全 1），所以 F + 1 = 16 = 进位</div>
+· <b>记忆</b>：F 是 15 = 二进制 <code>1111</code>（全 1），所以 F + 1 = 16 = 进位
+          <div class="fc-scroll-hint"></div>
+        </div>
         </div>
       </div>
     </div>
@@ -1931,7 +1971,9 @@ code.inline {
 · <b>步骤</b>：正数二进制 → 全部位取反（0↔1）→ 加 1<br>
 · 例：求 <code>-5</code>：+5 = <code>0000 0101</code> → 取反 <code>1111 1010</code> → 加 1 = <code>1111 1011</code><br>
 · <b>为什么</b>：补码让加法器可以无差别处理正负数，且 <code>0</code> 只有一种表示<br>
-· <b>8 位补码范围</b>：<code>-128 ~ +127</code>（公式 <code>-2ⁿ⁻¹ ~ 2ⁿ⁻¹-1</code>）</div>
+· <b>8 位补码范围</b>：<code>-128 ~ +127</code>（公式 <code>-2ⁿ⁻¹ ~ 2ⁿ⁻¹-1</code>）
+          <div class="fc-scroll-hint"></div>
+        </div>
         </div>
       </div>
     </div>
@@ -1951,7 +1993,9 @@ code.inline {
 · <code>1 + 1 + 1 = 11</code>（本位写 1，进位 1）<br>
 · <b>竖式加法</b>：从右往左逐位相加，处理好进位<br>
 · 例：<code>1011 + 1101</code> = <code>11000</code>（十进制 11 + 13 = 24）<br>
-· <b>口诀</b>：一位一位加，记下进位，往左传</div>
+· <b>口诀</b>：一位一位加，记下进位，往左传
+          <div class="fc-scroll-hint"></div>
+        </div>
         </div>
       </div>
     </div>
@@ -1972,7 +2016,9 @@ code.inline {
 · <b>二进制 ↔ 八进制</b>：每 <b>3 位</b>一组（从右往左，不够补 0）<br>
 · <b>二进制 ↔ 十六进制</b>：每 <b>4 位</b>一组<br>
 · 例：<code>11010110₂</code> = <code>11 010 110</code> = <code>326₈</code><br>
-· <b>速算技巧</b>：记住 <code>2¹⁰ = 1024</code>，<code>2⁸ = 256</code>，<code>2⁴ = 16</code></div>
+· <b>速算技巧</b>：记住 <code>2¹⁰ = 1024</code>，<code>2⁸ = 256</code>，<code>2⁴ = 16</code>
+          <div class="fc-scroll-hint"></div>
+        </div>
         
         </div>
       </div>
@@ -1994,7 +2040,9 @@ code.inline {
 · <b>方法 2：十进制小数 → 二进制</b>（乘 2 取整法）<br>
   例：<code>0.625₁₀</code> → 0.625×2=1.25 (整 1) → 0.25×2=0.5 (整 0) → 0.5×2=1.0 (整 1) → <b>0.101₂</b><br>
 · ⚠️ ACSL 考点：会做转换即可，<b>不考</b>浮点数 IEEE 754<br>
-· ⚠️ 小数部分永远 &lt; 1，<b>不是</b>原数（0.625 → 取 0.25，不是 0.625）</div>
+· ⚠️ 小数部分永远 &lt; 1，<b>不是</b>原数（0.625 → 取 0.25，不是 0.625）
+          <div class="fc-scroll-hint"></div>
+        </div>
         </div>
       </div>
     </div>
@@ -2014,7 +2062,9 @@ code.inline {
 · <b>递归调用 / Recursive call</b>：函数内部调用自己<br>
 · <b>参数缩小 / Shrinking</b>：每次递归调用参数都比上次更接近基例<br>
 · 例：<code>fact(0)=1</code> 是基例；<code>fact(n)=n×fact(n-1)</code> 是递归调用 + 参数缩小<br>
-· <b>缺基例 = 死循环</b>，最终栈溢出（Stack Overflow）</div>
+· <b>缺基例 = 死循环</b>，最终栈溢出（Stack Overflow）
+          <div class="fc-scroll-hint"></div>
+        </div>
         
         </div>
       </div>
@@ -2034,7 +2084,9 @@ code.inline {
 · <b>第一阶段 · 向下追到底</b>：从 <code>f(n)</code> 开始，不断展开 <code>f(n-1)</code>、<code>f(n-2)</code>... 直到碰到基例<br>
 · <b>第二阶段 · 向上回填</b>：从基例的值开始，一格格向上算回去<br>
 · <b>不要混着算</b>：先完整画出调用树结构，再回填数值<br>
-· 例：<code>fact(3)</code> 先展开 → <code>3 × fact(2)</code> → <code>3 × 2 × fact(1)</code> → <code>3 × 2 × 1 × 1</code> = <b>6</b></div>
+· 例：<code>fact(3)</code> 先展开 → <code>3 × fact(2)</code> → <code>3 × 2 × fact(1)</code> → <code>3 × 2 × 1 × 1</code> = <b>6</b>
+          <div class="fc-scroll-hint"></div>
+        </div>
         
         </div>
       </div>
@@ -2054,7 +2106,9 @@ code.inline {
 · <b>条件写错</b>（如 <code>fib(1)=0</code> 写成 0 而不是 1）→ 后续所有值全错位<br>
 · <b>Base case 缺失</b>（忘了写终止条件）→ 无限递归 → 栈溢出<br>
 · <b>预防方法</b>：写完递归函数后，先口算 <code>f(0)</code> 和 <code>f(1)</code>，对得上再往下算<br>
-· <b>调试技巧</b>：在递归调用前 <code>print(n)</code> 看实际执行顺序</div>
+· <b>调试技巧</b>：在递归调用前 <code>print(n)</code> 看实际执行顺序
+          <div class="fc-scroll-hint"></div>
+        </div>
         
         </div>
       </div>
@@ -2077,7 +2131,9 @@ code.inline {
 · <b>画调用树的作用</b>：<br>
 &nbsp;&nbsp;1. 看清楚递归结构（几层？几路？）<br>
 &nbsp;&nbsp;2. 避免漏算（Fibonacci 重叠子问题）<br>
-&nbsp;&nbsp;3. 加快速度（一眼看出哪里是重复计算）</div>
+&nbsp;&nbsp;3. 加快速度（一眼看出哪里是重复计算）
+          <div class="fc-scroll-hint"></div>
+        </div>
         
         </div>
       </div>
@@ -2098,7 +2154,9 @@ code.inline {
 · <b>正确做法</b>：在纸上<b>同时</b>写 (x, y) 两个值，例如 <code>(7, 3) → (6, 2) → ...</code><br>
 · 例：<code>f(x,y) = f(x-1, y) + f(x, y-1)</code>（路径计数）<br>
 · <b>画调用树技巧</b>：每个节点标 <code>(x, y)</code> 两个值<br>
-· <b>练习</b>：ACSL Wiki "Two Variables" 类题目</div>
+· <b>练习</b>：ACSL Wiki "Two Variables" 类题目
+          <div class="fc-scroll-hint"></div>
+        </div>
 
         </div>
       </div>
@@ -2117,7 +2175,9 @@ code.inline {
 · 输入：<code>INPUT x, y</code>（不是 Python 的 <code>input()</code>）<br>
 · 输出：<code>OUTPUT var</code>（不是 <code>print()</code>）<br>
 · ACSL 直接看 OUTPUT 后面的变量名，不带括号
-          </div>
+          
+          <div class="fc-scroll-hint"></div>
+        </div>
         </div>
       </div>
     </div>
@@ -2131,7 +2191,9 @@ code.inline {
         </div>
         <div class="fc-face fc-back">
           <div class="fc-tag" style="background:rgba(22,163,74,.12); color:#047857;">答案 · L3-C02</div>
-          <div class="fc-q" style="color:#047857;">1. <b>通读代码找变量</b>：标出所有被赋值的变量<br>2. <b>画追踪表</b>：每行 = 变量当前值，每列 = 分支节点<br>3. <b>逐 IF 顺序执行</b>：连续 IF 串联（不是 if-else 互斥）</div>
+          <div class="fc-q" style="color:#047857;">1. <b>通读代码找变量</b>：标出所有被赋值的变量<br>2. <b>画追踪表</b>：每行 = 变量当前值，每列 = 分支节点<br>3. <b>逐 IF 顺序执行</b>：连续 IF 串联（不是 if-else 互斥）
+          <div class="fc-scroll-hint"></div>
+        </div>
         </div>
       </div>
     </div>
@@ -2145,7 +2207,9 @@ code.inline {
         </div>
         <div class="fc-face fc-back">
           <div class="fc-tag" style="background:rgba(22,163,74,.12); color:#047857;">答案 · L3-C03</div>
-          <div class="fc-q" style="color:#047857;">1. <b>起点 = 前</b>，<b>终点 = 后</b>（FOR j = 5 TO 1 STEP -1 是 5→1 不是 1→5）<br>2. <b>含头含尾</b>（5,4,3,2,1 共 5 次）<br>3. <b>边界值</b>（FOR j = 0 TO 0 STEP -1 只跑 1 次）</div>
+          <div class="fc-q" style="color:#047857;">1. <b>起点 = 前</b>，<b>终点 = 后</b>（FOR j = 5 TO 1 STEP -1 是 5→1 不是 1→5）<br>2. <b>含头含尾</b>（5,4,3,2,1 共 5 次）<br>3. <b>边界值</b>（FOR j = 0 TO 0 STEP -1 只跑 1 次）
+          <div class="fc-scroll-hint"></div>
+        </div>
         </div>
       </div>
     </div>
@@ -2159,7 +2223,9 @@ code.inline {
         </div>
         <div class="fc-face fc-back">
           <div class="fc-tag" style="background:rgba(22,163,74,.12); color:#047857;">答案 · L3-C04</div>
-          <div class="fc-q" style="color:#047857;">嵌套循环追踪表 <b>6 列模板</b>：<br><b>外层变量 | 内层变量 | 进/出内循环 | 关键变量 1 | 关键变量 2 | 当前做了什么</b><br>⚠️ 每次进/出内循环都记一行，不能省！</div>
+          <div class="fc-q" style="color:#047857;">嵌套循环追踪表 <b>6 列模板</b>：<br><b>外层变量 | 内层变量 | 进/出内循环 | 关键变量 1 | 关键变量 2 | 当前做了什么</b><br>⚠️ 每次进/出内循环都记一行，不能省！
+          <div class="fc-scroll-hint"></div>
+        </div>
         </div>
       </div>
     </div>
@@ -2177,7 +2243,9 @@ code.inline {
 · <code>S[:3]</code> = 前 3 字符 = "ACS"<br>
 · <code>S[4:]</code> = 位置 4 起到末尾 = " WDTPD"<br>
 · <code>S[2:6]</code> = 位置 2-5（含头不含尾）= "SL W"<br>
-⚠️ 索引从 <b>0 开始</b></div>
+⚠️ 索引从 <b>0 开始</b>
+          <div class="fc-scroll-hint"></div>
+        </div>
         </div>
       </div>
     </div>
@@ -2201,7 +2269,9 @@ code.inline {
           <div class="fc-explain"><b>为什么要有前缀/后缀</b><br>
 · 中缀 <code>3 + 4 * 2</code> 要先确定先算哪个，得引入优先级规则，规则一多就容易错<br>
 · 后缀 <code>3 4 2 * +</code> 直接告诉你：先把 4 和 2 乘，再跟 3 加<br>
-· <b>计算机实现栈求值极方便</b>，所以表达式求值、编译原理都用后缀</div>
+· <b>计算机实现栈求值极方便</b>，所以表达式求值、编译原理都用后缀
+          <div class="fc-scroll-hint"></div>
+        </div>
         </div>
       </div>
     </div>
@@ -2224,7 +2294,9 @@ code.inline {
           </div>
           <div class="fc-explain"><b>例</b>：<code>3 + 4 * 2</code> → 先算 <code>*</code> → 3+8 = <b>11</b><br>
 <b>例</b>：<code>10 − 4 − 3</code> → 同级从左往右 → (10−4)−3 = <b>3</b>，不是 10−(4−3)<br>
-<b>例</b>：<code>(3 + 4) * 2</code> → 括号优先 → 7×2 = <b>14</b></div>
+<b>例</b>：<code>(3 + 4) * 2</code> → 括号优先 → 7×2 = <b>14</b>
+          <div class="fc-scroll-hint"></div>
+        </div>
         </div>
       </div>
     </div>
@@ -2248,7 +2320,9 @@ code.inline {
           </div>
           <div class="fc-explain"><b>例</b> <code>2 + 3 * 4 − 6 / 2</code><br>
 读到 <code>−</code> 时，<code>*</code> 和 <code>+</code> 都被弹出 → 输出 <code>2 3 4 * + 6</code><br>
-读完全部 → <code>2 3 4 * + 6 2 / −</code></div>
+读完全部 → <code>2 3 4 * + 6 2 / −</code>
+          <div class="fc-scroll-hint"></div>
+        </div>
         </div>
       </div>
     </div>
@@ -2269,7 +2343,9 @@ code.inline {
           </div>
           <div class="fc-explain"><b>为什么①容易错</b>：<code>8 − 3 + 1</code> 转换时，读到 <code>+</code>，栈顶是 <code>−</code>，优先级<b>相等</b>，也必须先弹出<br>
 → 正确后缀 <code>8 3 1 + −</code>（先算 3+1，再 8−4）<br>
-若误用 <code>&gt;</code>，会得到 <code>8 3 − 1 +</code> = 6，答案就错了</div>
+若误用 <code>&gt;</code>，会得到 <code>8 3 − 1 +</code> = 6，答案就错了
+          <div class="fc-scroll-hint"></div>
+        </div>
         </div>
       </div>
     </div>
@@ -2293,7 +2369,9 @@ code.inline {
 3→[3] · 4→[3,4] · 2→[3,4,2]<br>
 <code>*</code> 弹 2 和 4 → 4×2=8 → [3,8]<br>
 <code>+</code> 弹 8 和 3 → 3+8 = <b>11</b><br>
-<b>⚠️</b> <code>10 3 −</code> 要算成 <b>10−3=7</b>，不是 3−10</div>
+<b>⚠️</b> <code>10 3 −</code> 要算成 <b>10−3=7</b>，不是 3−10
+          <div class="fc-scroll-hint"></div>
+        </div>
         </div>
       </div>
     </div>
@@ -2318,7 +2396,9 @@ code.inline {
 逆序读 2→[2] · 4→[2,4]<br>
 <code>*</code> 弹 4 和 2 → 4×2=8 → [8]<br>
 3→[8,3] · <code>+</code> 弹 3 和 8 → 3+8 = <b>11</b><br>
-<b>对比表</b>：后缀=左→右扫，先弹<b>右</b>；前缀=右→左扫，先弹<b>左</b></div>
+<b>对比表</b>：后缀=左→右扫，先弹<b>右</b>；前缀=右→左扫，先弹<b>左</b>
+          <div class="fc-scroll-hint"></div>
+        </div>
         </div>
       </div>
     </div>
@@ -2343,7 +2423,9 @@ code.inline {
 <code>−</code> 根 → 左 <code>+ 2 * 3 8</code> = 2+(3×8) = <b>26</b><br>
 　　　　右 <code>/ * 6 2 3</code> = (6×2)÷3 = <b>4</b><br>
 26 − 4 = <b>22</b><br>
-<b>⚠️</b> 前缀题宁可慢点画树，也别盲推栈</div>
+<b>⚠️</b> 前缀题宁可慢点画树，也别盲推栈
+          <div class="fc-scroll-hint"></div>
+        </div>
         </div>
       </div>
     </div>
@@ -2367,7 +2449,9 @@ code.inline {
 块2 <code>(B²−C)</code> → <code>B 2 ^ C −</code><br>
 块3 <code>(B+D²)</code> → <code>B D 2 ^ +</code><br>
 整式 <code>块1 块2 * 块3 /</code><br>
-→ <code>A 2 ^ B + B 2 ^ C − * B D 2 ^ + /</code></div>
+→ <code>A 2 ^ B + B 2 ^ C − * B D 2 ^ + /</code>
+          <div class="fc-scroll-hint"></div>
+        </div>
         </div>
       </div>
     </div>
@@ -2386,7 +2470,9 @@ code.inline {
             <b>定长</b>：都是 5 位，短的<b>高位补 0</b>（<code>5</code> = <code>00101</code>）<br>
             <b>对齐</b>：两个位串<b>右边对齐</b><br>
             <b>位置</b>：从右往左编号，第 0 位是最低位
-          </div>
+          
+          <div class="fc-scroll-hint"></div>
+        </div>
         </div>
       </div>
     </div>
@@ -2406,7 +2492,9 @@ code.inline {
             <b>AND</b>：有 0 必 0 ｜口诀「同 1 才 1」<br>
             <b>OR</b>：有 1 必 1 ｜口诀「同 0 才 0」<br>
             <b>XOR</b>：相同为 0 ｜口诀「不同才 1」
-          </div>
+          
+          <div class="fc-scroll-hint"></div>
+        </div>
         </div>
       </div>
     </div>
@@ -2425,7 +2513,9 @@ code.inline {
             从高到低：<code>NOT</code> → <code>LSHIFT/RSHIFT/LCIRC/RCIRC</code> → <code>AND</code>/<code>XOR</code> → <code>OR</code><br>
             <b>AND 和 XOR 同级</b>，从左往右算；<b>OR 最低</b>，最后算。<br>
             拿不准就<b>加括号</b>。
-          </div>
+          
+          <div class="fc-scroll-hint"></div>
+        </div>
         </div>
       </div>
     </div>
@@ -2445,7 +2535,9 @@ code.inline {
             <code>RSHIFT-n</code>：<b>右移</b> n 位，低位<b>丢弃</b>，高位<b>补 0</b><br>
             移完长度<b>不变</b>（还是 5 位）<br>
             例：<code>LSHIFT-3 10101</code> = <code>01000</code>
-          </div>
+          
+          <div class="fc-scroll-hint"></div>
+        </div>
         </div>
       </div>
     </div>
@@ -2465,7 +2557,9 @@ code.inline {
             <code>RCIRC-n</code>：<b>最低位</b>挪到最左边<br>
             <b>快速区分</b>：看到 <b>C</b>（Circular）就是循环，<b>没有 C 就是丢位补 0</b><br>
             记忆法：<b>L = Left = 往左 = 高的跑到低的</b>
-          </div>
+          
+          <div class="fc-scroll-hint"></div>
+        </div>
         </div>
       </div>
     </div>
@@ -2485,7 +2579,9 @@ code.inline {
             <code>LSHIFT-1 10110</code> = <code>01100</code>（丢了 <code>1</code>）<br>
             <code>LCIRC-1 10110</code> = <code>01101</code>（<code>1</code> 绕到最右）<br>
             一句话：移位是「<b>挤出去</b>」，循环是「<b>转个圈</b>」
-          </div>
+          
+          <div class="fc-scroll-hint"></div>
+        </div>
         </div>
       </div>
     </div>
@@ -2506,7 +2602,9 @@ code.inline {
             ③ AND/OR 优先级搞反（每年第 3 题都考）<br>
             ④ 循环移位当普通移位做<br>
             ⑤ 移完忘了检查长度
-          </div>
+          
+          <div class="fc-scroll-hint"></div>
+        </div>
         </div>
       </div>
     </div>
@@ -2526,7 +2624,9 @@ code.inline {
             <b>第 2 步</b>：算移位（先定位移，再看是丢位还是循环）<br>
             <b>第 3 步</b>：按优先级算 AND / OR（AND 先、OR 后）<br>
             别一步到底，<b>每步都检查还是 5 位</b>
-          </div>
+          
+          <div class="fc-scroll-hint"></div>
+        </div>
         </div>
       </div>
     </div>
