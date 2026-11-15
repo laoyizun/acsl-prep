@@ -742,7 +742,7 @@ code.inline {
   <!-- ===== Tab 2: 作业 ===== -->
   <div class="tab-content" id="tab-homework">
     <h2 class="section-title">📝 课后作业汇总</h2>
-    <p class="section-sub">做完截图发给老师，下节课讲评 · L6 表达式作业 8 题在下方</p>
+    <p class="section-sub">做完截图发给老师，下节课讲评 · L6 表达式作业 8 题在下方 · 下方还有「日常练习」纯计算题区</p>
 
     <details class="hw-flip">
       <summary>L1 · 数字系统完整版（30 题选择题 · 6 大考点）</summary>
@@ -1890,10 +1890,292 @@ code.inline {
 
         <hr style="border:none; border-top:1px dashed var(--line); margin:18px 0 8px;">
         <p style="font-size:13px; color:var(--muted);">
-              <code style="font-size:13px; line-height:1.7; display:block; white-space:pre;">📊 <b>做完对答案</b>：Part A + B 共 8 题，限时 40 分钟。错 1 道 → 把对应方法的 PPT 页重看一遍；错 ≥ 2 道 → 下节课前找老师面批。
-🎯 <b>目标</b>：8 题全对，且移位题能立刻说出「丢哪边、补什么」，真题题能 5 步内写完。
-💡 <b>做题工具</b>：<b>必须手算</b>，不许用代码跑 —— 考试考的就是手算能力！</code>        </p>
+          📊 <b>做完对答案</b>：Part A + B 共 8 题，限时 40 分钟。错 1 道 → 把对应方法的 PPT 页重看一遍；错 ≥ 2 道 → 下节课前找老师面批。<br>
+          🎯 <b>目标</b>：8 题全对，且移位题能立刻说出「丢哪边、补什么」，真题题能 5 步内写完。<br>
+          💡 <b>做题工具</b>：<b>必须手算</b>，不许用代码跑 —— 考试考的就是手算能力！
+        </p>
 
+      </div>
+    </details>
+
+
+    <hr style="border:none; border-top:2px solid var(--line); margin:32px 0 8px;">
+
+    <h2 class="section-title">⚡ 日常练习 · 计算题速练</h2>
+    <p class="section-sub">
+      与课后作业区分：这里是<b>纯计算题</b>，用来保持手感、随时能做。<br>
+      不限时交作业，做完自己核对即可 —— A 组 11 题（进制）+ B 组 11 题（表达式），每组约 12 分钟。
+    </p>
+
+    <details class="hw-flip">
+      <summary>⚡ 日常练习 A · 进制速练（11 题 · 建议 12 分钟）</summary>
+      <div class="hw-body">
+        <p style="font-size:14px; line-height:1.7;">
+          <b>建议用时</b>：12 分钟以内<br>
+          <b>说明</b>：不给选项，直接写答案；每题写完点「展开答案」核对。除法都能整除。
+        </p>
+
+        <ol class="hw-quiz">
+          <li>
+            <p class="hw-q"><b>1.</b> <code>2026₁₀</code> = ?<sub>8</sub></p>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>答案：<code>3752₈</code></b><br>除 8 取余（除到商为 0 为止）：2026÷8=253余2 → 253÷8=31余5 → 31÷8=3余7 → 3÷8=0余3<br>余数<b>倒着读</b>：3 → 7 → 5 → 2，得 <code>3752₈</code><br>验算：3×512 + 7×64 + 5×8 + 2 = 1536+448+40+2 = 2026 ✓<br><span style="color:var(--muted);">易错：除到商为 0 才停，余数一定倒着读。</span></div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q"><b>2.</b> <code>500₁₀</code> = ?<sub>2</sub></p>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>答案：<code>111110100₂</code></b><br>从最高位权开始「试减」：256+128+64+32+16 = 496，再加 4 得 500<br>位权依次 256 / 128 / 64 / 32 / 16 / 8 / 4 / 2 / 1，取值 <code>111110100</code><br>验算：256+128+64+32+16+4 = 500 ✓<br><span style="color:var(--muted);">易错：权值别漏中间的 8 和 2，写完按权加一遍最稳。</span></div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q"><b>3.</b> <code>1000₁₀</code> = ?<sub>16</sub></p>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>答案：<code>3E8₁₆</code></b><br>除 16 取余：1000÷16=62余8 → 62÷16=3余14 → 3÷16=0余3<br>余数倒读：3 → 14 → 8，其中 <b>14 写成 E</b>，得 <code>3E8₁₆</code><br>验算：3×256 + 14×16 + 8 = 768+224+8 = 1000 ✓<br><span style="color:var(--muted);">易错：10～15 必须写成 A～F 的<b>单个字符</b>，写成「14」就变成两位数字了。</span></div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q"><b>4.</b> <code>1101101011₂</code> = ?<sub>8</sub> = ?<sub>16</sub><br><span style="color:var(--muted); font-size:13px;">八进制：______　　十六进制：______</span></p>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>答案：<code>1553₈</code>　<code>36B₁₆</code></b><br>转八进制：从右往左每 <b>3</b> 位一组 → <code>001 101 101 011</code> → 1553<br>转十六进制：从右往左每 <b>4</b> 位一组 → <code>0011 0110 1011</code> → 36B<br>验算：<code>1553₈</code> = 875₁₀，<code>36B₁₆</code> = 768+96+11 = 875₁₀ ✓<br><span style="color:var(--muted);">易错：最左边不足一组要补 0（八进制补 3 位、十六进制补 4 位）；两问是同一串二进制，十进制值必须相等。</span></div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q"><b>5.</b> <code>3F7₁₆</code> = ?<sub>8</sub></p>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>答案：<code>1767₈</code></b><br>先把每一位十六进制展开成 4 位二进制：<code>3 F 7</code> → <code>0011 1111 0111</code><br>再按 3 位一组重新分组：<code>001 | 111 | 110 | 111</code> → <code>1767₈</code><br>验算：<code>1767₈</code> = 1015₁₀，<code>3F7₁₆</code> = 768+240+7 = 1015₁₀ ✓<br><span style="color:var(--muted);">易错：8↔16 之间走二进制最稳，中间的一个 0 都不能丢。</span></div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q"><b>6.</b> <code>2A5₁₆</code> + <code>9B7₁₆</code> = ?<sub>16</sub></p>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>答案：<code>C5C₁₆</code></b><br>先把字母换成数字：A=10，B=11，然后<b>逐位相加、满 16 进 1</b>：<br><code style="display:block; white-space:pre;">    2 A 5
++   9 B 7
+──────────
+  C 5 C</code>从右往左：<br>· 5+7=12 → 写 <b>C</b>(12)，进 1<br>· A+B+1 = 10+11+1 = 22 → 写 <b>6</b>(22−16)，进 1<br>· 2+9+1 = 12 → 写 <b>C</b>(12)<br>验算：<code>2A5₁₆</code> = 2×256+10×16+5 = 677₁₀<br>　　<code>9B7₁₆</code> = 9×256+11×16+7 = 2487₁₀<br>　　677+2487 = 3164₁₀ = <code>C5C₁₆</code> ✓<br><span style="color:var(--muted);">易错：<b>满 16 进 1</b>，不是满 10；A～F 超过 9 时每一位只写一个字符。</span></div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q"><b>7.</b> <code>7632₈</code> − <code>4527₈</code> = ?<sub>8</sub></p>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>答案：<code>3103₈</code></b><br>逐位相减，不够减就<b>借 1 当 8</b>：<br><code style="display:block; white-space:pre;">    7 6 3 2
+-   4 5 2 7
+──────────
+  3 1 0 3</code>从右往左：<br>· 2−7 不够，向 3 借（3 变 2），2+8−7 = <b>3</b><br>· 2−2 = <b>0</b>（借走的那位已经减掉了）<br>· 6−5 = <b>1</b><br>· 7−4 = <b>3</b><br>验算：<code>7632₈</code> = 7×512+6×64+3×8+2 = 3994₁₀<br>　　<code>4527₈</code> = 4×512+5×64+2×8+7 = 3031₁₀<br>　　3994−3031 = 963₁₀ = <code>3103₈</code> ✓<br><span style="color:var(--muted);">易错：借的是「<b>基</b>」（这里是 8），不是借 10。</span></div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q"><b>8.</b> <code>65234₈</code> − <code>3512₈</code> + <code>67₈</code> = ?<sub>16</sub></p>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>答案：<code>6389₁₆</code></b><br>这题跨进制，<b>先全部转十进制算完，再转回十六进制</b>：<br><code>65234₈</code> = 6×4096 + 5×512 + 2×64 + 3×8 + 4 = 27084₁₀<br><code>3512₈</code> = 3×512 + 5×64 + 1×8 + 2 = 1802₁₀<br><code>67₈</code> = 6×8 + 7 = 55₁₀<br>27084 − 1802 + 55 = <b>25481₁₀</b><br>25481 转十六进制（除 16 取余）：<br><code style="display:block; white-space:pre;">25481 ÷ 16 = 1592 余 9
+ 1592 ÷ 16 =   99 余 8
+   99 ÷ 16 =    6 余 3
+    6 ÷ 16 =    0 余 6</code>余数倒读：6 → 3 → 8 → 9，得 <code>6389₁₆</code><br>验算：6×4096 + 3×256 + 8×16 + 9 = 24576+768+128+9 = 25481 ✓<br><span style="color:var(--muted);">易错：跨进制加减最容易漏掉「借位/进位按基算」，直接转十进制最保险。</span></div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q"><b>9.</b> 下面五个数中，最大的是哪一个？<br><code>110110₂</code>　<code>67₈</code>　<code>3A₁₆</code>　<code>52₁₀</code>　<code>111000₂</code></p>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>答案：<code>3A₁₆</code></b><br>全部转成十进制再比：<br><code>110110₂</code> = 54　　<code>67₈</code> = 55　　<code>3A₁₆</code> = <b>58</b><br><code>52₁₀</code> = 52　　<code>111000₂</code> = 56<br>最大是 58 → <code>3A₁₆</code><br><span style="color:var(--muted);">易错：<code>110110₂</code>=54 和 <code>111000₂</code>=56 很接近，别看错。</span></div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q"><b>10.</b> 把 1 到 16 分别写成二进制，一共有多少个 <code>1</code>？</p>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>答案：33</b><br>1~16 的二进制里 1 的个数：<br><code style="display:block; white-space:pre;"> 1 → 1      1个    |  9 → 1001   2个
+ 2 → 10     1个    | 10 → 1010   2个
+ 3 → 11     2个    | 11 → 1011   3个
+ 4 → 100    1个    | 12 → 1100   2个
+ 5 → 101    2个    | 13 → 1101   3个
+ 6 → 110    2个    | 14 → 1110   3个
+ 7 → 111    3个    | 15 → 1111   4个
+ 8 → 1000   1个    | 16 → 10000  1个</code>左半边 1+1+2+1+2+2+3+1 = 13<br>右半边 2+2+3+2+3+3+4+1 = 20<br>合计 = 13 + 20 = <b>33</b><br><span style="color:var(--muted);">技巧：1~7 每个 bit 出现 3 次（3×3=9），8~16 单独数更快。</span></div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q"><b>11.</b> 斐波那契数列 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, … 中，<br>第一个二进制里恰好有 <b>4 个 1</b> 的数是？</p>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>答案：89</b><br>逐个写二进制，数 1 的个数：<br><code style="display:block; white-space:pre;">  0 → 0      0个
+  1 → 1      1个
+  1 → 1      1个
+  2 → 10     1个
+  3 → 11     2个
+  5 → 101    2个
+  8 → 1000   1个
+ 13 → 1101   3个
+ 21 → 10101  3个
+ 34 → 100010 2个
+ 55 → 110111 5个
+ 89 → 1011001 4个  ← 第一个</code>验算：89₁₀ = 64+16+8+1 = 89，二进制 <code>1011001</code>，正好 4 个 1 ✓<br><span style="color:var(--muted);">易错：<code>55</code> 有 5 个 1，要在它之后继续找。</span></div>
+            </details>
+          </li>
+        </ol>
+
+        <hr style="border:none; border-top:1px dashed var(--line); margin:18px 0 8px;">
+        <p style="font-size:13px; color:var(--muted);">
+          🛡 <b>自查习惯</b>：进制题把答案转回十进制对一遍；表达式题把中缀、前缀、后缀三种写法各算一遍，结果必须相同。
+        </p>
+      </div>
+    </details>
+
+    <details class="hw-flip">
+      <summary>⚡ 日常练习 B · 表达式速练（11 题 · 建议 12 分钟）</summary>
+      <div class="hw-body">
+        <p style="font-size:14px; line-height:1.7;">
+          <b>建议用时</b>：12 分钟以内<br>
+          <b>说明</b>：不给选项，直接写答案；每题写完点「展开答案」核对。除法都能整除。
+        </p>
+
+        <ol class="hw-quiz">
+          <li>
+            <p class="hw-q"><b>12.</b> 把中缀表达式转成<b>后缀</b>表达式：<br><code style="font-size:15px;">7 + 4 * 5 - 12 / 3</code></p>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>答案：<code>7 4 5 * + 12 3 / -</code></b><br>先按优先级拆：<code>(7 + (4*5)) - (12/3)</code><br><code style="display:block; white-space:pre;">4 5 *  →  12 3 /  →  7 [前块] [后块] -</code>拼起来：<code>7 4 5 * + 12 3 / -</code><br>验算：4×5=20，7+20=27，12÷3=4，27−4=23 ✓（中缀也是 23）<br><span style="color:var(--muted);">口诀：后缀 = <b>左 右 运算符</b>。</span></div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q"><b>13.</b> 把中缀表达式转成<b>后缀</b>表达式：<br><code style="font-size:15px;">(9 - 3) * (8 + 2) / 4</code></p>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>答案：<code>9 3 - 8 2 + * 4 /</code></b><br>括号内各自转后缀，再按 <code>左 * 右 / 4</code> 拼：<br><code style="display:block; white-space:pre;">(9-3) → 9 3 -
+(8+2) → 8 2 +
+整式：左 * 右 / 4</code>得 <code>9 3 - 8 2 + * 4 /</code><br>验算：(9−3)×(8+2)÷4 = 6×10÷4 = 15 ✓（中缀也是 15）<br><span style="color:var(--muted);">易错：括号转完后<b>整式</b>的 <code>*</code> 和 <code>/</code> 还要再排一次。</span></div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q"><b>14.</b> 把中缀表达式转成<b>后缀</b>表达式：<br><code style="font-size:15px;">(A + B) * C - D / (E + F)</code></p>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>答案：<code>A B + C * D E F + / -</code></b><br>先拆两块括号：<br><code style="display:block; white-space:pre;">(A+B) → A B +
+(E+F) → E F +
+整式：(块1) * C  -  D / (块2)</code>按优先级拼：<code>块1 C * D 块2 / -</code><br>得 <code>A B + C * D E F + / -</code><br><span style="color:var(--muted);">提醒：<code>-</code> 是<b>二元</b>运算符，必须有左operand和右operand，别只写一个。</span></div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q"><b>15.</b> 把中缀表达式转成<b>前缀</b>表达式：<br><code style="font-size:15px;">8 + 6 * 3 - 10 / 5</code></p>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>答案：<code>- + 8 * 6 3 / 10 5</code></b><br>从<b>里往外</b>包：<br><code style="display:block; white-space:pre;">(1) 10 / 5        → / 10 5
+(2) 6 * 3         → * 6 3
+(3) 8 + (2)       → + 8 * 6 3
+(4) (3) - (1)     → - + 8 * 6 3 / 10 5</code>验算：10÷5=2，6×3=18，8+18=26，26−2=24 ✓<br><span style="color:var(--muted);">口诀：前缀 = <b>运算符 左 右</b>；方法是<b>从最里层往外包</b>。</span></div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q"><b>16.</b> 把中缀表达式转成<b>前缀</b>表达式：<br><code style="font-size:15px;">3 ^ 2 + 4 * (6 - 2)</code></p>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>答案：<code>+ ^ 3 2 * 4 - 6 2</code></b><br>从里往外包：<br><code style="display:block; white-space:pre;">(1) 6 - 2        → - 6 2
+(2) 4 * (1)      → * 4 - 6 2
+(3) 3 ^ 2        → ^ 3 2
+(4) (3) + (2)    → + ^ 3 2 * 4 - 6 2</code>验算：3²=9，6−2=4，4×4=16，9+16=25 ✓<br><span style="color:var(--muted);">易错：<code>^</code> 优先级<b>高于</b> <code>*</code>，先算 3² 别搞反。</span></div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q"><b>17.</b> 求<b>后缀</b>表达式的值：<br><code style="font-size:15px;">6 2 5 1 - * 4 / +</code></p>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>答案：8</b><br>从左往右扫，运算符<b>先弹右操作数</b>：<br><code style="display:block; white-space:pre;">6 2 5 1  → [6, 2, 5, 1]
+-    → 弹1和5 → 5-1=4    [6, 2, 4]
+*    → 弹4和2 → 2×4=8    [6, 8]
+4    → [6, 8, 4]
+/    → 弹4和8 → 8÷4=2    [6, 2]
++    → 弹2和6 → 6+2=8    [8]</code>最后栈里剩一个数 → <b>8</b><br><span style="color:var(--muted);">易错：<code>-</code> 那一步是 <b>5−1</b> 不是 1−5。</span></div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q"><b>18.</b> 求<b>后缀</b>表达式的值：<br><code style="font-size:15px;">9 3 - 8 2 + * 4 /</code></p>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>答案：15</b><br><code style="display:block; white-space:pre;">9 3    → [9, 3]
+-    → 弹3和9 → 9-3=6   [6]
+8 2    → [6, 8, 2]
++    → 弹2和8 → 8+2=10  [6, 10]
+*    → 弹10和6 → 6×10=60 [60]
+4    → [60, 4]
+/    → 弹4和60 → 60÷4=15 [15]</code>最后栈里剩一个数 → <b>15</b><br><span style="color:var(--muted);">验算：9−3=6，8+2=10，6×10=60，60÷4=15 ✓</span></div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q"><b>19.</b> 求<b>后缀</b>表达式的值：<br><code style="font-size:15px;">9 8 6 2 - * 2 / + 6 3 / -</code></p>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>答案：23</b><br><code style="display:block; white-space:pre;">9 8 6 2   → [9, 8, 6, 2]
+-    → 6-2=4     [9, 8, 4]
+*    → 8×4=32    [9, 32]
+2    → [9, 32, 2]
+/    → 32÷2=16   [9, 16]
++    → 9+16=25   [25]
+6 3  → [25, 6, 3]
+/    → 6÷3=2     [25, 2]
+-    → 25-2=23   [23]</code>分块验算：前半段 9 + (8×(6−2)÷2) = 25，后半段 25 − (6÷3) = 23 ✓<br><span style="color:var(--muted);">这题是 2024-2025 真题第 2 题，官方答案 D.23。</span></div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q"><b>20.</b> 求<b>前缀</b>表达式的值：<br><code style="font-size:15px;">- + 8 * 6 3 / 10 5</code></p>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>答案：24</b><br>前缀从<b>右往左</b>扫，运算符<b>先弹左操作数</b>：<br><code style="display:block; white-space:pre;">逆序读：5 10 / 3 6 * 8 + -
+
+5    → [5]
+10   → [5, 10]
+/    → 弹5和10 → 10÷5=2  [2]
+3    → [2, 3]
+6    → [2, 3, 6]
+*    → 弹6和3 → 3×6=18  [2, 18]
+8    → [2, 18, 8]
++    → 弹8和18 → 8+18=26 [2, 26]
+-    → 弹26和2 → 26-2=24 [24]</code>最后栈里剩一个数 → <b>24</b><br><span style="color:var(--muted);">对比第 17 题：后缀先弹右、前缀先弹左，这是唯一区别。</span></div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q"><b>21.</b> 求<b>前缀</b>表达式的值：<br><code style="font-size:15px;">+ * 5 - ^ 4 2 6 3</code></p>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>答案：53</b><br>前缀从<b>右往左</b>扫，运算符<b>先弹左操作数</b>：<br><code style="display:block; white-space:pre;">逆序读：3 6 2 4 ^ - 5 * +
+
+3    → [3]
+6    → [3, 6]
+2    → [3, 6, 2]
+4    → [3, 6, 2, 4]
+^    → 弹4和2 → 4^2=16  [3, 6, 16]
+-    → 弹16和6 → 16-6=10 [3, 10]
+5    → [3, 10, 5]
+*    → 弹5和10 → 5×10=50 [3, 50]
++    → 弹50和3 → 50+3=53 [53]</code>最后栈里剩一个数 → <b>53</b><br>验算：4²=16，16−6=10，5×10=50，50+3=53 ✓<br><span style="color:var(--muted);">易错：前缀逆序读时 token 顺序别看错，是 <code>3 6 2 4 ^ - 5 * +</code>。</span></div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q"><b>22.</b> 求<b>后缀</b>表达式的值（已知 A=4，B=2，C=1）：<br><code style="font-size:15px;">A B + C / A B - B / -</code></p>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>答案：5</b><br><code style="display:block; white-space:pre;">A(4) → [4]
+B(2) → [4, 2]
++    → 4+2=6     [6]
+C(1) → [6, 1]
+/    → 6÷1=6     [6]
+A(4) → [6, 4]
+B(2) → [6, 4, 2]
+-    → 4-2=2     [6, 2]
+B(2) → [6, 2, 2]
+/    → 2÷2=1     [6, 1]
+-    → 6-1=5     [5]</code>代入验算：a+b=6 → 6÷c=6 → a−b=2 → 2÷b=1 → 6−1=5 ✓<br><span style="color:var(--muted);">字母题的关键：压栈时把<b>变量的值</b>压进去。</span></div>
+            </details>
+          </li>
+        </ol>
+
+        <hr style="border:none; border-top:1px dashed var(--line); margin:18px 0 8px;">
+        <p style="font-size:13px; color:var(--muted);">
+          🛡 <b>自查习惯</b>：进制题把答案转回十进制对一遍；表达式题把中缀、前缀、后缀三种写法各算一遍，结果必须相同。
+        </p>
+      </div>
+    </details>
+
+    <details class="hw-flip">
+      <summary>🔀 日常练习 C · 综合练习（待补充）</summary>
+      <div class="hw-body">
+        <p style="font-size:14px; line-height:1.8;">
+          <b>状态</b>：<span style="color:var(--amber); font-weight:700;">待补充</span><br><br>
+          <b>计划</b>：等 L7 比特位操作（位运算与进制的结合）学完后，把<b>进制 + 表达式 + 位运算</b>三个知识点混编出 5～8 道综合计算题，作为第二轮的总复习。<br><br>
+          <b>在那之前</b>：先把日常练习 A（进制）和 B（表达式）两组做熟，两组都是纯计算，不需要选择题技巧。<br><br>
+          <b>做完 A、B 两组之后的自检标准</b>：
+          <ul style="margin:8px 0 0 20px; padding:0;">
+            <li>进制互转：十进制 ↔ 二/八/十六，10 秒内出答案</li>
+            <li>进制运算：十六进制加减不把 A～F 写错</li>
+            <li>表达式：中缀转后缀/前缀 5 步内写完</li>
+            <li>表达式求值：后缀先弹右、前缀先弹左不搞混</li>
+          </ul>
+        </p>
       </div>
     </details>
   </div>
