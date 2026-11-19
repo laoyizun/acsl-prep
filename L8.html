@@ -1,0 +1,1887 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>L8 · 循环追踪强化 | ACSL Junior 备赛</title>
+<style>
+:root {
+  --bg: #faf7f2;
+  --panel: #ffffff;
+  --panel-soft: #fdf9f3;
+  --text: #1a1626;
+  --muted: #5a536b;
+  --line: #e2d9c8;
+  --purple: #7c3aed;
+  --amber: #d97706;
+  --red: #dc2626;
+  --green: #16a34a;
+  --blue: #2563eb;
+  --teal: #0f9f9a;
+  --ink: #2d1b4e;
+  --shadow: 0 18px 46px rgba(124, 58, 237, .10);
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; min-height: 100%; }
+body {
+  font-family: "HarmonyOS Sans", "Source Han Sans SC", "Alibaba PuHuiTi", "PingFang SC", Inter, Arial, sans-serif;
+  color: var(--text);
+  background:
+    linear-gradient(135deg, rgba(124, 58, 237, .08), transparent 36%),
+    linear-gradient(225deg, rgba(217, 119, 6, .08), transparent 34%),
+    var(--bg);
+  font-size: 18px; line-height: 1.7;
+}
+body::before {
+  content: "";
+  position: fixed; inset: 0;
+  background-image:
+    linear-gradient(rgba(124, 58, 237, .05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(124, 58, 237, .05) 1px, transparent 1px);
+  background-size: 38px 38px;
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, .52), transparent 78%);
+  pointer-events: none;
+}
+a { color: inherit; }
+.deck-page { height: 100%; overflow: hidden; }
+.deck { position: relative; z-index: 1; width: 100vw; height: 100vh; }
+.slide {
+  position: absolute; inset: 0;
+  display: none;
+  padding: 56px 80px 150px;
+  opacity: 0;
+  transform: translateX(24px);
+  transition: .35s ease;
+  overflow-y: auto;
+}
+.slide.active {
+  display: grid;
+  grid-template-columns: .95fr 1.05fr;
+  gap: 42px;
+  opacity: 1; transform: translateX(0);
+}
+.slide.wide.active { grid-template-columns: 1fr; }
+.slide.title-slide.active,
+.slide.part-slide.active { grid-template-columns: 1fr; place-items: center; align-content: center; text-align: center; }
+.slide.title-slide .left, .slide.part-slide .left { align-items: center; width: min(1080px, 100%); justify-content: center; }
+.slide.title-slide .right { display: none; }
+.slide.part-slide .right { width: min(1080px, 100%); justify-content: center; }
+.left, .right { min-width: 0; display: flex; flex-direction: column; justify-content: flex-start; }
+.kicker {
+  display: inline-flex; align-items: center; width: max-content;
+  padding: 10px 14px; border-radius: 999px;
+  background: rgba(124, 58, 237, .08);
+  border: 1px solid rgba(124, 58, 237, .22);
+  color: #6d28d9;
+  font-size: 16px; font-weight: 800;
+  margin-bottom: 22px;
+}
+.kicker.amber {
+  background: rgba(217, 119, 6, .1);
+  border-color: rgba(217, 119, 6, .24);
+  color: #b45309;
+}
+h1 { font-size: clamp(42px, 5vw, 66px); line-height: 1.1; margin: 0 0 22px; color: var(--ink); }
+h2 { font-size: clamp(34px, 4vw, 50px); line-height: 1.16; margin: 0 0 20px; color: var(--ink); }
+h3 { margin: 0 0 12px; font-size: 26px; line-height: 1.3; color: var(--ink); }
+.subtitle { max-width: 820px; color: var(--muted); font-size: 22px; line-height: 1.75; margin: 0 0 24px; }
+.highlight { color: var(--purple); font-weight: 900; }
+.muted { color: var(--muted); }
+.chips { display: flex; flex-wrap: wrap; gap: 10px; }
+.chip {
+  display: inline-flex; align-items: center; min-height: 38px;
+  padding: 9px 14px; border-radius: 999px;
+  background: var(--panel-soft); border: 1px solid var(--line);
+  color: #25415f; font-weight: 800; font-size: 16px;
+}
+.chip.purple { background: rgba(124, 58, 237, .1); color: #6d28d9; border-color: rgba(124, 58, 237, .24); }
+.chip.amber  { background: rgba(217, 119, 6, .1); color: #b45309; border-color: rgba(217, 119, 6, .24); }
+.chip.red    { background: rgba(220, 38, 38, .08); color: #b91c1c; border-color: rgba(220, 38, 38, .2); }
+.chip.green  { background: rgba(22, 163, 74, .1); color: #047857; border-color: rgba(22, 163, 74, .22); }
+.chip.blue   { background: rgba(37, 99, 235, .08); color: #1d4ed8; border-color: rgba(37, 99, 235, .18); }
+.chip.teal   { background: rgba(15, 159, 154, .1); color: #0f766e; border-color: rgba(15, 159, 154, .24); }
+
+.card, .metaphor, .step-block, .takeaway, .practice, .bug {
+  background: rgba(255, 255, 255, .88);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  box-shadow: var(--shadow);
+}
+.card { padding: 22px 24px; }
+.metaphor {
+  padding: 22px 24px;
+  border-left: 6px solid var(--amber);
+  font-size: 20px;
+  line-height: 1.7;
+}
+.metaphor .emo { font-size: 30px; margin-right: 12px; vertical-align: middle; }
+.metaphor b { color: var(--amber); }
+.practice {
+  background: linear-gradient(135deg, rgba(22, 163, 74, .04), rgba(15, 159, 154, .04));
+  border: 1px solid rgba(22, 163, 74, .22);
+  padding: 22px 24px;
+}
+.practice .label, .bug .label, .takeaway .label, .metaphor .label {
+  display: inline-flex; align-items: center;
+  padding: 6px 12px; border-radius: 999px;
+  background: rgba(22, 163, 74, .12);
+  color: #047857;
+  font-size: 14px; font-weight: 800;
+  margin-bottom: 14px;
+}
+.bug .label { background: rgba(220, 38, 38, .1); color: #b91c1c; }
+.takeaway { background: var(--ink); color: #edf6ff; padding: 22px 26px; border: 1px solid var(--ink); }
+.takeaway .label { background: rgba(255, 255, 255, .14); color: #edf6ff; }
+.takeaway h3 { color: #edf6ff; }
+.takeaway p { color: #cbd9ed; margin: 6px 0; font-size: 19px; }
+.bug {
+  background: linear-gradient(135deg, rgba(220, 38, 38, .04), rgba(217, 119, 6, .04));
+  border: 1px solid rgba(220, 38, 38, .22);
+  padding: 22px 24px;
+}
+.practice ol, .practice ul, .bug ol, .bug ul { padding-left: 26px; margin: 8px 0; }
+.practice li, .bug li { margin-bottom: 10px; font-size: 19px; line-height: 1.65; }
+.practice li::marker { color: var(--green); font-weight: 800; }
+.bug li::marker { color: var(--red); font-weight: 800; }
+
+pre {
+  background: #0f243f;
+  color: #edf6ff;
+  font-size: 19px;
+  line-height: 1.75;
+  border-radius: 10px;
+  padding: 22px 26px;
+  margin: 12px 0;
+  overflow-x: auto;
+  font-family: "JetBrains Mono", "Fira Code", "SF Mono", Consolas, monospace;
+  white-space: pre;
+}
+pre code .kw { color: #ff9d72; font-weight: 700; }
+pre code .str { color: #a5e88c; }
+pre code .num { color: #ffb547; }
+pre code .com { color: #7c8aa8; font-style: italic; }
+pre code .fn { color: #82d4ff; font-weight: 700; }
+
+code.inline {
+  background: rgba(15, 36, 63, .08);
+  border: 1px solid rgba(15, 36, 63, .12);
+  padding: 2px 8px; border-radius: 6px;
+  font-family: "JetBrains Mono", "Fira Code", "SF Mono", Consolas, monospace;
+  font-size: 0.92em; color: #6d28d9;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* 浅紫色代码块（替代 <pre> 用来显示 ACSL 伪代码） */
+.code-block {
+  background: rgba(124, 58, 237, .05);
+  border: 1px solid rgba(124, 58, 237, .18);
+  color: var(--text);
+  font-family: "JetBrains Mono", "Fira Code", "SF Mono", Consolas, monospace;
+  font-size: 13px;
+  line-height: 1.7;
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin: 8px 0;
+  overflow-x: auto;
+  white-space: pre;
+}
+.code-block.tiny { font-size: 11px; padding: 8px 12px; }
+.code-block.small { font-size: 12px; padding: 10px 14px; }
+
+
+/* 英文术语标注 */
+.en-tag {
+  display: inline-block;
+  margin-top: 4px;
+  padding: 2px 10px;
+  font-family: "Inter", "JetBrains Mono", "SF Mono", Consolas, monospace;
+  font-size: 0.78em;
+  font-weight: 700;
+  color: #1d4ed8;
+  background: rgba(37, 99, 235, .08);
+  border: 1px solid rgba(37, 99, 235, .24);
+  border-radius: 999px;
+  letter-spacing: 0.3px;
+  vertical-align: middle;
+}
+/* 大号英文（h1 / h2 副标） */
+h1 .en-tag, h2 .en-tag {
+  margin-left: 12px;
+  font-size: 0.4em;
+  vertical-align: middle;
+}
+/* chip 上的英文 */
+.chip .en-tag {
+  margin: 0;
+  font-size: 0.78em;
+}
+
+table { width: 100%; border-collapse: collapse; font-size: 19px; line-height: 1.55; margin: 14px 0; }
+th { text-align: left; font-size: 14px; color: #25415f; font-weight: 800;
+     padding: 12px 14px; border-bottom: 2px solid var(--line); background: var(--panel-soft); }
+td { padding: 16px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+tr:last-child td { border-bottom: none; }
+td code, th code { font-size: 17px; }
+
+.flow {
+  display: grid; grid-template-columns: 1fr auto 1fr auto 1fr;
+  gap: 12px; align-items: stretch; margin: 16px 0;
+}
+.flow .step {
+  padding: 18px 16px;
+  background: rgba(255, 255, 255, .88);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: var(--shadow);
+}
+.flow .step .num { font-size: 14px; color: var(--purple); font-weight: 800; }
+.flow .step .ttl { font-size: 22px; font-weight: 900; margin-top: 6px; color: var(--ink); }
+.flow .step .desc { font-size: 15px; color: var(--muted); margin-top: 6px; }
+.flow .arrow { display: grid; place-items: center; color: var(--purple); font-size: 28px; font-weight: 900; }
+
+.warning { border-left: 5px solid var(--amber); padding-left: 18px; }
+.success  { border-left: 5px solid var(--green); padding-left: 18px; }
+.danger   { border-left: 5px solid var(--red);   padding-left: 18px; }
+.info     { border-left: 5px solid var(--purple); padding-left: 18px; }
+
+.big-list { display: grid; gap: 12px; }
+.list-item {
+  display: flex; align-items: center; gap: 16px;
+  padding: 18px 20px; border-radius: 10px;
+  background: rgba(255, 255, 255, .88);
+  border: 1px solid var(--line);
+  font-size: 22px; font-weight: 800;
+  box-shadow: var(--shadow);
+}
+.num {
+  display: grid; place-items: center;
+  min-width: 44px; height: 44px;
+  border-radius: 10px;
+  background: #f0e7ff; color: #6d28d9;
+  font-weight: 900; font-size: 18px;
+}
+pre .num, code .num { display: inline; min-width: 0; height: auto; background: none; border-radius: 0;
+  padding: 0; margin: 0; font-size: inherit; font-weight: inherit; font-family: inherit; }
+
+.nav {
+  position: fixed; z-index: 10;
+  left: 80px; right: 80px; bottom: 20px;
+  display: flex; align-items: center; gap: 16px;
+  pointer-events: none;
+}
+.nav > * { pointer-events: auto; }
+.nav a { text-decoration: none; }
+.nav button:disabled { opacity: .38; cursor: not-allowed; }
+.counter { font-weight: 900; color: #314860; min-width: 84px; text-align: center; font-size: 18px; }
+.progress-bar { position: fixed; left: 0; right: 0; top: 0; z-index: 12; height: 6px; border-radius: 0; background: rgba(124, 58, 237, .12); overflow: hidden; }
+.progress-bar span {
+  display: block; height: 100%; width: 0;
+  background: linear-gradient(90deg, var(--purple), var(--amber));
+  transition: .25s ease;
+}
+.nav button {
+  display: inline-flex; justify-content: center; align-items: center;
+  min-height: 48px; border: 0; border-radius: 10px;
+  padding: 12px 22px;
+  background: var(--ink); color: #fff;
+  font-weight: 900; cursor: pointer;
+  box-shadow: 0 12px 28px rgba(45, 27, 78, .18);
+  font-size: 16px;
+  text-decoration: none;
+}
+.nav button.secondary, .nav .home-link.secondary { background: #f4eee0; color: var(--ink); border: 1px solid var(--line); box-shadow: none; }
+.nav .home-link.secondary { padding: 12px 22px; }
+
+@media (max-width: 1080px) {
+  .slide.active { grid-template-columns: 1fr; gap: 28px; }
+  .slide { padding: 48px 36px 150px; }
+  h1 { font-size: 40px; } h2 { font-size: 32px; }
+}
+.slide.compact { padding: 32px 56px 150px; }
+.slide.compact .left, .slide.compact .right { gap: 0; }
+.slide.compact .card { padding: 16px 20px; }
+.slide.compact .card h3 { font-size: 21px; margin-bottom: 8px; }
+.slide.compact .card p, .slide.compact .card li { font-size: 15px; line-height: 1.6; }
+.slide.compact .card table { font-size: 12px; }
+.slide.compact .card td, .slide.compact .card th { padding: 5px 8px; }
+.slide.compact .code-block { font-size: 12px; line-height: 1.55; padding: 9px 12px; margin: 5px 0; }
+.slide.compact h1 { font-size: clamp(34px, 4vw, 48px); }
+.slide.compact.active {
+  display: flex !important;
+  flex-direction: column;
+  gap: 0;
+}
+.slide.compact .head { flex: 0 0 auto; }
+.slide.compact .grid2x2, .slide.compact .grid { flex: 1; min-height: 0; }
+.slide.compact h2 { font-size: clamp(28px, 3.4vw, 40px); margin-bottom: 14px; }
+.slide.compact .subtitle { font-size: 19px; line-height: 1.6; margin-bottom: 14px; }
+.slide.compact .kicker { margin-bottom: 14px; padding: 8px 12px; font-size: 14px; }
+.slide.compact pre { white-space: pre; }
+.slide.compact .practice { padding: 16px 20px; }
+.slide.compact .practice .label { padding: 5px 10px; font-size: 13px; margin-bottom: 8px; }
+
+/* 规则 + 演示 并排对照页 */
+.slide.compare.active {
+  display: grid !important;
+  grid-template-columns: 1.06fr .94fr;
+  grid-template-areas:
+    "head head"
+    "left right";
+  gap: 0 22px;
+}
+.slide.compare .head {
+  grid-area: head;
+  display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px 14px;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 9px; margin-bottom: 11px;
+}
+.slide.compare .head .kicker { margin-bottom: 0; }
+.slide.compare .head h2 { font-size: clamp(26px, 2.8vw, 34px); margin: 0; }
+.slide.compare .head .subtitle { font-size: 15px; line-height: 1.5; margin: 0; }
+.slide.compare .left { grid-area: left; }
+.slide.compare .right { grid-area: right; }
+.slide.compare .left, .slide.compare .right { gap: 0; }
+.slide.compare .card + .card, .slide.compare .card + .practice { margin-top: 9px; }
+.slide.compare .card { padding: 12px 15px; }
+.slide.compare .card h3 { font-size: 19px; margin-bottom: 6px; }
+.slide.compare .card table { font-size: 11.5px; }
+.slide.compare .card td, .slide.compare .card th { padding: 2.5px 6px; }
+.slide.compare .code-block { font-size: 11.5px; line-height: 1.5; padding: 8px 10px; margin: 0; }
+.slide.compare .rule-list { counter-reset: rule; list-style: none; padding: 0 !important; margin: 0; }
+.slide.compare .rule-list li {
+  position: relative; padding: 6px 0 6px 36px; font-size: 14px; line-height: 1.5;
+  border-bottom: 1px dashed var(--line);
+}
+.slide.compare .rule-list li:last-child { border-bottom: none; }
+.slide.compare .rule-list li::before {
+  counter-increment: rule; content: counter(rule);
+  position: absolute; left: 0; top: 5px;
+  width: 25px; height: 25px; border-radius: 50%;
+  background: rgba(124, 58, 237, .12); color: var(--purple);
+  font-size: 12.5px; font-weight: 800; line-height: 25px; text-align: center;
+}
+.slide.compare .rule-list .r-hit {
+  display: block; margin-top: 2px; font-size: 12.5px; color: var(--muted); line-height: 1.45;
+}
+.slide.compare .rule-list .r-hit b { color: var(--amber); }
+.slide.compare td.r { font-weight: 800; color: var(--purple); white-space: nowrap; }
+.slide.compare td.r-act { color: var(--muted); font-size: 11px; white-space: nowrap; }
+.slide.compare tr.r-key td { background: rgba(217, 119, 6, .1) !important; }
+.slide.compare tr.r-key td.r { color: #b45309; }
+.slide.compare .practice { padding: 11px 15px; }
+.slide.compare .practice p { font-size: 13px !important; line-height: 1.5; }
+.slide.compare .practice .label { padding: 4px 9px; font-size: 12px; margin-bottom: 6px; }
+
+/* 题目卡 + 答案折叠（题目与答案分成两个 div，答案默认收起） */
+.ans-card { padding: 0 !important; }
+.ans-card > summary {
+  cursor: pointer; list-style: none;
+  padding: 11px 15px; font-size: 14px; font-weight: 800; color: var(--green-deep);
+  display: flex; align-items: center; gap: 8px;
+}
+.ans-card > summary::-webkit-details-marker { display: none; }
+.ans-card > summary::before {
+  content: "▸"; display: inline-block; font-size: 12px; color: var(--green);
+  transition: transform .2s ease;
+}
+.ans-card[open] > summary::before { transform: rotate(90deg); }
+.ans-card[open] > summary { border-bottom: 1px dashed var(--line); }
+.ans-card > summary:hover { background: rgba(22, 163, 74, .06); }
+.ans-body { padding: 11px 15px 13px; }
+.ans-body > *:first-child { margin-top: 0 !important; }
+
+/* 展开后答案区限高内滚：高度按视口精确计算，保证卡片底边不越过导航条 */
+.ans-body { max-height: max(150px, calc(100vh - 500px)); overflow-y: auto; }
+/* 对照页：可用高度 = 视口 - 上下padding - head - 题目卡 - 间隔 - 折叠条 */
+.slide.compare .ans-body { max-height: max(160px, calc(100vh - 411px)); }
+/* 对照页的答案表格行距再收紧一点，让表格 + 结论条一起放得下 */
+.slide.compare .card table { font-size: 11px; }
+.slide.compare .card td, .slide.compare .card th { padding: 1.5px 6px; }
+
+/* 题目卡：补足高度，让左右两栏视觉平衡 */
+.q-card { border-left: 4px solid var(--purple) !important; }
+.q-card .code-block { margin: 6px 0 0 !important; }
+.q-note { font-size: 12.5px; color: var(--muted); margin-top: 7px; line-height: 1.55; }
+.q-list { font-size: 12.5px; line-height: 1.7; }
+.q-list b { color: var(--purple); }
+/* 对照页的题目卡：撑满左栏剩余空间，与右栏规则卡视觉平衡 */
+.slide.compare .left > .q-card { flex: 1 1 auto; min-height: 130px; display: flex; flex-direction: column; justify-content: center; }
+.slide.compare .left > .ans-card { flex: 0 0 auto; }
+.slide.compare .q-card .qa-expr { font-size: 15px; padding: 9px 12px; }
+.slide.compare .q-card .q-note { font-size: 13px; }
+
+/* 真题速查页：每题一栏，答案独立折叠 */
+.qa-row { margin-bottom: 9px; }
+.qa-row:last-child { margin-bottom: 0; }
+.qa-tag {
+  display: inline-block; padding: 2px 9px; border-radius: 999px;
+  background: rgba(220, 38, 38, .1); color: #b91c1c;
+  font-size: 12px; font-weight: 800; margin-bottom: 5px;
+}
+.qa-expr {
+  font-family: "JetBrains Mono", "Fira Code", "SF Mono", Consolas, monospace;
+  font-size: 13px; font-weight: 700; color: var(--ink);
+  background: rgba(124, 58, 237, .07); border: 1px solid rgba(124, 58, 237, .18);
+  border-radius: 6px; padding: 6px 10px; letter-spacing: .3px;
+}
+
+/* slide 16：3 道题各占一列，答案各自折叠 */
+.slide.qa3.active {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-areas:
+    "head head head"
+    "colA colB colC";
+  gap: 0 18px;
+}
+.slide.qa3 .head {
+  grid-area: head;
+  display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px 14px;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 9px; margin-bottom: 11px;
+}
+.slide.qa3 .head .kicker { margin-bottom: 0; }
+.slide.qa3 .head h2 { font-size: clamp(26px, 2.8vw, 34px); margin: 0; }
+.slide.qa3 .head .subtitle { font-size: 15px; line-height: 1.5; margin: 0; }
+.slide.qa3 .qa-col { display: flex; flex-direction: column; gap: 7px; }
+.slide.qa3 .qa-colA { grid-area: colA; }
+.slide.qa3 .qa-colB { grid-area: colB; }
+.slide.qa3 .qa-colC { grid-area: colC; }
+/* 题目卡撑开余量，答案折叠条紧跟其下 */
+.slide.qa3 .qa-col .q-card { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; justify-content: center; }
+.slide.qa3 .qa-col .ans-card { flex: 0 0 auto; }
+.slide.qa3 .qa-row { margin-bottom: 0; }
+.slide.qa3 .q-card { padding: 10px 14px; }
+.slide.qa3 .qa-expr { font-size: 12.5px; padding: 6px 9px; }
+.slide.qa3 .practice { padding: 11px 15px; }
+.slide.qa3 .practice p { font-size: 13px !important; line-height: 1.5; }
+/* slide 16 展开时答案区高度按视口计算 */
+.slide.qa3 .ans-body { max-height: max(140px, calc(100vh - 330px)); }
+
+/* 检验问题卡 */
+.check-q {
+  padding: 14px 18px;
+  margin: 12px 0;
+  background: rgba(245, 158, 11, .08);
+  border-left: 4px solid var(--amber);
+  border-radius: 8px;
+}
+.check-q-blue {
+  background: rgba(124, 58, 237, .08);
+  border-left-color: var(--purple);
+}
+.check-q-text {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.6;
+}
+.check-q details summary {
+  cursor: pointer;
+  color: var(--purple);
+  margin-top: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  list-style: none;
+}
+.check-q details summary::-webkit-details-marker { display: none; }
+.check-q details summary::before { content: '▸ '; color: var(--purple); }
+.check-q details[open] summary::before { content: '▾ '; }
+.check-q details summary:hover { text-decoration: underline; }
+.check-q details[open] summary { margin-bottom: 8px; }
+.check-a {
+  padding: 10px 14px;
+  background: rgba(22, 163, 74, .08);
+  border-radius: 6px;
+  font-family: "JetBrains Mono", "Fira Code", monospace;
+  font-size: 16px;
+  color: #047857;
+  margin-top: 4px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+/* Recap 网格卡片 */
+.recap-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 14px;
+  margin-top: 8px;
+}
+.recap-card {
+  padding: 18px 16px;
+  background: var(--panel);
+  border-radius: 12px;
+  border: 2px solid var(--line);
+  position: relative;
+  min-height: 110px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.recap-card.card-purple { border-color: var(--purple); background: rgba(124, 58, 237, .04); }
+.recap-card.card-amber  { border-color: var(--amber);  background: rgba(217, 119, 6, .04); }
+.recap-card.card-green  { border-color: var(--green);  background: rgba(22, 163, 74, .04); }
+.recap-card.card-blue   { border-color: var(--blue);   background: rgba(37, 99, 235, .04); }
+.recap-card.card-red    { border-color: var(--red);    background: rgba(220, 38, 38, .04); }
+.recap-card.card-teal   { border-color: var(--teal);   background: rgba(15, 159, 154, .04); }
+
+.recap-num {
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1;
+  margin-bottom: 10px;
+  color: var(--text);
+}
+.recap-card.card-purple .recap-num { color: var(--purple); }
+.recap-card.card-amber  .recap-num { color: var(--amber); }
+.recap-card.card-green  .recap-num { color: var(--green); }
+.recap-card.card-blue   .recap-num { color: var(--blue); }
+.recap-card.card-red    .recap-num { color: var(--red); }
+.recap-card.card-teal   .recap-num { color: var(--teal); }
+
+.recap-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+.recap-sub {
+  font-size: 13px;
+  color: var(--muted);
+}
+.recap-next {
+  font-size: 14px;
+  color: var(--muted);
+  margin-top: 16px;
+  text-align: left;
+}
+
+/* 网格 */
+.grid2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+.grid2x2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+.grid3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 14px;
+}
+
+/* ASCII 二进制可视化 */
+.bin-vis {
+  display: inline-block;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 22px;
+  letter-spacing: 4px;
+}
+.bin-vis .bit { padding: 4px 8px; border-radius: 4px; margin: 0 2px; }
+.bin-vis .bit.on  { background: #6d28d9; color: #fff; }
+.bin-vis .bit.off { background: rgba(124, 58, 237, .15); color: #6d28d9; }
+.bin-vis .bit-group { margin: 0 8px; }
+
+/* 卡片链接样式 */
+.link-card {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  padding: 18px 22px;
+  background: rgba(255, 255, 255, .88);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  box-shadow: var(--shadow);
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.link-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 24px 60px rgba(124, 58, 237, .18);
+}
+
+  /* ===================== L8 · 循环追踪强化 专属 ===================== */
+  /* 追踪表：紧凑等宽，数字右对齐 */
+  .trace-table {
+    font-family: "JetBrains Mono", "Fira Code", "SF Mono", Consolas, monospace;
+    font-size: 12px;
+    line-height: 1.55;
+  }
+  .trace-table td.num {
+    text-align: right;
+    font-weight: 700;
+    color: var(--purple);
+    white-space: nowrap;
+  }
+  .trace-table td.step {
+    white-space: nowrap;
+    color: var(--muted);
+    font-size: 11px;
+  }
+  .trace-table tr.hl td {
+    background: rgba(217, 119, 6, .11);
+  }
+  .trace-table tr.hit td {
+    background: rgba(22, 163, 74, .1);
+  }
+  /* 答案折叠按钮 */
+  .ans-card summary {
+    list-style: none;
+  }
+  .ans-card summary::-webkit-details-marker { display: none; }
+  .ans-card summary::before {
+    content: "▸ ";
+    color: var(--green);
+    font-weight: 800;
+  }
+  .ans-card details[open] summary::before {
+    content: "▾ ";
+  }
+  /* ===================== L8 end ===================== */
+</style>
+</head>
+<body class="deck-page">
+<!-- 01 · 封面 -->
+<section class="slide title-slide active">
+  <div class="left">
+    <div class="kicker">L8 · 第二轮知识点（三）</div>
+    <h1>循环<span class="highlight">追踪强化</span></h1>
+    <p class="subtitle">ACSL Junior Contest 2 · What Does This Program Do? (Loops) · 22 页</p>
+    <p style="margin-top:24px; padding:16px; background:rgba(124,58,237,.06); border-left:4px solid var(--purple); border-radius:8px; font-size:15px; line-height:1.7;">
+      <b>本课重点</b><br>
+      1. <b>循环变量被改写</b> · 变量交换型陷阱<br>
+      2. <b>循环内改自身</b> · 复利型陷阱<br>
+      3. <b>WHILE 退出时机</b> · 三种情形<br>
+      4. <b>嵌套 + 整除判断</b> · INT() 的用法<br>
+      5. <b>两循环串联</b> · 交集不是并集<br>
+      6. <b>历年真题</b> · 8 年 9 道全收录
+    </p>
+  </div>
+</section>
+
+<!-- 02 · 第二轮地图 -->
+<section class="slide ">
+  <div class="left">
+    <div class="kicker">第二轮地图</div>
+    <h2>Contest 2 考 <span class="highlight">3 个主题</span></h2>
+    <p class="subtitle">循环追踪题固定在<b>第 5 题</b>，位置 9 年没变过</p>
+    <div class="card" style="border-left:4px solid var(--purple); margin-top:14px;">
+      <h3 style="color:var(--purple);">🔄 第二轮 3 大主题</h3>
+      <table style="font-size:14px; width:100%; border-collapse:collapse; margin-top:8px;">
+        <tr style="background:rgba(124,58,237,.08);">
+          <th style="padding:6px;">#</th><th style="padding:6px;">主题</th><th style="padding:6px;">考什么</th><th style="padding:6px;">课次</th><th style="padding:6px;">题号</th>
+        </tr>
+        <tr><td style="padding:5px;">1</td><td style="padding:5px;">前缀/中缀/后缀</td><td style="padding:5px;">表达式转换 + 求值</td><td style="padding:5px;">L6 ✅</td><td style="padding:5px;">第 1、2 题</td></tr>
+        <tr><td style="padding:5px;">2</td><td style="padding:5px;">比特位操作</td><td style="padding:5px;">位串求值</td><td style="padding:5px;">L7 ✅</td><td style="padding:5px;">第 3、4 题</td></tr>
+        <tr><td style="padding:5px;">3</td><td style="padding:5px;">循环追踪</td><td style="padding:5px;">while / for / 嵌套</td><td style="padding:5px;"><b>L8（今天）</b></td><td style="padding:5px;"><b>第 5 题</b></td></tr>
+      </table>
+    </div>
+    <div class="practice" style="margin-top:12px;">
+      <div class="label">小贴士</div>
+      <p style="font-size:15px;">第 5 题<b>只考循环追踪</b>，不考分支、不考数组 —— 范围小，但<b>每年必考</b>。</p>
+    </div>
+  </div>
+  <div class="right">
+    <div class="card" style="border-left:4px solid var(--green);">
+      <h3 style="color:var(--green-deep);">✅ 9 年从未间断</h3>
+      <p style="font-size:14px; line-height:1.7; margin-top:6px;">
+        从 <b>2015-2016</b> 到 <b>2024-2025</b>，每年第 5 题都是循环追踪，<b>题号和主题完全没变</b>。<br>
+        <span style="color:var(--muted);">L3 讲过追踪的基本功，但真题考的是<b>变形</b> —— 这就是 L8 存在的理由。</span>
+      </p>
+    </div>
+    <div class="card" style="border-left:4px solid var(--amber); margin-top:12px;">
+      <h3 style="color:var(--amber);">📊 9 年真题的答案</h3>
+      <table style="font-size:13px; width:100%; border-collapse:collapse; margin-top:6px;">
+        <tr style="background:rgba(217,119,6,.1);"><th style="padding:4px;">年份</th><th style="padding:4px;">答案</th><th style="padding:4px;">题型</th></tr>
+        <tr><td style="padding:4px;">15-16</td><td style="padding:4px;">36, 89</td><td style="padding:4px;">三循环计数</td></tr>
+        <tr><td style="padding:4px;">16-17</td><td style="padding:4px;">1</td><td style="padding:4px;">三重嵌套</td></tr>
+        <tr><td style="padding:4px;">18-19</td><td style="padding:4px;">12</td><td style="padding:4px;">串行 + 整除</td></tr>
+        <tr><td style="padding:4px;">19-20</td><td style="padding:4px;">7, 31, 127</td><td style="padding:4px;">两循环筛</td></tr>
+        <tr><td style="padding:4px;">21-22</td><td style="padding:4px;">27</td><td style="padding:4px;">嵌套约数</td></tr>
+        <tr><td style="padding:4px;">22-23</td><td style="padding:4px;">331</td><td style="padding:4px;">复利自增</td></tr>
+        <tr><td style="padding:4px;">23-24</td><td style="padding:4px;">10</td><td style="padding:4px;">WHILE 浮点</td></tr>
+        <tr><td style="padding:4px;">24-25</td><td style="padding:4px;">10 / 24</td><td style="padding:4px;">变量交换 / 双段</td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- 03 · 9 年题型全景 -->
+<section class="slide ">
+  <div class="left">
+    <div class="kicker">题型全景</div>
+    <h2>9 年真题 <span class="highlight">长什么样</span></h2>
+    <p class="subtitle">先看全貌，再逐个击破</p>
+    <div class="card" style="border-left:4px solid var(--purple); margin-top:12px;">
+      <h3 style="color:var(--purple);">🧩 只考这 3 种结构</h3>
+      <ul style="font-size:14px; line-height:1.85; padding-left:20px; margin-top:6px;">
+        <li><b>串行多循环</b> —— 一个接一个，每个循环干一件事（2015-16 / 2018-19 / 2024-25）</li>
+        <li><b>嵌套循环</b> —— 循环套循环（2016-17 / 2021-22）</li>
+        <li><b>单循环 + 循环内改动</b> —— 变量被自己改写（2022-23 / 2023-24 / 2024-25）</li>
+      </ul>
+      <p style="font-size:13.5px; color:var(--muted); margin-top:8px;">
+        <b>共同点</b>：循环体里几乎一定有 <code>IF</code>，而且判断条件里几乎一定有 <code>INT()</code> 或 <code>%</code>。
+      </p>
+    </div>
+    <div class="practice" style="margin-top:12px;">
+      <div class="label">重要提醒</div>
+      <p style="font-size:15px;">这 9 道题的答案我<b>全部独立验算过</b>，与官方答案 100% 一致 —— 包括 2019-2020 那道多选题。</p>
+    </div>
+  </div>
+  <div class="right">
+    <div class="card" style="border-left:4px solid var(--blue);">
+      <h3 style="color:var(--blue);">📐 一个通用骨架</h3>
+      <p style="font-size:14px; line-height:1.75; margin-top:6px;">
+        9 年真题几乎都是这个套路：
+      </p>
+      <ol style="font-size:14px; line-height:1.85; padding-left:20px; margin-top:6px;">
+        <li>先把<b>循环变量</b>想清楚：<code>1 to n</code>？<code>1 to n step 2</code>？<code>n to 1 step -1</code>？</li>
+        <li>算<b>循环次数</b>（这一步最常错）</li>
+        <li>每一轮<b>哪些变量会变</b> —— 列出来</li>
+        <li>最后取<b>要输出的那个变量</b>在最后一轮的值</li>
+      </ol>
+      <p style="font-size:13.5px; color:var(--muted); margin-top:8px;">
+        L3 教了「画追踪表」，但真题的坑在于<b>变量不止一个</b>，而且会被<b>循环体自己改写</b>。
+      </p>
+    </div>
+    <div class="card" style="border-left:4px solid var(--amber); margin-top:12px;">
+      <h3 style="color:var(--amber);">⚠️ L3 的 4 个空白</h3>
+      <ul style="font-size:13.5px; line-height:1.75; padding-left:20px; margin-top:6px;">
+        <li>循环变量被循环体<b>改写</b></li>
+        <li>循环体<b>修改计数器自身</b></li>
+        <li><code>WHILE</code> 条件<b>一开始就不成立</b></li>
+        <li><b>两个循环串联</b>筛选（交集 ≠ 并集）</li>
+      </ul>
+      <p style="font-size:13.5px; color:var(--muted); margin-top:6px;">这 4 条就是 L8 要补的。</p>
+    </div>
+  </div>
+</section>
+
+<!-- 04 · L3 追踪表速查 -->
+<section class="slide compact compare">
+  <div class="head">
+    <div class="kicker">🪞 L3 快速复习</div>
+    <h2>追踪表模板 · <span class="highlight">3 步法</span></h2>
+    <p class="subtitle">L3 教过的工具，一个字都不过时</p>
+  </div>
+  <div class="left">
+    <div class="code-block"># 3 步追踪法
+1. 通读代码 (30 秒)  圈出 INPUT / OUTPUT
+2. 画追踪表            变量 / 当前值 / 条件 / 输出
+3. 逐行执行            每执行一行更新一列</div>
+    <div class="card" style="margin-top:10px; border-left:4px solid var(--green);">
+      <h3 style="color:var(--green-deep);">✅ 追踪表长这样</h3>
+      <table class="trace-table" style="font-size:13px; width:100%; border-collapse:collapse;">
+      <tr style="background:rgba(124,58,237,.08);"><th style="padding:4px 6px;">行号</th><th style="padding:4px 6px;">m</th><th style="padding:4px 6px;">n</th><th style="padding:4px 6px;">r</th><th style="padding:4px 6px;">条件</th></tr>
+      <tr><td style="padding:3px 6px;">初始</td><td class="num" style="padding:3px 6px;">50</td><td class="num" style="padding:3px 6px;">40</td><td style="padding:3px 6px;">—</td><td style="padding:3px 6px;">—</td></tr>
+      <tr><td style="padding:3px 6px;">r = m % n</td><td class="num" style="padding:3px 6px;">50</td><td class="num" style="padding:3px 6px;">40</td><td class="num" style="padding:3px 6px;">10</td><td style="padding:3px 6px;">50 % 40 = 10</td></tr>
+      <tr><td style="padding:3px 6px;">m = n</td><td class="num" style="padding:3px 6px;"><b>40</b></td><td class="num" style="padding:3px 6px;">40</td><td class="num" style="padding:3px 6px;">10</td><td style="padding:3px 6px;">m 变了</td></tr>
+      <tr><td style="padding:3px 6px;">n = r</td><td class="num" style="padding:3px 6px;">40</td><td class="num" style="padding:3px 6px;"><b>10</b></td><td class="num" style="padding:3px 6px;">10</td><td style="padding:3px 6px;">n 变了</td></tr>
+      <tr class="hit"><td style="padding:3px 6px;">判断</td><td class="num" style="padding:3px 6px;">40</td><td class="num" style="padding:3px 6px;">10</td><td class="num" style="padding:3px 6px;">10</td><td style="padding:3px 6px;">n ≠ 0 ✓</td></tr>
+      </table>
+      <p style="font-size:13px; color:var(--muted); margin-top:6px;">
+        👆 注意 <b>m 和 n 都被改写了</b> —— 这就是 L8 的第一个重点。
+      </p>
+    </div>
+  </div>
+  <div class="right">
+    <div class="card" style="border-left:4px solid var(--purple);">
+      <h3 style="color:var(--purple);">📌 ACSL 伪代码速查</h3>
+      <table style="font-size:13px; width:100%; border-collapse:collapse;">
+      <tr style="background:rgba(124,58,237,.08);"><th style="padding:4px 6px;">ACSL</th><th style="padding:4px 6px;">含义</th></tr>
+      <tr><td style="padding:3px 6px;">FOR i = 1 TO n</td><td style="padding:3px 6px;">i 从 1 到 n，每次 +1</td></tr>
+      <tr><td style="padding:3px 6px;">FOR i = a TO b STEP d</td><td style="padding:3px 6px;">i 从 a 到 b，每次 +d</td></tr>
+      <tr><td style="padding:3px 6px;">NEXT i</td><td style="padding:3px 6px;">循环结束，变量自动 +d</td></tr>
+      <tr><td style="padding:3px 6px;">WHILE 条件</td><td style="padding:3px 6px;">条件为真就重复</td></tr>
+      <tr><td style="padding:3px 6px;">END WHILE</td><td style="padding:3px 6px;">重新判断条件</td></tr>
+      <tr><td style="padding:3px 6px;">INT(x)</td><td style="padding:3px 6px;">取整数部分（向下取整）</td></tr>
+      <tr><td style="padding:3px 6px;">x % y</td><td style="padding:3px 6px;">取余（求余数）</td></tr>
+      </table>
+    </div>
+    <div class="card" style="border-left:4px solid var(--amber); margin-top:10px;">
+      <h3 style="color:var(--amber);">⚠️ 3 个语法点</h3>
+      <ul style="font-size:13.5px; line-height:1.8; padding-left:20px; margin-top:4px;">
+        <li><code>INT(x)</code> 是<b>向下取整</b>，不是四舍五入</li>
+        <li><code>N/B = INT(N/B)</code> 是<b>整除判断</b>；<code>N/B</code> 是实数除法</li>
+        <li><code>FOR</code> 的循环变量<b>自动</b>加步长，别手写 <code>i = i + 1</code></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 05 · 循环次数速算 -->
+<section class="slide compact compare">
+  <div class="head">
+    <div class="kicker">基础工具</div>
+    <h2>循环次数 · <span class="highlight">先算这个</span></h2>
+    <p class="subtitle">90% 的追踪错误都出在「循环跑了几遍」上</p>
+  </div>
+  <div class="left">
+    <div class="card" style="border-left:4px solid var(--purple);">
+      <h3 style="color:var(--purple);">🔢 次数速算表</h3>
+      <table style="font-size:13px; width:100%; border-collapse:collapse;">
+      <tr style="background:rgba(124,58,237,.08);"><th style="padding:4px 6px;">写法</th><th style="padding:4px 6px;">跑几次</th><th style="padding:4px 6px;">说明</th></tr>
+      <tr><td style="padding:3px 6px;">FOR i = 1 TO 5</td><td style="padding:3px 6px;"><b>5</b></td><td style="padding:3px 6px;">1,2,3,4,5</td></tr>
+      <tr><td style="padding:3px 6px;">FOR i = 1 TO 5 STEP 2</td><td style="padding:3px 6px;"><b>3</b></td><td style="padding:3px 6px;">1,3,5（≤5 的等差）</td></tr>
+      <tr><td style="padding:3px 6px;">FOR i = 3 TO 1 STEP -1</td><td style="padding:3px 6px;"><b>3</b></td><td style="padding:3px 6px;">3,2,1</td></tr>
+      <tr><td style="padding:3px 6px;">FOR i = 3 TO 1 STEP 1</td><td style="padding:3px 6px;"><b>0</b></td><td style="padding:3px 6px;">⚠️ 起点 &gt; 终点，一次都不跑</td></tr>
+      <tr><td style="padding:3px 6px;">FOR i = 2 TO 10 STEP 2</td><td style="padding:3px 6px;"><b>5</b></td><td style="padding:3px 6px;">2,4,6,8,10</td></tr>
+      <tr><td style="padding:3px 6px;">FOR k = 2 TO d</td><td style="padding:3px 6px;">d − 1</td><td style="padding:3px 6px;">k 从 2 数到 d</td></tr>
+      </table>
+    </div>
+    <div class="practice" style="margin-top:10px;">
+      <div class="label">先算次数，再填表</div>
+      <p style="font-size:14px;">追踪表最常见的死法是<b>手滑多写一行</b>。先在心里算出「这循环跑 N 次」，表就画不歪。</p>
+    </div>
+  </div>
+  <div class="right">
+    <div class="card" style="border-left:4px solid var(--amber);">
+      <h3 style="color:var(--amber);">⚠️ 3 个边界情形</h3>
+      <ul style="font-size:14px; line-height:1.85; padding-left:20px; margin-top:4px;">
+        <li><b>起点 &gt; 终点</b> → 循环体一次都不执行（<code>FOR i = 3 TO 1 STEP 1</code>）</li>
+        <li><b>终点恰好落在步长上</b> → 要算进去（<code>FOR j = 2 TO 10 STEP 2</code> 跑 5 次，不是 4 次）</li>
+        <li><b>步长为负</b> → 起点必须 &gt; 终点（<code>FOR z = 3 TO 1 STEP -1</code> ✓，<code>FOR z = 1 TO 3 STEP -1</code> ✘）</li>
+      </ul>
+    </div>
+    <div class="card" style="border-left:4px solid var(--green); margin-top:10px;">
+      <h3 style="color:var(--green-deep);">🧮 快速验证法</h3>
+      <p style="font-size:14px; line-height:1.8; margin-top:4px;">
+        次数 = <code>⌊(终点 − 起点) / 步长⌋ + 1</code>（终点 ≥ 起点时）<br><br>
+        验算 <code>FOR j = 2 TO 10 STEP 2</code>：<br>
+        ⌊(10−2)/2⌋ + 1 = 4 + 1 = <b>5</b> ✓
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- 06 · 变量交换（演示） -->
+<section class="slide compact compare">
+  <div class="head">
+    <div class="kicker">强化点 1</div>
+    <h2>变量 <span class="highlight">被循环体改写</span></h2>
+    <p class="subtitle">陷阱类型 ① · 欧几里得算法（2024-2025 真题原形）</p>
+  </div>
+  <div class="left">
+    <div class="code-block">m = 50
+n = 40
+while n != 0
+  r = m % n
+  m = n
+  n = r
+end while
+output m</div>
+    <div class="card" style="margin-top:8px; border-left:4px solid var(--purple);">
+      <h3 style="color:var(--purple);">📋 追踪表</h3>
+      <table class="trace-table" style="font-size:12.5px; width:100%; border-collapse:collapse;">
+        <tr style="background:rgba(124,58,237,.08);">
+          <th class="step">步骤</th><th style="padding:4px;">m</th><th style="padding:4px;">n</th>
+          <th style="padding:4px;">r</th><th style="padding:4px;">说明</th>
+        </tr>
+        <tr><td class="step">进入循环前</td><td style="padding:3px 5px;">50</td><td style="padding:3px 5px;">40</td><td style="padding:3px 5px;">—</td><td style="padding:3px 5px;">n ≠ 0 ✓ 进入</td></tr><tr><td class="step">第 1 轮 r = m % n</td><td style="padding:3px 5px;">50</td><td style="padding:3px 5px;">40</td><td style="padding:3px 5px;">10</td><td style="padding:3px 5px;">50 ÷ 40 = 1 余 10</td></tr><tr><td class="step">第 1 轮 m = n</td><td style="padding:3px 5px;">40</td><td style="padding:3px 5px;">40</td><td style="padding:3px 5px;">10</td><td style="padding:3px 5px;">m 改成 40</td></tr><tr><td class="step">第 1 轮 n = r</td><td style="padding:3px 5px;">40</td><td style="padding:3px 5px;">10</td><td style="padding:3px 5px;">10</td><td style="padding:3px 5px;">n 改成 10</td></tr><tr><td class="step">第 2 轮 r = m % n</td><td style="padding:3px 5px;">40</td><td style="padding:3px 5px;">10</td><td style="padding:3px 5px;">0</td><td style="padding:3px 5px;">40 ÷ 10 = 4 余 0</td></tr><tr><td class="step">第 2 轮 m = n</td><td style="padding:3px 5px;">10</td><td style="padding:3px 5px;">10</td><td style="padding:3px 5px;">0</td><td style="padding:3px 5px;">m 改成 10</td></tr><tr><td class="step">第 2 轮 n = r</td><td style="padding:3px 5px;">10</td><td style="padding:3px 5px;">0</td><td style="padding:3px 5px;">0</td><td style="padding:3px 5px;">n 改成 0</td></tr><tr class="hl"><td class="step">判断 n ≠ 0</td><td style="padding:3px 5px;">10</td><td style="padding:3px 5px;">0</td><td style="padding:3px 5px;">0</td><td style="padding:3px 5px;">n = 0 ✘ 退出循环</td></tr><tr class="hit"><td class="step">output m</td><td style="padding:3px 5px;">10</td><td style="padding:3px 5px;">0</td><td style="padding:3px 5px;">0</td><td style="padding:3px 5px;">输出 10</td></tr>      </table>
+    </div>
+  </div>
+  <div class="right">
+    <div class="card" style="border-left:4px solid var(--amber);">
+      <h3 style="color:var(--amber);">⚠️ 坑在哪</h3>
+      <p style="font-size:14px; line-height:1.8; margin-top:4px;">
+        <code>m = n</code> 这一行把 m <b>改掉了</b>，下一行 <code>n = r</code> 用的是<b>新的 m</b>吗？<br><br>
+        <b>不是。</b> <code>n = r</code> 用的是 r，而 r 是<b>上一轮就算好的</b>，跟 m 无关。<br><br>
+        如果你按「r = m % n 用新 m」去算，就会算错。
+      </p>
+    </div>
+    <div class="card" style="border-left:4px solid var(--green); margin-top:10px;">
+      <h3 style="color:var(--green-deep);">✅ 正确读法</h3>
+      <ul style="font-size:14px; line-height:1.85; padding-left:20px; margin-top:4px;">
+        <li><code>r = m % n</code> —— 用<b>本轮开始时</b>的 m 和 n</li>
+        <li><code>m = n</code> —— m 变成 n 的<b>旧值</b></li>
+        <li><code>n = r</code> —— n 变成 r（r 刚算出来）</li>
+        <li>所以这是<b>交换</b>：m 取 n 的旧值，n 取余数</li>
+      </ul>
+    </div>
+    <div class="practice" style="margin-top:10px;">
+      <div class="label">一句话记住</div>
+      <p style="font-size:14px;">追踪表里<b>每写一行就更新一次</b>，绝不用「这轮开始时的值」去套所有行。</p>
+    </div>
+  </div>
+</section>
+
+<!-- 07 · 真题 2024-2025 Q5 -->
+<section class="slide compact compare">
+  <div class="head">
+    <div class="kicker">强化点 1 · 真题</div>
+    <h2>2024-2025 第 5 题 · <span class="highlight">变量交换</span></h2>
+    <p class="subtitle">官方答案 D. 10</p>
+  </div>
+  <div class="left">
+        <div class="card q-card">
+      <div class="qa-tag">真题 · 2024-2025 Q5</div>
+      <div class="qa-expr">m = 50<br>n = 40<br>while n != 0<br>&nbsp;&nbsp;r = m % n<br>&nbsp;&nbsp;m = n<br>&nbsp;&nbsp;n = r<br>end while<br><b>output m</b></div>
+      <div class="q-note">问：程序输出什么？（A.50 B.40 C.20 D.10 E.0）</div>
+    </div>
+    <div class="card ans-card" style="margin-top:8px;">
+      <details>
+        <summary style="cursor:pointer; padding:9px 14px; font-weight:700; font-size:14px; color:var(--green-deep); background:rgba(22,163,74,.07); border-radius:8px;">
+          展开答案 · Show Answer
+        </summary>
+        <div class="ans-body"><div class="code-block">m = 50
+n = 40
+while n != 0
+  r = m % n
+  m = n
+  n = r
+end while
+output m</div>
+              <p style="font-size:14px; line-height:1.8;"><b>答案：10（D）</b></p>
+              <p style="font-size:14px; line-height:1.8;">这就是<b>辗转相除法</b>求最大公约数：<br>
+              GCF(50, 40) = GCF(40, 10) = GCF(10, 0) = <b>10</b></p>
+              <p style="font-size:13.5px; color:var(--muted); margin-top:6px;">
+              官方解析原话：<i>"This is Euclid's algorithm that finds the GCF in 2 iterations of the loop."</i></p></div>
+      </details>
+    </div>
+  </div>
+  <div class="right">
+    <div class="card" style="border-left:4px solid var(--purple);">
+      <h3 style="color:var(--purple);">📋 手算追踪</h3>
+      <table class="trace-table" style="font-size:13px; width:100%; border-collapse:collapse;">
+      <tr style="background:rgba(124,58,237,.08);"><th class="step">轮次</th><th style="padding:4px 6px; width:12%;">m</th><th style="padding:4px 6px; width:12%;">n</th><th style="padding:4px 6px; width:20%;">r = m % n</th><th style="padding:4px 6px; width:43%;">动作</th></tr>
+      <tr><td class="step">进入</td><td class="num" style="padding:3px 6px;">50</td><td class="num" style="padding:3px 6px;">40</td><td style="padding:3px 6px;">—</td><td style="padding:3px 6px;">n ≠ 0 ✓</td></tr>
+      <tr><td class="num" style="padding:3px 6px;">1</td><td class="num" style="padding:3px 6px;">50</td><td class="num" style="padding:3px 6px;">40</td><td class="num" style="padding:3px 6px;"><b>10</b></td><td style="padding:3px 6px;">50 ÷ 40 余 10</td></tr>
+      <tr><td class="num" style="padding:3px 6px;">1</td><td class="num" style="padding:3px 6px;"><b>40</b></td><td class="num" style="padding:3px 6px;">40</td><td class="num" style="padding:3px 6px;">10</td><td style="padding:3px 6px;">m ← n</td></tr>
+      <tr><td class="num" style="padding:3px 6px;">1</td><td class="num" style="padding:3px 6px;">40</td><td class="num" style="padding:3px 6px;"><b>10</b></td><td class="num" style="padding:3px 6px;">10</td><td style="padding:3px 6px;">n ← r</td></tr>
+      <tr><td class="num" style="padding:3px 6px;">2</td><td class="num" style="padding:3px 6px;">40</td><td class="num" style="padding:3px 6px;">10</td><td class="num" style="padding:3px 6px;"><b>0</b></td><td style="padding:3px 6px;">40 ÷ 10 余 0</td></tr>
+      <tr><td class="num" style="padding:3px 6px;">2</td><td class="num" style="padding:3px 6px;"><b>10</b></td><td class="num" style="padding:3px 6px;">10</td><td class="num" style="padding:3px 6px;">0</td><td style="padding:3px 6px;">m ← n</td></tr>
+      <tr><td class="num" style="padding:3px 6px;">2</td><td class="num" style="padding:3px 6px;">10</td><td class="num" style="padding:3px 6px;"><b>0</b></td><td class="num" style="padding:3px 6px;">0</td><td style="padding:3px 6px;">n ← r</td></tr>
+      <tr class="hl"><td class="step">退出</td><td class="num" style="padding:3px 6px;">10</td><td class="num" style="padding:3px 6px;">0</td><td class="num" style="padding:3px 6px;">0</td><td style="padding:3px 6px;">n = 0 ✘</td></tr>
+      </table>
+      <p style="font-size:13.5px; color:var(--muted); margin-top:6px;">
+        循环跑了 <b>2 轮</b>，最后 m = <b>10</b>。
+      </p>
+    </div>
+    <div class="card" style="border-left:4px solid var(--amber); margin-top:10px;">
+      <h3 style="color:var(--amber);">⚠️ 干扰项分析</h3>
+      <ul style="font-size:13.5px; line-height:1.8; padding-left:20px; margin-top:4px;">
+        <li><b>A. 50</b> —— 只跑了 1 轮就停</li>
+        <li><b>B. 40</b> —— 误以为 m ← n 后就输出</li>
+        <li><b>C. 20</b> —— 把 50 % 40 算成 30 之类的乱数</li>
+        <li><b>E. 0</b> —— 误以为输出的是 n（最后一次 n = 0）</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 08 · 循环体改自身（演示） -->
+<section class="slide compact compare">
+  <div class="head">
+    <div class="kicker">强化点 2</div>
+    <h2>循环体 <span class="highlight">修改计数器自身</span></h2>
+    <p class="subtitle">陷阱类型 ② · 复利计算（2022-2023 真题原形）</p>
+  </div>
+  <div class="left">
+    <div class="code-block">p = 1000, r = 10, t = 3
+o = p
+for c = 1 to t
+  i = p * r / 100
+  p = p + i
+next c
+f = p - o
+output f</div>
+    <div class="card" style="margin-top:8px; border-left:4px solid var(--purple);">
+      <h3 style="color:var(--purple);">📋 追踪表</h3>
+      <table class="trace-table" style="font-size:12.5px; width:100%; border-collapse:collapse;">
+        <tr style="background:rgba(124,58,237,.08);">
+          <th class="step">轮次</th><th style="padding:4px;">i</th><th style="padding:4px;">p</th>
+          <th style="padding:4px;">o</th><th style="padding:4px;">说明</th>
+        </tr>
+        <tr><td class="step">初始</td><td style="padding:3px 5px;">1000</td><td style="padding:3px 5px;">10</td><td style="padding:3px 5px;">—</td><td style="padding:3px 5px;">o = p = 1000（快照）</td></tr><tr><td class="step">c = 1</td><td style="padding:3px 5px;">i = 1000×10/100 = 100</td><td style="padding:3px 5px;">p = 1000+100 = 1100</td><td style="padding:3px 5px;">100</td><td style="padding:3px 5px;">p 变了</td></tr><tr><td class="step">c = 2</td><td style="padding:3px 5px;">i = 1100×10/100 = 110</td><td style="padding:3px 5px;">p = 1100+110 = 1210</td><td style="padding:3px 5px;">110</td><td style="padding:3px 5px;">用新的 p 算 i</td></tr><tr><td class="step">c = 3</td><td style="padding:3px 5px;">i = 1210×10/100 = 121</td><td style="padding:3px 5px;">p = 1210+121 = 1331</td><td style="padding:3px 5px;">121</td><td style="padding:3px 5px;">第 3 年</td></tr><tr><td class="step">f = p − o</td><td style="padding:3px 5px;">1331</td><td style="padding:3px 5px;">—</td><td style="padding:3px 5px;">—</td><td style="padding:3px 5px;">1331 − 1000 = 331</td></tr><tr class="hit"><td class="step">output f</td><td style="padding:3px 5px;">331</td><td style="padding:3px 5px;">—</td><td style="padding:3px 5px;">—</td><td style="padding:3px 5px;">输出 331</td></tr>      </table>
+    </div>
+  </div>
+  <div class="right">
+    <div class="card" style="border-left:4px solid var(--amber);">
+      <h3 style="color:var(--amber);">⚠️ 坑在哪</h3>
+      <p style="font-size:14px; line-height:1.8; margin-top:4px;">
+        <code>i = p * r / 100</code> 里的 p，<b>是这一轮已经更新过的 p</b>，不是循环开始时的 p。<br><br>
+        第 2 轮要用 <b>1100</b> 算利息（110），而不是 1000（100）。<br><br>
+        算成 1000+100、1100+100、1200+100 就全错了。
+      </p>
+    </div>
+    <div class="card" style="border-left:4px solid var(--green); margin-top:10px;">
+      <h3 style="color:var(--green-deep);">✅ 记住「自增型」</h3>
+      <p style="font-size:14px; line-height:1.8; margin-top:4px;">
+        只要看到 <code>p = p + ...</code> 这类写法，p 就是<b>逐轮累变</b>的。<br><br>
+        追踪表要<b>一行一行往下滚</b>，不能「算一次用到底」。
+      </p>
+    </div>
+    <div class="card" style="border-left:4px solid var(--blue); margin-top:10px;">
+      <h3 style="color:var(--blue);">🔍 <code>o = p</code> 的作用</h3>
+      <p style="font-size:14px; line-height:1.8; margin-top:4px;">
+        在循环<b>之前</b>把 p 的初始值 1000 存进 o（快照）。<br><br>
+        最后 <code>f = p - o</code> 就是「终值 − 初值」= 利息。<br>
+        <b>如果忘了存这个快照，题目就没法算了。</b>
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- 09 · 真题 2022-2023 -->
+<section class="slide compact compare">
+  <div class="head">
+    <div class="kicker">强化点 2 · 真题</div>
+    <h2>2022-2023 第 5 题 · <span class="highlight">复利</span></h2>
+    <p class="subtitle">官方答案 D. 331</p>
+  </div>
+  <div class="left">
+        <div class="card q-card">
+      <div class="qa-tag">真题 · 2022-2023</div>
+      <div class="qa-expr">p = 1000, r = 10, t = 3<br>o = p<br>for c = 1 to t<br>&nbsp;&nbsp;i = p * r / 100<br>&nbsp;&nbsp;p = p + i<br>next c<br>f = p - o<br><b>output f</b></div>
+      <div class="q-note">问：程序输出什么？<br>（A.100 B.110 C.121 D.331 E.1331）</div>
+    </div>
+    <div class="card ans-card" style="margin-top:8px;">
+      <details>
+        <summary style="cursor:pointer; padding:9px 14px; font-weight:700; font-size:14px; color:var(--green-deep); background:rgba(22,163,74,.07); border-radius:8px;">
+          展开答案 · Show Answer
+        </summary>
+        <div class="ans-body"><div class="code-block">p = 1000, r = 10, t = 3
+o = p
+for c = 1 to t
+  i = p * r / 100
+  p = p + i
+next c
+f = p - o
+output f</div>
+              <p style="font-size:14px; line-height:1.8;"><b>答案：331（D）</b></p>
+              <p style="font-size:14px; line-height:1.8;">
+              第 1 年：1000 × 10% = <b>100</b> → p = 1100<br>
+              第 2 年：1100 × 10% = <b>110</b> → p = 1210<br>
+              第 3 年：1210 × 10% = <b>121</b> → p = 1331<br>
+              利息 = 1331 − 1000 = <b>331</b></p>
+              <p style="font-size:13.5px; color:var(--muted); margin-top:6px;">
+              官方解析：<i>"$1000 at a yearly rate of 10% for 3 years… Total interest $1331-$1000 = $331"</i></p></div>
+      </details>
+    </div>
+  </div>
+  <div class="right">
+    <div class="card" style="border-left:4px solid var(--purple);">
+      <h3 style="color:var(--purple);">📋 手算追踪</h3>
+      <table class="trace-table" style="font-size:13px; width:100%; border-collapse:collapse;">
+      <tr style="background:rgba(124,58,237,.08);"><th style="padding:4px 6px; width:10%;">c</th><th style="padding:4px 6px; width:30%;">p（本轮开始）</th><th style="padding:4px 6px; width:28%;">i = p×10%</th><th style="padding:4px 6px; width:32%;">p = p + i</th></tr>
+      <tr><td class="num" style="padding:3px 6px;">1</td><td class="num" style="padding:3px 6px;">1000</td><td class="num" style="padding:3px 6px;">100</td><td class="num" style="padding:3px 6px;"><b>1100</b></td></tr>
+      <tr><td class="num" style="padding:3px 6px;">2</td><td class="num" style="padding:3px 6px;"><b>1100</b></td><td class="num" style="padding:3px 6px;">110</td><td class="num" style="padding:3px 6px;"><b>1210</b></td></tr>
+      <tr class="hit"><td class="num" style="padding:3px 6px;">3</td><td class="num" style="padding:3px 6px;"><b>1210</b></td><td class="num" style="padding:3px 6px;">121</td><td class="num" style="padding:3px 6px;"><b>1331</b></td></tr>
+      </table>
+      <p style="font-size:13.5px; color:var(--muted); margin-top:6px;">
+        循环跑 <b>3 次</b>（<code>for c = 1 to 3</code>），f = 1331 − 1000 = <b>331</b>。
+      </p>
+    </div>
+    <div class="card" style="border-left:4px solid var(--amber); margin-top:10px;">
+      <h3 style="color:var(--amber);">⚠️ 干扰项分析</h3>
+      <ul style="font-size:13.5px; line-height:1.8; padding-left:20px; margin-top:4px;">
+        <li><b>A. 100</b> —— 只算了第 1 年的利息</li>
+        <li><b>B. 110</b> —— 只算了第 2 年的利息</li>
+        <li><b>C. 121</b> —— 只算了第 3 年的利息</li>
+        <li><b>E. 1331</b> —— <b>算出了终值但忘了减 o</b>（最典型的错）</li>
+      </ul>
+      <p style="font-size:13px; color:var(--muted); margin-top:6px;">
+        👆 E 选项专门抓「忘了 <code>o = p</code>」这个错。
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- 10 · WHILE 三种退出情形 -->
+<section class="slide compact compare">
+  <div class="head">
+    <div class="kicker">强化点 3</div>
+    <h2>WHILE 的 <span class="highlight">三种退出情形</span></h2>
+    <p class="subtitle">陷阱类型 ③ · 判断时机（2023-2024 真题原形）</p>
+  </div>
+  <div class="left">
+    <div class="card" style="border-left:4px solid var(--purple);">
+      <h3 style="color:var(--purple);">🔀 三种情形</h3>
+      <table style="font-size:13px; width:100%; border-collapse:collapse;">
+      <tr style="background:rgba(124,58,237,.08);"><th style="padding:4px 6px;">情形</th><th style="padding:4px 6px;">示例</th><th style="padding:4px 6px;">循环体跑几次</th></tr>
+      <tr><td style="padding:3px 6px;">① 条件一开始就假</td><td style="padding:3px 6px;"><code>WHILE 0 &lt; 1</code></td><td style="padding:3px 6px;"><b>0 次</b></td></tr>
+      <tr><td style="padding:3px 6px;">② 跑够次数才假</td><td style="padding:3px 6px;"><code>WHILE i &lt; 5</code></td><td style="padding:3px 6px;">4 次（i=1..4）</td></tr>
+      <tr><td style="padding:3px 6px;">③ 跑着跑着变假</td><td style="padding:3px 6px;"><code>WHILE t &lt; d</code>（d 也在变）</td><td style="padding:3px 6px;"><b>看表</b></td></tr>
+      </table>
+      <p style="font-size:13.5px; color:var(--muted); margin-top:8px;">
+        <b>FOR 是「跑够就停」，WHILE 是「条件假就停」</b> —— 循环体内的变量变化会<b>影响退出时机</b>。
+      </p>
+    </div>
+    <div class="card" style="margin-top:10px; border-left:4px solid var(--blue);">
+      <h3 style="color:var(--blue);">🧭 WHILE 追踪的正确姿势</h3>
+      <ol style="font-size:14px; line-height:1.85; padding-left:20px; margin-top:4px;">
+        <li>先把<b>循环体</b>从上到下算一遍，得到新的 t</li>
+        <li>回到循环开头<b>重新判断</b>条件</li>
+        <li>条件为假 → 跳出，<b>不要再执行一次循环体</b></li>
+        <li>最后一行的值就是输出</li>
+      </ol>
+    </div>
+  </div>
+  <div class="right">
+    <div class="card" style="border-left:4px solid var(--green);">
+      <h3 style="color:var(--green-deep);">⚠️ 最常见的错</h3>
+      <p style="font-size:14px; line-height:1.8; margin-top:4px;">
+        很多同学把 WHILE 的表<b>少写一行</b> —— 只写到「条件变假」就停，<b>忘了条件变假那一轮已经执行过了</b>。<br><br>
+        正确：<b>先执行，再判断</b>。所以最后一行的值是<b>最后一次执行后</b>的值。
+      </p>
+    </div>
+    <div class="practice" style="margin-top:10px;">
+      <div class="label">对比记忆</div>
+      <p style="font-size:14px;">
+        <b>FOR</b>：先定循环变量 → 循环 N 次 → 结束<br>
+        <b>WHILE</b>：先判条件 → 执行 → 再判 → 可能一次都不执行
+      </p>
+    </div>
+    <div class="card" style="border-left:4px solid var(--amber); margin-top:10px;">
+      <h3 style="color:var(--amber);">💡 浮点数比较</h3>
+      <p style="font-size:14px; line-height:1.8; margin-top:4px;">
+        2023-2024 用的是小数（.01 / .02 / .03…）。<b>手算时保留 2 位小数</b>，不要写成分数或化成百分比 —— 对齐小数点最不容易错。
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- 11 · 真题 2023-2024 -->
+<section class="slide compact compare">
+  <div class="head">
+    <div class="kicker">强化点 3 · 真题</div>
+    <h2>2023-2024 第 5 题 · <span class="highlight">WHILE + 浮点</span></h2>
+    <p class="subtitle">官方答案 D. 10</p>
+  </div>
+  <div class="left">
+        <div class="card q-card">
+      <div class="qa-tag">真题 · 2023-2024</div>
+      <div class="qa-expr">p = .01<br>d = 1<br>t = .01<br>while t &lt; d<br>&nbsp;&nbsp;d = d + 1<br>&nbsp;&nbsp;p = p * 2<br>&nbsp;&nbsp;t = t + p<br>end while<br><b>output d</b></div>
+      <div class="q-note">问：程序输出什么？<br>（A.7 B.8 C.9 D.10 E.11）</div>
+    </div>
+    <div class="card ans-card" style="margin-top:8px;">
+      <details>
+        <summary style="cursor:pointer; padding:9px 14px; font-weight:700; font-size:14px; color:var(--green-deep); background:rgba(22,163,74,.07); border-radius:8px;">
+          展开答案 · Show Answer
+        </summary>
+        <div class="ans-body"><div class="code-block">p = .01
+d = 1
+t = .01
+while t < d
+  d = d + 1
+  p = p * 2
+  t = t + p
+end while
+output d</div>
+              <p style="font-size:14px; line-height:1.8;"><b>答案：10（D）</b></p>
+              <p style="font-size:14px; line-height:1.8;">
+              循环跑了 <b>9 次</b>，最后 d = 10。<br>
+              退出时 t = 10.23 ≥ d = 10，条件不成立。</p>
+              <p style="font-size:13.5px; color:var(--muted); margin-top:6px;">
+              官方解析把它翻译成了生活题：<i>"It takes 10 days for you to make more money by getting a penny a day and doubling it every day after that than by getting a dollar a day."</i></p></div>
+      </details>
+    </div>
+  </div>
+  <div class="right">
+    <div class="card" style="border-left:4px solid var(--purple);">
+      <h3 style="color:var(--purple);">📋 追踪表（官方同款）</h3>
+      <table class="trace-table" style="font-size:12px; width:100%; border-collapse:collapse;">
+        <tr style="background:rgba(124,58,237,.08);">
+          <th class="step">轮</th><th style="padding:3px;">p</th><th style="padding:3px;">d</th>
+          <th style="padding:3px;">t</th><th style="padding:3px;">t &lt; d ?</th>
+        </tr>
+        <tr><td class="step">判断</td><td style="padding:3px 5px;">—</td><td style="padding:3px 5px;">t = .01</td><td style="padding:3px 5px;">d = 1</td><td style="padding:3px 5px;">.01 < 1 ✓ 进入</td></tr><tr><td class="step">第 1 轮</td><td style="padding:3px 5px;">d = 2</td><td style="padding:3px 5px;">p = .02</td><td style="padding:3px 5px;">t = .03</td><td style="padding:3px 5px;">.03 < 2 ✓</td></tr><tr><td class="step">第 2 轮</td><td style="padding:3px 5px;">d = 3</td><td style="padding:3px 5px;">p = .04</td><td style="padding:3px 5px;">t = .07</td><td style="padding:3px 5px;">.07 < 3 ✓</td></tr><tr><td class="step">第 3 轮</td><td style="padding:3px 5px;">d = 4</td><td style="padding:3px 5px;">p = .08</td><td style="padding:3px 5px;">t = .15</td><td style="padding:3px 5px;">.15 < 4 ✓</td></tr><tr><td class="step">第 4 轮</td><td style="padding:3px 5px;">d = 5</td><td style="padding:3px 5px;">p = .16</td><td style="padding:3px 5px;">t = .31</td><td style="padding:3px 5px;">.31 < 5 ✓</td></tr><tr><td class="step">第 5 轮</td><td style="padding:3px 5px;">d = 6</td><td style="padding:3px 5px;">p = .32</td><td style="padding:3px 5px;">t = .63</td><td style="padding:3px 5px;">.63 < 6 ✓</td></tr><tr><td class="step">第 6 轮</td><td style="padding:3px 5px;">d = 7</td><td style="padding:3px 5px;">p = .64</td><td style="padding:3px 5px;">t = 1.27</td><td style="padding:3px 5px;">1.27 < 7 ✓</td></tr><tr><td class="step">第 7 轮</td><td style="padding:3px 5px;">d = 8</td><td style="padding:3px 5px;">p = 1.28</td><td style="padding:3px 5px;">t = 2.55</td><td style="padding:3px 5px;">2.55 < 8 ✓</td></tr><tr><td class="step">第 8 轮</td><td style="padding:3px 5px;">d = 9</td><td style="padding:3px 5px;">p = 2.56</td><td style="padding:3px 5px;">t = 5.11</td><td style="padding:3px 5px;">5.11 < 9 ✓</td></tr><tr class="hl"><td class="step">第 9 轮</td><td style="padding:3px 5px;">d = 10</td><td style="padding:3px 5px;">p = 5.12</td><td style="padding:3px 5px;">t = 10.23</td><td style="padding:3px 5px;">10.23 < 10 ✘ 退出</td></tr><tr class="hit"><td class="step">output d</td><td style="padding:3px 5px;">—</td><td style="padding:3px 5px;">—</td><td style="padding:3px 5px;">d = 10</td><td style="padding:3px 5px;">输出 10</td></tr>      </table>
+    </div>
+    <div class="card" style="border-left:4px solid var(--amber); margin-top:10px;">
+      <h3 style="color:var(--amber);">⚠️ 干扰项分析</h3>
+      <ul style="font-size:13.5px; line-height:1.8; padding-left:20px; margin-top:4px;">
+        <li><b>A. 7</b> —— 第 6 轮就停了（t = 1.27 时误判）</li>
+        <li><b>B. 8</b> —— 第 7 轮后误判（t = 2.55 ≥ 8? 不成立，容易看串）</li>
+        <li><b>C. 9</b> —— 第 8 轮后误判（t = 5.11 ≥ 9? 不成立）</li>
+        <li><b>E. 11</b> —— <b>多跑了一轮</b>（条件已经假了还执行）</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 12 · 嵌套 + 整除（演示） -->
+<section class="slide compact compare">
+  <div class="head">
+    <div class="kicker">强化点 4</div>
+    <h2>嵌套循环 + <span class="highlight">整除判断</span></h2>
+    <p class="subtitle">陷阱类型 ④ · INT() 的用法（2016-2017 / 2021-2022 真题原形）</p>
+  </div>
+  <div class="left">
+    <div class="code-block">t = 0
+for j = 1 to 5
+  for k = 1 to 5
+    for m = 1 to 5
+      if j*j + k*k = m*m then t = t + 1
+    next m
+  next k
+next j
+t = t / 2
+print t</div>
+    <div class="card" style="margin-top:8px; border-left:4px solid var(--purple);">
+      <h3 style="color:var(--purple);">📋 追踪表（只列出命中和典型行）</h3>
+      <table class="trace-table" style="font-size:13px; width:100%; border-collapse:collapse;">
+      <tr style="background:rgba(124,58,237,.08);"><th style="padding:4px 6px; width:10%;">j</th><th style="padding:4px 6px; width:10%;">k</th><th style="padding:4px 6px; width:10%;">m</th><th style="padding:4px 6px; width:42%;">判断</th><th style="padding:4px 6px; width:28%;">t</th></tr>
+      <tr><td class="num" style="padding:3px 6px;">1</td><td class="num" style="padding:3px 6px;">1</td><td class="num" style="padding:3px 6px;">1</td><td style="padding:3px 6px;">1+1=2 ≠ 1</td><td class="num" style="padding:3px 6px;">0</td></tr>
+      <tr><td class="num" style="padding:3px 6px;">1</td><td class="num" style="padding:3px 6px;">1</td><td class="num" style="padding:3px 6px;">2</td><td style="padding:3px 6px;">1+1=2 ≠ 4</td><td class="num" style="padding:3px 6px;">0</td></tr>
+      <tr><td class="num" style="padding:3px 6px;"><b>3</b></td><td class="num" style="padding:3px 6px;"><b>4</b></td><td class="num" style="padding:3px 6px;"><b>5</b></td><td style="padding:3px 6px;"><b>9+16 = 25 = 5²</b> ✓</td><td class="num" style="padding:3px 6px;"><b>1</b></td></tr>
+      <tr><td class="num" style="padding:3px 6px;"><b>4</b></td><td class="num" style="padding:3px 6px;"><b>3</b></td><td class="num" style="padding:3px 6px;"><b>5</b></td><td style="padding:3px 6px;"><b>16+9 = 25 = 5²</b> ✓</td><td class="num" style="padding:3px 6px;"><b>2</b></td></tr>
+      <tr><td class="num" style="padding:3px 6px;">5</td><td class="num" style="padding:3px 6px;">3</td><td class="num" style="padding:3px 6px;">4</td><td style="padding:3px 6px;">25+9 = 34 ≠ 16</td><td class="num" style="padding:3px 6px;">2</td></tr>
+      <tr class="hit"><td style="padding:3px 6px;">—</td><td style="padding:3px 6px;">—</td><td style="padding:3px 6px;">—</td><td style="padding:3px 6px;">t = 2</td><td style="padding:3px 6px;">t = 2/2 = <b>1</b></td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="right">
+    <div class="card" style="border-left:4px solid var(--amber);">
+      <h3 style="color:var(--amber);">⚠️ 坑 1：INT() 是整除判断</h3>
+      <p style="font-size:14px; line-height:1.8; margin-top:4px;">
+        <code>N / B = INT(N / B)</code> → 判断 <b>N 能不能被 B 整除</b>。<br><br>
+        <code>INT(7/2) = INT(3.5) = 3</code>，<code>7/2 = 3.5</code> → <b>不相等</b>，说明不能整除。<br>
+        <code>INT(8/2) = 4</code>，<code>8/2 = 4</code> → <b>相等</b>，能整除。
+      </p>
+    </div>
+    <div class="card" style="border-left:4px solid var(--green); margin-top:10px;">
+      <h3 style="color:var(--green-deep);">✅ 坑 2：嵌套的顺序</h3>
+      <p style="font-size:14px; line-height:1.8; margin-top:4px;">
+        三层循环 = <b>5 × 5 × 5 = 125</b> 种组合。<br><br>
+        但勾股三元组只有 (3,4,5) 一组，而且 <b>(3,4,5) 和 (4,3,5) 都算</b> → t = 2。<br>
+        所以最后要 <code>t = t / 2</code> 除掉重复。
+      </p>
+    </div>
+    <div class="practice" style="margin-top:10px;">
+      <div class="label">技巧</div>
+      <p style="font-size:14px;">125 种组合不要手算 —— 先<b>猜答案范围</b>，再用排除法验证，效率高得多。</p>
+    </div>
+  </div>
+</section>
+
+<!-- 13 · 真题 2021-2022 -->
+<section class="slide compact compare">
+  <div class="head">
+    <div class="kicker">强化点 4 · 真题</div>
+    <h2>2021-2022 第 5 题 · <span class="highlight">嵌套求约数个数</span></h2>
+    <p class="subtitle">官方答案 D. 27</p>
+  </div>
+  <div class="left">
+        <div class="card q-card">
+      <div class="qa-tag">真题 · 2021-2022</div>
+      <div class="qa-expr">x = 0<br>for a = 1 to 10<br>&nbsp;&nbsp;for b = 1 to a<br>&nbsp;&nbsp;&nbsp;&nbsp;if a % b == 0 then<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x = x + 1<br>&nbsp;&nbsp;&nbsp;&nbsp;end if<br>&nbsp;&nbsp;next b<br>next a<br><b>output x</b></div>
+      <div class="q-note">问：程序输出什么？<br>（A.8 B.10 C.17 D.27 E.55）</div>
+    </div>
+    <div class="card ans-card" style="margin-top:8px;">
+      <details>
+        <summary style="cursor:pointer; padding:9px 14px; font-weight:700; font-size:14px; color:var(--green-deep); background:rgba(22,163,74,.07); border-radius:8px;">
+          展开答案 · Show Answer
+        </summary>
+        <div class="ans-body"><div class="code-block">x = 0
+for a = 1 to 10
+  for b = 1 to a
+    if a % b == 0 then
+      x = x + 1
+    end if
+  next b
+next a
+output x</div>
+              <p style="font-size:14px; line-height:1.8;"><b>答案：27（D）</b></p>
+              <p style="font-size:14px; line-height:1.8;">
+              内层循环 <code>for b = 1 to a</code> 从 1 数到 a，<b>每找到一个 a 的约数就 x 加 1</b>。<br><br>
+              所以 x = 1~10 每个数的约数个数<b>加起来</b>：<br>
+              1(1) + 2(2) + 3(2) + 4(3) + 5(2) + 6(4) + 7(2) + 8(4) + 9(3) + 10(4) = <b>27</b></p>
+              <p style="font-size:13.5px; color:var(--muted); margin-top:6px;">
+              官方解析：<i>"This program counts the number of factors of the numbers from 1 to 10. There are 27 of them."</i></p></div>
+      </details>
+    </div>
+  </div>
+  <div class="right">
+    <div class="card" style="border-left:4px solid var(--purple);">
+      <h3 style="color:var(--purple);">📋 手算追踪</h3>
+      <table class="trace-table" style="font-size:12px; width:100%; border-collapse:collapse;">
+        <tr style="background:rgba(124,58,237,.08);">
+          <th style="padding:3px;">a</th><th style="padding:3px;">b 的范围</th>
+          <th style="padding:3px;">命中次数</th><th style="padding:3px;">x</th><th style="padding:3px;">a 的约数</th>
+        </tr>
+        <tr><td style="padding:3px 5px;">a = 1</td><td style="padding:3px 5px;">b = 1</td><td style="padding:3px 5px;">1 % 1 = 0 ✓</td><td style="padding:3px 5px;">x = 1</td><td style="padding:3px 5px;">约数：1</td></tr><tr><td style="padding:3px 5px;">a = 2</td><td style="padding:3px 5px;">b = 1, 2</td><td style="padding:3px 5px;">2%1=0 ✓  2%2=0 ✓</td><td style="padding:3px 5px;">x = 3</td><td style="padding:3px 5px;">约数：1, 2</td></tr><tr><td style="padding:3px 5px;">a = 3</td><td style="padding:3px 5px;">b = 1, 2, 3</td><td style="padding:3px 5px;">3%1 ✓ 3%2 ✘ 3%3 ✓</td><td style="padding:3px 5px;">x = 5</td><td style="padding:3px 5px;">约数：1, 3</td></tr><tr><td style="padding:3px 5px;">a = 4</td><td style="padding:3px 5px;">b = 1..4</td><td style="padding:3px 5px;">✓ ✘ ✓ ✓</td><td style="padding:3px 5px;">x = 8</td><td style="padding:3px 5px;">约数：1, 2, 4</td></tr><tr><td style="padding:3px 5px;">a = 5</td><td style="padding:3px 5px;">b = 1..5</td><td style="padding:3px 5px;">✓ ✘ ✘ ✘ ✓</td><td style="padding:3px 5px;">x = 10</td><td style="padding:3px 5px;">约数：1, 5</td></tr><tr><td style="padding:3px 5px;">a = 6</td><td style="padding:3px 5px;">b = 1..6</td><td style="padding:3px 5px;">✓ ✓ ✓ ✘ ✓ ✓</td><td style="padding:3px 5px;">x = 14</td><td style="padding:3px 5px;">约数：1, 2, 3, 6</td></tr><tr><td style="padding:3px 5px;">a = 7</td><td style="padding:3px 5px;">b = 1..7</td><td style="padding:3px 5px;">✓ ✘✘✘✘✘ ✓</td><td style="padding:3px 5px;">x = 16</td><td style="padding:3px 5px;">约数：1, 7</td></tr><tr><td style="padding:3px 5px;">a = 8</td><td style="padding:3px 5px;">b = 1..8</td><td style="padding:3px 5px;">✓ ✓ ✓ ✘ ✓ ✘ ✓ ✓</td><td style="padding:3px 5px;">x = 20</td><td style="padding:3px 5px;">约数：1, 2, 4, 8</td></tr><tr><td style="padding:3px 5px;">a = 9</td><td style="padding:3px 5px;">b = 1..9</td><td style="padding:3px 5px;">✓ ✓ ✓ ✘ ✘ ✘ ✓ ✓ ✓</td><td style="padding:3px 5px;">x = 23</td><td style="padding:3px 5px;">约数：1, 3, 9</td></tr><tr class="hit"><td style="padding:3px 5px;">a = 10</td><td style="padding:3px 5px;">b = 1..10</td><td style="padding:3px 5px;">✓ ✓ ✘ ✓ ✘ ✘ ✓ ✘ ✓ ✓</td><td style="padding:3px 5px;">x = 27</td><td style="padding:3px 5px;">约数：1, 2, 5, 10</td></tr>      </table>
+    </div>
+    <div class="card" style="border-left:4px solid var(--amber); margin-top:10px;">
+      <h3 style="color:var(--amber);">⚠️ 干扰项分析</h3>
+      <ul style="font-size:13.5px; line-height:1.8; padding-left:20px; margin-top:4px;">
+        <li><b>A. 8</b> —— 只算到 a = 8 就停了</li>
+        <li><b>B. 10</b> —— 误以为 x = a（每轮加 1 而不是加约数个数）</li>
+        <li><b>C. 17</b> —— 算到 a = 7 的部分和</li>
+        <li><b>E. 55</b> —— 把「约数个数」当成「所有 a 的和」（1+2+…+10 = 55）</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 14 · 真题 2018-2019 -->
+<section class="slide compact compare">
+  <div class="head">
+    <div class="kicker">真题 · 串行循环</div>
+    <h2>2018-2019 第 5 题 · <span class="highlight">4 个循环接力</span></h2>
+    <p class="subtitle">官方答案 12 · 最"长"的一道，但每段都很简单</p>
+  </div>
+  <div class="left">
+        <div class="card q-card">
+      <div class="qa-tag">真题 · 2018-2019</div>
+      <div class="qa-expr">a = 0 : c = 0 : t = 0<br>for i = 1 to 5<br>&nbsp;&nbsp;a = a + i^2<br>next i<br>b = a / 11<br>for j = 2 to 10 step 2<br>&nbsp;&nbsp;c = c + j * b<br>next j<br>d = c / b - a / 11<br>for k = 2 to d<br>&nbsp;&nbsp;if a/k == int(a/k) then t = t + 1<br>&nbsp;&nbsp;if b/k == int(b/k) then t = t + 1<br>&nbsp;&nbsp;if c/k == int(c/k) then t = t + 1<br>&nbsp;&nbsp;if d/k == int(d/k) then t = t + 1<br>next k<br><b>output t</b></div>
+      <div class="q-note">问：程序输出什么？</div>
+    </div>
+    <div class="card ans-card" style="margin-top:8px;">
+      <details>
+        <summary style="cursor:pointer; padding:9px 14px; font-weight:700; font-size:14px; color:var(--green-deep); background:rgba(22,163,74,.07); border-radius:8px;">
+          展开答案 · Show Answer
+        </summary>
+        <div class="ans-body"><div class="code-block">a = 0 : c = 0 : t = 0
+for i = 1 to 5
+  a = a + i ^ 2
+next i
+b = a / 11
+for j = 2 to 10 step 2
+  c = c + j * b
+next j
+d = c / b - a / 11
+for k = 2 to d
+  if a / k == int(a / k) then t = t + 1
+  if b / k == int(b / k) then t = t + 1
+  if c / k == int(c / k) then t = t + 1
+  if d / k == int(d / k) then t = t + 1
+next k
+output t</div>
+              <p style="font-size:14px; line-height:1.8;"><b>答案：12</b></p>
+              <p style="font-size:14px; line-height:1.8;">四个循环<b>接力</b>，每段算出一个中间量给下一段用：</p>
+              <p style="font-size:14px; line-height:1.9;">
+              ① <code>for i = 1 to 5</code>：a = 1+4+9+16+25 = <b>55</b><br>
+              ② <code>b = a / 11</code> → b = <b>5</b><br>
+              ③ <code>for j = 2 to 10 step 2</code>：j = 2,4,6,8,10，c = 5×(2+4+6+8+10) = <b>150</b><br>
+              ④ <code>d = c/b - a/11</code> = 150/5 − 5 = <b>25</b><br>
+              ⑤ <code>for k = 2 to 25</code>：数 55、5、150、25 各有几个约数落在 2~25</p>
+              <p style="font-size:13.5px; color:var(--muted); margin-top:6px;">
+              官方解析原话：<i>"The i loop gives the variable a values of 1, 5, 14, 30, 55… This loop counts the factors of these numbers from 2 to 25. There are 12 factors."</i></p></div>
+      </details>
+    </div>
+  </div>
+  <div class="right">
+    <div class="card" style="border-left:4px solid var(--purple);">
+      <h3 style="color:var(--purple);">📋 第 5 个循环在数什么</h3>
+      <table style="font-size:13px; width:100%; border-collapse:collapse;">
+      <tr style="background:rgba(124,58,237,.08);"><th style="padding:4px 6px; width:20%;">数</th><th style="padding:4px 6px; width:52%;">2~25 之间的约数</th><th style="padding:4px 6px; width:28%;">个数</th></tr>
+      <tr><td style="padding:3px 6px;">a = 55</td><td style="padding:3px 6px;">2, 5, 11</td><td style="padding:3px 6px;">3 个</td></tr>
+      <tr><td style="padding:3px 6px;">b = 5</td><td style="padding:3px 6px;">5</td><td style="padding:3px 6px;">1 个</td></tr>
+      <tr><td style="padding:3px 6px;">c = 150</td><td style="padding:3px 6px;">2, 3, 5, 6, 10, 15, 25</td><td style="padding:3px 6px;">7 个</td></tr>
+      <tr><td style="padding:3px 6px;">d = 25</td><td style="padding:3px 6px;">5, 25</td><td style="padding:3px 6px;">2 个</td></tr>
+      </table>
+      <p style="font-size:14px; line-height:1.8; margin-top:8px;">
+        3 + 1 + 7 + 2 = <b>12</b> ✓
+      </p>
+      <p style="font-size:13.5px; color:var(--muted); margin-top:4px;">
+        注意 <b>k 从 2 开始</b>（不含 1），所以 1 不算约数。
+      </p>
+    </div>
+    <div class="card" style="border-left:4px solid var(--green); margin-top:10px;">
+      <h3 style="color:var(--green-deep);">✅ 解法要点</h3>
+      <ul style="font-size:13.5px; line-height:1.8; padding-left:20px; margin-top:4px;">
+        <li>前 4 段都是<b>纯算术</b>，慢慢算就行</li>
+        <li>第 5 段不用真跑 24 轮 —— <b>直接列约数更快</b></li>
+        <li><code>a/11</code> 写成 <code>a / 11</code>，a = 55 正好整除 → 5</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 15 · 两循环串联（演示） -->
+<section class="slide compact compare">
+  <div class="head">
+    <div class="kicker">强化点 5</div>
+    <h2>两个循环 <span class="highlight">串联筛选</span></h2>
+    <p class="subtitle">陷阱类型 ⑤ · 交集不是并集（2019-2020 真题原形）</p>
+  </div>
+  <div class="left">
+    <div class="code-block">INPUT N
+FOR B = 3 TO N - 1 STEP 2
+  IF N / B = INT(N / B) THEN GOTO notprime
+NEXT B
+FOR I = 1 TO 20
+  IF N == 2 ^ I - 1 THEN
+    PRINT N
+  END IF
+NEXT I
+notprime:
+END</div>
+    <div class="card" style="margin-top:8px; border-left:4px solid var(--purple);">
+      <h3 style="color:var(--purple);">📋 两个循环各筛一遍</h3>
+      <p style="font-size:13.5px; line-height:1.8;">
+        <b>B 循环</b>：从 3 到 N−1 试奇数，找得到能整除 N 的 → N <b>不是质数</b>，跳过<br>
+        <b>I 循环</b>：N = 2<sup>I</sup> − 1 吗？是就 <code>PRINT N</code>
+      </p>
+    </div>
+  </div>
+  <div class="right">
+    <div class="card" style="border-left:4px solid var(--amber);">
+      <h3 style="color:var(--amber);">⚠️ 坑在哪</h3>
+      <p style="font-size:14px; line-height:1.8; margin-top:4px;">
+        两个条件是<b>「且」</b>不是<b>「或」</b>！<br><br>
+        必须<b>既</b>是质数，<b>又</b>是 2<sup>I</sup>−1 才会打印。<br><br>
+        我自己第一次做就把这题算成了 5 个（5, 7, 31, 101, 127）—— 那是「或」。<br>
+        正确答案是 <b>3 个</b>。
+      </p>
+    </div>
+    <div class="card" style="border-left:4px solid var(--green); margin-top:10px;">
+      <h3 style="color:var(--green-deep);">✅ 逐个筛选表</h3>
+      <table class="trace-table" style="font-size:12.5px; width:100%; border-collapse:collapse;">
+        <tr style="background:rgba(124,58,237,.08);">
+          <th style="padding:3px;">N</th><th style="padding:3px;">质数?</th>
+          <th style="padding:3px;">2^I−1?</th><th style="padding:3px;">打印?</th>
+        </tr>
+        <tr><td class="num" style="padding:3px 6px;"><b>5</b></td><td style="padding:3px 6px;">✔</td><td style="padding:3px 6px;">✘</td><td style="padding:3px 6px; font-weight:800; color:var(--muted);">✘</td></tr><tr class="hit"><td class="num" style="padding:3px 6px;"><b>7</b></td><td style="padding:3px 6px;">✔</td><td style="padding:3px 6px;">✔</td><td style="padding:3px 6px; font-weight:800; color:var(--green);">✔</td></tr><tr><td class="num" style="padding:3px 6px;"><b>15</b></td><td style="padding:3px 6px;">✘</td><td style="padding:3px 6px;">✔</td><td style="padding:3px 6px; font-weight:800; color:var(--muted);">✘</td></tr><tr class="hit"><td class="num" style="padding:3px 6px;"><b>31</b></td><td style="padding:3px 6px;">✔</td><td style="padding:3px 6px;">✔</td><td style="padding:3px 6px; font-weight:800; color:var(--green);">✔</td></tr><tr><td class="num" style="padding:3px 6px;"><b>35</b></td><td style="padding:3px 6px;">✘</td><td style="padding:3px 6px;">✘</td><td style="padding:3px 6px; font-weight:800; color:var(--muted);">✘</td></tr><tr><td class="num" style="padding:3px 6px;"><b>63</b></td><td style="padding:3px 6px;">✘</td><td style="padding:3px 6px;">✔</td><td style="padding:3px 6px; font-weight:800; color:var(--muted);">✘</td></tr><tr><td class="num" style="padding:3px 6px;"><b>101</b></td><td style="padding:3px 6px;">✔</td><td style="padding:3px 6px;">✘</td><td style="padding:3px 6px; font-weight:800; color:var(--muted);">✘</td></tr><tr class="hit"><td class="num" style="padding:3px 6px;"><b>127</b></td><td style="padding:3px 6px;">✔</td><td style="padding:3px 6px;">✔</td><td style="padding:3px 6px; font-weight:800; color:var(--green);">✔</td></tr><tr><td class="num" style="padding:3px 6px;"><b>255</b></td><td style="padding:3px 6px;">✘</td><td style="padding:3px 6px;">✔</td><td style="padding:3px 6px; font-weight:800; color:var(--muted);">✘</td></tr><tr><td class="num" style="padding:3px 6px;"><b>1023</b></td><td style="padding:3px 6px;">✘</td><td style="padding:3px 6px;">✔</td><td style="padding:3px 6px; font-weight:800; color:var(--muted);">✘</td></tr>      </table>
+    </div>
+  </div>
+</section>
+
+<!-- 16 · 真题 2019-2020 -->
+<section class="slide compact compare">
+  <div class="head">
+    <div class="kicker">强化点 5 · 真题</div>
+    <h2>2019-2020 第 5 题 · <span class="highlight">梅森质数</span></h2>
+    <p class="subtitle">官方答案 7, 31, 127（多选题）</p>
+  </div>
+  <div class="left">
+        <div class="card q-card">
+      <div class="qa-tag">真题 · 2019-2020</div>
+      <div class="qa-expr">INPUT N<br>FOR B = 3 TO N - 1 STEP 2<br>&nbsp;&nbsp;IF N/B = INT(N/B) THEN GOTO notprime<br>NEXT B<br>FOR I = 1 TO 20<br>&nbsp;&nbsp;IF N == 2^I - 1 THEN<br>&nbsp;&nbsp;&nbsp;&nbsp;PRINT N<br>&nbsp;&nbsp;END IF<br>NEXT I<br>notprime:<br>END</div>
+      <div class="q-note">问：以下哪些输入会被打印？<br>5, 7, 15, 31, 35, 63, 101, 127, 255, 1023</div>
+    </div>
+    <div class="card ans-card" style="margin-top:8px;">
+      <details>
+        <summary style="cursor:pointer; padding:9px 14px; font-weight:700; font-size:14px; color:var(--green-deep); background:rgba(22,163,74,.07); border-radius:8px;">
+          展开答案 · Show Answer
+        </summary>
+        <div class="ans-body"><div class="code-block">INPUT N
+FOR B = 3 TO N - 1 STEP 2
+  IF N / B = INT(N / B) THEN GOTO notprime
+NEXT B
+FOR I = 1 TO 20
+  IF N == 2 ^ I - 1 THEN
+    PRINT N
+  END IF
+NEXT I
+notprime:
+END</div>
+              <p style="font-size:14px; line-height:1.8;"><b>答案：7, 31, 127</b></p>
+              <p style="font-size:14px; line-height:1.8;">
+              第一步（B 循环）筛出<b>质数</b>：5, 7, 31, 101, 127<br>
+              第二步（I 循环）筛出 <b>2<sup>I</sup>−1</b>：7, 15, 31, 63, 127, 255, 1023<br>
+              <b>两者取交集</b> → <b>7, 31, 127</b></p>
+              <p style="font-size:14px; line-height:1.8; margin-top:6px;">
+              官方解析：<i>"This program first checks to see if the inputted number is prime… If it is, it then checks to see if it is one less than a power of 2. There are 3: 7, 31, and 127."</i></p>
+              <p style="font-size:13.5px; color:var(--muted); margin-top:6px;">
+              这种质数叫<b>梅森质数</b>（Mersenne Prime）。</p></div>
+      </details>
+    </div>
+  </div>
+  <div class="right">
+    <div class="card" style="border-left:4px solid var(--purple);">
+      <h3 style="color:var(--purple);">📋 手算筛选</h3>
+      <table class="trace-table" style="font-size:12.5px; width:100%; border-collapse:collapse;">
+        <tr style="background:rgba(124,58,237,.08);">
+          <th style="padding:3px;">N</th><th style="padding:3px;">是质数?</th>
+          <th style="padding:3px;">= 2^I−1?</th><th style="padding:3px;">结论</th>
+        </tr>
+        <tr><td class="num" style="padding:3px 6px;"><b>5</b></td><td style="padding:3px 6px;">✔</td><td style="padding:3px 6px;">✘</td><td style="padding:3px 6px; font-weight:800; color:var(--muted);">✘</td></tr><tr class="hit"><td class="num" style="padding:3px 6px;"><b>7</b></td><td style="padding:3px 6px;">✔</td><td style="padding:3px 6px;">✔</td><td style="padding:3px 6px; font-weight:800; color:var(--green);">✔</td></tr><tr><td class="num" style="padding:3px 6px;"><b>15</b></td><td style="padding:3px 6px;">✘</td><td style="padding:3px 6px;">✔</td><td style="padding:3px 6px; font-weight:800; color:var(--muted);">✘</td></tr><tr class="hit"><td class="num" style="padding:3px 6px;"><b>31</b></td><td style="padding:3px 6px;">✔</td><td style="padding:3px 6px;">✔</td><td style="padding:3px 6px; font-weight:800; color:var(--green);">✔</td></tr><tr><td class="num" style="padding:3px 6px;"><b>35</b></td><td style="padding:3px 6px;">✘</td><td style="padding:3px 6px;">✘</td><td style="padding:3px 6px; font-weight:800; color:var(--muted);">✘</td></tr><tr><td class="num" style="padding:3px 6px;"><b>63</b></td><td style="padding:3px 6px;">✘</td><td style="padding:3px 6px;">✔</td><td style="padding:3px 6px; font-weight:800; color:var(--muted);">✘</td></tr><tr><td class="num" style="padding:3px 6px;"><b>101</b></td><td style="padding:3px 6px;">✔</td><td style="padding:3px 6px;">✘</td><td style="padding:3px 6px; font-weight:800; color:var(--muted);">✘</td></tr><tr class="hit"><td class="num" style="padding:3px 6px;"><b>127</b></td><td style="padding:3px 6px;">✔</td><td style="padding:3px 6px;">✔</td><td style="padding:3px 6px; font-weight:800; color:var(--green);">✔</td></tr><tr><td class="num" style="padding:3px 6px;"><b>255</b></td><td style="padding:3px 6px;">✘</td><td style="padding:3px 6px;">✔</td><td style="padding:3px 6px; font-weight:800; color:var(--muted);">✘</td></tr><tr><td class="num" style="padding:3px 6px;"><b>1023</b></td><td style="padding:3px 6px;">✘</td><td style="padding:3px 6px;">✔</td><td style="padding:3px 6px; font-weight:800; color:var(--muted);">✘</td></tr>      </table>
+      <p style="font-size:13.5px; color:var(--muted); margin-top:6px;">
+        质数 ∩ 梅森数 = <b>7, 31, 127</b>（1023 = 3×341 不是质数，排除）
+      </p>
+    </div>
+    <div class="card" style="border-left:4px solid var(--amber); margin-top:10px;">
+      <h3 style="color:var(--amber);">⚠️ 这题的两个坑</h3>
+      <ul style="font-size:13.5px; line-height:1.8; padding-left:20px; margin-top:4px;">
+        <li><b>「且」写成「或」</b> → 会多选 5 和 101</li>
+        <li><b>2^I−1 看成 2^(I−1)</b> → 会把 15、63、255 也选进来</li>
+      </ul>
+      <p style="font-size:13px; color:var(--muted); margin-top:6px;">
+        👆 这两个坑我都踩过 —— <code>2^I − 1</code> 是「比 2 的幂少 1」，不是「2 的 (I−1) 次方」。
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- 17 · 真题 2024-2025 Q6 -->
+<section class="slide compact compare">
+  <div class="head">
+    <div class="kicker">真题 · 双段累加</div>
+    <h2>2024-2025 第 6 题 · <span class="highlight">两个 FOR 接力</span></h2>
+    <p class="subtitle">官方答案 A. 24</p>
+  </div>
+  <div class="left">
+        <div class="card q-card">
+      <div class="qa-tag">真题 · 2024-2025 Q6</div>
+      <div class="qa-expr">s = 0<br>for y = 2 to 8 step 2<br>&nbsp;&nbsp;s = s + y / 2<br>next y<br>for z = 3 to 1 step -1<br>&nbsp;&nbsp;s = s + z ^ 2<br>next z<br><b>output s</b></div>
+      <div class="q-note">问：程序输出什么？<br>（A.24 B.23 C.22 D.20 E.10）</div>
+    </div>
+    <div class="card ans-card" style="margin-top:8px;">
+      <details>
+        <summary style="cursor:pointer; padding:9px 14px; font-weight:700; font-size:14px; color:var(--green-deep); background:rgba(22,163,74,.07); border-radius:8px;">
+          展开答案 · Show Answer
+        </summary>
+        <div class="ans-body"><div class="code-block">s = 0
+for y = 2 to 8 step 2
+  s = s + y / 2
+next y
+for z = 3 to 1 step -1
+  s = s + z ^ 2
+next z
+output s</div>
+              <p style="font-size:14px; line-height:1.8;"><b>答案：24（A）</b></p>
+              <p style="font-size:14px; line-height:1.8;">
+              第一段 <code>for y = 2 to 8 step 2</code>：y = 2, 4, 6, 8<br>
+              → s = 1 + 2 + 3 + 4 = <b>10</b><br><br>
+              第二段 <code>for z = 3 to 1 step -1</code>：z = 3, 2, 1<br>
+              → s = 10 + 9 + 4 + 1 = <b>24</b></p>
+              <p style="font-size:13.5px; color:var(--muted); margin-top:6px;">
+              官方解析：<i>"This program finds the sum of the numbers generated by the 2 loops."</i></p></div>
+      </details>
+    </div>
+  </div>
+  <div class="right">
+    <div class="card" style="border-left:4px solid var(--purple);">
+      <h3 style="color:var(--purple);">📋 手算追踪</h3>
+      <table class="trace-table" style="font-size:12.5px; width:100%; border-collapse:collapse;">
+        <tr style="background:rgba(124,58,237,.08);">
+          <th class="step">轮次</th><th style="padding:3px;">第一段</th>
+          <th style="padding:3px;">第二段</th><th style="padding:3px;">s</th>
+        </tr>
+        <tr><td class="step">y = 2</td><td style="padding:3px 5px;">s = 0 + 2/2 = 1</td><td style="padding:3px 5px;">—</td><td style="padding:3px 5px;">s = 1</td></tr><tr><td class="step">y = 4</td><td style="padding:3px 5px;">s = 1 + 4/2 = 3</td><td style="padding:3px 5px;">—</td><td style="padding:3px 5px;">s = 3</td></tr><tr><td class="step">y = 6</td><td style="padding:3px 5px;">s = 3 + 6/2 = 6</td><td style="padding:3px 5px;">—</td><td style="padding:3px 5px;">s = 6</td></tr><tr><td class="step">y = 8</td><td style="padding:3px 5px;">s = 6 + 8/2 = 10</td><td style="padding:3px 5px;">—</td><td style="padding:3px 5px;">s = 10</td></tr><tr><td class="step">z = 3</td><td style="padding:3px 5px;">—</td><td style="padding:3px 5px;">s = 10 + 3² = 19</td><td style="padding:3px 5px;">s = 19</td></tr><tr><td class="step">z = 2</td><td style="padding:3px 5px;">—</td><td style="padding:3px 5px;">s = 19 + 2² = 23</td><td style="padding:3px 5px;">s = 23</td></tr><tr><td class="step">z = 1</td><td style="padding:3px 5px;">—</td><td style="padding:3px 5px;">s = 23 + 1² = 24</td><td style="padding:3px 5px;">s = 24</td></tr><tr class="hit"><td class="step">output</td><td style="padding:3px 5px;">—</td><td style="padding:3px 5px;">—</td><td style="padding:3px 5px;">输出 24</td></tr>      </table>
+    </div>
+    <div class="card" style="border-left:4px solid var(--green); margin-top:10px;">
+      <h3 style="color:var(--green-deep);">✅ 关键</h3>
+      <p style="font-size:14px; line-height:1.8; margin-top:4px;">
+        <code>step -1</code> 从 3 往下走到 1，<b>走 3 次</b>（3, 2, 1），不能漏掉 z = 1。<br><br>
+        漏掉 z = 1 → 24 − 1 = 23（就是选项 B）！
+      </p>
+    </div>
+    <div class="card" style="border-left:4px solid var(--amber); margin-top:10px;">
+      <h3 style="color:var(--amber);">⚠️ 干扰项</h3>
+      <ul style="font-size:13.5px; line-height:1.8; padding-left:20px; margin-top:4px;">
+        <li><b>B. 23</b> —— 第二段漏了 z = 1</li>
+        <li><b>C. 22</b> —— 两处都漏</li>
+        <li><b>D. 20</b> —— 只算了第一段（10）和 10？</li>
+        <li><b>E. 10</b> —— 只算了第一段</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 18 · 真题 2015-2016 -->
+<section class="slide compact compare">
+  <div class="head">
+    <div class="kicker">真题 · 三循环计数</div>
+    <h2>2015-2016 第 5 题 · <span class="highlight">三个循环各数一半</span></h2>
+    <p class="subtitle">官方答案 36, 89 · 唯一一个输出两个数的</p>
+  </div>
+  <div class="left">
+        <div class="card q-card">
+      <div class="qa-tag">真题 · 2015-2016</div>
+      <div class="qa-expr">C = 0 : S = 0<br>FOR I = 1 TO 50<br>&nbsp;&nbsp;IF I/2 = INT(I/2) THEN C = C + 1 ELSE S = S + 1<br>NEXT I<br>FOR K = 1 TO 50<br>&nbsp;&nbsp;IF (K/3 = INT(K/3)) AND (K/2 &lt;&gt; INT(K/2))<br>&nbsp;&nbsp;THEN C = C + 1 ELSE S = S + 1<br>NEXT K<br>FOR J = 1 TO 50 STEP 2<br>&nbsp;&nbsp;IF (J/5 = INT(J/5)) AND (J/3 &lt;&gt; INT(J/3))<br>&nbsp;&nbsp;THEN C = C + 1 ELSE S = S + 1<br>NEXT J<br><b>PRINT C, S</b></div>
+      <div class="q-note">问：程序打印什么？（两个数，用逗号分隔）</div>
+    </div>
+    <div class="card ans-card" style="margin-top:8px;">
+      <details>
+        <summary style="cursor:pointer; padding:9px 14px; font-weight:700; font-size:14px; color:var(--green-deep); background:rgba(22,163,74,.07); border-radius:8px;">
+          展开答案 · Show Answer
+        </summary>
+        <div class="ans-body"><div class="code-block">C = 0 : S = 0
+FOR I = 1 TO 50
+  IF I/2 = INT(I/2) THEN C = C + 1 ELSE S = S + 1
+NEXT I
+FOR K = 1 TO 50
+  IF (K/3 = INT(K/3)) AND (K/2 <> INT(K/2))
+  THEN C = C + 1 ELSE S = S + 1
+NEXT K
+FOR J = 1 TO 50 STEP 2
+  IF (J/5 = INT(J/5)) AND (J/3 <> INT(J/3))
+  THEN C = C + 1 ELSE S = S + 1
+NEXT J
+PRINT C, S</div>
+              <p style="font-size:14px; line-height:1.8;"><b>答案：36, 89</b></p>
+              <p style="font-size:14px; line-height:1.8;">
+              三个循环一共检查了 50 + 50 + 25 = <b>125</b> 个数<br>
+              每个数要么计入 C（能被整除），要么计入 S（不能）<br>
+              所以 <b>C + S = 125</b></p>
+              <p style="font-size:14px; line-height:1.85;">
+              ① C 数<b>2 的倍数</b>（1~50 共 25 个）→ C = 25<br>
+              ② C 再加<b>3 的倍数但不是 2 的倍数</b>：3, 9, 15, 21, 27, 33, 39, 45（共 8 个）→ C = 33<br>
+              ③ C 再加<b>5 的倍数但不是 3 的倍数</b>（且是奇数）：5, 25, 35（共 3 个）→ C = <b>36</b><br>
+              S = 125 − 36 = <b>89</b></p>
+              <p style="font-size:13.5px; color:var(--muted); margin-top:6px;">
+              官方解析：<i>"This program counts the integers from 1 to 50 inclusive that are divisible by 2, 3 or 5. There are 36 such integers. S counts the ones that are not, which is 89 since 125 integers were checked in the three loops."</i></p></div>
+      </details>
+    </div>
+  </div>
+  <div class="right">
+    <div class="card" style="border-left:4px solid var(--purple);">
+      <h3 style="color:var(--purple);">📋 三个循环各数了什么</h3>
+      <table class="trace-table" style="font-size:13px; width:100%; border-collapse:collapse;">
+      <tr style="background:rgba(124,58,237,.08);"><th style="padding:4px 6px; width:10%;">循环</th><th style="padding:4px 6px; width:18%;">范围</th><th style="padding:4px 6px; width:40%;">条件</th><th style="padding:4px 6px; width:12%;">个数</th><th style="padding:4px 6px; width:16%;">C 累计</th></tr>
+      <tr><td style="padding:3px 6px;">① I</td><td style="padding:3px 6px;">1~50</td><td style="padding:3px 6px;">I/2 = INT(I/2)（偶数）</td><td class="num" style="padding:3px 6px;">25</td><td class="num" style="padding:3px 6px;">25</td></tr>
+      <tr><td style="padding:3px 6px;">② K</td><td style="padding:3px 6px;">1~50</td><td style="padding:3px 6px;">3 的倍数 且 不是 2 的倍数</td><td class="num" style="padding:3px 6px;">8</td><td class="num" style="padding:3px 6px;">33</td></tr>
+      <tr class="hit"><td style="padding:3px 6px;">③ J</td><td style="padding:3px 6px;">1~50 step 2</td><td style="padding:3px 6px;">5 的倍数 且 不是 3 的倍数</td><td class="num" style="padding:3px 6px;">3</td><td class="num" style="padding:3px 6px;"><b>36</b></td></tr>
+      </table>
+    </div>
+    <div class="card" style="border-left:4px solid var(--green); margin-top:10px;">
+      <h3 style="color:var(--green-deep);">✅ 神算技巧</h3>
+      <p style="font-size:14px; line-height:1.8; margin-top:4px;">
+        不用真去数 125 个数！<br><br>
+        ① 三个循环一共检查 <b>125</b> 个（50+50+25）<br>
+        ② 每个数<b>必然</b>落进 C 或 S 之一 → <b>C + S = 125</b><br>
+        ③ 只要算出 C，S = 125 − C 就有了
+      </p>
+    </div>
+    <div class="card" style="border-left:4px solid var(--amber); margin-top:10px;">
+      <h3 style="color:var(--amber);">⚠️ 注意</h3>
+      <p style="font-size:13.5px; line-height:1.8; margin-top:4px;">
+        第 ③ 个循环是 <code>STEP 2</code> —— 只看<b>奇数</b>，所以只有 25 个数，不是 50 个。
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- 19 · 9 年题型分布 -->
+<section class="slide ">
+  <div class="left">
+    <div class="kicker">命题规律</div>
+    <h2>9 年真题 <span class="highlight">题型分布</span></h2>
+    <p class="subtitle">循环追踪题固定在第 5 题，9 年 9 道题的类型分布</p>
+    <div class="card" style="border-left:4px solid var(--purple); margin-top:12px;">
+      <h3 style="color:var(--purple);">📊 全表</h3>
+      <table style="font-size:13px; width:100%; border-collapse:collapse; margin-top:6px;">
+        <tr style="background:rgba(124,58,237,.08);">
+          <th style="padding:4px;">年份</th><th style="padding:4px;">题型</th><th style="padding:4px;">结构</th><th style="padding:4px;">答案</th>
+        </tr>
+        <tr><td style="padding:4px;">15-16</td><td style="padding:4px;">三循环计数</td><td style="padding:4px;">串行 × 3</td><td style="padding:4px;">36, 89</td></tr>
+        <tr style="background:rgba(22,163,74,.06);"><td style="padding:4px;"><b>16-17</b></td><td style="padding:4px;"><b>勾股三元组</b></td><td style="padding:4px;"><b>三重嵌套</b></td><td style="padding:4px;"><b>1</b></td></tr>
+        <tr><td style="padding:4px;">18-19</td><td style="padding:4px;">四循环接力</td><td style="padding:4px;">串行 × 4</td><td style="padding:4px;">12</td></tr>
+        <tr style="background:rgba(22,163,74,.06);"><td style="padding:4px;"><b>19-20</b></td><td style="padding:4px;"><b>梅森质数</b></td><td style="padding:4px;"><b>两循环筛</b></td><td style="padding:4px;"><b>7, 31, 127</b></td></tr>
+        <tr><td style="padding:4px;">21-22</td><td style="padding:4px;">约数个数</td><td style="padding:4px;">嵌套 × 2</td><td style="padding:4px;">27</td></tr>
+        <tr style="background:rgba(22,163,74,.06);"><td style="padding:4px;"><b>22-23</b></td><td style="padding:4px;"><b>复利</b></td><td style="padding:4px;"><b>单循环自增</b></td><td style="padding:4px;"><b>331</b></td></tr>
+        <tr><td style="padding:4px;">23-24</td><td style="padding:4px;">翻倍累积</td><td style="padding:4px;">WHILE</td><td style="padding:4px;">10</td></tr>
+        <tr style="background:rgba(22,163,74,.06);"><td style="padding:4px;"><b>24-25</b></td><td style="padding:4px;"><b>辗转相除</b></td><td style="padding:4px;"><b>WHILE 变量交换</b></td><td style="padding:4px;"><b>10</b></td></tr>
+        <tr><td style="padding:4px;">24-25</td><td style="padding:4px;">双段累加</td><td style="padding:4px;">FOR × 2</td><td style="padding:4px;">24</td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="right">
+    <div class="card" style="border-left:4px solid var(--green);">
+      <h3 style="color:var(--green-deep);">🎯 考点频次</h3>
+      <table style="font-size:13px; width:100%; border-collapse:collapse; margin-top:6px;">
+        <tr style="background:rgba(22,163,74,.1);"><th style="padding:4px;">考点</th><th style="padding:4px;">出现</th></tr>
+        <tr><td style="padding:4px;">FOR 循环</td><td style="padding:4px;"><b>7 / 9</b></td></tr>
+        <tr><td style="padding:4px;">整除 / 取模判断（INT / %）</td><td style="padding:4px;"><b>6 / 9</b></td></tr>
+        <tr><td style="padding:4px;">IF 条件分支</td><td style="padding:4px;"><b>5 / 9</b></td></tr>
+        <tr><td style="padding:4px;">嵌套循环</td><td style="padding:4px;"><b>2 / 9</b></td></tr>
+        <tr><td style="padding:4px;">WHILE 循环</td><td style="padding:4px;"><b>2 / 9</b></td></tr>
+        <tr><td style="padding:4px;">STEP 步长</td><td style="padding:4px;"><b>3 / 9</b></td></tr>
+        <tr><td style="padding:4px;">循环体改写自身变量</td><td style="padding:4px;"><b>3 / 9</b></td></tr>
+        <tr><td style="padding:4px;">输出 2 个数 / 多选</td><td style="padding:4px;"><b>2 / 9</b></td></tr>
+        <tr><td style="padding:4px;">浮点数</td><td style="padding:4px;"><b>1 / 9</b></td></tr>
+      </table>
+    </div>
+    <div class="card" style="border-left:4px solid var(--amber); margin-top:12px;">
+      <h3 style="color:var(--amber);">💡 结论</h3>
+      <p style="font-size:14px; line-height:1.8; margin-top:4px;">
+        <b>FOR 是绝对主力</b>（7/9），<b>整除判断是万能考点</b>（6/9）。<br><br>
+        只要这两样练熟，循环追踪题<b>至少能拿一半分</b>。<br>
+        WHILE 只考了 2 次，但<b>每次都是坑</b>（变量交换 / 退出时机）。
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- 20 · 6 大陷阱 -->
+<section class="slide ">
+  <div class="left">
+    <div class="kicker">易错点</div>
+    <h2>6 大 <span class="highlight">陷阱</span></h2>
+    <p class="subtitle">这 6 条覆盖了 9 年真题的全部失分点</p>
+    <div class="card" style="border-left:4px solid var(--red); margin-top:12px;">
+      <h3 style="color:var(--red);">🚨 陷阱清单</h3>
+      <table style="font-size:13px; width:100%; border-collapse:collapse; margin-top:6px;">
+        <tr style="background:rgba(220,38,38,.08);">
+          <th style="padding:4px;">#</th><th style="padding:4px;">陷阱</th><th style="padding:4px;">真题</th><th style="padding:4px;">正解</th>
+        </tr>
+        <tr><td style="padding:4px;"><b>1</b></td><td style="padding:4px;">循环变量被循环体改写</td><td style="padding:4px;">24-25</td><td style="padding:4px;">每行都更新后再用</td></tr>
+        <tr style="background:rgba(220,38,38,.04);"><td style="padding:4px;"><b>2</b></td><td style="padding:4px;"><code>INT()</code> 看成四舍五入</td><td style="padding:4px;">全部</td><td style="padding:4px;">向下取整</td></tr>
+        <tr><td style="padding:4px;"><b>3</b></td><td style="padding:4px;">WHILE 条件一开始就不成立</td><td style="padding:4px;">23-24</td><td style="padding:4px;">先判再进</td></tr>
+        <tr style="background:rgba(220,38,38,.04);"><td style="padding:4px;"><b>4</b></td><td style="padding:4px;">STEP −1 漏掉最后一个</td><td style="padding:4px;">24-25</td><td style="padding:4px;">数清走几次</td></tr>
+        <tr><td style="padding:4px;"><b>5</b></td><td style="padding:4px;">两循环串联写成「或」</td><td style="padding:4px;">19-20</td><td style="padding:4px;">取交集</td></tr>
+        <tr style="background:rgba(220,38,38,.04);"><td style="padding:4px;"><b>6</b></td><td style="padding:4px;">累加前忘了存初始快照</td><td style="padding:4px;">22-23</td><td style="padding:4px;">先存再算</td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="right">
+    <div class="card" style="border-left:4px solid var(--purple);">
+      <h3 style="color:var(--purple);">🛡️ 考场自检清单</h3>
+      <ol style="font-size:14px; line-height:1.9; padding-left:20px; margin-top:4px;">
+        <li>循环<b>跑几次</b>？先算出来</li>
+        <li>循环体里<b>哪些变量会变</b>？列全</li>
+        <li>每写一行，<b>立刻更新</b>追踪表</li>
+        <li>最后问：<b>要输出的是哪个变量</b>？它最后一行是多少？</li>
+      </ol>
+    </div>
+    <div class="card" style="border-left:4px solid var(--green); margin-top:12px;">
+      <h3 style="color:var(--green-deep);">⏱️ 时间分配建议</h3>
+      <p style="font-size:14px; line-height:1.85; margin-top:4px;">
+        这题建议用 <b>5~7 分钟</b>（共 30 分钟 / 5 题）。<br><br>
+        <b>超过 8 分钟还没思路 → 跳过</b>，先把其他 4 题做完 —— 循环追踪是最容易「钻牛角尖」失分的题。
+      </p>
+    </div>
+    <div class="card" style="border-left:4px solid var(--amber); margin-top:12px;">
+      <h3 style="color:var(--amber);">📌 历年答案已核对</h3>
+      <p style="font-size:13.5px; line-height:1.8; margin-top:4px;">
+        本课 9 道真题的答案<b>全部独立验算过</b>，与官方答案 100% 一致 —— 包括 2015-2016 的两个数输出和 2019-2020 的多选题。
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- 21 · 方法回顾 -->
+<section class="slide ">
+  <div class="left">
+    <div class="kicker">方法回顾</div>
+    <h2>一张图 <span class="highlight">带走</span></h2>
+    <p class="subtitle">循环追踪的通用流程</p>
+    <div class="card" style="border-left:4px solid var(--purple); margin-top:12px;">
+      <h3 style="color:var(--purple);">🔁 4 步流程</h3>
+      <div class="code-block" style="font-size:13.5px;">① 读循环头 → 算出跑几次 + 走哪些值
+② 圈出循环体里会被改写的变量
+③ 画追踪表，一行一行滚
+④ 定位输出变量，取最后一行的值</div>
+      <p style="font-size:13.5px; color:var(--muted); margin-top:8px;">
+        ② 这一步是 L3 没强调、L8 最重要的一步 —— <b>循环体改写的东西才是坑</b>。
+      </p>
+    </div>
+    <div class="card" style="border-left:4px solid var(--green); margin-top:12px;">
+      <h3 style="color:var(--green-deep);">⚡ 三个秒算技巧</h3>
+      <ul style="font-size:13.5px; line-height:1.85; padding-left:20px; margin-top:4px;">
+        <li><b>次数</b> = ⌊(终−起)/步⌋ + 1</li>
+        <li><b>总数守恒</b>：每个数必落一边 → C + S = 总数（2015-16）</li>
+        <li><b>整除判断</b>：<code>N/B = INT(N/B)</code> ⇔ 能整除</li>
+      </ul>
+    </div>
+  </div>
+  <div class="right">
+    <div class="card" style="border-left:4px solid var(--blue);">
+      <h3 style="color:var(--blue);">📚 L8 补上了什么</h3>
+      <table style="font-size:13px; width:100%; border-collapse:collapse; margin-top:6px;">
+        <tr style="background:rgba(59,130,246,.08);">
+          <th style="padding:4px;">L3 教的</th><th style="padding:4px;">L8 补的</th>
+        </tr>
+        <tr><td style="padding:4px;">画追踪表</td><td style="padding:4px;"><b>变量被改写时怎么记</b></td></tr>
+        <tr style="background:rgba(59,130,246,.04);"><td style="padding:4px;">FOR / WHILE 基础</td><td style="padding:4px;"><b>WHILE 的三种退出情形</b></td></tr>
+        <tr><td style="padding:4px;">嵌套循环</td><td style="padding:4px;"><b>嵌套 + 整除判断</b></td></tr>
+        <tr style="background:rgba(59,130,246,.04);"><td style="padding:4px;">数组 / 字符串追踪</td><td style="padding:4px;"><b>两循环取交集</b></td></tr>
+        <tr><td style="padding:4px;">分支追踪</td><td style="padding:4px;"><b>循环内改计数器自身</b></td></tr>
+      </table>
+    </div>
+    <div class="card" style="border-left:4px solid var(--amber); margin-top:12px;">
+      <h3 style="color:var(--amber);">🎯 达标标准</h3>
+      <p style="font-size:14px; line-height:1.85; margin-top:4px;">
+        看到循环追踪题，能做到：
+      </p>
+      <ul style="font-size:13.5px; line-height:1.85; padding-left:20px; margin-top:4px;">
+        <li><b>10 秒内</b>算出循环跑几次</li>
+        <li><b>2 分钟内</b>画出追踪表</li>
+        <li><b>5 分钟内</b>得出答案</li>
+      </ul>
+      <p style="font-size:13.5px; color:var(--muted); margin-top:6px;">
+        达不到就去做课后作业里的 8 道真题。
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- 22 · L9 预告 + 收尾 -->
+<section class="slide title-slide">
+  <div class="left">
+    <div class="kicker">下一节 · L9</div>
+    <h1>第二轮<span class="highlight">真题专项</span></h1>
+    <p class="subtitle">整节课做题 · 前缀后缀 + 位运算 + 循环追踪 全部混合</p>
+    <p style="margin-top:24px; padding:16px; background:rgba(124,58,237,.06); border-left:4px solid var(--purple); border-radius:8px; font-size:15px; line-height:1.8;">
+      <b>到目前为止</b><br>
+      L6 ✅ 前缀/中缀/后缀表达式　·　L7 ✅ 比特位操作　·　<b>L8 ✅ 循环追踪</b><br>
+      <span style="color:var(--muted);">第二轮三个知识点<b>全部讲完</b>了。</span>
+    </p>
+    <p style="margin-top:14px; padding:16px; background:rgba(22,163,74,.06); border-left:4px solid var(--green); border-radius:8px; font-size:15px; line-height:1.8;">
+      <b>L9 会做什么</b><br>
+      · 整节课做 <b>6 套</b>第二轮真题（每套 30 分钟 / 6 题）<br>
+      · 三个知识点<b>打乱混编</b>，不再是「一课一主题」<br>
+      · 每道题讲评时标出<b>这是哪个知识点的哪个坑</b>
+    </p>
+    <p style="margin-top:14px; font-size:15px; color:var(--muted);">
+      课后作业已经放在首页「课后作业」栏 —— 8 道真题 + 4 道变式练习。
+    </p>
+  </div>
+  <div class="right">
+    <div class="card" style="border-left:4px solid var(--purple);">
+      <h3 style="color:var(--purple);">🗺️ 第二轮进度</h3>
+      <table style="font-size:14px; width:100%; border-collapse:collapse; margin-top:6px;">
+        <tr style="background:rgba(124,58,237,.08);"><th style="padding:6px;">课次</th><th style="padding:6px;">主题</th><th style="padding:6px;">状态</th></tr>
+        <tr><td style="padding:6px;">L6</td><td style="padding:6px;">前缀/中缀/后缀表达式</td><td style="padding:6px;">✅ 已讲</td></tr>
+        <tr><td style="padding:6px;">L7</td><td style="padding:6px;">比特位操作</td><td style="padding:6px;">✅ 已讲</td></tr>
+        <tr style="background:rgba(22,163,74,.08);"><td style="padding:6px;"><b>L8</b></td><td style="padding:6px;"><b>循环追踪</b></td><td style="padding:6px;"><b>✅ 今天</b></td></tr>
+        <tr><td style="padding:6px;">L9</td><td style="padding:6px;">第二轮真题专项</td><td style="padding:6px;">→ 下一节</td></tr>
+        <tr><td style="padding:6px;">L10</td><td style="padding:6px;">第二轮模拟考</td><td style="padding:6px;">待上</td></tr>
+      </table>
+    </div>
+    <div class="practice" style="margin-top:14px;">
+      <div class="label">今天回去要做的</div>
+      <p style="font-size:15px; line-height:1.8;">
+        1. 课后作业：<b>8 道真题 + 4 道变式</b>，限时 45 分钟<br>
+        2. 把错的那几道<b>重画一遍追踪表</b><br>
+        3. 记忆卡片 8 张，明天早读背一遍
+      </p>
+    </div>
+  </div>
+</section>
+
+<div class="nav">
+  <a class="home-link secondary" href="index.html">📚 目录</a>
+  <button class="secondary" onclick="prev()">← 上页</button>
+  <span class="counter"><span id="cur">1</span> / <span id="total">22</span></span>
+  <div class="progress-bar"><span id="bar"></span></div>
+  <button onclick="next()">下页 →</button>
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  document.getElementById('total').textContent = total;
+  let idx = 0;
+  function show(i) {
+    if (i < 0) i = 0;
+    if (i >= total) i = total - 1;
+    slides.forEach(s => s.classList.remove('active'));
+    slides[i].classList.add('active');
+    document.getElementById('cur').textContent = i + 1;
+    document.getElementById('bar').style.width = ((i + 1) / total * 100) + '%';
+    idx = i;
+    slides[i].scrollTop = 0;
+  }
+  function next() { show(idx + 1); }
+  function prev() { show(idx - 1); }
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'Enter') { e.preventDefault(); next(); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); prev(); }
+  });
+  let tx = 0;
+  document.addEventListener('touchstart', e => { tx = e.touches[0].clientX; });
+  document.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - tx;
+    if (Math.abs(dx) > 50) { if (dx < 0) next(); else prev(); }
+  });
+</script>
+</body>
+</html>
