@@ -2162,19 +2162,109 @@ B(2) → [6, 2, 2]
     </details>
 
     <details class="hw-flip">
-      <summary>🔀 日常练习 C · 综合练习（待补充）</summary>
+      <summary>🔀 日常练习 C · 综合练习（11 题 · 建议 15 分钟）</summary>
       <div class="hw-body">
-        <p style="font-size:14px; line-height:1.8;">
-          <b>状态</b>：<span style="color:var(--amber); font-weight:700;">待补充</span><br><br>
-          <b>计划</b>：等 L7 比特位操作（位运算与进制的结合）学完后，把<b>进制 + 表达式 + 位运算</b>三个知识点混编出 5～8 道综合计算题，作为第二轮的总复习。<br><br>
-          <b>在那之前</b>：先把日常练习 A（进制）和 B（表达式）两组做熟，两组都是纯计算，不需要选择题技巧。<br><br>
-          <b>做完 A、B 两组之后的自检标准</b>：
-          <ul style="margin:8px 0 0 20px; padding:0;">
-            <li>进制互转：十进制 ↔ 二/八/十六，10 秒内出答案</li>
-            <li>进制运算：十六进制加减不把 A～F 写错</li>
-            <li>表达式：中缀转后缀/前缀 5 步内写完</li>
-            <li>表达式求值：后缀先弹右、前缀先弹左不搞混</li>
-          </ul>
+        <p style="font-size:14px; line-height:1.7;">
+          <b>建议用时</b>：15 分钟以内<br>
+          <b>说明</b>：本组把<b>进制</b>和<b>表达式</b>两个知识点混在一起考 —— 不给选项，直接写答案；每题写完点「展开答案」核对。除法都能整除。
+        </p>
+
+        <p style="font-size:13.5px; color:var(--muted); margin:10px 0 4px;">
+          <b>本组考点分布</b>：① 混合进制运算 4 题 · ② 表达式求值再转进制 4 题 · ③ 比较 / 统计 / 转换 3 题<br>
+          其中 <b>6 题同时用到进制和表达式</b>，是第二轮知识点交叉的检验。
+        </p>
+
+        <ol class="hw-quiz">
+          <li>
+            <p class="hw-q"><b>1.</b> <b>混合进制的算术运算</b> —— 先把每个数转成十进制再算：<br><code style="font-size:15px;">(1011₂ + 12₈) × 2 = ?<sub>10</sub></code></p>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>答案：42</b><br><code>1011₂</code> = 8+2+1 = 11　　<code>12₈</code> = 8+2 = 10<br>(11 + 10) × 2 = 21 × 2 = <b>42</b><br><span style="color:var(--muted);">思路：跨进制的加减乘除，<b>先全部转十进制</b>最保险，不要试图在混合进制上直接竖式。</span></div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q"><b>2.</b> <b>十六进制 + 八进制混算</b>：<br><code style="font-size:15px;">(2A₁₆ + 13₈) × 2 = ?<sub>10</sub></code></p>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>答案：106</b><br><code>2A₁₆</code> = 2×16 + 10 = 42　　<code>13₈</code> = 8+3 = 11<br>(42 + 11) × 2 = 53 × 2 = <b>106</b><br><span style="color:var(--muted);">易错：<code>A</code>=10、<code>B</code>=11、<code>C</code>=12… 别把 <code>A</code> 当成 10 以外的值。</span></div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q"><b>3.</b> <b>三种进制混在一道题里</b>：<br><code style="font-size:15px;">(110₂ + 5) × (A₁₆ − 7) = ?<sub>2</sub></code></p>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>答案：<code>100001₂</code></b><br><code>110₂</code> = 4+2 = 6　　<code>A₁₆</code> = 10<br>(6 + 5) × (10 − 7) = 11 × 3 = 33<br>33 转二进制：32+1 → <code>100001₂</code><br>验算：<code>100001₂</code> = 32+1 = 33 ✓<br><span style="color:var(--muted);">提示：33 的二进制可以直接写 —— 32=2⁵，所以 33 = 2⁵+1 = <code>100001</code>。</span></div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q"><b>4.</b> <b>进制 + 表达式混合</b>：<br><code style="font-size:15px;">(F₁₆ + 11₂) × (7 − 3) = ?<sub>10</sub></code></p>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>答案：72</b><br><code>F₁₆</code> = 15　　<code>11₂</code> = 2+1 = 3<br>(15 + 3) × (7 − 3) = 18 × 4 = <b>72</b><br><span style="color:var(--muted);">这题考两件事：字母位转十进制、括号内先算。</span></div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q"><b>5.</b> <b>表达式求值 → 转二进制</b>：<br><code style="font-size:15px;">3 + 4 × 2 − 10 ÷ 5 = ?<sub>2</sub></code></p>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>答案：<code>1001₂</code></b><br>按优先级：<code>3 + (4×2) − (10÷5)</code> = 3 + 8 − 2 = <b>9</b><br>9 转二进制：8+1 → <code>1001₂</code><br>验算：<code>1001₂</code> = 8+1 = 9 ✓<br><span style="color:var(--muted);">易错：<code>×</code> 和 <code>÷</code> 优先级高于 <code>+</code> 和 <code>−</code>；别从左往右硬算。</span></div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q"><b>6.</b> <b>后缀求值 → 转八进制</b>：<br><code style="font-size:15px;">7 2 + 3 4 * +</code> = ?<sub>8</sub></p>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>答案：<code>25₈</code></b><br>栈模拟：<br><code style="display:block; white-space:pre;">7 2   → [7, 2]
++    → 7+2=9     [9]
+3 4   → [9, 3, 4]
+*    → 3×4=12    [9, 12]
++    → 9+12=21   [21]</code>21 转八进制：21 ÷ 8 = 2 余 5 → <code>25₈</code><br>验算：<code>25₈</code> = 16+5 = 21 ✓<br><span style="color:var(--muted);">易错：后缀求值<b>先弹右操作数</b>（<code>3 4 *</code> 是 3×4；这题乘法和减法结果一样，但换成减法就会错）。</span></div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q"><b>7.</b> <b>前缀求值 → 转十六进制</b>：<br><code style="font-size:15px;">+ * 3 4 + 2 5</code> = ?<sub>16</sub></p>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>答案：<code>13₁₆</code></b><br>前缀要<b>从右往左</b>读，运算符<b>先弹左操作数</b>：<br><code style="display:block; white-space:pre;">逆序读：5 2 + 4 3 * +
+
+5    → [5]
+2    → [5, 2]
++    → 弹2和5 → 2+5=7    [7]
+4    → [7, 4]
+3    → [7, 4, 3]
+*    → 弹3和4 → 3×4=12   [7, 12]
++    → 弹12和7 → 12+7=19 [19]</code>19 转十六进制：19 ÷ 16 = 1 余 3 → <code>13₁₆</code><br>验算：<code>13₁₆</code> = 16+3 = 19 ✓<br><span style="color:var(--muted);">易错：前缀<b>先弹左</b>，后缀<b>先弹右</b> —— 这是前缀后缀题唯一的区别，务必记牢。</span></div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q"><b>8.</b> <b>后缀求值（含乘方）→ 转二进制</b>：<br><code style="font-size:15px;">5 1 + 2 3 ^ *</code> = ?<sub>2</sub></p>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>答案：<code>110000₂</code></b><br><code style="display:block; white-space:pre;">5 1   → [5, 1]
++    → 5+1=6      [6]
+2 3   → [6, 2, 3]
+^    → 弹3和2 → 2³=8   [6, 8]
+*    → 弹8和6 → 6×8=48  [48]</code>48 转二进制：48 = 32 + 16 → <code>110000₂</code><br>验算：<code>110000₂</code> = 32+16 = 48 ✓<br><span style="color:var(--muted);">易错：<code>^</code> 是<b>乘方</b>不是异或；<code>2 3 ^</code> = 2³ = 8。</span></div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q"><b>9.</b> <b>跨进制比大小</b> —— 下面四个数中最大的是哪一个？<br><code style="font-size:15px;">11001₂　　23₈　　1A₁₆　　27₁₀</code></p>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>答案：<code>27₁₀</code></b><br>全部转成十进制再比：<br><code>11001₂</code> = 16+8+1 = <b>25</b><br><code>23₈</code> = 16+3 = <b>19</b><br><code>1A₁₆</code> = 16+10 = <b>26</b><br><code>27₁₀</code> = <b>27</b><br>最大是 27 → <code>27₁₀</code><br><span style="color:var(--muted);">易错：四个数挨得都很近（25 / 19 / 26 / 27），<b>必须逐个转换再比</b>，凭「看起来像」一定会错。</span></div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q"><b>10.</b> <b>表达式 → 转二进制 → 数 1 的个数</b>：<br><code style="font-size:15px;">7 + 4 × 5 − 12 ÷ 3</code> 的结果转成二进制后，有几个 <code>1</code>？</p>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>答案：4</b><br>先求值：<code>7 + (4×5) − (12÷3)</code> = 7 + 20 − 4 = <b>23</b><br>23 转二进制：23 = 16+4+2+1 → <code>10111₂</code><br>数 1 的个数：<code>1</code>、<code>0</code>、<code>1</code>、<code>1</code>、<code>1</code> → <b>4 个</b><br><span style="color:var(--muted);">这题把 A 组第 10 题（数 1 的个数）的技巧搬过来了：<b>23 = 16+7 = 16+4+2+1</b>，直接拆比逐位转快。</span></div>
+            </details>
+          </li>
+          <li>
+            <p class="hw-q"><b>11.</b> <b>中缀转后缀</b>：<br><code style="font-size:15px;">1 + 10 × 2 ÷ 4</code> → 后缀表达式</p>
+            <details class="hw-ans"><summary>展开答案 · Show Answer</summary>
+              <div class="hw-ans-body"><b>答案：<code>1 10 2 * 4 / +</code></b><br>先按优先级拆：<code>1 + (10×2÷4)</code><br><code style="display:block; white-space:pre;">10 2 *  →  4 /  →  1 [前块] [后块] +</code>拼起来：<code>1 10 2 * 4 / +</code><br>验算：10×2=20，20÷4=5，1+5=6；中缀算也得 6 ✓<br><span style="color:var(--muted);">易错：<code>*</code> 和 <code>/</code> <b>同级，从左往右</b>算 —— 所以是 <code>10 2 *</code> 先出结果，再 <code>/ 4</code>。</span></div>
+            </details>
+          </li>
+        </ol>
+
+        <hr style="border:none; border-top:1px dashed var(--line); margin:18px 0 8px;">
+        <p style="font-size:13px; color:var(--muted);">
+          🛡 <b>做完这三组的自检标准</b>：<br>
+          · A 组（进制）能独立做完 11 题 → 进制转换和运算没问题<br>
+          · B 组（表达式）能独立做完 11 题 → 栈模拟和表达式树没问题<br>
+          · C 组（综合）能独立做完 11 题 → <b>两个知识点都稳了</b>，可以进入 L8 循环追踪
         </p>
       </div>
     </details>
