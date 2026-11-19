@@ -2595,6 +2595,21 @@ B(2) → [6, 2, 2]
     </p>
 
     <details class="hw-flip">
+      <summary>📌 怎么用这个专栏</summary>
+      <div class="hw-body">
+        <ul style="font-size:14px; line-height:1.8; padding-left:20px; margin:0 0 10px;">
+          <li><b>有 OJ 链接的题 → 去 OJ 提交</b>（OJ 会真正判题，只有通过才算会做）</li>
+          <li><b>OJ 上没有的题 → 照着题面写</b>，用页面里的样例输出自测</li>
+          <li><b>限时 72 小时</b>，和正式比赛同规则 —— 别一口气写完，分几次做</li>
+          <li><b>写完必须重写一遍</b>：看懂 ≠ 会写，关掉答案从头再写一次才算过</li>
+        </ul>
+        <p style="font-size:13.5px; color:var(--muted); margin:0;">
+          💡 <b>往后加题的原则</b>：优先选 <b>OJ 上有的 ACSL 原题</b>，这样学生能直接跳转提交、看到真实判题结果；OJ 上暂时没有的真题才把题面抄到页面上。
+        </p>
+      </div>
+    </details>
+
+    <details class="hw-flip">
       <summary>📌 编程题的三个共性</summary>
       <div class="hw-body">
         <ul style="font-size:14px; line-height:1.8; padding-left:20px; margin:0;">
@@ -2672,7 +2687,8 @@ B(2) → [6, 2, 2]
     s = nums[4]
     print(s[(len(s) - 1) // 2])</pre>
                 <p style="font-size:13.5px; color:var(--muted); margin-top:8px;">
-                  🧪 用官方测试数据验证：<code>25370912518369327</code> 等 5 行输入，输出 <b>17 / 67 / 34 / 0 / 7</b>，与官方答案完全一致。
+                  🧪 用官方测试数据验证：<code>25370912518369327</code> 等 5 行输入，输出 <b>17 / 67 / 34 / 0 / 7</b>，与官方答案完全一致。<br>
+                  ⚠️ <b>易错</b>：<b>第 i 行只回答第 i 个问题</b>，不是每行都回答 5 个问题 —— 官方输出是 5 行、每行 1 个数。
                 </p>
               </div>
             </details>
@@ -2701,7 +2717,9 @@ B(2) → [6, 2, 2]
             <p style="font-size:14px; line-height:1.8; margin:6px 0;"><b>样例输出</b></p>
             <pre style="background:#0f243f; color:#e6edf3; padding:12px 14px; border-radius:8px; overflow-x:auto; font-size:12.5px; line-height:1.65; font-family:"JetBrains Mono", "Fira Code", "SF Mono", Consolas, monospace; margin:8px 0;">70</pre>
             <p style="font-size:13.5px; color:var(--muted); margin:4px 0;">
-              逐位置看：<code>max(6,7,9)=9</code>、<code>max(8,6,3)=8</code>、<code>max(1,2,4)=4</code>、…、<code>max(4,2,8)=8</code>、<code>max(9,4,4)=9</code>，共 11 个位置，和 = <b>70</b>。
+              三行长度不同（10 / 4 / 11），所以一共<b>按 11 个位置</b>看，每列取有的数里的最大值：<br>
+              第 1 列 <code>max(6,7,9)=9</code>、第 2 列 <code>max(8,6,3)=8</code>、第 3 列 <code>max(1,2,4)=4</code>、第 4 列 <code>max(5,9,6)=9</code>、第 5 列 <code>max(2,1)=2</code>、第 6 列 <code>max(3,8)=8</code>、第 7 列 <code>max(5,6)=6</code>、第 8 列 <code>max(3,4)=4</code>、第 9 列 <code>max(7,2)=7</code>、第 10 列 <code>max(9,8)=9</code>、第 11 列 <code>max(4)=4</code>。<br>
+              和 = 9+8+4+9+2+8+6+4+7+9+4 = <b>70</b> ✓（和官方答案一致）
             </p>
             <details class="hw-ans"><summary>展开参考解法（Python 3）+ 思路讲解</summary>
               <div class="hw-ans-body">
@@ -2728,7 +2746,7 @@ B(2) → [6, 2, 2]
             total += max(col)                       # 取最大的
         print(total)</pre>
                 <p style="font-size:13.5px; color:var(--muted); margin-top:8px;">
-                  🧪 官方样例 4 组输出 <b>70 / 101 / 63 / 6</b>；负数测试组（全是负数）输出 <b>-86</b>，均与官方一致。<br>
+                  🧪 官方样例共 <b>5 组</b>，输出 <b>70 / 101 / 63 / 6 / 1139</b>；官方测试数据输出 <b>131 / 1032 / 46946 / −86 / 1</b> —— 全部与官方一致。<br>
                   ⚠️ <b>易错</b>：负数取最大要小心 —— <code>-5</code> 和 <code>-9</code> 里最大的是 <code>-5</code>，别当成绝对值比。
                 </p>
               </div>
