@@ -330,6 +330,40 @@ details.hw-flip .hw-body p {
   color: var(--text);
 }
 
+/* ===== 速查表（计算技巧 / 题型方法表） ===== */
+.tips-table {
+  width: 100%;
+  margin: 6px 0 14px;
+  border-collapse: collapse;
+  font-size: 13px;
+  line-height: 1.7;
+}
+.tips-table th {
+  padding: 6px 8px;
+  background: rgba(124, 58, 237, .08);
+  border-bottom: 2px solid rgba(124, 58, 237, .25);
+  text-align: left;
+  font-weight: 700;
+  color: var(--purple-deep);
+  white-space: nowrap;
+}
+.tips-table td {
+  padding: 5px 8px;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
+.tips-table tr:nth-child(even) td {
+  background: rgba(124, 58, 237, .03);
+}
+.tips-table code {
+  font-family: "JetBrains Mono", "SF Mono", Consolas, monospace;
+  font-size: 12px;
+  padding: 1px 4px;
+  background: rgba(124, 58, 237, .08);
+  border-radius: 4px;
+  color: var(--purple-deep);
+}
+
 /* ===== 闪卡筛选标签 ===== */
 .fc-tabs {
   display: flex;
@@ -2152,8 +2186,43 @@ END</code><br>以下哪些输入会被打印？<br>3, 7, 15, 31, 63, 127, 255, 5
     <h2 class="section-title">⚡ 日常练习 · 计算题速练</h2>
     <p class="section-sub">
       与课后作业区分：这里是<b>纯计算题</b>，用来保持手感、随时能做。<br>
-      不限时交作业，做完自己核对即可 —— A 组 11 题（进制）+ B 组 11 题（表达式），每组约 12 分钟。
+      不限时交作业，做完自己核对即可 —— A 组 11 题（进制）+ B 组 11 题（表达式）+ C 组 11 题（综合），每组约 12～15 分钟。
     </p>
+
+
+    <details class="hw-flip">
+      <summary>🧰 计算技巧速查（按题型分类 · 做题前先扫一眼）</summary>
+      <div class="hw-body">
+        <p style="font-size:13px; color:var(--muted); margin-bottom:12px;">
+          把各课最容易用错的方法按<b>题型</b>归拢在一起。遇到新题先来这里找套路，找到套路后再动手 —— 不要拿到题就硬算。<br>
+          <b>覆盖</b>：进制转换 · 位运算 · 表达式 · 循环追踪 · 递归 · 通用速算
+        </p>
+
+        <h4 style="color:var(--purple-deep);">🔢 一、进制转换与运算（L1）</h4>
+        <table class="tips-table"><tr><th style="width:20%;">题型</th><th style="width:48%;">方法</th><th style="width:32%;">易错点</th></tr><tr><td>十 → 二 / 八 / 十六</td><td><b>除基取余</b>，除到商为 0 为止</td><td>余数一定<b>倒着读</b></td></tr><tr><td>二 / 八 / 十六 → 十</td><td><b>按权展开</b>求和（2⁰,2¹… / 8⁰,8¹… / 16⁰,16¹…）</td><td>位权别漏中间的</td></tr><tr><td>二 ↔ 八 / 十六</td><td>从右往左<b>分组</b>（3 位一组 / 4 位一组）</td><td>最左不足一组要<b>补 0</b></td></tr><tr><td>同进制加减</td><td>逐位算，<b>满基进 1</b> / <b>借 1 当基</b></td><td>借的是「<b>基</b>」不是借 10</td></tr><tr><td>跨进制加减</td><td>先<b>全转十进制</b>算完，再转回目标进制</td><td>最稳的做法，别硬跨基</td></tr><tr><td>跨进制比大小</td><td>全部转成十进制再比</td><td>不能看「谁位数多」</td></tr></table>
+
+        <h4 style="color:var(--purple-deep);">🔧 二、位运算（L7）</h4>
+        <table class="tips-table"><tr><th style="width:20%;">题型</th><th style="width:48%;">方法</th><th style="width:32%;">易错点</th></tr><tr><td>NOT</td><td>逐位 0↔1，长度不变</td><td><b>定长</b>，高位补的 0 也要翻</td></tr><tr><td>AND / OR / XOR</td><td>同 1 才 1 / 同 0 才 0 / 不同才 1</td><td>别把 <code>^</code> 当异或（表达式里才是幂）</td></tr><tr><td>优先级</td><td>NOT &gt; 移位 / 循环移位 &gt; AND / XOR &gt; OR</td><td>AND 与 XOR <b>同级</b>，从左往右；<code>OR</code> 最后算</td></tr><tr><td>LSHIFT / RSHIFT</td><td>丢位 + 补 0</td><td>移位会<b>丢位</b>，循环移位不会</td></tr><tr><td>LCIRC / RCIRC</td><td>头尾相接<b>绕回</b></td><td>一位都不丢</td></tr></table>
+
+        <h4 style="color:var(--purple-deep);">🧮 三、表达式（L6）</h4>
+        <table class="tips-table"><tr><th style="width:20%;">题型</th><th style="width:48%;">方法</th><th style="width:32%;">易错点</th></tr><tr><td>中缀 → 后缀</td><td><b>两个栈</b>：输出栈放操作数，运算符栈放 <code>+ - * /</code></td><td>弹栈条件是<b>≥</b> 不是 <b>&gt;</b>（同级也先弹）；<code>(</code> 要<b>丢掉</b></td></tr><tr><td>后缀求值</td><td>从<b>左往右</b>扫，运算符弹两个算一个</td><td>每读一个 token 就更新一次栈</td></tr><tr><td>前缀求值</td><td>从<b>右往左</b>扫</td><td>方向反了必错</td></tr><tr><td>画树法（最稳）</td><td>中缀按优先级拆；前缀的根在<b>最左边</b></td><td>长表达式强烈建议画树</td></tr><tr><td>运算符优先级</td><td><code>^</code> &gt; <code>*</code> <code>/</code> &gt; <code>+</code> <code>-</code></td><td>同级从左往右</td></tr></table>
+
+        <h4 style="color:var(--purple-deep);">🔄 四、循环追踪（L8）</h4>
+        <table class="tips-table"><tr><th style="width:22%;">题型</th><th style="width:46%;">方法</th><th style="width:32%;">易错点</th></tr><tr><td>循环跑几次</td><td><code>⌊(终点 − 起点) / 步长⌋ + 1</code></td><td>起点 &gt; 终点 → <b>0 次</b></td></tr><tr><td>追踪表 3 步</td><td>通读 → 画表 → 逐行执行</td><td><b>每写一行立刻更新</b>，别用「本轮开头」的值套所有行</td></tr><tr><td>变量被循环体改写</td><td>标出哪些变量会被改，按行更新</td><td>这是 L8 第 1 号陷阱</td></tr><tr><td>WHILE 退出时机</td><td><b>先执行，再判断</b></td><td>条件变假<b>那一轮已经执行过了</b></td></tr><tr><td>整除判断</td><td><code>N / B = INT(N / B)</code></td><td><code>INT()</code> 是<b>向下取整</b>，不是四舍五入</td></tr><tr><td>嵌套循环</td><td>外层每跑一次，内层<b>完整跑一遍</b></td><td>内层上限可能依赖外层变量</td></tr><tr><td>两循环串联筛选</td><td>两个条件是「<b>且</b>」→ 取<b>交集</b></td><td>写成「或」会多选一堆答案</td></tr></table>
+
+        <h4 style="color:var(--purple-deep);">🌳 五、递归（L2）</h4>
+        <table class="tips-table"><tr><th style="width:18%;">题型</th><th style="width:52%;">方法</th><th style="width:30%;">易错点</th></tr><tr><td>阶乘</td><td><code>fact(n)=n×fact(n−1)</code>（n &gt; 1）</td><td>基例 <code>fact(n)=1</code>（n ≤ 1）</td></tr><tr><td>求和</td><td><code>sum_to(n)=n+sum_to(n−1)</code>（n &gt; 1）</td><td>基例 <code>sum_to(n)=1</code>（n = 1）</td></tr><tr><td>斐波那契</td><td><code>fib(n)=fib(n−1)+fib(n−2)</code></td><td>两个基例：<code>fib(0)=0, fib(1)=1</code></td></tr><tr><td>画调用树</td><td>先<b>展开</b>到基例，再<b>回填</b></td><td>回填顺序从下往上</td></tr></table>
+
+        <h4 style="color:var(--purple-deep);">⚡ 六、通用速算（跨题型）</h4>
+        <table class="tips-table"><tr><th style="width:22%;">技巧</th><th style="width:50%;">怎么用</th><th style="width:28%;">典型出处</th></tr><tr><td><b>总数守恒</b></td><td>每个数必然落进一边 → 已知一边就算出另一边</td><td>2015-2016（125 = C + S）</td></tr><tr><td><b>手判质数</b></td><td>数学上只需试到 √n；但<b>考试必须按题目给的循环范围走</b></td><td>2019-2020 的循环是 <code>B = 3 TO N−1</code>，别自作主张改成 √n</td></tr><tr><td><b>辗转相除</b></td><td><code>GCF(a,b) = GCF(b, a mod b)</code>，直到 b = 0</td><td>2024-2025 变量交换</td></tr><tr><td><b>只算一半</b></td><td>结果有守恒关系时，只算一半，另一半倒推</td><td>2015-2016 数 C 不数 S</td></tr><tr><td><b>背下来的固定值</b></td><td>2 的幂（1,2,4,8,…）/ 16 的幂 / 十进制位权</td><td>位运算与进制题</td></tr></table>
+
+        <hr style="border:none; border-top:1px dashed var(--line); margin:18px 0 8px;">
+        <p style="font-size:13px; color:var(--muted);">
+          💡 <b>用法提醒</b>：这张表是<b>速查</b>，不是<b>题库</b>。做完 A/B/C 三组日常练习后，如果某类题还做不对，就回到对应课的 PPT 把那张「规则页」重看一遍。<br>
+          🛡 <b>做题顺序建议</b>：<b>先扫技巧表</b> → 选套路 → 动笔 → 对答案 → <b>错了就记下是哪个套路没掌握</b>。
+        </p>
+      </div>
+    </details>
 
     <details class="hw-flip">
       <summary>⚡ 日常练习 A · 进制速练（11 题 · 建议 12 分钟）</summary>
@@ -2536,192 +2605,201 @@ B(2) → [6, 2, 2]
       </div>
     </details>
 
-    <!-- ===== 题目 1 ===== -->
-    <h4 style="color:var(--purple-deep);">⚙️ 题目 1 · Digit Reassembly（数字重组）· 2018-2019 第 1 轮 ⭐ 最简单</h4>
-    <ol class="hw-quiz">
-      <li>
-        <p class="hw-q"><b>题目</b>：给出一个小于 10<sup>50</sup> 的正整数，回答关于这个数字的各种问题。</p>
-        <p style="font-size:14px; line-height:1.8; margin:6px 0;">
-          <b>输入</b>：共 <b>5 行</b>，每行一个正整数。<br>
-          <b>输出</b>：<b>第 1 行回答问题 1，第 2 行回答问题 2 …… 第 5 行回答问题 5</b>（每行只回答对应的那一问！）。<br>
-          1. 这一行的数有<b>多少位</b>？<br>
-          2. 这一行的数<b>所有数字之和</b>是多少？<br>
-          3. 这一行的数<b>奇数位置</b>上的数字之和是多少？（<b>最左边的数字是位置 1</b>）<br>
-          4. 这一行的数里数字 <b>4 出现了几次</b>？<br>
-          5. 这一行的数的<b>中间位</b>数字是多少？（若长度为偶数，取第 <b>N/2</b> 位，最左边仍是第 1 位）
-        </p>
-        <p style="font-size:14px; line-height:1.8; margin:6px 0;"><b>样例</b></p>
-        <pre style="background:#0f243f; color:#e6edf3; padding:12px 14px; border-radius:8px; overflow-x:auto; font-size:12.5px; line-height:1.65; font-family:"JetBrains Mono", "Fira Code", "SF Mono", Consolas, monospace; margin:8px 0;">1325678945
-987654
-456160
-143295823976154
-123456</pre>
-        <p style="font-size:14px; line-height:1.8; margin:6px 0;"><b>样例输出</b></p>
-        <pre style="background:#0f243f; color:#e6edf3; padding:12px 14px; border-radius:8px; overflow-x:auto; font-size:12.5px; line-height:1.65; font-family:"JetBrains Mono", "Fira Code", "SF Mono", Consolas, monospace; margin:8px 0;">10
-39
-16
-2
-3</pre>
-        <details class="hw-ans"><summary>展开参考解法（Python 3）+ 思路讲解</summary>
-          <div class="hw-ans-body">
-            <p style="font-size:14px; line-height:1.8;"><b>思路</b>：把数字当<b>字符串</b>处理，不要转成整数 —— 因为它可能有 50 位，Python 大整数虽然能装下，但逐位操作字符串更直接。</p>
-            <ul style="font-size:13.5px; line-height:1.8; padding-left:20px;">
-              <li><b>位数</b>：<code>len(s)</code></li>
-              <li><b>各位和</b>：<code>sum(int(c) for c in s)</code></li>
-              <li><b>奇数位和</b>：<code>enumerate</code> 的下标从 0 开始，而题目「位置 1」是最左 → 所以要取<b>下标为偶数</b>的（0, 2, 4…）</li>
-              <li><b>4 的个数</b>：<code>s.count('4')</code></li>
-              <li><b>中间位</b>：<code>s[(len(s)-1)//2]</code> —— 这个写法<b>奇数长度和偶数长度都能用</b>：
-                <ul style="padding-left:18px;">
-                  <li>长度 7 → <code>s[3]</code> = 第 4 位（正中间）✓</li>
-                  <li>长度 6 → <code>s[2]</code> = 第 3 位 = N/2 位 ✓</li>
+    <details class="hw-flip">
+      <summary>⚙️ 题目 1 · Digit Reassembly（数字重组）· 2018-2019 第 1 轮 ⭐ 最简单</summary>
+      <div class="hw-body">
+        <ol class="hw-quiz">
+          <li>
+            <p class="hw-q"><b>题目</b>：给出一个小于 10<sup>50</sup> 的正整数，回答关于这个数字的各种问题。</p>
+            <p style="font-size:14px; line-height:1.8; margin:6px 0;">
+              <b>输入</b>：共 <b>5 行</b>，每行一个正整数。<br>
+              <b>输出</b>：<b>第 1 行回答问题 1，第 2 行回答问题 2 …… 第 5 行回答问题 5</b>（每行只回答对应的那一问！）。<br>
+              1. 这一行的数有<b>多少位</b>？<br>
+              2. 这一行的数<b>所有数字之和</b>是多少？<br>
+              3. 这一行的数<b>奇数位置</b>上的数字之和是多少？（<b>最左边的数字是位置 1</b>）<br>
+              4. 这一行的数里数字 <b>4 出现了几次</b>？<br>
+              5. 这一行的数的<b>中间位</b>数字是多少？（若长度为偶数，取第 <b>N/2</b> 位，最左边仍是第 1 位）
+            </p>
+            <p style="font-size:14px; line-height:1.8; margin:6px 0;"><b>样例</b></p>
+            <pre style="background:#0f243f; color:#e6edf3; padding:12px 14px; border-radius:8px; overflow-x:auto; font-size:12.5px; line-height:1.65; font-family:"JetBrains Mono", "Fira Code", "SF Mono", Consolas, monospace; margin:8px 0;">1325678945
+    987654
+    456160
+    143295823976154
+    123456</pre>
+            <p style="font-size:14px; line-height:1.8; margin:6px 0;"><b>样例输出</b></p>
+            <pre style="background:#0f243f; color:#e6edf3; padding:12px 14px; border-radius:8px; overflow-x:auto; font-size:12.5px; line-height:1.65; font-family:"JetBrains Mono", "Fira Code", "SF Mono", Consolas, monospace; margin:8px 0;">10
+    39
+    16
+    2
+    3</pre>
+            <details class="hw-ans"><summary>展开参考解法（Python 3）+ 思路讲解</summary>
+              <div class="hw-ans-body">
+                <p style="font-size:14px; line-height:1.8;"><b>思路</b>：把数字当<b>字符串</b>处理，不要转成整数 —— 因为它可能有 50 位，Python 大整数虽然能装下，但逐位操作字符串更直接。</p>
+                <ul style="font-size:13.5px; line-height:1.8; padding-left:20px;">
+                  <li><b>位数</b>：<code>len(s)</code></li>
+                  <li><b>各位和</b>：<code>sum(int(c) for c in s)</code></li>
+                  <li><b>奇数位和</b>：<code>enumerate</code> 的下标从 0 开始，而题目「位置 1」是最左 → 所以要取<b>下标为偶数</b>的（0, 2, 4…）</li>
+                  <li><b>4 的个数</b>：<code>s.count('4')</code></li>
+                  <li><b>中间位</b>：<code>s[(len(s)-1)//2]</code> —— 这个写法<b>奇数长度和偶数长度都能用</b>：
+                    <ul style="padding-left:18px;">
+                      <li>长度 7 → <code>s[3]</code> = 第 4 位（正中间）✓</li>
+                      <li>长度 6 → <code>s[2]</code> = 第 3 位 = N/2 位 ✓</li>
+                    </ul>
+                  </li>
                 </ul>
-              </li>
-            </ul>
-            <pre style="background:#0f243f; color:#e6edf3; padding:12px 14px; border-radius:8px; overflow-x:auto; font-size:12.5px; line-height:1.65; font-family:"JetBrains Mono", "Fira Code", "SF Mono", Consolas, monospace; margin:8px 0;">import sys
+                <pre style="background:#0f243f; color:#e6edf3; padding:12px 14px; border-radius:8px; overflow-x:auto; font-size:12.5px; line-height:1.65; font-family:"JetBrains Mono", "Fira Code", "SF Mono", Consolas, monospace; margin:8px 0;">import sys
 
-# 读入 5 行，每行一个正整数
-lines = [l.strip() for l in sys.stdin if l.strip()]
-nums = lines[:5]
+    # 读入 5 行，每行一个正整数
+    lines = [l.strip() for l in sys.stdin if l.strip()]
+    nums = lines[:5]
 
-# 问题 1：第 1 行的数有多少位
-print(len(nums[0]))
+    # 问题 1：第 1 行的数有多少位
+    print(len(nums[0]))
 
-# 问题 2：第 2 行的数所有数字之和
-print(sum(int(c) for c in nums[1]))
+    # 问题 2：第 2 行的数所有数字之和
+    print(sum(int(c) for c in nums[1]))
 
-# 问题 3：第 3 行的数，奇数位上的数字之和（最左是位置 1）
-print(sum(int(c) for i, c in enumerate(nums[2]) if i % 2 == 0))
+    # 问题 3：第 3 行的数，奇数位上的数字之和（最左是位置 1）
+    print(sum(int(c) for i, c in enumerate(nums[2]) if i % 2 == 0))
 
-# 问题 4：第 4 行的数里数字 4 出现几次
-print(nums[3].count('4'))
+    # 问题 4：第 4 行的数里数字 4 出现几次
+    print(nums[3].count('4'))
 
-# 问题 5：第 5 行的数的中间位（长度为偶数取第 N/2 位）
-s = nums[4]
-print(s[(len(s) - 1) // 2])</pre>
-            <p style="font-size:13.5px; color:var(--muted); margin-top:8px;">
-              🧪 用官方测试数据验证：<code>25370912518369327</code> 等 5 行输入，输出 <b>17 / 67 / 34 / 0 / 7</b>，与官方答案完全一致。
+    # 问题 5：第 5 行的数的中间位（长度为偶数取第 N/2 位）
+    s = nums[4]
+    print(s[(len(s) - 1) // 2])</pre>
+                <p style="font-size:13.5px; color:var(--muted); margin-top:8px;">
+                  🧪 用官方测试数据验证：<code>25370912518369327</code> 等 5 行输入，输出 <b>17 / 67 / 34 / 0 / 7</b>，与官方答案完全一致。
+                </p>
+              </div>
+            </details>
+          </li>
+        </ol>
+      </div>
+    </details>
+
+    <details class="hw-flip">
+      <summary>⚙️ 题目 2 · Multiple Arrays（多个数列）· 2020-2021 第 3 轮 ⭐⭐ 中等</summary>
+      <div class="hw-body">
+        <ol class="hw-quiz">
+          <li>
+            <p class="hw-q"><b>题目</b>：给定 <b>3 行</b>长度可能不同的数列，找出<b>每个位置上最大的数</b>，输出这些数的<b>总和</b>。</p>
+            <p style="font-size:14px; line-height:1.8; margin:6px 0;">
+              <b>输入</b>：每组数据有 <b>3 行</b>整数数列，整数之间用空格分隔；<b>多组数据一直读到文件结束</b>。<br>
+              <b>输出</b>：每组输出一行 —— 各位置最大数之和。
             </p>
-          </div>
-        </details>
-      </li>
-    </ol>
-
-    <!-- ===== 题目 2 ===== -->
-    <h4 style="color:var(--purple-deep);">⚙️ 题目 2 · Multiple Arrays（多个数列）· 2020-2021 第 3 轮 ⭐⭐ 中等</h4>
-    <ol class="hw-quiz">
-      <li>
-        <p class="hw-q"><b>题目</b>：给定 <b>3 行</b>长度可能不同的数列，找出<b>每个位置上最大的数</b>，输出这些数的<b>总和</b>。</p>
-        <p style="font-size:14px; line-height:1.8; margin:6px 0;">
-          <b>输入</b>：每组数据有 <b>3 行</b>整数数列，整数之间用空格分隔；<b>多组数据一直读到文件结束</b>。<br>
-          <b>输出</b>：每组输出一行 —— 各位置最大数之和。
-        </p>
-        <p style="font-size:14px; line-height:1.8; margin:6px 0;"><b>样例（第 1 组）</b></p>
-        <pre style="background:#0f243f; color:#e6edf3; padding:12px 14px; border-radius:8px; overflow-x:auto; font-size:12.5px; line-height:1.65; font-family:"JetBrains Mono", "Fira Code", "SF Mono", Consolas, monospace; margin:8px 0;">6 8 1 5 2 3 5 3 7 9
-7 6 2 9
-9 3 4 6 1 8 6 4 2 8 4</pre>
-        <p style="font-size:14px; line-height:1.8; margin:6px 0;"><b>样例输出</b></p>
-        <pre style="background:#0f243f; color:#e6edf3; padding:12px 14px; border-radius:8px; overflow-x:auto; font-size:12.5px; line-height:1.65; font-family:"JetBrains Mono", "Fira Code", "SF Mono", Consolas, monospace; margin:8px 0;">70</pre>
-        <p style="font-size:13.5px; color:var(--muted); margin:4px 0;">
-          逐位置看：<code>max(6,7,9)=9</code>、<code>max(8,6,3)=8</code>、<code>max(1,2,4)=4</code>、…、<code>max(4,2,8)=8</code>、<code>max(9,4,4)=9</code>，共 11 个位置，和 = <b>70</b>。
-        </p>
-        <details class="hw-ans"><summary>展开参考解法（Python 3）+ 思路讲解</summary>
-          <div class="hw-ans-body">
-            <p style="font-size:14px; line-height:1.8;"><b>思路</b>：把 3 行读成 3 个列表 → <b>逐列</b>取最大值累加。两个关键点：</p>
-            <ul style="font-size:13.5px; line-height:1.8; padding-left:20px;">
-              <li><b>行数不同长度</b> → 循环上限取 <code>max(len(r) for r in group)</code>，取某一列时要把<b>不够长的行跳过</b>（<code>if j &lt; len(r)</code>）</li>
-              <li><b>多组数据</b> → 每 3 行一组，<code>for i in range(0, len(rows) - 2, 3)</code></li>
-            </ul>
-            <pre style="background:#0f243f; color:#e6edf3; padding:12px 14px; border-radius:8px; overflow-x:auto; font-size:12.5px; line-height:1.65; font-family:"JetBrains Mono", "Fira Code", "SF Mono", Consolas, monospace; margin:8px 0;">import sys
-
-# 每 3 行是一组数据，一直读到文件结束
-rows = []
-for line in sys.stdin:
-    line = line.strip()
-    if line:
-        rows.append([int(x) for x in line.split()])
-
-for i in range(0, len(rows) - 2, 3):
-    group = rows[i:i + 3]
-    n = max(len(r) for r in group)              # 最长那一行有多长
-    total = 0
-    for j in range(n):                          # 逐个位置看
-        col = [r[j] for r in group if j &lt; len(r)]  # 这一列上有的数
-        total += max(col)                       # 取最大的
-    print(total)</pre>
-            <p style="font-size:13.5px; color:var(--muted); margin-top:8px;">
-              🧪 官方样例 4 组输出 <b>70 / 101 / 63 / 6</b>；负数测试组（全是负数）输出 <b>-86</b>，均与官方一致。<br>
-              ⚠️ <b>易错</b>：负数取最大要小心 —— <code>-5</code> 和 <code>-9</code> 里最大的是 <code>-5</code>，别当成绝对值比。
+            <p style="font-size:14px; line-height:1.8; margin:6px 0;"><b>样例（第 1 组）</b></p>
+            <pre style="background:#0f243f; color:#e6edf3; padding:12px 14px; border-radius:8px; overflow-x:auto; font-size:12.5px; line-height:1.65; font-family:"JetBrains Mono", "Fira Code", "SF Mono", Consolas, monospace; margin:8px 0;">6 8 1 5 2 3 5 3 7 9
+    7 6 2 9
+    9 3 4 6 1 8 6 4 2 8 4</pre>
+            <p style="font-size:14px; line-height:1.8; margin:6px 0;"><b>样例输出</b></p>
+            <pre style="background:#0f243f; color:#e6edf3; padding:12px 14px; border-radius:8px; overflow-x:auto; font-size:12.5px; line-height:1.65; font-family:"JetBrains Mono", "Fira Code", "SF Mono", Consolas, monospace; margin:8px 0;">70</pre>
+            <p style="font-size:13.5px; color:var(--muted); margin:4px 0;">
+              逐位置看：<code>max(6,7,9)=9</code>、<code>max(8,6,3)=8</code>、<code>max(1,2,4)=4</code>、…、<code>max(4,2,8)=8</code>、<code>max(9,4,4)=9</code>，共 11 个位置，和 = <b>70</b>。
             </p>
-          </div>
-        </details>
-      </li>
-    </ol>
+            <details class="hw-ans"><summary>展开参考解法（Python 3）+ 思路讲解</summary>
+              <div class="hw-ans-body">
+                <p style="font-size:14px; line-height:1.8;"><b>思路</b>：把 3 行读成 3 个列表 → <b>逐列</b>取最大值累加。两个关键点：</p>
+                <ul style="font-size:13.5px; line-height:1.8; padding-left:20px;">
+                  <li><b>行数不同长度</b> → 循环上限取 <code>max(len(r) for r in group)</code>，取某一列时要把<b>不够长的行跳过</b>（<code>if j &lt; len(r)</code>）</li>
+                  <li><b>多组数据</b> → 每 3 行一组，<code>for i in range(0, len(rows) - 2, 3)</code></li>
+                </ul>
+                <pre style="background:#0f243f; color:#e6edf3; padding:12px 14px; border-radius:8px; overflow-x:auto; font-size:12.5px; line-height:1.65; font-family:"JetBrains Mono", "Fira Code", "SF Mono", Consolas, monospace; margin:8px 0;">import sys
 
-    <!-- ===== 题目 3 ===== -->
-    <h4 style="color:var(--purple-deep);">⚙️ 题目 3 · Lex Strings（字典序字符串）· 2020-2021 第 2 轮 ⭐⭐⭐ 最难</h4>
-    <ol class="hw-quiz">
-      <li>
-        <p class="hw-q"><b>题目</b>：给定一个输入字符串，按如下规则生成新字符串。</p>
-        <p style="font-size:14px; line-height:1.8; margin:6px 0;">
-          1. 把大写字母改成小写，<b>删掉所有非字母</b><br>
-          2. 找出每个不同字母的<b>第一次出现</b>，按<b>字典序</b>排好<br>
-          3. 把这些字母追加到新字符串末尾，并从原串中<b>移除</b>它们<br>
-          4. 重复步骤 2、3，直到<b>原串为空</b><br>
-          5. 输出前，<b>删掉相邻重复的字母</b>（如 <code>"bboooo"</code> → <code>"bo"</code>）
-        </p>
-        <p style="font-size:14px; line-height:1.8; margin:6px 0;"><b>输入</b>：每行一个字符串（长度少于 100），<b>读到文件结束</b>。<br><b>输出</b>：按规则生成的新字符串，每行一个。</p>
-        <p style="font-size:14px; line-height:1.8; margin:6px 0;"><b>官方示例推演</b>（输入 <code>"A good sorting algorithm."</code>）</p>
-        <pre style="background:#0f243f; color:#e6edf3; padding:12px 14px; border-radius:8px; overflow-x:auto; font-size:12.5px; line-height:1.65; font-family:"JetBrains Mono", "Fira Code", "SF Mono", Consolas, monospace; margin:8px 0;">步骤1 后:  agoodsortingalgorithm
-第1轮:  取首次出现 adghilmnorst   剩余 oogagorit
-第2轮:  取首次出现 agiort         剩余 ogo
-第3轮:  取首次出现 go              剩余 o
-第4轮:  取首次出现 o
-拼接:    adghilmnorstagiortgoo
-去相邻重复: adghilmnorstagiortgo</pre>
-        <details class="hw-ans"><summary>展开参考解法（Python 3）+ 思路讲解</summary>
-          <div class="hw-ans-body">
-            <p style="font-size:14px; line-height:1.8;"><b>思路</b>：这是<b>模拟题</b> —— 严格按步骤 1→5 写代码就行，难点在于<b>想清楚「移除」到底移走几个</b>。</p>
-            <ul style="font-size:13.5px; line-height:1.8; padding-left:20px;">
-              <li>步骤 3 的「移除那些不同字母」= <b>每个字母只移除它的第一次出现</b>，其余重复的<b>留在原串里</b>（看官方推演：第 1 轮移走 1 个 <code>a</code> 后还剩 <code>oogagorit</code>，里面的 <code>o</code>、<code>a</code> 还在）</li>
-              <li>步骤 2 用 <code>sorted(set(s))</code> —— <code>set</code> 去重、<code>sorted</code> 字典序，一步到位</li>
-              <li>步骤 3 移除用 <code>s.index(c)</code> 找<b>第一次</b>出现的位置，再切片删掉</li>
-              <li>步骤 5 去相邻重复：遍历结果串，<b>和上一个字符相同就跳过</b></li>
-            </ul>
-            <pre style="background:#0f243f; color:#e6edf3; padding:12px 14px; border-radius:8px; overflow-x:auto; font-size:12.5px; line-height:1.65; font-family:"JetBrains Mono", "Fira Code", "SF Mono", Consolas, monospace; margin:8px 0;">import sys
+    # 每 3 行是一组数据，一直读到文件结束
+    rows = []
+    for line in sys.stdin:
+        line = line.strip()
+        if line:
+            rows.append([int(x) for x in line.split()])
 
-def solve(text):
-    # 步骤 1：转小写 + 去掉所有非字母
-    s = ''.join(c.lower() for c in text if c.isalpha())
+    for i in range(0, len(rows) - 2, 3):
+        group = rows[i:i + 3]
+        n = max(len(r) for r in group)              # 最长那一行有多长
+        total = 0
+        for j in range(n):                          # 逐个位置看
+            col = [r[j] for r in group if j &lt; len(r)]  # 这一列上有的数
+            total += max(col)                       # 取最大的
+        print(total)</pre>
+                <p style="font-size:13.5px; color:var(--muted); margin-top:8px;">
+                  🧪 官方样例 4 组输出 <b>70 / 101 / 63 / 6</b>；负数测试组（全是负数）输出 <b>-86</b>，均与官方一致。<br>
+                  ⚠️ <b>易错</b>：负数取最大要小心 —— <code>-5</code> 和 <code>-9</code> 里最大的是 <code>-5</code>，别当成绝对值比。
+                </p>
+              </div>
+            </details>
+          </li>
+        </ol>
+      </div>
+    </details>
 
-    result = []
-    while s:                       # 反复处理，直到原串为空
-        # 步骤 2：每个不同字母的第一次出现，按字典序排好
-        firsts = sorted(set(s))
-        # 步骤 3：追加到新串，并从原串移除这些字母（各一个）
-        for c in firsts:
-            result.append(c)
-            i = s.index(c)
-            s = s[:i] + s[i + 1:]
-
-    # 步骤 5：去掉相邻重复字母
-    out = ''
-    for c in result:
-        if not out or out[-1] != c:
-            out += c
-    return out
-
-for line in sys.stdin:
-    line = line.rstrip('\n')
-    if line:
-        print(solve(line))</pre>
-            <p style="font-size:13.5px; color:var(--muted); margin-top:8px;">
-              🧪 官方 5 组样例全部一致（如 <code>"A good sorting algorithm."</code> → <code>adghilmnorstagiortgo</code>）。<br>
-              📌 <b>勘误</b>：官方 PDF 的 <code>EXPECTED OUTPUT</code> 栏第 1 个写成 <code>adghilnorstagiortgo</code>，这是<b>排版笔误</b> —— 同页的分步推演和 <code>Output</code> 栏都是 <code>adghilmnorstagiortgo</code>，以这两个为准。
+    <details class="hw-flip">
+      <summary>⚙️ 题目 3 · Lex Strings（字典序字符串）· 2020-2021 第 2 轮 ⭐⭐⭐ 最难</summary>
+      <div class="hw-body">
+        <ol class="hw-quiz">
+          <li>
+            <p class="hw-q"><b>题目</b>：给定一个输入字符串，按如下规则生成新字符串。</p>
+            <p style="font-size:14px; line-height:1.8; margin:6px 0;">
+              1. 把大写字母改成小写，<b>删掉所有非字母</b><br>
+              2. 找出每个不同字母的<b>第一次出现</b>，按<b>字典序</b>排好<br>
+              3. 把这些字母追加到新字符串末尾，并从原串中<b>移除</b>它们<br>
+              4. 重复步骤 2、3，直到<b>原串为空</b><br>
+              5. 输出前，<b>删掉相邻重复的字母</b>（如 <code>"bboooo"</code> → <code>"bo"</code>）
             </p>
-          </div>
-        </details>
-      </li>
-    </ol>
+            <p style="font-size:14px; line-height:1.8; margin:6px 0;"><b>输入</b>：每行一个字符串（长度少于 100），<b>读到文件结束</b>。<br><b>输出</b>：按规则生成的新字符串，每行一个。</p>
+            <p style="font-size:14px; line-height:1.8; margin:6px 0;"><b>官方示例推演</b>（输入 <code>"A good sorting algorithm."</code>）</p>
+            <pre style="background:#0f243f; color:#e6edf3; padding:12px 14px; border-radius:8px; overflow-x:auto; font-size:12.5px; line-height:1.65; font-family:"JetBrains Mono", "Fira Code", "SF Mono", Consolas, monospace; margin:8px 0;">步骤1 后:  agoodsortingalgorithm
+    第1轮:  取首次出现 adghilmnorst   剩余 oogagorit
+    第2轮:  取首次出现 agiort         剩余 ogo
+    第3轮:  取首次出现 go              剩余 o
+    第4轮:  取首次出现 o
+    拼接:    adghilmnorstagiortgoo
+    去相邻重复: adghilmnorstagiortgo</pre>
+            <details class="hw-ans"><summary>展开参考解法（Python 3）+ 思路讲解</summary>
+              <div class="hw-ans-body">
+                <p style="font-size:14px; line-height:1.8;"><b>思路</b>：这是<b>模拟题</b> —— 严格按步骤 1→5 写代码就行，难点在于<b>想清楚「移除」到底移走几个</b>。</p>
+                <ul style="font-size:13.5px; line-height:1.8; padding-left:20px;">
+                  <li>步骤 3 的「移除那些不同字母」= <b>每个字母只移除它的第一次出现</b>，其余重复的<b>留在原串里</b>（看官方推演：第 1 轮移走 1 个 <code>a</code> 后还剩 <code>oogagorit</code>，里面的 <code>o</code>、<code>a</code> 还在）</li>
+                  <li>步骤 2 用 <code>sorted(set(s))</code> —— <code>set</code> 去重、<code>sorted</code> 字典序，一步到位</li>
+                  <li>步骤 3 移除用 <code>s.index(c)</code> 找<b>第一次</b>出现的位置，再切片删掉</li>
+                  <li>步骤 5 去相邻重复：遍历结果串，<b>和上一个字符相同就跳过</b></li>
+                </ul>
+                <pre style="background:#0f243f; color:#e6edf3; padding:12px 14px; border-radius:8px; overflow-x:auto; font-size:12.5px; line-height:1.65; font-family:"JetBrains Mono", "Fira Code", "SF Mono", Consolas, monospace; margin:8px 0;">import sys
+
+    def solve(text):
+        # 步骤 1：转小写 + 去掉所有非字母
+        s = ''.join(c.lower() for c in text if c.isalpha())
+
+        result = []
+        while s:                       # 反复处理，直到原串为空
+            # 步骤 2：每个不同字母的第一次出现，按字典序排好
+            firsts = sorted(set(s))
+            # 步骤 3：追加到新串，并从原串移除这些字母（各一个）
+            for c in firsts:
+                result.append(c)
+                i = s.index(c)
+                s = s[:i] + s[i + 1:]
+
+        # 步骤 5：去掉相邻重复字母
+        out = ''
+        for c in result:
+            if not out or out[-1] != c:
+                out += c
+        return out
+
+    for line in sys.stdin:
+        line = line.rstrip('\n')
+        if line:
+            print(solve(line))</pre>
+                <p style="font-size:13.5px; color:var(--muted); margin-top:8px;">
+                  🧪 官方 5 组样例全部一致（如 <code>"A good sorting algorithm."</code> → <code>adghilmnorstagiortgo</code>）。<br>
+                  📌 <b>勘误</b>：官方 PDF 的 <code>EXPECTED OUTPUT</code> 栏第 1 个写成 <code>adghilnorstagiortgo</code>，这是<b>排版笔误</b> —— 同页的分步推演和 <code>Output</code> 栏都是 <code>adghilmnorstagiortgo</code>，以这两个为准。
+                </p>
+              </div>
+            </details>
+          </li>
+        </ol>
+      </div>
+    </details>
 
     <details class="hw-flip">
       <summary>🗺️ 后续还会补这些题</summary>
