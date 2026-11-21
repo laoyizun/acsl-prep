@@ -709,7 +709,7 @@ f(x) = {
   <div class="left">
     <div class="kicker">分段递归例题</div>
     <h2>区间分段 <span class="highlight">f(12)</span></h2>
-    <p class="subtitle">2022-2023 真题函数：x≤5 / 5<x≤9 / x>9</p>
+    <p class="subtitle">2022-2023 真题函数：x≤5 / 5&lt;x≤9 / x&gt;9</p>
   </div>
   <div class="right">
     <div class="card" style="border-left:4px solid var(--purple);">
@@ -731,7 +731,7 @@ f(12) = 19 + 1 = 20
     <div class="card" style="border-left:4px solid var(--blue); margin-top:10px;">
       <h3 style="color:var(--blue);">易错点</h3>
       <ul style="font-size:14px; line-height:1.7; margin-top:6px; padding-left:20px;">
-        <li><b>边界条件</b>：x=5 时是 base case（不是"5<x"），直接返回 25</li>
+        <li><b>边界条件</b>：x=5 时是 base case（不是"5&lt;x"），直接返回 25</li>
         <li><b>别跳步</b>：f(12) 算完 9，再算 7，再算 5（base）</li>
         <li><b>注意符号</b>：第二段是 -3，第三段是 +1，不要混</li>
       </ul>
@@ -765,8 +765,8 @@ f(12) = 19 + 1 = 20
         <tr style="background:rgba(37,99,235,.04);"><td style="padding:5px;">if a≤b</td><td style="padding:5px;">14</td><td style="padding:5px;">10</td><td style="padding:5px;">1</td><td style="padding:5px;">2</td></tr>
         <tr><td style="padding:5px;">if c·d≥a</td><td style="padding:5px;">14</td><td style="padding:5px;">10</td><td style="padding:5px;">-1</td><td style="padding:5px;">2</td></tr>
         <tr style="background:rgba(37,99,235,.04);"><td style="padding:5px;">if a/b≤1</td><td style="padding:5px;">14</td><td style="padding:5px;">12</td><td style="padding:5px;">-1</td><td style="padding:5px;">2</td></tr>
-        <tr><td style="padding:5px;">if d^c<c^d</td><td style="padding:5px;">14</td><td style="padding:5px;">12</td><td style="padding:5px;">2</td><td style="padding:5px;">2</td></tr>
-        <tr style="background:rgba(37,99,235,.04);"><td style="padding:5px;">if a>b or c<d</td><td style="padding:5px;">14</td><td style="padding:5px;">2</td><td style="padding:5px;">2</td><td style="padding:5px;">2</td></tr>
+        <tr><td style="padding:5px;">if d^c&lt;c^d</td><td style="padding:5px;">14</td><td style="padding:5px;">12</td><td style="padding:5px;">2</td><td style="padding:5px;">2</td></tr>
+        <tr style="background:rgba(37,99,235,.04);"><td style="padding:5px;">if a&gt;b or c&lt;d</td><td style="padding:5px;">14</td><td style="padding:5px;">2</td><td style="padding:5px;">2</td><td style="padding:5px;">2</td></tr>
       </table>
       <p style="font-size:13px; margin-top:6px; color:var(--muted);">来源：2015-2016 真题第 5 题（最终输出 34）</p>
     </div>
@@ -964,13 +964,13 @@ f(x) = f(x-3) + 2  if x > 8
         <div class="code-block" style="font-size:14px; line-height:1.8;">
 调用树（向下）:
 f(20) → f(17) → f(14) → f(11) → f(8) → f(6) → f(4) → f(2) = 50
-                              (x>8)  (x>8) (x>8) (3<x≤8) (3<x≤8) (3<x≤8) (base)
+                              (x>8)  (x>8) (x>8) (3&lt;x≤8) (3&lt;x≤8) (3&lt;x≤8) (base)
 
 回填（向上）:
 f(2)  = 50             (base, x≤3)
-f(4)  = 50 + 5 = 55    (3<x≤8)
-f(6)  = 55 + 5 = 60    (3<x≤8)
-f(8)  = 60 + 5 = 65    (3<x≤8)
+f(4)  = 50 + 5 = 55    (3&lt;x≤8)
+f(6)  = 55 + 5 = 60    (3&lt;x≤8)
+f(8)  = 60 + 5 = 65    (3&lt;x≤8)
 f(11) = 65 + 2 = 67    (x>8)
 f(14) = 67 + 2 = 69    (x>8)
 f(17) = 69 + 2 = 71    (x>8)
@@ -1230,13 +1230,13 @@ f(x) = f(x-3) + 2  if x > 8
 
 调用树（向下）:
 f(20) → f(17) → f(14) → f(11) → f(8) → f(6) → f(4) → f(2) = 50
-                                  (x>8)  (x>8) (x>8) (3<x≤8) (3<x≤8) (3<x≤8) (base)
+                                  (x>8)  (x>8) (x>8) (3&lt;x≤8) (3&lt;x≤8) (3&lt;x≤8) (base)
 
 回填（向上）:
 f(2)  = 50             (base)
-f(4)  = 50 + 5 = 55    (3<x≤8)
-f(6)  = 55 + 5 = 60    (3<x≤8)
-f(8)  = 60 + 5 = 65    (3<x≤8)
+f(4)  = 50 + 5 = 55    (3&lt;x≤8)
+f(6)  = 55 + 5 = 60    (3&lt;x≤8)
+f(8)  = 60 + 5 = 65    (3&lt;x≤8)
 f(11) = 65 + 2 = 67    (x>8)
 f(14) = 67 + 2 = 69    (x>8)
 f(17) = 69 + 2 = 71    (x>8)

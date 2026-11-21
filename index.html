@@ -1948,14 +1948,14 @@ code.inline {
 
     <!-- ===== L8 · 循环追踪强化 作业 ===== -->
     <details class="hw-flip">
-      <summary>L8 · 循环追踪强化（8 道真题 + 4 道变式）</summary>
+      <summary>L8 · 循环追踪强化（9 道真题 + 4 道变式）</summary>
       <div class="hw-body">
         <p style="font-size:13px; color:var(--muted); margin-bottom:12px;">
-          <b>覆盖范围</b>：变量交换 / 循环体自增 / WHILE 退出时机 / 嵌套 + 整除 / 两循环串联<br>
+          <b>覆盖范围</b>：变量交换 / 循环体自增 / WHILE 退出时机 / 嵌套 + 整除 / 两循环串联 / 取模计数<br>
           <b>限时</b>：45 分钟 ｜ <b>说明</b>：全部手算，每题画追踪表
         </p>
 
-        <h4 style="color:var(--purple-deep);">📘 Part A · 历年真题（8 题 · 每题 5 分钟）</h4>
+        <h4 style="color:var(--purple-deep);">📘 Part A · 历年真题（9 题 · 每题 5 分钟）</h4>
         <ol class="hw-quiz">
           <li>
             <p class="hw-q">A1. 2024-2025 第 5 题 · 变量交换<br><code style="font-size:13px; line-height:1.7; display:block; white-space:pre;">m = 50
@@ -2083,7 +2083,27 @@ d=25:  5, 25                   → 2 个</code><p>3 + 1 + 7 + 2 = <b>12</b>。</
             </div></details>
           </li>
           <li>
-            <p class="hw-q">A8. 2015-2016 第 5 题 · 三循环计数（输出两个数）<br><code style="font-size:13px; line-height:1.7; display:block; white-space:pre;">C = 0 : S = 0
+            <p class="hw-q">A8. 2020-2021 第 5 题 · 两个循环数两种数<br><code style="font-size:13px; line-height:1.7; display:block; white-space:pre;">c = 0
+for i = 1 to 50
+  if i % 4 == 3 then c = c + 1
+next i
+for j = 2 to 50 step 2
+  if j % 6 == 0 && j % 4 != 0 then c = c + 1
+  if j % 7 == 0 then c = c + 1
+next j
+output c</code><br>输出什么？（A.15 B.17 C.19 D.21 E.23）</p>
+            <details class="hw-ans"><summary>展开答案</summary><div class="hw-ans-body">
+              <p><b>答案：19（C）</b></p><p>两个循环各加各的，最后相加：</p><code style="font-size:13px; line-height:1.7; display:block; white-space:pre;">① for i = 1 to 50
+   数除以 4 余 3 的数：3,7,11,15,19,23,27,31,35,39,43,47
+   → 12 个 → c = 12
+② for j = 2 to 50 step 2（只看偶数）
+   j%6==0 && j%4!=0 → 6,18,30,42   → 4 个
+   j%7==0            → 14,28,42     → 3 个
+   → c = 12 + 4 + 3 = 19</code><p><b>坑</b>：① 42 同时满足两个条件，<b>就该加 2 次</b>；② 两个 if 是「或」不是「且」，用加法不用去重。</p>
+            </div></details>
+          </li>
+          <li>
+            <p class="hw-q">A9. 2015-2016 第 5 题 · 三循环计数（输出两个数）<br><code style="font-size:13px; line-height:1.7; display:block; white-space:pre;">C = 0 : S = 0
 FOR I = 1 TO 50
   IF I/2 = INT(I/2) THEN C = C + 1 ELSE S = S + 1
 NEXT I
@@ -2590,21 +2610,44 @@ B(2) → [6, 2, 2]
 
     <h2 class="section-title">⚙️ 历届编程题 · 专题</h2>
     <p class="section-sub">
-      ACSL 每轮第 6 题是<b>编程题</b>（72 小时提交制）。这里收录历届真题，按难度递进排列。<br>
+      ACSL 每轮有 <b>1 道编程题</b>（<b>独立的一份</b>，72 小时提交制）。这里收录历届真题，按难度递进排列。<br>
       <b>建议流程</b>：先自己写，写不出再点开参考解法 —— <b>看完解法一定要自己重写一遍</b>。
     </p>
 
     <details class="hw-flip">
       <summary>📌 怎么用这个专栏</summary>
       <div class="hw-body">
+        <div style="padding:12px 16px; background:rgba(217,119,6,.05); border-left:4px solid var(--amber); border-radius:8px; margin-bottom:12px;">
+          <h3 style="color:var(--amber); font-size:15px; margin:0 0 4px;">⚡ 两步走：OJ 练习 → HackerRank 正式交</h3>
+          <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:8px;">
+            <div style="flex:1; min-width:230px;">
+              <p style="font-size:13.5px; font-weight:800; color:var(--purple); margin:0 0 4px;">① 练习（无限次，随便练）</p>
+              <ul style="font-size:13.5px; line-height:1.75; padding-left:18px; margin:0;">
+                <li>在 <b>cubicbird OJ</b> 上写代码、跑样例、看判题</li>
+                <li>OJ 上的题 <b>带官方测试数据</b>，跑通了说明逻辑基本对</li>
+                <li>OJ 上没有的题 → 照着题面写，用页面里的样例输出自测</li>
+              </ul>
+            </div>
+            <div style="flex:1; min-width:230px;">
+              <p style="font-size:13.5px; font-weight:800; color:var(--green-deep); margin:0 0 4px;">② 正式交卷（比赛当天）</p>
+              <ul style="font-size:13.5px; line-height:1.75; padding-left:18px; margin:0;">
+                <li>提交平台是 <b>HackerRank</b>（老师发的邮件链接），<b>不是 OJ</b></li>
+                <li>把 OJ 上跑通的<b>同一份代码</b>贴进去提交</li>
+                <li><b>最后一次 Run 的版本</b>就是计分版本 —— 最后一次 Run 前一定要确认代码对</li>
+              </ul>
+            </div>
+          </div>
+          <p style="font-size:13px; color:var(--muted); margin:10px 0 0;">
+            ⏱️ <b>72 小时是「运行时间」</b>：可以中途登出、过夜再写，但计时不停 —— 别一口气写完，分几次做。<br>
+            🔒 <b>提交后就交卷了</b>，不能再修改；HackerRank 有抄袭检测，协作直接 0 分。
+          </p>
+        </div>
         <ul style="font-size:14px; line-height:1.8; padding-left:20px; margin:0 0 10px;">
-          <li><b>有 OJ 链接的题 → 去 OJ 提交</b>（OJ 会真正判题，只有通过才算会做）</li>
-          <li><b>OJ 上没有的题 → 照着题面写</b>，用页面里的样例输出自测</li>
-          <li><b>限时 72 小时</b>，和正式比赛同规则 —— 别一口气写完，分几次做</li>
           <li><b>写完必须重写一遍</b>：看懂 ≠ 会写，关掉答案从头再写一次才算过</li>
+          <li>写完把代码<b>交到 HackerRank</b>，OJ 上的通过记录只是自测，不是成绩</li>
         </ul>
         <p style="font-size:13.5px; color:var(--muted); margin:0;">
-          💡 <b>往后加题的原则</b>：优先选 <b>OJ 上有的 ACSL 原题</b>，这样学生能直接跳转提交、看到真实判题结果；OJ 上暂时没有的真题才把题面抄到页面上。
+          💡 <b>往后加题的原则</b>：优先选 <b>OJ 上有的 ACSL 原题</b>，这样学生能直接跳转、提前用官方测试数据验证；OJ 上暂时没有的真题才把题面抄到页面上。
         </p>
       </div>
     </details>
@@ -2772,7 +2815,8 @@ B(2) → [6, 2, 2]
             <p style="font-size:14px; line-height:1.8; margin:6px 0;"><b>输入</b>：每行一个字符串（长度少于 100），<b>读到文件结束</b>。<br><b>输出</b>：按规则生成的新字符串，每行一个。</p>
               <p style="font-size:13.5px; margin:6px 0;">
                 <a href="https://oj.cubicbird.com/p/1418" target="_blank" rel="noopener" style="color:var(--purple); font-weight:800; text-decoration:underline;">点击打开 OJ 1418 题目页 ↗</a>
-                · 语言选 Python，<b>72 小时内交</b>（和正式比赛同规则）
+                · 语言选 Python，<b>72 小时内交</b>（和正式比赛同规则）<br>
+                · 💡 OJ 是<b>练习场</b>；正式交卷在 <b>HackerRank</b>（老师邮件里的链接），同一份代码贴过去即可
               </p>
             <p style="font-size:14px; line-height:1.8; margin:6px 0;"><b>官方示例推演</b>（输入 <code>"A good sorting algorithm."</code>）</p>
             <pre style="background:#0f243f; color:#e6edf3; padding:12px 14px; border-radius:8px; overflow-x:auto; font-size:12.5px; line-height:1.65; font-family:"JetBrains Mono", "Fira Code", "SF Mono", Consolas, monospace; margin:8px 0;">步骤1 后:  agoodsortingalgorithm
